@@ -2,15 +2,29 @@
 
 #include "ofMain.h"
 
+#include "ofxAssimpModelLoader.h"
+#include "ofEasyCam.h"
+
+
 class ofApp : public ofBaseApp{
 
 	public:
-		void setup() {
-			ofSetBackgroundColor(255, 0, 0);
-		}
-		void update();
-		void draw();
+		ofxAssimpModelLoader can;
+		ofEasyCam cam;
 
+		void setup() {
+			ofSetBackgroundColor(0, 0, 0);
+			can.loadModel("LIXILEYE_can_obj.obj", 10);
+		}
+		//void update();
+		void draw(){
+			ofPushMatrix();
+			ofTranslate(ofGetWidth() / 2, ofGetHeight() / 4*3);
+			can.drawWireframe();
+			
+		}
+
+		
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -22,5 +36,6 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+		
 		
 };
