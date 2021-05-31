@@ -4,6 +4,7 @@
 
 #include "ofxAssimpModelLoader.h"
 #include "ofEasyCam.h"
+#include "ofCamera.h"
 
 
 class ofApp : public ofBaseApp{
@@ -13,12 +14,16 @@ class ofApp : public ofBaseApp{
 		ofxAssimpModelLoader can;
 		ofTrueTypeFont font;
 		ofShader shader;
-		ofEasyCam cam;
+		ofCamera cam;
 
 		//-----------GLOBAL
+		bool initDone = false;
 		float currentFrame = 0;
 		int fontSize = 10;
 		int uiNum = 10;
+
+		static const int numVertexIndices = 20;
+		int vertexIndices[numVertexIndices];
 
 		//-----------STRUCTURE
 		void setup() {
@@ -26,8 +31,14 @@ class ofApp : public ofBaseApp{
 			
 			ofSetBackgroundColor(0, 0, 0);
 
+			//camera
+
+			//cam.setAspectRatio(ofGetHeight()/ ofGetWidth());
+			cam.setPosition(0, 0, 500);
+			//cam.setFov(10);
+			cam.enableOrtho();
 			//3D
-			can.loadModel("3D/LIXILEYE_can_obj.obj", 10);
+			can.loadModel("3D/LIXILEYE_can_obj.obj", 8);
 			
 			//font
 			ofTrueTypeFont::setGlobalDpi(72);
@@ -36,25 +47,31 @@ class ofApp : public ofBaseApp{
 			font.setLetterSpacing(1.0);
 			
 			//shader
-			//shader.load("shader/shader.vert", "shader/shader.frag");
+			shader.load("shader/shader.vert", "shader/shader.frag");
 
 		}
 		//void update();
 		
 		void draw(){
 			
-			ofPushMatrix();
+
+			cam.begin();
 			shader.begin();
-			ofTranslate(ofGetWidth() / 2, ofGetHeight() / 5 * 4);
+			shader.setUniform1f("a",1.0);
+			
+			
+			ofRotateX(180+25);
 			ofRotateY(currentFrame / 10);
 			ofSetColor(180);
 			can.drawFaces();
 			ofSetColor(255);
 			can.drawWireframe();
-			ofSetColor(0, 255, 0);
+			ofSetColor( 255,0, 0);
 			//can.drawVertices();
 			shader.end();
-			ofPopMatrix();
+			cam.end();
+
+			
 
 			makeGrid();
 			for (int i = 0; i < uiNum; i++) {
@@ -95,6 +112,21 @@ class ofApp : public ofBaseApp{
 			ofDrawLine(0, -_size / 2, 0, _size / 2);
 			ofPopMatrix();
 		}
+
+
+		void makeNotation() {
+			if (!initDone) {
+				for (int i = 0; i < numVertexIndices; i++) {
+					vertexIndices[i] = ofRandom(can.getNumMeshes());
+				}
+				initDone = !initDone;
+			}
+			else {
+				
+			}	
+		}
+
+
 
 		void ui(ofVec2f _pos) {
 			string _posToPrint = "X:" + ofToString(_pos.x) + " , " + "Y:" + ofToString(_pos.y);
