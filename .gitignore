@@ -43,6 +43,7 @@
 xcuserdata/
 
 # Visual Studio
+.vs
 *.sdf
 *.opensdf
 *.suo
