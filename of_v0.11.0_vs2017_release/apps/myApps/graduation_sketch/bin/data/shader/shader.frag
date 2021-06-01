@@ -7,6 +7,6 @@ uniform vec2 resolution;
 varying vec4 vPos;
 varying vec4 vNormal;
 
-void main(void){
-	gl_FragColor = vec4(1);
+void main(){
+	gl_FragColor = vec4(1,1,1,1);
 }

@@ -10,7 +10,7 @@ varying vec4 vPos;
 varying vec4 vNormal;
 
 
-void main(void){
+void main(){
 	vPos = position;
 	vNormal = normal;
 	gl_Position = modelViewProjectionMatrix * position;
