@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-
 #include "ofxAssimpModelLoader.h"
 #include "ofEasyCam.h"
 #include "ofCamera.h"
@@ -48,6 +47,9 @@ class ofApp : public ofBaseApp{
 			
 			//shader
 			shader.load("shader/shader.vert", "shader/shader.frag");
+			if (shader.isLoaded()) {
+				cout << "shader loaded" << endl;
+			}
 
 		}
 		//void update();
@@ -57,15 +59,19 @@ class ofApp : public ofBaseApp{
 
 			cam.begin();
 			shader.begin();
-			shader.setUniform1f("a",1.0);
 			
-			
+			shader.setUniform1f("time",ofGetElapsedTimef());
+			shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
+				
 			ofRotateX(180+25);
 			ofRotateY(currentFrame / 10);
 			ofSetColor(180);
 			can.drawFaces();
 			ofSetColor(255);
-			can.drawWireframe();
+			//glEnable(GL_LINE_STIPPLE);
+			//glLineStipple(1, 0x0101);
+			can.drawWireframe(); 
+			//glDisable(GL_LINE_STIPPLE);
 			ofSetColor( 255,0, 0);
 			//can.drawVertices();
 			shader.end();
@@ -121,8 +127,7 @@ class ofApp : public ofBaseApp{
 				}
 				initDone = !initDone;
 			}
-			else {
-				
+			else {				
 			}	
 		}
 

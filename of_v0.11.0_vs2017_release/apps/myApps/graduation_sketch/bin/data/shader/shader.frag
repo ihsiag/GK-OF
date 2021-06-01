@@ -1,8 +1,12 @@
 #version 120
 
 
-varying vec4 vPos;
+uniform float time;
+uniform vec2 resolution;
 
-void main(){
-gl_FragColor = vec4(1,0,0);
+varying vec4 vPos;
+varying vec4 vNormal;
+
+void main(void){
+	gl_FragColor = vec4(1);
 }
