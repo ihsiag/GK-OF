@@ -26,16 +26,26 @@ class ofApp : public ofBaseApp{
 
 		//-----------STRUCTURE
 		void setup() {
-			std::cout << "setting up" << endl;
+			std::cout << "setting up" << std::endl;
 			
+			//basic
+			//ofSetBackgroundAuto(false);
 			ofSetBackgroundColor(0, 0, 0);
+			ofEnableAlphaBlending();
+			//ofEnableBlendMode(); //OF_BLENDMODE_DISABLED, OF_BLENDMODE_ALPHA, OF_BLENDMODE_ADD, OF_BLENDMODE_SUBTRACT, OF_BLENDMODE_MULTIPLY, OF_BLENDMODE_SCREEN
+			
 
 			//camera
 
-			//cam.setAspectRatio(ofGetHeight()/ ofGetWidth());
-			cam.setPosition(0, 0, 500);
-			//cam.setFov(10);
+			int CAM_Z = 500;
+			cam.setNearClip(0.1);
+			cam.setFarClip(100000);
+			cam.setPosition(0, 0, CAM_Z);
 			cam.enableOrtho();
+			//cam.setFov(15);
+			//cam.disableMouseInput();
+			
+			
 			//3D
 			can.loadModel("3D/LIXILEYE_can_obj.obj", 8);
 			
@@ -48,7 +58,10 @@ class ofApp : public ofBaseApp{
 			//shader
 			shader.load("shader/shader.vert", "shader/shader.frag");
 			if (shader.isLoaded()) {
-				cout << "shader loaded" << endl;
+				std::cout << "shader loaded" << std::endl;
+			}
+			else {
+				std::cout << "shader loading failed" << std::endl;
 			}
 
 		}
@@ -58,6 +71,12 @@ class ofApp : public ofBaseApp{
 			
 
 			cam.begin();
+
+			//glEnable(GL_BLEND);
+			glFrontFace(GL_CW);
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glEnable(GL_DEPTH_TEST);
 			shader.begin();
 			
 			shader.setUniform1f("time",ofGetElapsedTimef());
@@ -83,9 +102,7 @@ class ofApp : public ofBaseApp{
 			for (int i = 0; i < uiNum; i++) {
 				ofVec2f uiPos = ofVec2f(ofGetWidth() / 4 * 3, ofGetHeight() / 4 + i * fontSize * 3);
 				ui(uiPos);
-			}
-			
-			
+			}			
 			currentFrame++;
 		}
 
