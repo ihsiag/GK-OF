@@ -4,20 +4,31 @@
 #include "ofxAssimpModelLoader.h"
 #include "ofEasyCam.h"
 #include "ofCamera.h"
+//
+#include "myController.h"
 
 
 class ofApp : public ofBaseApp{
 
 	public:
 		//-----------IMPORT
-		ofxAssimpModelLoader can;
+		ofCamera cam;
+		ofEasyCam ezCam;
 		ofTrueTypeFont font;
 		ofShader shader;
-		ofCamera cam;
+		myController controller;
+		
+		ofxAssimpModelLoader model;
+		ofVboMesh vboMesh;
 
 		//-----------GLOBAL
+		float time;
+		bool mouseIsPressed = false;
+		bool mouseIsDragged = false;
+
+
 		bool initDone = false;
-		float currentFrame = 0;
+		float currentFrame = 0.0;
 		int fontSize = 10;
 		int uiNum = 10;
 
@@ -29,11 +40,11 @@ class ofApp : public ofBaseApp{
 			std::cout << "setting up" << std::endl;
 			
 			//basic
-			//ofSetBackgroundAuto(false);
+			ofSetBackgroundAuto(true);
 			ofSetBackgroundColor(0, 0, 0);
 			ofEnableAlphaBlending();
 			//ofEnableBlendMode(); //OF_BLENDMODE_DISABLED, OF_BLENDMODE_ALPHA, OF_BLENDMODE_ADD, OF_BLENDMODE_SUBTRACT, OF_BLENDMODE_MULTIPLY, OF_BLENDMODE_SCREEN
-			
+			ofSetFrameRate(60);
 
 			//camera
 
@@ -47,7 +58,7 @@ class ofApp : public ofBaseApp{
 			
 			
 			//3D
-			can.loadModel("3D/LIXILEYE_can_obj.obj", 8);
+			model.loadModel("3D/LIXILEYE_can_obj.obj", 8);
 			
 			//font
 			ofTrueTypeFont::setGlobalDpi(72);
@@ -64,45 +75,65 @@ class ofApp : public ofBaseApp{
 				std::cout << "shader loading failed" << std::endl;
 			}
 
+			//controller
+			ofVec2f controllerPos = ofVec2f(ofGetWidth() / 4 * 3, ofGetHeight() / 4);
+			controller.init(controllerPos.x, controllerPos.y);
+
 		}
-		//void update();
+		void update() {
+			ofSetWindowTitle(ofToString(ofGetFrameRate()));
+			time = ofGetElapsedTimef();
+		}
 		
 		void draw(){
 			
-
+			ofEnableDepthTest();
 			cam.begin();
 
 			//glEnable(GL_BLEND);
-			glFrontFace(GL_CW);
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			glEnable(GL_DEPTH_TEST);
+			//glFrontFace(GL_CW);
+			//glEnable(GL_CULL_FACE);
+			//glCullFace(GL_BACK);
+			//glEnable(GL_DEPTH_TEST);
 			shader.begin();
 			
-			shader.setUniform1f("time",ofGetElapsedTimef());
+			//modelMatrix
+			ofMatrix4x4 modelMatrix;
+			modelMatrix.translate(0, 0, 0);
+			modelMatrix.rotate(0.0,0.0,0.0,1.0);
+			modelMatrix.scale(4.0, 4.0, 4.0);
+
+			// view Matrix
+			ofMatrix4x4 viewMatrix;
+			viewMatrix = ofGetCurrentViewMatrix();
+
+			// projection Matrix
+			ofMatrix4x4 projectionMatrix;
+			projectionMatrix = cam.getProjectionMatrix();
+
+			// mvp Matrix
+			ofMatrix4x4 modelViewProjectionMatrix;
+			modelViewProjectionMatrix = modelMatrix * viewMatrix * projectionMatrix;
+			
+			//uniforms
+			shader.setUniform1f("alpha", controller.bridgeValue());
+			shader.setUniform1f("time", time);
 			shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
-				
-			ofRotateX(180+25);
-			ofRotateY(currentFrame / 10);
-			ofSetColor(180);
-			can.drawFaces();
-			ofSetColor(255);
-			//glEnable(GL_LINE_STIPPLE);
-			//glLineStipple(1, 0x0101);
-			can.drawWireframe(); 
-			//glDisable(GL_LINE_STIPPLE);
-			ofSetColor( 255,0, 0);
-			//can.drawVertices();
+			shader.setUniformMatrix4f("projectionMatrix", projectionMatrix);
+			shader.setUniformMatrix4f("modelViewProjectionMatrix", modelViewProjectionMatrix);
+			
+			model.drawFaces();
+			//model.drawWireframe();
 			shader.end();
 			cam.end();
-
-			
+			ofDisableDepthTest();
 
 			makeGrid();
 			for (int i = 0; i < uiNum; i++) {
 				ofVec2f uiPos = ofVec2f(ofGetWidth() / 4 * 3, ofGetHeight() / 4 + i * fontSize * 3);
 				ui(uiPos);
-			}			
+			}
+			showControllers();
 			currentFrame++;
 		}
 
@@ -140,7 +171,7 @@ class ofApp : public ofBaseApp{
 		void makeNotation() {
 			if (!initDone) {
 				for (int i = 0; i < numVertexIndices; i++) {
-					vertexIndices[i] = ofRandom(can.getNumMeshes());
+					vertexIndices[i] = ofRandom(model.getNumMeshes());
 				}
 				initDone = !initDone;
 			}
@@ -153,17 +184,32 @@ class ofApp : public ofBaseApp{
 		void ui(ofVec2f _pos) {
 			string _posToPrint = "X:" + ofToString(_pos.x) + " , " + "Y:" + ofToString(_pos.y);
 			ofRectangle _bb = font.getStringBoundingBox(_posToPrint, 0, 0);
-			font.drawString(_posToPrint,_pos.x + 50,_pos.y);
-		
+			font.drawString(ofToString(controller.bridgeValue()),_pos.x + 50,_pos.y);
+		}
+
+		void showControllers() {
+			controller.update();
+			controller.show();
 		}
 
 		
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
+		void mouseDragged(int _x, int _y, int _button) {
+			controller.mouseIsDragged = true;
+			controller.mouseX = _x;
+			controller.mouseY = _y;
+		}
+		void mousePressed(int _x, int _y, int _button){
+			controller.mouseIsPressed = true;
+			controller.mouseX = _x;
+			controller.mouseY = _y;			
+		}
+		void mouseReleased(int _x, int _y, int _button) {
+			controller.mouseIsPressed = false;
+			controller.mouseIsDragged = false;
+		}
 		void mouseEntered(int x, int y);
 		void mouseExited(int x, int y);
 		void windowResized(int w, int h);
