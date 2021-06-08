@@ -9,34 +9,32 @@ public:
     ofVec2f controllerSize;
     ofVec2f sliderPos;
     float sliderR;
-    float widthRange[2];
-    float heightRange[2];
+    float tolerance;
+    float toleranceRangeWidth[2];
+    float toleranceRangeHeight[2];
     ofColor baseColor;
     ofColor changedColor;
-    bool isBeingSlided;
-    bool mouseIsPressed;
     bool mouseIsDragged;
-    float mouseX;
-    float mouseY;
+    float mouseX, mouseY;
+
     
     myController(){}
 
-    void init(float _x, float _y) {
-        isBeingSlided = false;
+    void init(float _x, float _y, std::string _name) {
         controllerPos = ofVec2f(int(_x), int(_y));
-        controllerSize = ofVec2f(ofGetWidth() / 4 * 0.8, 3);
+        controllerSize = ofVec2f(ofGetWidth() / 4 * 0.8, 1);
         sliderPos = ofVec2f(int(_x), int(_y));
         sliderR = 10;
-        widthRange[0] = controllerPos.x;
-        widthRange[1] = controllerPos.x + controllerSize.x;
-        heightRange[0] = controllerPos.y;
-        heightRange[1] = controllerPos.y + controllerSize.y;
-        heightRange[0] -= 20;
-        heightRange[1] += 20;
+        tolerance = 20;
+        toleranceRangeWidth[0] = controllerPos.x;
+        toleranceRangeWidth[1] = controllerPos.x + controllerSize.x;
+        toleranceRangeHeight[0] = controllerPos.y;
+        toleranceRangeHeight[1] = controllerPos.y + controllerSize.y;
+        toleranceRangeHeight[0] -= tolerance;
+        toleranceRangeHeight[1] += tolerance;
         baseColor.set(150, 150, 150);
         changedColor.set(255, 0, 0);
-        mouseIsPressed = false;
-        isBeingSlided = false;
+        mouseIsDragged = false;
         mouseX = 0;
         mouseY = 0;
     }
@@ -52,23 +50,23 @@ public:
     }
 
     float bridgeValue() {
-        float value = ofMap(sliderPos.x - controllerPos.x, 0, controllerSize.x, 0, 1);
+        float value = ofMap(sliderPos.x - controllerPos.x, 0, controllerSize.x, 0.00, 1.00);
         return value;
     }
 
 
     void event() {
         if (mouseIsDragged == true) {
-            if (mouseY > heightRange[0] && mouseY < heightRange[1]) {
+            if (mouseY > toleranceRangeHeight[0] && mouseY < toleranceRangeHeight[1]) {
                 ofSetColor(changedColor);
-                if (mouseX > widthRange[0] && mouseX < widthRange[1]) {
+                if (mouseX > toleranceRangeWidth[0] && mouseX < toleranceRangeWidth[1]) {
                     sliderPos.x = mouseX;
                 }
-                else if (mouseX < widthRange[0]) {
-                    sliderPos.x = widthRange[0];
+                else if (mouseX < toleranceRangeWidth[0]) {
+                    sliderPos.x = toleranceRangeWidth[0];
                 }
-                else if (mouseX > widthRange[1]) {
-                    sliderPos.x = widthRange[1];
+                else if (mouseX > toleranceRangeWidth[1]) {
+                    sliderPos.x = toleranceRangeWidth[1];
                 }
             }
         }

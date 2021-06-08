@@ -16,14 +16,12 @@ class ofApp : public ofBaseApp{
 		ofEasyCam ezCam;
 		ofTrueTypeFont font;
 		ofShader shader;
-		myController controller;
 		
 		ofxAssimpModelLoader model;
 		ofVboMesh vboMesh;
 
 		//-----------GLOBAL
 		float time;
-		bool mouseIsPressed = false;
 		bool mouseIsDragged = false;
 
 
@@ -32,12 +30,18 @@ class ofApp : public ofBaseApp{
 		int fontSize = 10;
 		int uiNum = 10;
 
+		static const int numControllers = 4;
+		myController controllers[numControllers];
+
 		static const int numVertexIndices = 20;
 		int vertexIndices[numVertexIndices];
 
 		//-----------STRUCTURE
 		void setup() {
 			std::cout << "setting up" << std::endl;
+
+			//initParams
+
 			
 			//basic
 			ofSetBackgroundAuto(true);
@@ -76,9 +80,10 @@ class ofApp : public ofBaseApp{
 			}
 
 			//controller
-			ofVec2f controllerPos = ofVec2f(ofGetWidth() / 4 * 3, ofGetHeight() / 4);
-			controller.init(controllerPos.x, controllerPos.y);
-
+			for (int i = 0; i < numControllers; i++) {
+				ofVec2f controllerPos = ofVec2f(ofGetWidth() / 4 * 3, ofGetHeight() / 4+30*i);
+				controllers[i].init(controllerPos.x, controllerPos.y, "try");
+			}
 		}
 		void update() {
 			ofSetWindowTitle(ofToString(ofGetFrameRate()));
@@ -100,38 +105,36 @@ class ofApp : public ofBaseApp{
 			//modelMatrix
 			ofMatrix4x4 modelMatrix;
 			modelMatrix.translate(0, 0, 0);
-			modelMatrix.rotate(0.0,0.0,0.0,1.0);
+			modelMatrix.rotate(controllers[0].bridgeValue()*90,controllers[1].bridgeValue()*90, controllers[2].bridgeValue()*90,1.0);
 			modelMatrix.scale(4.0, 4.0, 4.0);
 
-			// view Matrix
 			ofMatrix4x4 viewMatrix;
 			viewMatrix = ofGetCurrentViewMatrix();
 
-			// projection Matrix
 			ofMatrix4x4 projectionMatrix;
 			projectionMatrix = cam.getProjectionMatrix();
 
-			// mvp Matrix
 			ofMatrix4x4 modelViewProjectionMatrix;
 			modelViewProjectionMatrix = modelMatrix * viewMatrix * projectionMatrix;
 			
 			//uniforms
-			shader.setUniform1f("alpha", controller.bridgeValue());
+			shader.setUniform1f("alpha", controllers[3].bridgeValue());
 			shader.setUniform1f("time", time);
 			shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
-			shader.setUniformMatrix4f("projectionMatrix", projectionMatrix);
 			shader.setUniformMatrix4f("modelViewProjectionMatrix", modelViewProjectionMatrix);
 			
+			//draw model
 			model.drawFaces();
 			//model.drawWireframe();
+			
 			shader.end();
 			cam.end();
 			ofDisableDepthTest();
 
 			makeGrid();
-			for (int i = 0; i < uiNum; i++) {
+			for (int i = 0; i < numControllers; i++) {
 				ofVec2f uiPos = ofVec2f(ofGetWidth() / 4 * 3, ofGetHeight() / 4 + i * fontSize * 3);
-				ui(uiPos);
+				ui(i,uiPos);
 			}
 			showControllers();
 			currentFrame++;
@@ -181,15 +184,17 @@ class ofApp : public ofBaseApp{
 
 
 
-		void ui(ofVec2f _pos) {
+		void ui(int _index, ofVec2f _pos) {
 			string _posToPrint = "X:" + ofToString(_pos.x) + " , " + "Y:" + ofToString(_pos.y);
 			ofRectangle _bb = font.getStringBoundingBox(_posToPrint, 0, 0);
-			font.drawString(ofToString(controller.bridgeValue()),_pos.x + 50,_pos.y);
+			font.drawString(ofToString(controllers[_index].bridgeValue()),_pos.x + 50,_pos.y);
 		}
 
 		void showControllers() {
-			controller.update();
-			controller.show();
+			for (int i = 0; i < numControllers; i++) {
+				controllers[i].update();
+				controllers[i].show();
+			}
 		}
 
 		
@@ -197,18 +202,18 @@ class ofApp : public ofBaseApp{
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
 		void mouseDragged(int _x, int _y, int _button) {
-			controller.mouseIsDragged = true;
-			controller.mouseX = _x;
-			controller.mouseY = _y;
+			for (int i = 0; i < numControllers; i++) {
+				controllers[i].mouseIsDragged = true;
+				controllers[i].mouseX = _x;
+				controllers[i].mouseY = _y;
+			}
 		}
-		void mousePressed(int _x, int _y, int _button){
-			controller.mouseIsPressed = true;
-			controller.mouseX = _x;
-			controller.mouseY = _y;			
+		void mousePressed(int _x, int _y, int _button){		
 		}
 		void mouseReleased(int _x, int _y, int _button) {
-			controller.mouseIsPressed = false;
-			controller.mouseIsDragged = false;
+			for (int i = 0; i < numControllers; i++) {
+				controllers[i].mouseIsDragged = false;
+			}
 		}
 		void mouseEntered(int x, int y);
 		void mouseExited(int x, int y);
