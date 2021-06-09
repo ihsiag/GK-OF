@@ -30,7 +30,7 @@ class ofApp : public ofBaseApp{
 		int fontSize = 10;
 		int uiNum = 10;
 
-		static const int numControllers = 4;
+		static const int numControllers = 16;
 		myController controllers[numControllers];
 
 		static const int numVertexIndices = 20;
@@ -80,10 +80,26 @@ class ofApp : public ofBaseApp{
 			}
 
 			//controller
-			for (int i = 0; i < numControllers; i++) {
-				ofVec2f controllerPos = ofVec2f(ofGetWidth() / 4 * 3, ofGetHeight() / 4+30*i);
-				controllers[i].init(controllerPos.x, controllerPos.y, "try");
-			}
+			ofVec2f controllerAreaNW = ofVec2f(ofGetWidth() * 3 / 4, ofGetHeight() * 1 / 4);
+			ofVec2f controllerAreaSE = ofVec2f(ofGetWidth(), ofGetHeight() * 3 / 4);
+			
+			controllers[0].init(0,"shaderAlpha", 0, 1, controllerAreaNW,controllerAreaSE);
+			controllers[1].init(1, "nothing", 0, 100, controllerAreaNW, controllerAreaSE);
+			controllers[2].init(2, "nothing", 0, 45, controllerAreaNW, controllerAreaSE);
+			controllers[3].init(3, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[4].init(4, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[5].init(5, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[6].init(6, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[7].init(7, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[8].init(8, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[9].init(9, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[10].init(10, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[11].init(11, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[12].init(12, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[13].init(13, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[14].init(14, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			controllers[15].init(15, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+
 		}
 		void update() {
 			ofSetWindowTitle(ofToString(ofGetFrameRate()));
@@ -97,15 +113,16 @@ class ofApp : public ofBaseApp{
 
 			//glEnable(GL_BLEND);
 			//glFrontFace(GL_CW);
-			//glEnable(GL_CULL_FACE);
-			//glCullFace(GL_BACK);
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
 			//glEnable(GL_DEPTH_TEST);
 			shader.begin();
 			
 			//modelMatrix
 			ofMatrix4x4 modelMatrix;
 			modelMatrix.translate(0, 0, 0);
-			modelMatrix.rotate(controllers[0].bridgeValue()*90,controllers[1].bridgeValue()*90, controllers[2].bridgeValue()*90,1.0);
+			modelMatrix.rotate(currentFrame / 10, 0, 1, 0);
+			modelMatrix.rotate(25,1, 0,0);
 			modelMatrix.scale(4.0, 4.0, 4.0);
 
 			ofMatrix4x4 viewMatrix;
@@ -118,7 +135,7 @@ class ofApp : public ofBaseApp{
 			modelViewProjectionMatrix = modelMatrix * viewMatrix * projectionMatrix;
 			
 			//uniforms
-			shader.setUniform1f("alpha", controllers[3].bridgeValue());
+			shader.setUniform1f("alpha", controllers[0].bridgeValue());
 			shader.setUniform1f("time", time);
 			shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
 			shader.setUniformMatrix4f("modelViewProjectionMatrix", modelViewProjectionMatrix);
@@ -132,10 +149,6 @@ class ofApp : public ofBaseApp{
 			ofDisableDepthTest();
 
 			makeGrid();
-			for (int i = 0; i < numControllers; i++) {
-				ofVec2f uiPos = ofVec2f(ofGetWidth() / 4 * 3, ofGetHeight() / 4 + i * fontSize * 3);
-				ui(i,uiPos);
-			}
 			showControllers();
 			currentFrame++;
 		}
@@ -182,14 +195,6 @@ class ofApp : public ofBaseApp{
 			}	
 		}
 
-
-
-		void ui(int _index, ofVec2f _pos) {
-			string _posToPrint = "X:" + ofToString(_pos.x) + " , " + "Y:" + ofToString(_pos.y);
-			ofRectangle _bb = font.getStringBoundingBox(_posToPrint, 0, 0);
-			font.drawString(ofToString(controllers[_index].bridgeValue()),_pos.x + 50,_pos.y);
-		}
-
 		void showControllers() {
 			for (int i = 0; i < numControllers; i++) {
 				controllers[i].update();
@@ -202,22 +207,36 @@ class ofApp : public ofBaseApp{
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
 		void mouseDragged(int _x, int _y, int _button) {
+			//controller-begin
 			for (int i = 0; i < numControllers; i++) {
 				controllers[i].mouseIsDragged = true;
 				controllers[i].mouseX = _x;
 				controllers[i].mouseY = _y;
 			}
+			//controller-end
 		}
-		void mousePressed(int _x, int _y, int _button){		
+		void mousePressed(int _x, int _y, int _button){
 		}
 		void mouseReleased(int _x, int _y, int _button) {
+			//controller-begin
 			for (int i = 0; i < numControllers; i++) {
 				controllers[i].mouseIsDragged = false;
 			}
+			//controller-end
 		}
 		void mouseEntered(int x, int y);
 		void mouseExited(int x, int y);
-		void windowResized(int w, int h);
+		void windowResized(int w, int h) {
+			
+			//controller-begin
+			ofVec2f controllerAreaNW = ofVec2f(ofGetWidth() * 3 / 4, ofGetHeight() * 1 / 4);
+			ofVec2f controllerAreaSE = ofVec2f(ofGetWidth(), ofGetHeight() * 3 / 4);
+			for (int i = 0; i < numControllers; i++) {
+				controllers[i].windowResizeEvent(i,controllerAreaNW,controllerAreaSE);
+			}
+			//controller-end
+			
+		}
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
