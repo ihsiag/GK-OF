@@ -4,6 +4,7 @@
 #include "ofxAssimpModelLoader.h"
 #include "ofEasyCam.h"
 #include "ofCamera.h"
+#include "ofxGui.h"
 //
 #include "myController.h"
 
@@ -12,29 +13,24 @@ class ofApp : public ofBaseApp{
 
 	public:
 		//-----------IMPORT
+
 		ofCamera cam;
 		ofEasyCam ezCam;
 		ofTrueTypeFont font;
-		ofShader shader;
-		
+		ofShader shader;		
 		ofxAssimpModelLoader model;
 		ofVboMesh vboMesh;
+		ofxPanel gui;
 
 		//-----------GLOBAL
 		float time;
-		bool mouseIsDragged = false;
-
-
-		bool initDone = false;
 		float currentFrame = 0.0;
 		int fontSize = 10;
-		int uiNum = 10;
 
-		static const int numControllers = 16;
-		myController controllers[numControllers];
+		ofxFloatSlider shaderAlpha;
 
-		static const int numVertexIndices = 20;
-		int vertexIndices[numVertexIndices];
+
+
 
 		//-----------STRUCTURE
 		void setup() {
@@ -80,25 +76,9 @@ class ofApp : public ofBaseApp{
 			}
 
 			//controller
-			ofVec2f controllerAreaNW = ofVec2f(ofGetWidth() * 3 / 4, ofGetHeight() * 1 / 4);
-			ofVec2f controllerAreaSE = ofVec2f(ofGetWidth(), ofGetHeight() * 3 / 4);
-			
-			controllers[0].init(0,"shaderAlpha", 0, 1, controllerAreaNW,controllerAreaSE);
-			controllers[1].init(1, "nothing", 0, 100, controllerAreaNW, controllerAreaSE);
-			controllers[2].init(2, "nothing", 0, 45, controllerAreaNW, controllerAreaSE);
-			controllers[3].init(3, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[4].init(4, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[5].init(5, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[6].init(6, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[7].init(7, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[8].init(8, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[9].init(9, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[10].init(10, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[11].init(11, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[12].init(12, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[13].init(13, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[14].init(14, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
-			controllers[15].init(15, "nothing", 0, 50, controllerAreaNW, controllerAreaSE);
+			gui.setup();
+			gui.add(shaderAlpha.setup("shaderAlpha", 0.75, 0.00, 1.00));
+
 
 		}
 		void update() {
@@ -135,31 +115,41 @@ class ofApp : public ofBaseApp{
 			modelViewProjectionMatrix = modelMatrix * viewMatrix * projectionMatrix;
 			
 			//uniforms
-			shader.setUniform1f("alpha", controllers[0].bridgeValue());
+			shader.setUniform1f("alpha",shaderAlpha);
 			shader.setUniform1f("time", time);
 			shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
 			shader.setUniformMatrix4f("modelViewProjectionMatrix", modelViewProjectionMatrix);
 			
 			//draw model
-			model.drawFaces();
-			//model.drawWireframe();
+			//model.drawFaces();
+			model.drawWireframe();
 			
 			shader.end();
 			cam.end();
 			ofDisableDepthTest();
 
 			makeGrid();
-			showControllers();
+			gui.draw();
 			currentFrame++;
 		}
 
 		//-----------CUSTOM-FUNCS
 		void makeGrid() {
+			//
 			ofNoFill();
 			ofSetColor(50, 50, 50);
 			ofDrawLine(0, ofGetHeight() / 2, ofGetWidth(), ofGetHeight() / 2);
 			ofDrawLine(ofGetWidth() / 2, 0, ofGetWidth() / 2, ofGetHeight());
 
+			//
+			ofNoFill();
+			ofSetColor(200);
+			int margin = 8;
+			ofDrawRectangle(margin, margin, ofGetWidth() - margin * 2, ofGetHeight() - margin * 2);
+			
+			//
+			ofFill();
+			ofSetColor(255);
 			ofPushMatrix();
 			ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
 			for (int y = -1; y < 2; y++) {
@@ -172,10 +162,12 @@ class ofApp : public ofBaseApp{
 				}
 			}
 			ofPopMatrix();
+
+			//
+
 		}
 
 		void makeCross(int _x, int _y, int _size) {
-			ofSetColor(255);
 			ofPushMatrix();
 			ofTranslate(_x, _y);
 			ofDrawLine(-_size / 2, 0, _size / 2, 0);
@@ -185,57 +177,22 @@ class ofApp : public ofBaseApp{
 
 
 		void makeNotation() {
-			if (!initDone) {
-				for (int i = 0; i < numVertexIndices; i++) {
-					vertexIndices[i] = ofRandom(model.getNumMeshes());
-				}
-				initDone = !initDone;
-			}
-			else {				
-			}	
 		}
 
-		void showControllers() {
-			for (int i = 0; i < numControllers; i++) {
-				controllers[i].update();
-				controllers[i].show();
-			}
-		}
 
 		
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
 		void mouseDragged(int _x, int _y, int _button) {
-			//controller-begin
-			for (int i = 0; i < numControllers; i++) {
-				controllers[i].mouseIsDragged = true;
-				controllers[i].mouseX = _x;
-				controllers[i].mouseY = _y;
-			}
-			//controller-end
 		}
 		void mousePressed(int _x, int _y, int _button){
 		}
 		void mouseReleased(int _x, int _y, int _button) {
-			//controller-begin
-			for (int i = 0; i < numControllers; i++) {
-				controllers[i].mouseIsDragged = false;
-			}
-			//controller-end
 		}
 		void mouseEntered(int x, int y);
 		void mouseExited(int x, int y);
-		void windowResized(int w, int h) {
-			
-			//controller-begin
-			ofVec2f controllerAreaNW = ofVec2f(ofGetWidth() * 3 / 4, ofGetHeight() * 1 / 4);
-			ofVec2f controllerAreaSE = ofVec2f(ofGetWidth(), ofGetHeight() * 3 / 4);
-			for (int i = 0; i < numControllers; i++) {
-				controllers[i].windowResizeEvent(i,controllerAreaNW,controllerAreaSE);
-			}
-			//controller-end
-			
+		void windowResized(int w, int h) {			
 		}
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);

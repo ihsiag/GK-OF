@@ -113,19 +113,5 @@ public:
     }
 
     void windowResizeEvent(int _index,ofVec2f _areaNW, ofVec2f _areaSE) {
-        //font
-
-        //
-        margin = (_areaSE - _areaNW) / 10;
-
-        controllerPos = _areaNW + margin + ofVec2f(0, dist * _index);
-        controllerSize = ofVec2f((_areaSE.x - _areaNW.x) / 10, 1);
-
-        sliderPos = controllerPos;
-
-        toleranceRangeWidth[0] = controllerPos.x;
-        toleranceRangeWidth[1] = controllerPos.x + controllerSize.x;
-        toleranceRangeHeight[0] = controllerPos.y;
-        toleranceRangeHeight[1] = controllerPos.y + controllerSize.y;
     }
 };
