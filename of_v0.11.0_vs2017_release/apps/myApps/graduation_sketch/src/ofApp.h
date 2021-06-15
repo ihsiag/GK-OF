@@ -27,7 +27,12 @@ class ofApp : public ofBaseApp{
 		float currentFrame = 0.0;
 		int fontSize = 10;
 
+		float tmpShaderScannerPosY;
+
 		ofxFloatSlider shaderAlpha;
+		ofxFloatSlider shaderScannerPosY;
+		ofxFloatSlider shaderScannerWidth;
+
 
 
 
@@ -37,6 +42,13 @@ class ofApp : public ofBaseApp{
 			std::cout << "setting up" << std::endl;
 
 			//initParams
+			tmpShaderScannerPosY = 100;
+
+			//controller
+			gui.setup();
+			gui.add(shaderAlpha.setup("shaderAlpha", 0.38, 0.00, 1.00));
+			gui.add(shaderScannerPosY.setup("shaderScannerPosY", 90, 90, -90));
+			gui.add(shaderScannerWidth.setup("shaderScannerWidth", 3.5, 30.00, 0.00));
 
 			
 			//basic
@@ -74,13 +86,8 @@ class ofApp : public ofBaseApp{
 			else {
 				std::cout << "shader loading failed" << std::endl;
 			}
-
-			//controller
-			gui.setup();
-			gui.add(shaderAlpha.setup("shaderAlpha", 0.75, 0.00, 1.00));
-
-
 		}
+
 		void update() {
 			ofSetWindowTitle(ofToString(ofGetFrameRate()));
 			time = ofGetElapsedTimef();
@@ -119,6 +126,9 @@ class ofApp : public ofBaseApp{
 			shader.setUniform1f("time", time);
 			shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
 			shader.setUniformMatrix4f("modelViewProjectionMatrix", modelViewProjectionMatrix);
+			shader.setUniform1f("scannerPosY", tmpShaderScannerPosY);
+			shader.setUniform1f("scannerWidth", shaderScannerWidth);
+
 			
 			//draw model
 			//model.drawFaces();
@@ -130,7 +140,13 @@ class ofApp : public ofBaseApp{
 
 			makeGrid();
 			gui.draw();
+			drawScannerBar();
 			currentFrame++;
+			tmpShaderScannerPosY -= 0.5;
+			if (tmpShaderScannerPosY < -100) {
+				tmpShaderScannerPosY = 100;
+			}
+
 		}
 
 		//-----------CUSTOM-FUNCS
@@ -156,7 +172,7 @@ class ofApp : public ofBaseApp{
 				for (int x = -1; x < 2; x++) {
 					if (y != 0) {
 						if (x != 0) {
-							makeCross(x * ofGetWidth() / 4, y * ofGetHeight() / 4, 10);
+							drawCross(x * ofGetWidth() / 4, y * ofGetHeight() / 4, 10);
 						}
 					}
 				}
@@ -167,7 +183,7 @@ class ofApp : public ofBaseApp{
 
 		}
 
-		void makeCross(int _x, int _y, int _size) {
+		void drawCross(int _x, int _y, int _size) {
 			ofPushMatrix();
 			ofTranslate(_x, _y);
 			ofDrawLine(-_size / 2, 0, _size / 2, 0);
@@ -177,6 +193,25 @@ class ofApp : public ofBaseApp{
 
 
 		void makeNotation() {
+		}
+
+		void drawScannerBar() {
+			ofTranslate(ofGetWidth() *3/ 4, ofGetHeight() / 4);
+			ofVec2f SP = ofVec2f(0.0, 0.0);
+			ofVec2f EP = ofVec2f(0.0, ofGetHeight()/2);
+			ofNoFill();
+			ofSetColor(255);
+			ofDrawLine(SP, EP);
+
+			float posY = ofMap(tmpShaderScannerPosY, 100, -100, 0, ofGetHeight() / 2);
+			int _size = 10;
+			SP = ofVec2f(-_size/2, posY);
+			EP = ofVec2f(_size/2, posY);
+			ofDrawLine(SP, EP);
+		}
+
+		void getBoundingBox() {
+
 		}
 
 
