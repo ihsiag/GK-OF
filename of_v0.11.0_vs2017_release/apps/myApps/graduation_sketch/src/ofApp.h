@@ -5,6 +5,8 @@
 #include "ofEasyCam.h"
 #include "ofCamera.h"
 #include "ofxGui.h"
+#include "ofxPostProcessing.h"
+
 //
 #include "myController.h"
 
@@ -21,6 +23,7 @@ class ofApp : public ofBaseApp{
 		ofxAssimpModelLoader model;
 		ofVboMesh vboMesh;
 		ofxPanel gui;
+		ofxPostProcessing post;
 
 		//-----------GLOBAL
 		float time;
@@ -86,6 +89,11 @@ class ofApp : public ofBaseApp{
 			else {
 				std::cout << "shader loading failed" << std::endl;
 			}
+
+			//post
+			post.init(ofGetWidth(), ofGetHeight());
+			//post.createPass<GodRaysPass>();
+
 		}
 
 		void update() {
@@ -95,8 +103,11 @@ class ofApp : public ofBaseApp{
 		
 		void draw(){
 			
+
 			ofEnableDepthTest();
+			post.begin(cam);
 			cam.begin();
+			
 
 			//glEnable(GL_BLEND);
 			//glFrontFace(GL_CW);
@@ -136,8 +147,9 @@ class ofApp : public ofBaseApp{
 			
 			shader.end();
 			cam.end();
+			post.end();
 			ofDisableDepthTest();
-
+			
 			makeGrid();
 			gui.draw();
 			drawScannerBar();
@@ -146,6 +158,8 @@ class ofApp : public ofBaseApp{
 			if (tmpShaderScannerPosY < -100) {
 				tmpShaderScannerPosY = 100;
 			}
+			
+
 
 		}
 

@@ -100,7 +100,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\Win32;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\license;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\Win32;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\license;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxPostProcessing-master\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
@@ -120,7 +120,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\Win32;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\license;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\Win32;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\license;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxPostProcessing-master\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -140,7 +140,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\Win32;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\license;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\Win32;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\license;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxPostProcessing-master\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -163,7 +163,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\Win32;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\license;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\Win32;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\license;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxPostProcessing-master\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
@@ -196,6 +196,31 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\BleachBypassPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\BloomPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ContrastPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ConvolutionPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\DofAltPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\DofPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\EdgePass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\FakeSSSPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\FxaaPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\GodRaysPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\HorizontalTiltShifPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\HsbShiftPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\KaleidoscopePass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\LimbDarkeningPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\LUTPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\NoiseWarpPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\PixelatePass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\PostProcessing.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RenderPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RGBShiftPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RimHighlightingPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\SSAOPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ToonPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\VerticalTiltShifPass.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
@@ -258,6 +283,32 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\BleachBypassPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\BloomPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ContrastPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ConvolutionPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\DofAltPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\DofPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\EdgePass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\FakeSSSPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\FxaaPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\GodRaysPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\HorizontalTiltShifPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\HsbShiftPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\KaleidoscopePass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\LimbDarkeningPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\LUTPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\NoiseWarpPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ofxPostProcessing.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\PixelatePass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\PostProcessing.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RenderPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RGBShiftPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RimHighlightingPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\SSAOPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ToonPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\VerticalTiltShifPass.h" />
+    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
