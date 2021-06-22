@@ -29,6 +29,7 @@ class ofApp : public ofBaseApp{
 		float time;
 		float currentFrame = 0.0;
 		int fontSize = 10;
+		ofImage imgToSave;
 
 		float tmpShaderScannerPosY;
 
@@ -238,7 +239,12 @@ class ofApp : public ofBaseApp{
 
 
 		
-		void keyPressed(int key);
+		void keyPressed(int key) {
+			if (key == 's') {
+				imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+				imgToSave.save("ofScreenShot.png");
+			}
+		}
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
 		void mouseDragged(int _x, int _y, int _button) {
