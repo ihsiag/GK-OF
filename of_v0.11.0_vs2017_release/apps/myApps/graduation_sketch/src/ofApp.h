@@ -32,9 +32,12 @@ class ofApp : public ofBaseApp{
 
 		float tmpShaderScannerPosY;
 
+		//-----------Sliders
 		ofxFloatSlider shaderAlpha;
 		ofxFloatSlider shaderScannerPosY;
 		ofxFloatSlider shaderScannerWidth;
+		ofxFloatSlider shaderColWhenBright;
+		ofxFloatSlider shaderColWhenDark;
 
 
 
@@ -49,9 +52,12 @@ class ofApp : public ofBaseApp{
 
 			//controller
 			gui.setup();
-			gui.add(shaderAlpha.setup("shaderAlpha", 0.38, 0.00, 1.00));
+			gui.add(shaderAlpha.setup("shaderAlpha", 1.00, 0.00, 1.00));
 			gui.add(shaderScannerPosY.setup("shaderScannerPosY", 90, 90, -90));
 			gui.add(shaderScannerWidth.setup("shaderScannerWidth", 3.5, 30.00, 0.00));
+			gui.add(shaderColWhenBright.setup("shaderColWhenBright", 0.75, 0.00, 1.00));
+			gui.add(shaderColWhenDark.setup("shaderColWhenDark", 0.25, 0.00, 1.00));
+			
 
 			
 			//basic
@@ -139,6 +145,8 @@ class ofApp : public ofBaseApp{
 			shader.setUniformMatrix4f("modelViewProjectionMatrix", modelViewProjectionMatrix);
 			shader.setUniform1f("scannerPosY", tmpShaderScannerPosY);
 			shader.setUniform1f("scannerWidth", shaderScannerWidth);
+			shader.setUniform1f("colWhenBright", shaderColWhenBright);
+			shader.setUniform1f("colWhenDark", shaderColWhenDark);
 
 			
 			//draw model
