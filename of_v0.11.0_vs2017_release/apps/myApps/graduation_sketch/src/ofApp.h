@@ -15,7 +15,6 @@ class ofApp : public ofBaseApp{
 
 	public:
 		//-----------IMPORT
-
 		ofCamera cam;
 		ofEasyCam ezCam;
 		ofTrueTypeFont font;
@@ -39,7 +38,6 @@ class ofApp : public ofBaseApp{
 		ofxFloatSlider shaderScannerWidth;
 		ofxFloatSlider shaderColWhenBright;
 		ofxFloatSlider shaderColWhenDark;
-
 
 
 
