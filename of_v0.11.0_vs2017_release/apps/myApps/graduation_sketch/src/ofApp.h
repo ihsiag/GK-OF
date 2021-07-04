@@ -18,7 +18,8 @@ class ofApp : public ofBaseApp{
 		ofCamera cam;
 		ofEasyCam ezCam;
 		ofTrueTypeFont font;
-		ofShader shader;		
+		ofShader modelShader;
+		ofShader postShader;
 		ofxAssimpModelLoader model;
 		ofVboMesh vboMesh;
 		ofxPanel gui;
@@ -33,11 +34,11 @@ class ofApp : public ofBaseApp{
 		float tmpShaderScannerPosY;
 
 		//-----------Sliders
-		ofxFloatSlider shaderAlpha;
+		ofxFloatSlider modelShaderAlpha;
 		ofxFloatSlider shaderScannerPosY;
-		ofxFloatSlider shaderScannerWidth;
-		ofxFloatSlider shaderColWhenBright;
-		ofxFloatSlider shaderColWhenDark;
+		ofxFloatSlider modelShaderScannerWidth;
+		ofxFloatSlider modelShaderColWhenBright;
+		ofxFloatSlider modelShaderColWhenDark;
 
 
 
@@ -51,11 +52,10 @@ class ofApp : public ofBaseApp{
 
 			//controller
 			gui.setup();
-			gui.add(shaderAlpha.setup("shaderAlpha", 1.00, 0.00, 1.00));
-			gui.add(shaderScannerPosY.setup("shaderScannerPosY", 90, 90, -90));
-			gui.add(shaderScannerWidth.setup("shaderScannerWidth", 3.5, 30.00, 0.00));
-			gui.add(shaderColWhenBright.setup("shaderColWhenBright", 0.75, 0.00, 1.00));
-			gui.add(shaderColWhenDark.setup("shaderColWhenDark", 0.25, 0.00, 1.00));
+			gui.add(modelShaderAlpha.setup("modelShaderAlpha", 1.00, 0.00, 1.00));
+			gui.add(modelShaderScannerWidth.setup("modelShaderScannerWidth", 3.5, 30.00, 0.00));
+			gui.add(modelShaderColWhenBright.setup("modelShaderColWhenBright", 0.75, 0.00, 1.00));
+			gui.add(modelShaderColWhenDark.setup("modelShaderColWhenDark", 0.25, 0.00, 1.00));
 			
 
 			
@@ -87,13 +87,8 @@ class ofApp : public ofBaseApp{
 			font.setLetterSpacing(1.0);
 			
 			//shader
-			shader.load("shader/shader.vert", "shader/shader.frag");
-			if (shader.isLoaded()) {
-				std::cout << "shader loaded" << std::endl;
-			}
-			else {
-				std::cout << "shader loading failed" << std::endl;
-			}
+			modelShader.load("shader/model.vert", "shader/model.frag");
+			postShader.load("shader/post.vert", "shader/post.frag");
 
 			//post
 			post.init(ofGetWidth(), ofGetHeight());
@@ -119,9 +114,9 @@ class ofApp : public ofBaseApp{
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
 			//glEnable(GL_DEPTH_TEST);
-			shader.begin();
+			modelShader.begin();
 			
-			//modelMatrix
+			//matrix
 			ofMatrix4x4 modelMatrix;
 			modelMatrix.translate(0, 0, 0);
 			modelMatrix.rotate(currentFrame / 10, 0, 1, 0);
@@ -138,21 +133,21 @@ class ofApp : public ofBaseApp{
 			modelViewProjectionMatrix = modelMatrix * viewMatrix * projectionMatrix;
 			
 			//uniforms
-			shader.setUniform1f("alpha",shaderAlpha);
-			shader.setUniform1f("time", time);
-			shader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
-			shader.setUniformMatrix4f("modelViewProjectionMatrix", modelViewProjectionMatrix);
-			shader.setUniform1f("scannerPosY", tmpShaderScannerPosY);
-			shader.setUniform1f("scannerWidth", shaderScannerWidth);
-			shader.setUniform1f("colWhenBright", shaderColWhenBright);
-			shader.setUniform1f("colWhenDark", shaderColWhenDark);
+			modelShader.setUniform1f("alpha",modelShaderAlpha);
+			modelShader.setUniform1f("time", time);
+			modelShader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
+			modelShader.setUniformMatrix4f("modelViewProjectionMatrix", modelViewProjectionMatrix);
+			modelShader.setUniform1f("scannerPosY", tmpShaderScannerPosY);
+			modelShader.setUniform1f("scannerWidth", modelShaderScannerWidth);
+			modelShader.setUniform1f("colWhenBright", modelShaderColWhenBright);
+			modelShader.setUniform1f("colWhenDark", modelShaderColWhenDark);
 
 			
 			//draw model
 			//model.drawFaces();
 			model.drawWireframe();
 			
-			shader.end();
+			modelShader.end();
 			cam.end();
 			post.end();
 			ofDisableDepthTest();
