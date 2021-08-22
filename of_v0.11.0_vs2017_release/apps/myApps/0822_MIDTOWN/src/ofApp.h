@@ -22,7 +22,11 @@ public:
 	ofxCvGrayscaleImage imgGray;
 	ofxCvColorImage imgBlur;
 	
+	
 	ofImage imgA, imgB, imgC, imgD ,imgE, imgF, imgG;
+	ofImage imgs[7];
+	float originalW, originalH;
+	float currentW, currentH;
 
 
 	//-----------SLIDER-----------//
@@ -54,6 +58,15 @@ public:
 		imgE.load("./img_leaves/E.png");
 		imgF.load("./img_leaves/F.png");
 		imgG.load("./img_leaves/G.png");
+		imgs[0] = imgA;
+		imgs[1] = imgB; 
+		imgs[2] = imgC;  
+		imgs[3] = imgD; 
+		imgs[4] = imgE; 
+		imgs[5] = imgF; 
+		imgs[6] = imgG;
+		originalW = imgA.getWidth();
+		originalH = imgA.getHeight();
 
 
 		//font
@@ -68,11 +81,11 @@ public:
 		gui.setup();
 		gui.add(areaWidthSlider.setup("areaWidth", 500, 400, 800));
 		gui.add(areaHeightSlider.setup("areaHeight", 500, 400, 800));
-		gui.add(xNumSlider.setup("xNum", 10, 1, 20));
-		gui.add(yNumSlider.setup("yNum", 10, 1, 20));
+		gui.add(xNumSlider.setup("xNum", 3, 1, 20));
+		gui.add(yNumSlider.setup("yNum", 3, 1, 20));
 		gui.add(scaleSlider.setup("scale", 0.1, 0.01,0.1));
-		gui.add(distSliderX.setup("distX", 20,10,100));
-		gui.add(distSliderY.setup("distY", 20, 10, 100));
+		gui.add(distSliderX.setup("distX", 60,10,100));
+		gui.add(distSliderY.setup("distY", 60, 10, 100));
 		gui.add(blurSlider.setup("blur", 9, 5, 13));
 
 		//---basic---//
@@ -88,14 +101,14 @@ public:
 	void update() {
 		ofSetWindowTitle(ofToString(ofGetFrameRate()));
 		time = ofGetElapsedTimef();
+		currentW = originalW * scaleSlider;
+		currentH = originalH * scaleSlider;
 	}
 	void draw() {
-		
-		arrangeToGridSelect(imgA);
-		//arrangeToGridRandom();
-		
+				
 		setArea();
-		setGrid();
+		arrangeToGrid();
+		//showGrid();
 		info(10, ofGetHeight() * 0.9);
 		gui.draw();
 	}
@@ -124,7 +137,7 @@ public:
 	}
 
 
-	void setGrid() {
+	void showGrid() {
 		ofNoFill();
 		ofSetLineWidth(1);
 		ofSetColor(255, 100);
@@ -132,34 +145,48 @@ public:
 		ofTranslate(ofGetWidth() / 2 -distSliderX * xNumSlider/2, ofGetHeight() / 2 - distSliderY * yNumSlider/2);
 		for (int y = 0; y < yNumSlider+1; y++) {
 			for (int x = 0; x < xNumSlider+1; x++) {
-				drawCross(x * distSliderX, y * distSliderY,distSliderX,distSliderY);
+				drawCross(x * distSliderX, y * distSliderY, 20, 20);
 			}
 		}
 		ofPopMatrix();
 		ofSetColor(255, 255);
 	}
 
-
-	void arrangeToGridSelect(ofImage _img) {
-		_img.setAnchorPercent(0.5, 0.5);
-		float aW = _img.getWidth();
-		float aH = _img.getHeight();
-		aW = aW * scaleSlider;
-		aH = aH * scaleSlider;
-
+	void arrangeToGrid() {
+		ofSetColor(255, 255);
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2 - distSliderX * xNumSlider / 2, ofGetHeight() / 2 - distSliderY * yNumSlider / 2);
-		for (int y = 0; y < yNumSlider+1; y++) {
-			for (int x = 0; x < xNumSlider+1; x++) {
-			_img.draw(x * distSliderX, y * distSliderY, aW,aH);
-			drawDroppedShadhow(_img, x * distSliderX, y * distSliderY, aW, aH);
+		int s = 0;
+		for (int y = 0; y < yNumSlider + 1; y++) {
+			for (int x = 0; x < xNumSlider + 1; x++) {
+				//drawSelectImage(imgs[1], x * distSliderX, y * distSliderY);
+				//imgs[1].setAnchorPercent(0.5, 0.5);
+				//imgs[1].draw(x*distSliderX, y*distSliderY, currentW, currentH);
+				drawRandomImage(s,x * distSliderX, y * distSliderY);
+				s++;
 			}
 		}
 		ofPopMatrix();
 	}
 
-	void arrangeToGridSelect() {
 
+	void drawSelectImage(ofImage _img, int _x, int _y) {
+		ofSetColor(255, 255);
+		_img.setAnchorPercent(0.5, 0.5);
+		/*
+		float currentW = _img.getWidth();
+		float currentH = _img.getHeight();
+		currentW = originalW * scaleSlider;
+		currentH = originalH * scaleSlider;
+		*/
+		_img.draw(_x, _y, currentW,currentH);
+	}
+
+
+	void drawRandomImage(int _seed, int _x, int _y) {
+		//ofSeedRandom(_seed);
+		ofImage _img = imgs[int(ofRandom(0, 7))];
+		drawSelectImage(_img, _x, _y);
 	}
 
 	void drawCross(int _x, int _y, int _sizeX, int _sizeY) {
@@ -173,27 +200,28 @@ public:
 	void drawDroppedShadhow(ofImage _img, int _x, int _y, int _w, int _h) {
 		imgGray.allocate(_img.getWidth(), _img.getHeight());
 		imgBlur.allocate(_img.getWidth(), _img.getHeight());
-		imgGray = _img.getPixels();
-		imgBlur = imgGray;
+		ofPixels pixels = _img.getPixels();
+		imgGray.setFromPixels(pixels);
+		/*imgBlur = imgGray;
 		imgBlur.blur(blurSlider);
-		imgBlur.draw(_x, _y, _w, _h);
+		imgBlur.draw(_x, _y, _w, _h);*/
+		imgGray.draw(_x, _y, _w, _h);
 	}
 
-	
-	
+
 	
 	void drawSample(ofImage _img) {
-		float aW = _img.getWidth();
-		float aH = _img.getHeight();
-		aW = aW * scaleSlider;
-		aH = aH * scaleSlider;
+		float currentW = _img.getWidth();
+		float currentH = _img.getHeight();
+		currentW = currentW * scaleSlider;
+		currentH = currentH * scaleSlider;
 
 
 		for (int y = 0; y < yNumSlider; y++) {
 			for (int x = 0; x < xNumSlider; x++) {
 				ofPushMatrix();
 				ofTranslate(x * distSliderX, y * distSliderY);
-				imgA.draw(-aW/2,-aH/2, aW, aH);
+				imgA.draw(-currentW/2,-currentH/2, currentW, currentH);
 				ofPopMatrix();
 			}
 		}
