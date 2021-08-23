@@ -4,13 +4,21 @@
 #include "ofxGui.h"
 #include "ofxSvg.h"
 #include "ofxOpenCv.h"
+#include "ofEasyCam.h"
 
 class ofApp : public ofBaseApp {
 
 public:
+	//-----------ToDo-----------//
+	//画質 (FBO)
+	//blur
+	//z_sort
+	//２段階 + 合成 orアルファ写真作成
+
 	//-----------IMPORT-----------//
 	ofxPanel gui;
 	ofTrueTypeFont font;
+	ofEasyCam cam;
 
 	//-----------GLOBAL-----------//
 	float time;
@@ -47,10 +55,15 @@ public:
 	ofxFloatSlider shadowScaleSlider;
 	ofxFloatSlider shadowAlphaSlider;
 	ofxIntSlider seedSlider;
+	ofxIntSlider angleRangeSliderZ;
+	ofxIntSlider angleRangeSliderX;
+	ofxIntSlider angleRangeSliderY;
 	ofxFloatSlider blurSlider;
 
 	ofxToggle gridToggle;
 	ofxToggle randomRotationToggle;
+
+	ofxButton saveButton;
 
 
 	//----------MAIN-----------//
@@ -121,10 +134,24 @@ public:
 		gui.add(shadowScaleSlider.setup("shadowscale", 1.0, 0.8, 2.0));
 		gui.add(shadowAlphaSlider.setup("shadowAlpha", 30, 0, 200));
 		gui.add(seedSlider.setup("seed", 0, 0, 50));
+		gui.add(angleRangeSliderZ.setup("angleRangeZ", 45, 0, 180));
+		gui.add(angleRangeSliderX.setup("angleRangeX", 0, 0, 180));
+		gui.add(angleRangeSliderY.setup("angleRangeY", 45, 0, 180));
 		gui.add(blurSlider.setup("blur", 9, 5, 13));
 		
 		gui.add(gridToggle.setup("showGrid", true));
 		gui.add(randomRotationToggle.setup("random rotation", false));
+
+		gui.add(saveButton.setup("save image"));
+
+		//---camera---//
+
+		int CAM_Z = 500;
+		cam.setNearClip(0.1);
+		cam.setFarClip(1000);
+		cam.setPosition(0, 0, CAM_Z);
+		cam.enableOrtho();
+		cam.disableMouseInput();
 
 		//---basic---//
 
@@ -136,33 +163,53 @@ public:
 		ofEnableAntiAliasing();
 		//ofEnableDepthTest();
 
+		ofSetWindowTitle("MIDTOWN2021_TEXTUREMAKE : by Gaishi Kudo");
+
 	}
+	
 	void update() {
-		ofSetWindowTitle(ofToString(ofGetFrameRate()));
 		time = ofGetElapsedTimef();
 	}
+	
 	void draw() {
-
+		
+		cam.begin();
+		ofPushMatrix();
+		ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2,0);
 		arrangeToGrid();
+		ofPopMatrix();
+		cam.end();
+
 		if (gridToggle) {
 			showGrid();
 		}
 		setArea();
 		
-		info(10, ofGetHeight() * 0.9);
+		info();
 		gui.draw();
+		if (saveButton) {
+			saveImage();
+		}
 	}
 	
 	//----------CUSTOMFUNCS-----------//
 
-	void info(float _x, float _y) {
-		string infoData = "-Press S to save image-";
-		ofRectangle bb = font.getStringBoundingBox(infoData,0,0);
-		ofSetColor(0,80);
-		ofFill();
-		ofDrawRectangle(_x-fontSize/2,_y-fontSize/2-bb.height,bb.width+fontSize,bb.height+fontSize);
-		ofSetColor(255,255);
-		font.drawString(infoData, _x, _y);	
+	void info() {
+		float _x = 15;
+		float _y = ofGetHeight() * 0.9;
+		string infoData[3];
+		infoData[0] = "PROJECT : MIDTOWN2021";
+		infoData[1] = "FPS : " + ofToString(ceilf(ofGetFrameRate() * 100) / 100);
+		infoData[2] = "TIME : " + ofToString(ceilf(time * 100) / 100);
+
+		for (int i = 0; i < 3; i++) {
+			ofSetColor(0, 80);
+			ofFill();		
+			ofRectangle bb = font.getStringBoundingBox(infoData[i], 0, 0);
+			ofDrawRectangle(_x-fontSize/2, _y  - bb.height - fontSize/2+ (bb.height+fontSize)*i, bb.width+fontSize, bb.height+fontSize);
+			ofSetColor(255, 255);
+			font.drawString(infoData[i], _x, _y + (bb.height+fontSize)*i);
+		}			
 	}
 
 	void setArea() {
@@ -199,7 +246,6 @@ public:
 		ofSeedRandom(seedSlider);
 		for (int y = 0; y < yNumSlider + 1; y++) {
 			for (int x = 0; x < xNumSlider + 1; x++) {
-				//drawSelectImage(imgs[1], x * distSliderX, y * distSliderY);
 				drawRandomImage(x * distSliderX, y * distSliderY);
 			}
 		}
@@ -211,35 +257,47 @@ public:
 		currentW = originalW * scaleSlider;
 		currentH = originalH * scaleSlider;
 
+		float degreeZ = ofRandom(-angleRangeSliderZ,angleRangeSliderZ);
+		float degreeX = ofRandom(-angleRangeSliderX, angleRangeSliderX);
+		float degreeY = ofRandom(-angleRangeSliderY, angleRangeSliderY);
+		float zPos = ofRandom(500);
+
 		sdws[_imgIndex].setAnchorPercent(0.5, 0.5);
 		imgs[_imgIndex].setAnchorPercent(0.5, 0.5);
+		
 		ofPushMatrix();
-		ofTranslate(_x, _y);
+		ofTranslate(_x, _y ,0);
+		
+		//--shadow
+		ofPushMatrix();
+		ofTranslate(offsetShadowSliderX, offsetShadowSliderY, 0);
 		if (randomRotationToggle) {
-			ofRotate(ofRandom(360));
-		}
+			//ofTranslate(0, 0, -zPos);		
+			ofRotateX(degreeX);
+			ofRotateY(degreeY);
+			ofRotateZ(degreeZ);
+		}		
 		ofSetColor(255, shadowAlphaSlider);
-		sdws[_imgIndex].draw(offsetShadowSliderX, offsetShadowSliderY, currentW*shadowScaleSlider, currentH*shadowScaleSlider);
+		sdws[_imgIndex].draw(0,0, currentW*shadowScaleSlider, currentH*shadowScaleSlider);
+		ofPopMatrix();
+
+		//--real
+		ofPushMatrix();
+		if (randomRotationToggle) {
+			//ofTranslate(0, 0, -zPos);
+			ofRotateX(degreeX);
+			ofRotateY(degreeY);
+			ofRotateZ(degreeZ);
+		}
 		ofSetColor(255, 255);
 		imgs[_imgIndex].draw(0, 0, currentW,currentH);
 		ofPopMatrix();
-	}
 
+		ofPopMatrix();
+	}
 
 	void drawRandomImage( int _x, int _y) {
 		drawSelectImage(int(ofRandom(0, 6)), _x, _y);
-	}
-
-	
-	void drawDroppedShadhow(ofImage _img, int _x, int _y, int _w, int _h) {
-		imgGray.allocate(_img.getWidth(), _img.getHeight());
-		imgBlur.allocate(_img.getWidth(), _img.getHeight());
-		ofPixels pixels = _img.getPixels();
-		imgGray.setFromPixels(pixels);
-		/*imgBlur = imgGray;
-		imgBlur.blur(blurSlider);
-		imgBlur.draw(_x, _y, _w, _h);*/
-		imgGray.draw(_x, _y, _w, _h);
 	}
 
 	void drawCross(int _x, int _y, int _sizeX, int _sizeY) {
@@ -250,26 +308,15 @@ public:
 		ofPopMatrix();
 	}
 
-
-
-	
-	void drawSample(ofImage _img) {
-		float currentW = _img.getWidth();
-		float currentH = _img.getHeight();
-		currentW = currentW * scaleSlider;
-		currentH = currentH * scaleSlider;
-
-
-		for (int y = 0; y < yNumSlider; y++) {
-			for (int x = 0; x < xNumSlider; x++) {
-				ofPushMatrix();
-				ofTranslate(x * distSliderX, y * distSliderY);
-				imgA.draw(-currentW/2,-currentH/2, currentW, currentH);
-				ofPopMatrix();
-			}
-		}
+	void shadowEditer(int _x, int _y) {
 	}
 
+	void saveImage() {
+		string fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay())+ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
+		imgToSave.grabScreen(ofGetWidth() / 2 + area.x, ofGetHeight() / 2 + area.y, area.getWidth(), area.getHeight());
+		imgToSave.save(fileName, OF_IMAGE_QUALITY_BEST);
+		std::cout << "img : " + fileName + " -exported" << std::endl;
+	}
 
 
 
@@ -277,10 +324,7 @@ public:
 	//----------DEFAULT-OTHER-----------//
 	void keyPressed(int key) {
 		if (key == 's') {
-			string fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
-			imgToSave.grabScreen(ofGetWidth() / 2 + area.x, ofGetHeight() / 2 + area.y, area.getWidth(), area.getHeight());
-			imgToSave.save(fileName, OF_IMAGE_QUALITY_BEST);
-			std::cout << "img" + fileName + "exported" << std::endl;
+			saveImage();
 		}
 	};
 	void keyReleased(int key) {
