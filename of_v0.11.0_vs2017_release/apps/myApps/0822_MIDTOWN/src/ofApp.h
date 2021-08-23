@@ -25,6 +25,11 @@ public:
 	
 	ofImage imgA, imgB, imgC, imgD ,imgE, imgF, imgG;
 	ofImage imgs[7];
+
+	ofImage sdwA, sdwB, sdwC, sdwD, sdwE, sdwF, sdwG;
+	ofImage sdws[7];
+
+
 	float originalW, originalH;
 	float currentW, currentH;
 
@@ -37,7 +42,15 @@ public:
 	ofxFloatSlider scaleSlider;
 	ofxFloatSlider distSliderX;
 	ofxFloatSlider distSliderY;
+	ofxFloatSlider offsetShadowSliderX;
+	ofxFloatSlider offsetShadowSliderY;
+	ofxFloatSlider shadowScaleSlider;
+	ofxFloatSlider shadowAlphaSlider;
+	ofxIntSlider seedSlider;
 	ofxFloatSlider blurSlider;
+
+	ofxToggle gridToggle;
+	ofxToggle randomRotationToggle;
 
 
 	//----------MAIN-----------//
@@ -47,7 +60,7 @@ public:
 		std::cout << "Script Begins !" << std::endl;
 
 		//---initParam---//
-		fontSize = 10;
+		fontSize = 12;
 
 		//---loading---//
 		//img
@@ -68,6 +81,23 @@ public:
 		originalW = imgA.getWidth();
 		originalH = imgA.getHeight();
 
+		//sdw
+		sdwA.load("./img_leaves/sdwA.png");
+		sdwB.load("./img_leaves/sdwB.png");
+		sdwC.load("./img_leaves/sdwC.png");
+		sdwD.load("./img_leaves/sdwD.png");
+		sdwE.load("./img_leaves/sdwE.png");
+		sdwF.load("./img_leaves/sdwF.png");
+		sdwG.load("./img_leaves/sdwG.png");
+		sdws[0] = sdwA;
+		sdws[1] = sdwB;
+		sdws[2] = sdwC;
+		sdws[3] = sdwD;
+		sdws[4] = sdwE;
+		sdws[5] = sdwF;
+		sdws[6] = sdwG;
+
+
 
 		//font
 		ofTrueTypeFont::setGlobalDpi(72);
@@ -83,32 +113,42 @@ public:
 		gui.add(areaHeightSlider.setup("areaHeight", 500, 400, 800));
 		gui.add(xNumSlider.setup("xNum", 3, 1, 20));
 		gui.add(yNumSlider.setup("yNum", 3, 1, 20));
-		gui.add(scaleSlider.setup("scale", 0.1, 0.01,0.1));
-		gui.add(distSliderX.setup("distX", 60,10,100));
-		gui.add(distSliderY.setup("distY", 60, 10, 100));
+		gui.add(scaleSlider.setup("scale", 0.1, 0.01,0.2));
+		gui.add(distSliderX.setup("distX", 60,10,200));
+		gui.add(distSliderY.setup("distY", 60, 10, 200));
+		gui.add(offsetShadowSliderX.setup("offsetShadowX", 0, -20, 20));
+		gui.add(offsetShadowSliderY.setup("offsetShadowY", 0, -20, 20));
+		gui.add(shadowScaleSlider.setup("shadowscale", 1.0, 0.8, 2.0));
+		gui.add(shadowAlphaSlider.setup("shadowAlpha", 30, 0, 200));
+		gui.add(seedSlider.setup("seed", 0, 0, 50));
 		gui.add(blurSlider.setup("blur", 9, 5, 13));
+		
+		gui.add(gridToggle.setup("showGrid", true));
+		gui.add(randomRotationToggle.setup("random rotation", false));
 
 		//---basic---//
 
 		ofSetBackgroundAuto(true);
-		ofSetBackgroundColor(0, 0, 0);
+		ofSetBackgroundColor(220);
 		ofEnableAlphaBlending();
 		//ofEnableBlendMode(); //OF_BLENDMODE_DISABLED, OF_BLENDMODE_ALPHA, OF_BLENDMODE_ADD, OF_BLENDMODE_SUBTRACT, OF_BLENDMODE_MULTIPLY, OF_BLENDMODE_SCREEN
 		ofSetFrameRate(30);
 		ofEnableAntiAliasing();
+		//ofEnableDepthTest();
 
 	}
 	void update() {
 		ofSetWindowTitle(ofToString(ofGetFrameRate()));
 		time = ofGetElapsedTimef();
-		currentW = originalW * scaleSlider;
-		currentH = originalH * scaleSlider;
 	}
 	void draw() {
-				
-		setArea();
+
 		arrangeToGrid();
-		//showGrid();
+		if (gridToggle) {
+			showGrid();
+		}
+		setArea();
+		
 		info(10, ofGetHeight() * 0.9);
 		gui.draw();
 	}
@@ -156,47 +196,41 @@ public:
 		ofSetColor(255, 255);
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2 - distSliderX * xNumSlider / 2, ofGetHeight() / 2 - distSliderY * yNumSlider / 2);
-		int s = 0;
+		ofSeedRandom(seedSlider);
 		for (int y = 0; y < yNumSlider + 1; y++) {
 			for (int x = 0; x < xNumSlider + 1; x++) {
 				//drawSelectImage(imgs[1], x * distSliderX, y * distSliderY);
-				//imgs[1].setAnchorPercent(0.5, 0.5);
-				//imgs[1].draw(x*distSliderX, y*distSliderY, currentW, currentH);
-				drawRandomImage(s,x * distSliderX, y * distSliderY);
-				s++;
+				drawRandomImage(x * distSliderX, y * distSliderY);
 			}
 		}
 		ofPopMatrix();
 	}
 
 
-	void drawSelectImage(ofImage _img, int _x, int _y) {
-		ofSetColor(255, 255);
-		_img.setAnchorPercent(0.5, 0.5);
-		/*
-		float currentW = _img.getWidth();
-		float currentH = _img.getHeight();
+	void drawSelectImage(int _imgIndex, int _x, int _y) {
 		currentW = originalW * scaleSlider;
 		currentH = originalH * scaleSlider;
-		*/
-		_img.draw(_x, _y, currentW,currentH);
-	}
 
-
-	void drawRandomImage(int _seed, int _x, int _y) {
-		//ofSeedRandom(_seed);
-		ofImage _img = imgs[int(ofRandom(0, 7))];
-		drawSelectImage(_img, _x, _y);
-	}
-
-	void drawCross(int _x, int _y, int _sizeX, int _sizeY) {
+		sdws[_imgIndex].setAnchorPercent(0.5, 0.5);
+		imgs[_imgIndex].setAnchorPercent(0.5, 0.5);
 		ofPushMatrix();
 		ofTranslate(_x, _y);
-		ofDrawLine(-_sizeX / 2, 0, _sizeX / 2, 0);
-		ofDrawLine(0, -_sizeY / 2, 0, _sizeY / 2);
+		if (randomRotationToggle) {
+			ofRotate(ofRandom(360));
+		}
+		ofSetColor(255, shadowAlphaSlider);
+		sdws[_imgIndex].draw(offsetShadowSliderX, offsetShadowSliderY, currentW*shadowScaleSlider, currentH*shadowScaleSlider);
+		ofSetColor(255, 255);
+		imgs[_imgIndex].draw(0, 0, currentW,currentH);
 		ofPopMatrix();
 	}
 
+
+	void drawRandomImage( int _x, int _y) {
+		drawSelectImage(int(ofRandom(0, 6)), _x, _y);
+	}
+
+	
 	void drawDroppedShadhow(ofImage _img, int _x, int _y, int _w, int _h) {
 		imgGray.allocate(_img.getWidth(), _img.getHeight());
 		imgBlur.allocate(_img.getWidth(), _img.getHeight());
@@ -207,6 +241,15 @@ public:
 		imgBlur.draw(_x, _y, _w, _h);*/
 		imgGray.draw(_x, _y, _w, _h);
 	}
+
+	void drawCross(int _x, int _y, int _sizeX, int _sizeY) {
+		ofPushMatrix();
+		ofTranslate(_x, _y);
+		ofDrawLine(-_sizeX / 2, 0, _sizeX / 2, 0);
+		ofDrawLine(0, -_sizeY / 2, 0, _sizeY / 2);
+		ofPopMatrix();
+	}
+
 
 
 	
@@ -234,9 +277,10 @@ public:
 	//----------DEFAULT-OTHER-----------//
 	void keyPressed(int key) {
 		if (key == 's') {
+			string fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
 			imgToSave.grabScreen(ofGetWidth() / 2 + area.x, ofGetHeight() / 2 + area.y, area.getWidth(), area.getHeight());
-			imgToSave.save("ofScreenShot.png");
-			std::cout << "img exported" << std::endl;
+			imgToSave.save(fileName, OF_IMAGE_QUALITY_BEST);
+			std::cout << "img" + fileName + "exported" << std::endl;
 		}
 	};
 	void keyReleased(int key) {
