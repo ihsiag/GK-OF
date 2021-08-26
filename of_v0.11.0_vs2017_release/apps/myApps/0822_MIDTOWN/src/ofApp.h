@@ -30,6 +30,8 @@ public:
 	static const int loadingImgNum = 1;
 	ofImage imgs[loadingImgNum];
 
+	ofImage sdwA;
+
 	float originalW, originalH;
 	float currentW, currentH;
 

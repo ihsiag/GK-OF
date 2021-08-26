@@ -1322,6 +1322,9 @@
     <ClInclude Include="src\ofApp_arrangeLeaves.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\ofApp_arrangeLeavesAlpha.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
