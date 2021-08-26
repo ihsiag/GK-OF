@@ -27,7 +27,7 @@ public:
 	ofRectangle area;
 
 	ofImage imgA, imgB;
-	static const int loadingImgNum = 2;
+	static const int loadingImgNum = 1;
 	ofImage imgs[loadingImgNum];
 
 	float originalW, originalH;
@@ -92,11 +92,9 @@ public:
 
 		//---loading---//
 		//img
-		imgA.load("./img_circles/A.png");
-		imgB.load("./img_circles/B.png");
+		imgA.load("./img_leavesAlpha/A.png");
 
 		imgs[0] = imgA;
-		imgs[1] = imgB; 
 
 		originalW = imgA.getWidth();
 		originalH = imgA.getHeight();
@@ -126,9 +124,9 @@ public:
 		gui.add(mainRandomScaleToggle.setup("mainRandomScale", false));
 		gui.add(mainRandomAlphaToggle.setup("mainRandomAlpha", false));
 
-		gui.add(areaWidthSlider.setup("areaWidth", 500, 400, 1500));
+		gui.add(areaWidthSlider.setup("areaWidth", 4000, 800, 4000));
 		
-		gui.add(areaHeightSlider.setup("areaHeight", 500, 400, 1500));
+		gui.add(areaHeightSlider.setup("areaHeight", 4000, 800, 4000));
 		gui.add(gridNumXSlider.setup("gridNumX", 3, 1, 45));
 		gui.add(gridNumYSlider.setup("gridNumY", 3, 1, 45));
 		gui.add(gridDistXSlider.setup("gridDistX", 60,10,200));
@@ -193,7 +191,19 @@ public:
 	}
 	
 	void draw() {
-		fbo.draw(0, 0, 1000, 1000);
+		ofPushMatrix();
+		ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2, 0);
+		if (ofGetWidth() >= ofGetHeight()) {		
+			float _tmpH = ofGetHeight();
+			float _tmpW = fbo.getWidth() * ofGetHeight() / fbo.getHeight();
+			fbo.draw(-_tmpW/2,-_tmpH/2,_tmpW,_tmpH);
+		}
+		else {
+			float _tmpW = ofGetWidth();
+			float _tmpH = fbo.getHeight() * ofGetWidth() / fbo.getWidth();
+			fbo.draw(-_tmpW / 2, -_tmpH / 2, _tmpW, _tmpH);
+		}
+		ofPopMatrix();
 		info();
 		gui.draw();
 	}
@@ -263,7 +273,7 @@ public:
 	void showGrid() {
 		ofNoFill();
 		ofSetLineWidth(1);
-		ofSetColor(255, 100);
+		ofSetColor(255, 255);
 		ofPushMatrix();
 		ofTranslate(fbo.getWidth() / 2 - gridDistXSlider * gridNumXSlider / 2, fbo.getHeight() / 2 - gridDistYSlider * gridNumYSlider / 2);
 		for (int y = 0; y < gridNumYSlider + 1; y++) {
@@ -272,7 +282,6 @@ public:
 			}
 		}
 		ofPopMatrix();
-		ofSetColor(255, 255);
 	}
 
 	void arrangeToGrid() {
@@ -296,9 +305,27 @@ public:
 		ofSeedRandom(mainSeedSlider);
 		for (int y = 0; y < gridNumYSlider + 1; y++) {
 			for (int x = 0; x < gridNumXSlider + 1; x++) {
-				float value = ofRandom(-1,1)*ofRandom(offGridMinSlider, offGridMaxSlider);
-				if (mainRandomImgToggle) { drawRandomImage(x * gridDistXSlider+value, y * gridDistYSlider+value); }
-				else { drawSelectImage(mainImgSelectSlider, x * gridDistXSlider+value, y * gridDistYSlider+value); }
+				float offGrid = ofRandom(offGridMinSlider, offGridMaxSlider);
+				float dir = ofRandom(1);
+				float valueX, valueY;
+				if (dir < 0.25) {
+					valueX = -offGrid;
+					valueY = -offGrid;
+				}
+				else if (dir < 0.50) {
+					valueX = +offGrid;
+					valueY = -offGrid;
+				}
+				else if (dir < 0.75) {
+					valueX = -offGrid;
+					valueY = +offGrid;
+				}
+				else {
+					valueX = +offGrid;
+					valueY = +offGrid;
+				}
+				if (mainRandomImgToggle) { drawRandomImage(x * gridDistXSlider+valueX, y * gridDistYSlider+valueY); }
+				else { drawSelectImage(mainImgSelectSlider, x * gridDistXSlider+valueX, y * gridDistYSlider+valueY); }
 			}
 		}
 		ofPopMatrix();
@@ -347,7 +374,7 @@ public:
 			ofRotateZ(degreeZ);
 		}
 		if (mainRandomAlphaToggle) {ofSetColor(255, ofRandom(mainRandomAlphaMinSlider, mainRandomAlphaMaxSlider));}
-		else { ofSetColor(255, 255); }
+		else { ofSetColor(255, mainAlphaSlider); }
 		imgs[_imgIndex].draw(0, 0, currentW,currentH);
 		ofPopMatrix();
 
@@ -371,6 +398,8 @@ public:
 	
 	void saveChecker() {
 		if (drawAreaBGToggle) { drawAreaBGToggle = false; saveCheckerID01 = true; }
+		if (drawAreaOUTToggle) { drawAreaOUTToggle = false; saveCheckerID02 = true; }
+		if (drawGridToggle) { drawGridToggle = false; saveCheckerID03 = true; }
 	}
 
 
