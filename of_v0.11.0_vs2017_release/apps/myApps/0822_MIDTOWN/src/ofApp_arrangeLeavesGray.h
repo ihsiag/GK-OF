@@ -153,7 +153,7 @@ public:
 		gui.add(offGridMinSlider.setup("offGridMin", 0, 0, gridDistXSlider * 2));
 		gui.add(offGridMaxSlider.setup("offGridMax", 0, 0, gridDistXSlider * 4));
 
-		gui.add(organicCenterNumSlider.setup("organicCenterNum", 30, 10, 400));
+		gui.add(organicCenterNumSlider.setup("organicCenterNum", 30, 10, 1000));
 		gui.add(organicRadiusMinSlider.setup("organicRadiusMin", 50, 0, 200));
 		gui.add(organicRadiusMaxSlider.setup("organicRadiusMax", 100, 0, 500));
 		gui.add(organicLeavesNumMinSlider.setup("organicLeavesNumMin", 2, 1, 10));
