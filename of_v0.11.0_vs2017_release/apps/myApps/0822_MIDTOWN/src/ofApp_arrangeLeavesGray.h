@@ -63,10 +63,13 @@ public:
 	ofxIntSlider offGridMinSlider;
 	ofxIntSlider offGridMaxSlider;
 	
-	ofxFloatSlider offsetShadowXSlider;
-	ofxFloatSlider offsetShadowYSlider;
-	ofxFloatSlider offsetShadowScaleSlider;
-	ofxFloatSlider offsetShadowAlphaSlider;
+	ofxIntSlider organicCenterNumSlider;
+	ofxFloatSlider organicRadiusMinSlider;
+	ofxFloatSlider organicRadiusMaxSlider;
+	ofxIntSlider organicLeavesNumMinSlider;
+	ofxIntSlider organicLeavesNumMaxSlider;
+	ofxFloatSlider organicDegreeMinSlider;
+	ofxFloatSlider organicDegreeMaxSlider;
 	
 	ofxIntSlider mainSeedSlider;
 	ofxIntSlider mainImgSelectSlider;
@@ -77,18 +80,15 @@ public:
 	ofxIntSlider mainRandomAlphaMinSlider;
 	ofxIntSlider mainRandomAlphaMaxSlider;
 
-	ofxIntSlider organicCenterNumSlider;
-	ofxFloatSlider organicRadiusMinSlider;
-	ofxFloatSlider organicRadiusMaxSlider;
-	ofxIntSlider organicLeavesNumMinSlider;
-	ofxIntSlider organicLeavesNumMaxSlider;
-	ofxFloatSlider organicDegreeMinSlider;
-	ofxFloatSlider organicDegreeMaxSlider;
-
-
 	ofxIntSlider mainAngleRangeZSlider;
 	ofxIntSlider mainAngleRangeXSlider;
 	ofxIntSlider mainAngleRangeYSlider;
+
+	ofxFloatSlider offsetShadowXSlider;
+	ofxFloatSlider offsetShadowYSlider;
+	ofxFloatSlider offsetShadowScaleSlider;
+	ofxFloatSlider offsetShadowAlphaSlider;
+
 	ofxFloatSlider blurSlider;
 
 	ofxButton saveButton;
@@ -151,21 +151,7 @@ public:
 		gui.add(gridDistXSlider.setup("gridDistX", 60,10,200));
 		gui.add(gridDistYSlider.setup("gridDistY", 60, 10, 200));
 		gui.add(offGridMinSlider.setup("offGridMin", 0, 0, gridDistXSlider * 2));
-		gui.add(offGridMaxSlider.setup("offGridMax", gridDistXSlider, 0, gridDistXSlider * 4));
-		
-		gui.add(offsetShadowXSlider.setup("offsetShadowX", 0, -20, 20));
-		gui.add(offsetShadowYSlider.setup("offsetShadowY", 0, -20, 20));
-		gui.add(offsetShadowScaleSlider.setup("offsetShadowScale", 1.0, 0.8, 2.0));
-		gui.add(offsetShadowAlphaSlider.setup("offsetShadowAlpha", 30, 0, 200));
-		
-		gui.add(mainImgSelectSlider.setup("mainImgSelect", 0, 0, loadingImgNum-1));
-		gui.add(mainSeedSlider.setup("mainSeed", 0, 0, 50));
-		gui.add(mainScaleSlider.setup("mainScale", 0.1, 0.01, 0.2));
-		gui.add(mainRandomScaleMinSlider.setup("mainRandomScaleMin", 1.000, 0.000, 1.000));
-		gui.add(mainRandomScaleMaxSlider.setup("mainRandomScaleMax", 1.200, 0.0000, 2.000));
-		gui.add(mainAlphaSlider.setup("mainAlphaSlider", 255, 0, 255));
-		gui.add(mainRandomAlphaMinSlider.setup("mainRandomAlphaMin", 0, 0, 255));
-		gui.add(mainRandomAlphaMaxSlider.setup("mainRandomAlphaMax", 170, 0, 255));
+		gui.add(offGridMaxSlider.setup("offGridMax", 0, 0, gridDistXSlider * 4));
 
 		gui.add(organicCenterNumSlider.setup("organicCenterNum", 30, 10, 400));
 		gui.add(organicRadiusMinSlider.setup("organicRadiusMin", 50, 0, 200));
@@ -175,11 +161,23 @@ public:
 		gui.add(organicDegreeMinSlider.setup("organicDegreeMin", 20, 5, 80));
 		gui.add(organicDegreeMaxSlider.setup("organicDegreeMax", 20, 5, 80));
 
-
+		gui.add(mainImgSelectSlider.setup("mainImgSelect", 0, 0, loadingImgNum - 1));
+		gui.add(mainSeedSlider.setup("mainSeed", 0, 0, 50));
+		gui.add(mainScaleSlider.setup("mainScale", 0.1, 0.01, 0.2));
+		gui.add(mainRandomScaleMinSlider.setup("mainRandomScaleMin", 1.000, 0.000, 1.000));
+		gui.add(mainRandomScaleMaxSlider.setup("mainRandomScaleMax", 1.200, 0.0000, 2.000));
+		gui.add(mainAlphaSlider.setup("mainAlphaSlider", 255, 0, 255));
+		gui.add(mainRandomAlphaMinSlider.setup("mainRandomAlphaMin", 0, 0, 255));
+		gui.add(mainRandomAlphaMaxSlider.setup("mainRandomAlphaMax", 170, 0, 255));
 
 		gui.add(mainAngleRangeZSlider.setup("mainAngleRangeZ", 45, 0, 180));
 		gui.add(mainAngleRangeXSlider.setup("mainAngleRangeX", 0, 0, 180));
 		gui.add(mainAngleRangeYSlider.setup("mainAngleRangeY", 45, 0, 180));
+
+		gui.add(offsetShadowXSlider.setup("offsetShadowX", 0, -20, 20));
+		gui.add(offsetShadowYSlider.setup("offsetShadowY", 0, -20, 20));
+		gui.add(offsetShadowScaleSlider.setup("offsetShadowScale", 1.0, 0.8, 2.0));
+		gui.add(offsetShadowAlphaSlider.setup("offsetShadowAlpha", 30, 0, 200));
 		
 		gui.add(blurSlider.setup("blur", 9, 5, 13));
 		
@@ -244,11 +242,10 @@ public:
 		cam.begin();
 		ofPushMatrix();
 		ofTranslate(-fbo.getWidth() / 2, -fbo.getHeight() / 2, 0);
-		/*
-		if (arrangeToGridToggle) { arrangeToGrid(); }
-		else { arrangeRandom(); }
-		*/
-		arrangeOrganic();
+		
+		if (arrangeToGridToggle) { arrangeRandom(); }
+		else { arrangeOrganic(); }
+		
 		ofPopMatrix();
 		cam.end();
 
@@ -368,21 +365,26 @@ public:
 			float x = ofRandom(fbo.getWidth());
 			float y = ofRandom(fbo.getHeight());
 			int leavesNum = ofRandom(organicLeavesNumMinSlider, organicLeavesNumMaxSlider);
-			float radius = ofRandom(organicRadiusMinSlider,organicRadiusMaxSlider);
+			//float radius = ofRandom(organicRadiusMinSlider,organicRadiusMaxSlider);
 			float deg = ofRandom(organicDegreeMinSlider, organicDegreeMaxSlider);
 			float rad = sin(ofDegToRad(deg));
+			ofPushMatrix();
+			ofTranslate(x, y, 0);
+			if (drawGridToggle)drawCross(0,0, 20, 20);
+			ofRotateZ(-(leavesNum-1)*deg*0.5);
 			for (int i = 0; i < leavesNum; i++) {
-				x = x + cos(rad*i) * radius;
-				y = y + sin(rad*i) * radius;
+				float radius = ofRandom(organicRadiusMinSlider, organicRadiusMaxSlider);
+				float newX =cos((rad)*i - PI / 2) * radius;
+				float newY =sin((rad)*i - PI / 2) * radius;
 				ofPushMatrix();
-				ofTranslate(x, y, 0);
+				ofTranslate(newX, newY, 0);
 				ofRotateZ(deg * i);
 				ofSetLineWidth(2);
-				if(drawGridToggle)drawCross(x, y,20,20);
-				drawSelectImageOrganic(mainImgSelectSlider, 0,0);
+				drawCross(0, 0, 20, 20);
+				drawSelectImage(mainImgSelectSlider, 0,0);
 				ofPopMatrix();
-			}
-			
+			}	
+			ofPopMatrix();
 		}
 	}
 
@@ -416,7 +418,8 @@ public:
 			ofRotateZ(degreeZ);
 		}		
 		ofSetColor(255, offsetShadowAlphaSlider);
-		sdws[_imgIndex].setAnchorPercent(0.5, 0.5);
+		if (arrangeToGridToggle) { sdws[_imgIndex].setAnchorPercent(0.5, 0.5); }
+		else { sdws[_imgIndex].setAnchorPercent(0.5, 1.0); }
 		sdws[_imgIndex].draw(0,0, currentW*offsetShadowScaleSlider, currentH*offsetShadowScaleSlider);
 		ofPopMatrix();
 		
@@ -431,45 +434,10 @@ public:
 		}
 		if (mainRandomAlphaToggle) {ofSetColor(255, ofRandom(mainRandomAlphaMinSlider, mainRandomAlphaMaxSlider));}
 		else { ofSetColor(255, mainAlphaSlider); }
-		imgs[_imgIndex].setAnchorPercent(0.5, 0.5);
+		if(arrangeToGridToggle){ imgs[_imgIndex].setAnchorPercent(0.5, 0.5); }
+		else{ imgs[_imgIndex].setAnchorPercent(0.5, 1.0); }
 		imgs[_imgIndex].draw(0, 0, currentW,currentH);
 		ofPopMatrix();
-
-		ofPopMatrix();
-	}
-
-	void drawSelectImageOrganic(int _imgIndex, int _x, int _y) {
-		currentW = originalW * mainScaleSlider;
-		currentH = originalH * mainScaleSlider;
-		if (mainRandomScaleToggle) {
-			float value = ofRandom(mainRandomScaleMinSlider, mainRandomScaleMaxSlider);
-			currentW = currentW * value;
-			currentH = currentH * value;
-		}
-
-		float degreeZ = ofRandom(-mainAngleRangeZSlider, mainAngleRangeZSlider);
-		float degreeX = ofRandom(-mainAngleRangeXSlider, mainAngleRangeXSlider);
-		float degreeY = ofRandom(-mainAngleRangeYSlider, mainAngleRangeYSlider);
-		float zPos = ofRandom(500);
-
-
-
-		ofPushMatrix();
-		ofTranslate(_x, _y, 0);
-
-
-		//--real
-		ofPushMatrix();
-		if (mainRandomRotationToggle) {
-			//ofTranslate(0, 0, -zPos);
-			ofRotateX(degreeX);
-			ofRotateY(degreeY);
-			ofRotateZ(degreeZ);
-		}
-		if (mainRandomAlphaToggle) { ofSetColor(255, ofRandom(mainRandomAlphaMinSlider, mainRandomAlphaMaxSlider)); }
-		else { ofSetColor(255, mainAlphaSlider); }
-		imgs[_imgIndex].setAnchorPercent(0.5, 1);
-		imgs[_imgIndex].draw(0, 0, currentW, currentH);
 
 		ofPopMatrix();
 	}
@@ -486,9 +454,6 @@ public:
 		ofPopMatrix();
 	}
 
-	void shadowEditer(int _x, int _y) {
-	}
-	
 	void saveChecker() {
 		if (drawAreaBGToggle) { drawAreaBGToggle = false; saveCheckerID01 = true; }
 		if (drawAreaOUTToggle) { drawAreaOUTToggle = false; saveCheckerID02 = true; }
