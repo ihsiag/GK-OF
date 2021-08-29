@@ -5,6 +5,7 @@
 #include "ofxSvg.h"
 #include "ofxOpenCv.h"
 #include "ofEasyCam.h"
+#include "ofShader.h"
 
 class ofApp : public ofBaseApp {
 
@@ -14,6 +15,7 @@ public:
 	ofxPanel gui;
 	ofTrueTypeFont font;
 	ofEasyCam cam;
+	ofShader shader;
 
 	//------------OUTPUT----------//
 	ofImage imgToSave;
@@ -31,6 +33,9 @@ public:
 	ofImage imgs[loadingImgNum];
 
 	ofImage sdwA;
+	ofImage sdws[loadingImgNum];
+
+	ofImage colorPallete;
 
 	float originalW, originalH;
 	float currentW, currentH;
@@ -59,12 +64,12 @@ public:
 	ofxFloatSlider gridDistYSlider;
 	ofxIntSlider offGridMinSlider;
 	ofxIntSlider offGridMaxSlider;
-	/*
+	
 	ofxFloatSlider offsetShadowXSlider;
 	ofxFloatSlider offsetShadowYSlider;
 	ofxFloatSlider offsetShadowScaleSlider;
 	ofxFloatSlider offsetShadowAlphaSlider;
-	*/
+	
 	ofxIntSlider mainSeedSlider;
 	ofxIntSlider mainNumSlider;
 	ofxIntSlider mainImgSelectSlider;
@@ -94,7 +99,7 @@ public:
 
 		//---loading---//
 		//img
-		imgA.load("./img_leavesAlpha/A.png");
+		imgA.load("./img_leavesGray/grayA.png");
 
 		imgs[0] = imgA;
 
@@ -102,6 +107,20 @@ public:
 		originalH = imgA.getHeight();
 
 		//sdw
+		sdwA.load("./img_leavesGray/sdwA.png");
+		sdws[0] = sdwA;
+
+		//color
+		colorPallete.load("./shaders/colorPallete.png");
+
+		//shader
+		shader.load("./shaders/sample.vert","./shaders/voronoi.frag");
+		if (shader.isLoaded()) {
+			std::cout << "shaders ok" << std::endl;
+		}
+		else {
+			std::cout << "no" << std::endl;
+		}
 
 
 		//font
@@ -135,12 +154,12 @@ public:
 		gui.add(gridDistYSlider.setup("gridDistY", 60, 10, 200));
 		gui.add(offGridMinSlider.setup("offGridMin", 0, 0, gridDistXSlider * 2));
 		gui.add(offGridMaxSlider.setup("offGridMax", gridDistXSlider, 0, gridDistXSlider * 4));
-		/*
+		
 		gui.add(offsetShadowXSlider.setup("offsetShadowX", 0, -20, 20));
 		gui.add(offsetShadowYSlider.setup("offsetShadowY", 0, -20, 20));
-		gui.add(offsetShadoScaleSlider.setup("offsetShadowScale", 1.0, 0.8, 2.0));
+		gui.add(offsetShadowScaleSlider.setup("offsetShadowScale", 1.0, 0.8, 2.0));
 		gui.add(offsetShadowAlphaSlider.setup("offsetShadowAlpha", 30, 0, 200));
-		*/
+		
 		gui.add(mainImgSelectSlider.setup("mainImgSelect", 0, 0, loadingImgNum-1));
 		gui.add(mainNumSlider.setup("mainNum", 100, 10, 2000));
 		gui.add(mainSeedSlider.setup("mainSeed", 0, 0, 50));
@@ -214,7 +233,19 @@ public:
 		if (saveButton)saveChecker();
 		setArea();
 		if (drawAreaBGToggle)drawAreaBG();
-
+		cam.begin();
+		
+		shader.begin();
+		shader.setUniform1f("u_time", mainSeedSlider);
+		shader.setUniform2f("u_resolution", fbo.getWidth(), fbo.getHeight());
+		//colorPallete.getTexture().bind();
+		//colorPallete.getTexture.unbind();
+		//shader.setUniformTexture
+		//ofSetColor(255, 0, 0, 255);
+		ofDrawRectangle(area);
+		shader.end();
+		cam.end();
+		/*
 		cam.begin();
 		ofPushMatrix();
 		ofTranslate(-fbo.getWidth() / 2, -fbo.getHeight() / 2, 0);
@@ -222,7 +253,7 @@ public:
 		else { arrangeRandom(); }
 		ofPopMatrix();
 		cam.end();
-
+		*/
 		if (drawGridToggle)showGrid();
 		if (drawAreaOUTToggle)drawAreaOUT();
 		if (saveButton)saveFBOtoImage();
@@ -274,7 +305,7 @@ public:
 
 	void showGrid() {
 		ofNoFill();
-		ofSetLineWidth(1);
+		ofSetLineWidth(ofGetHeight()/fbo.getHeight());
 		ofSetColor(255, 255);
 		ofPushMatrix();
 		ofTranslate(fbo.getWidth() / 2 - gridDistXSlider * gridNumXSlider / 2, fbo.getHeight() / 2 - gridDistYSlider * gridNumYSlider / 2);
@@ -348,11 +379,11 @@ public:
 		float degreeY = ofRandom(-mainAngleRangeYSlider, mainAngleRangeYSlider);
 		float zPos = ofRandom(500);
 
-		imgs[_imgIndex].setAnchorPercent(0.5, 0.5);
+		
 		
 		ofPushMatrix();
 		ofTranslate(_x, _y ,0);
-		/*
+		
 		//--shadow
 		ofPushMatrix();
 		ofTranslate(offsetShadowXSlider, offsetShadowYSlider, 0);
@@ -363,9 +394,10 @@ public:
 			ofRotateZ(degreeZ);
 		}		
 		ofSetColor(255, offsetShadowAlphaSlider);
+		sdws[_imgIndex].setAnchorPercent(0.5, 0.5);
 		sdws[_imgIndex].draw(0,0, currentW*offsetShadowScaleSlider, currentH*offsetShadowScaleSlider);
 		ofPopMatrix();
-		*/
+		
 
 		//--real
 		ofPushMatrix();
@@ -377,6 +409,7 @@ public:
 		}
 		if (mainRandomAlphaToggle) {ofSetColor(255, ofRandom(mainRandomAlphaMinSlider, mainRandomAlphaMaxSlider));}
 		else { ofSetColor(255, mainAlphaSlider); }
+		imgs[_imgIndex].setAnchorPercent(0.5, 0.5);
 		imgs[_imgIndex].draw(0, 0, currentW,currentH);
 		ofPopMatrix();
 

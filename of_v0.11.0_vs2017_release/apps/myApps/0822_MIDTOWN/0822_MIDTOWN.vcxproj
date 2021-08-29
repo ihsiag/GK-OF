@@ -556,10 +556,12 @@
     <ClInclude Include="..\..\..\addons\ofxSvg\libs\libxml2\include\libxml\xpathInternals.h" />
     <ClInclude Include="..\..\..\addons\ofxSvg\libs\libxml2\include\libxml\xpointer.h" />
     <ClInclude Include="..\..\..\addons\ofxSvg\libs\svgtiny\include\svgtiny.h" />
-    <ClInclude Include="src\ofApp_arrangeLeavesAlpha.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\ofApp_arrangeCircles.h" />
     <ClInclude Include="src\ofApp_arrangeLeaves.h" />
+    <ClInclude Include="src\ofApp_arrangeLeavesAlpha.h" />
+    <ClInclude Include="src\ofApp_arrangeLeavesGray.h" />
+    <ClInclude Include="src\ofApp_voronoi.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
