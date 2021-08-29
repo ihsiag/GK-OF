@@ -106,6 +106,7 @@ public:
 		//---loading---//
 		//img
 		imgA.load("./img_leavesGray/grayA.png");
+		//imgA.load("./img_circles/A.png");
 
 		imgs[0] = imgA;
 
@@ -380,7 +381,7 @@ public:
 				ofTranslate(newX, newY, 0);
 				ofRotateZ(deg * i);
 				ofSetLineWidth(2);
-				drawCross(0, 0, 20, 20);
+				if(drawGridToggle){ drawCross(0, 0, 20, 20); }
 				drawSelectImage(mainImgSelectSlider, 0,0);
 				ofPopMatrix();
 			}	
@@ -407,6 +408,7 @@ public:
 		
 		ofPushMatrix();
 		ofTranslate(_x, _y ,0);
+		
 		
 		//--shadow
 		ofPushMatrix();
