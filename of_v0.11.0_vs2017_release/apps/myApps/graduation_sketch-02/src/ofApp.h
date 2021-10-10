@@ -7,6 +7,9 @@
 #include "ofxGui.h"
 #include "ofxPostProcessing.h"
 
+//
+#include "Class_Analysis.h"
+
 
 
 
@@ -14,6 +17,7 @@ class ofApp : public ofBaseApp {
 
 public:
 	//-----------IMPORT
+	Class_Analysis analysis;
 	ofCamera cam;
 	ofEasyCam ezCam;
 	ofTrueTypeFont font;
@@ -194,7 +198,7 @@ public:
 		ofSetColor(255);
 	}
 
-
+	/*
 	void ols() {
 		float avZ = 0.0;
 		float sstZ = 0.0;
@@ -228,6 +232,7 @@ public:
 		strokeWeight(3);
 		line(x1, y1, x2, y2);
 	}
+	*/
 
 
 

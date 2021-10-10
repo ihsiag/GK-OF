@@ -443,6 +443,9 @@
     <ClInclude Include="src\ofApp-original.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Class_Analysis.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

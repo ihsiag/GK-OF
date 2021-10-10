@@ -223,6 +223,7 @@
     <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Class_Analysis.h" />
     <ClInclude Include="src\ofApp-original.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\myController.h" />
