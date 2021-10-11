@@ -7,177 +7,157 @@
 class Class_Analysis {
 public:
 	//using Ptr = shared_ptr<Class_Analysis>;
+	vector < glm::vec3> listPosVertex;
+	vector <glm::vec2> resultArr;
+	bool calcEnd,displayEnd;
+	int frame;
+	float scl;
 
 	Class_Analysis() {
-		setup();
+		listPosVertex.clear();
+		resultArr.clear();
+		calcEnd = false;
+		displayEnd = false;
+		frame = 0;
+		scl = 7.0;
 	}
 
-	void setup() {
+	void setup(vector<glm::vec3>& _data) {
+		for (int i = 0; i < _data.size();i++) {
+			listPosVertex.push_back(_data[i]);
+		}
 	}
+
+
 	void run() {
-		update();
-		display();
+		//update();
+		//display();
 	}
 
 	void update() {
 	}
 
 	void display() {
+		if (resultArr.size() > 1) {
+			if (frame < resultArr.size()-1-1) {
+				frame+=2;
+			}
+			else {
+				displayEnd = true;
+			}
+			glLineWidth(2);
+			glColor3f(1, 0, 0);
+			glBegin(GL_LINES);
+			for (int i = 0; i < frame; i++) {
+				glVertex2f(i, ofGetHeight() / 2 + resultArr[i].y*scl);
+				glVertex2f(i + 1, ofGetHeight() / 2 + resultArr[i+1].y*scl);
+			}
+			glEnd();
+		}
+		
 	}
 	
-	void calcLeastSquaresMethod()
-	{
-		// 測定データ
-		vector<ofVec2f> pos;
-		FOR(i, line.size()) {
-			pos.push_back(line.getVertices()[i]);
+	vector<glm::vec2> calcLeastSquaresMethod() {
+
+		int N = listPosVertex.size();
+		const int M = 20;
+		double a[M + 1][M + 2], s[2 * M + 1], t[M + 1];
+		double p, d, px;
+
+		//-----------prepairBEGIN
+		for (int i = 0; i < 2 * M + 1; i++) {
+			s[i] = 0;
 		}
-		int N = line.size();
-		double min = INT_MAX;
+		for (int i = 0; i < M + 1; i++) {
+			t[i] = 0;
+		}
 
-		const int num = _M;
-		const int ARR = 15;
-		double a[ARR + 1][ARR + 2], s[2 * ARR + 1], t[ARR + 1];
-		ofPolyline func[ARR];
+		for (int j = 0; j < N; j++) {
+			for (int i = 0; i < 2 * M + 1; i++) {
+				s[i] += pow(j, i);//今回はxはただのindex
+			}
+			for (int i = 0; i < M + 1; i++) {
+				t[i] += pow(listPosVertex[j].z, i);
+			}
+		}
+		//-----------prepairEND
 
-		int MWhenMin = 0;
-		for (int M = num - 1; M < num; M++) {
-			FOR(i, 2 * ARR + 1) {
-				s[i] = 0;
+		//-----------gaussianJordanBEGIN
+		// a[][] に s[], t[] 代入
+		for (int i = 0; i < M + 1; i++) {
+			for (int j = 0; j < M + 1; j++) {
+				a[i][j] = s[i + j];
 			}
-			FOR(i, ARR + 1) {
-				t[i] = 0;
-			}
-			// s[], t[] 計算
-			FOR(i, N) {
-				//cout << pos[i] << endl;
-				FOR(j, 2 * M + 1) {
-					s[j] += pow(pos[i].x, j);
-					//cout << s[j] << endl;
-				}
-				FOR(j, M + 1) {
-					t[j] += pow(pos[i].x, j) * pos[i].y;
-					//cout << t[j] << endl;
-				}
-			}
+			a[i][M + 1] = t[i];
+		}
 
-			// a[][] に s[], t[] 代入
-			FOR(i, M + 1) {
-				FOR(j, M + 1) {
-					a[i][j] = s[i + j];
-				}
-				a[i][M + 1] = t[i];
+		// 掃き出し
+		for (int k = 0; k < M + 1; k++) {
+			p = a[k][k];
+			for (int j = k; j <= M + 1; j++) {
+				a[k][j] /= p;
 			}
-
-			// 掃き出し
-			FOR(k, M + 1) {
-				p = a[k][k];
-				for (int j = k; j <= M + 1; j++) {
-					a[k][j] /= p;
-				}
-				FOR(i, M + 1) {
-					if (i != k) {
-						d = a[i][k];
-						for (int j = k; j <= M + 1; j++) {
-							a[i][j] -= d * a[k][j];
-						}
+			for (int i = 0; i < M + 1; i++) {
+				if (i != k) {
+					d = a[i][k];
+					for (int j = k; j <= M + 1; j++) {
+						a[i][j] -= d * a[k][j];
 					}
 				}
 			}
+		}
 
-			// y 値計算＆結果出力
-			vector<float> dist;
-			//dist.erase();
-			vector<double> vSum;
-			double sum = 0;
-			int count = N - 1;
-			double y;
-			FOR(k, N) {
-				y = 0;
-				//count = 0;
-				FOR(i, M + 1) {
-					/*cout <<"a[]:" << a[i][M + 1] * pow(pos[k].x, i);
-					cout << ",pos:" << pos[k].y;
-					cout << "sum:" << abs(a[i][M + 1] * pow(pos[k].x, i) - pos[k].y) << endl;*/
-					y += a[i][M + 1] * pow(pos[k].x, i); //posXiにおけるyの値
-					//count++;
-				}
-				//cout << "x:" << pos[k].x <<",y:"<<y<< endl;
-				sum += abs(y - pos[k].y);
-			}
-
-			//cout << sum/pow(count, 1) << endl;
-			FOR(i, M + 1) {
-				cout << "a[" << i << "] = " << a[i][M + 1] << endl;
-			}
-			if (min == /*sum/pow(count, 1)*/ INT_MAX) {
-				min = sum / pow(count, 1);
-				MWhenMin = M;
-				for (double px = 0; px <= line.getVertices()[line.size() - 1].x; px += 0.01) {
-					double py = 0;
-					FOR(k, M + 1) {
-						py += a[k][M + 1] * pow(px, k);
-					}
-
-					//cout << "x:" << px << ",y:" << py << endl;
-					func[M].addVertex(px, py);
-				}
+		// y 値計算＆結果出力
+		for (int k = 0; k <= M; k++){
+			printf("a%d = %10.6f\n", k, a[k][M + 1]);
+			printf("    x    y\n");
+			for (px = -3; px<3; px += .5) {
+				p = 0;
+				for (int k = 0; k <= M; k++)
+					p += a[k][M + 1] * pow(px, k);
+				printf("%5.1f%5.1f\n", px, p);
 			}
 		}
-		cout << "M:" << MWhenMin << endl;
-		return func[MWhenMin];
+
+		// y 値計算＆結果出力
+		/*
+		vector<float> dist;
+		vector<double> vSum;
+		double sum = 0;
+		int count = N - 1;
+		double y;
+		for(int i=0;i<N;i++){
+			y = 0;
+			//count = 0;
+			for(int k=0; k<M+1;k++){
+				y += a[i][M + 1] * pow(listPosVertex[k][2], k); //posXiにおけるyの値
+				//count++;
+			}
+			sum += abs(y - i);
+		}
+		for (int i = 0; i < M + 1; i++) {
+			cout << "a[" << i << "] = " << a[i][M + 1] << endl;		
+		}
+		*/
+		float count = 0;
+		for (double px = 0; px <= listPosVertex.size(); px += 0.75) {
+			double py = 0;
+			for(int k=0; k<M+1;k++){				
+				py += a[k][M + 1] * pow(px, k)+ ofMap(ofNoise(px / 100, k / 100), 0, 1, -0.25, 0.25);
+				count++;
+			}
+			//cout << "x:" << px << ",y:" << py << endl;
+			//py *= scl;
+			resultArr.push_back(glm::vec2(px, py));
+		}
+
+		//-----------gaussianJordanEND
+
+		calcEnd = true;
+		return resultArr;
 	}
 
-	void calc() {
-		float y = 0;
-		float dist = 0;
-		float min = INT_MAX;
-		float aWhenMin = 0;
-		vector<float> bWhenMin;
-		//int x = 0;
-		FOR(a, m) { //xの個数 例:a=2:x^2+x
-			dist = 0;
-			FOR(h, a) { //何回ループを回すか、係数が何個必要か
-				FOR(b, m) { //xの係数 例:a=1, b=3:3x
-					bWhenMin.push_back(b);
-					dist = 0;
-					FOR(i, line.size()) {
-						y = float(b) * pow(line.getVertices()[i].x, a);
-						dist += sq(ofVec2f(line.getVertices()[i].x, y), line.getVertices()[i]);
-						cout << "y dist:" << sq(ofVec2f(line.getVertices()[i].x, y), line.getVertices()[i]) << "," << dist << endl;
-						/*if (i == line.size() - 1 && a == 1) {
-							cout << "d:" << pow(line.getVertices()[i].x, a) <<","<< y <<",b:"<<b<< endl;
-						}*/
-					}
-					cout << a << "," << b << "," << dist << endl;
-					if (dist < min) {
-						min = dist;
-						//cout << dist << endl;
-						aWhenMin = a;
-					}
-					/*else {
-						bWhenMin.clear();
-					}*/
-				}
-			}
-		}
-		cout << "a_min:" << aWhenMin << ", b_min:" << bWhenMin.size() << endl;
-		ofPolyline func;
-		y = 0;
-		FOR(i, line.size()) {
-			FOR(a, aWhenMin + 1) {
-				FOR(b, bWhenMin.size() + 1) {
-					y += b * pow(line.getVertices()[i].x, a);
-				}
-			}
-			func.addVertex(line.getVertices()[i].x, y);
-			//cout << line.getVertices()[i].x << "," << i << endl;
-		}
-		return func;
-	}
-
-	float LineAnalysis::sq(ofVec2f pos1, ofVec2f pos2) {
-		return ofDist(pos1.x, pos1.y, pos2.x, pos2.y);
-	}
-	
+	float sq(glm::vec2 pos1, glm::vec2 pos2) {
+		return glm::distance(pos1, pos2);
+	}	
 };

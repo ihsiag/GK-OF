@@ -31,6 +31,7 @@ public:
 	ofMesh meshCreate;
 	//ofxAssimpModelLoader model;
 	vector < glm::vec3> listPosVertexScan;
+	vector <glm::vec2> myArr;
 	
 	//ofVboMesh vboMesh;
 	ofFbo fbo;
@@ -45,6 +46,8 @@ public:
 	bool scanEnd = false;
 	bool createEnd = false;
 
+	bool IsUpdateCamera = true;
+
 	//-----------Sliders
 	ofxFloatSlider modelShaderAlpha;
 
@@ -55,12 +58,14 @@ public:
 	void setup() {
 		ofSetVerticalSync(true);
 		
-		ezCam.setNearClip(0.1);
-		ezCam.setFarClip(100000);
-		ezCam.setPosition(0, 0, 0);
-		ezCam.lookAt(glm::vec3(0, 0, 0),glm::vec3(0,0,1));
+		//ezCam.setNearClip(0.1);
+		//ezCam.setFarClip(100000);
+		//ezCam.setPosition(0, 0, 0);
+		//ezCam.lookAt(glm::vec3(0, 0, 0),glm::vec3(0,0,1));
 		//ezCam.enableOrtho();
-		ezCam.disableMouseInput();
+		//ezCam.disableMouseInput();
+		//ezCam.enableMouseInput();
+		//ezCam.enableMouseMiddleButton();
 
 		meshScan.load("./3D/can_piece_remesh02.ply");
 
@@ -69,10 +74,11 @@ public:
 
 	void update() {
 		currentFrame += 1.0;
-		ofSetWindowTitle(ofToString(ofGetFrameRate()));
+		//ofSetWindowTitle(ofToString(ofGetFrameRate()));
 		time = ofGetElapsedTimef();
+		ofSetWindowTitle(ofToString(time));
 		readyForDraw();
-		updateCamera();
+		if(IsUpdateCamera)updateCamera();
 	}
 
 	void draw() {
@@ -88,10 +94,29 @@ public:
 			meshScan.drawVertices();
 		}
 		if (scanEnd && !createEnd) {
-
+			if (!analysis.calcEnd) {
+				analysis.setup(listPosVertexScan);
+				myArr = analysis.calcLeastSquaresMethod();
+			}
 		}
+		if (createEnd) {
+			glColor3f(0.6, 0.6, 0.6);
+			meshCreate.drawWireframe();
+			glPointSize(2);
+			glColor3f(1, 1, 1);
+			meshCreate.drawVertices();
+		}
+
 		
 		ezCam.end();//-----------camEND
+		
+		if (analysis.calcEnd) {
+			analysis.display();
+		}
+		if (!createEnd && analysis.displayEnd) {
+			createMesh();
+		}
+		
 
 		//-----------PrepairBEGIN
 		int numVertexScan = meshScan.getNumVertices();
@@ -108,8 +133,8 @@ public:
 				glColor3f(1, 0, 0);
 				glBegin(GL_LINES);
 				for (int i = 0; i < listPosVertexScan.size()-1; i++) {
-					glVertex2f(i, ofGetHeight() / 2 + listPosVertexScan[i][2]);
-					glVertex2f(i + 1, ofGetHeight() / 2 + listPosVertexScan[i + 1][2]);
+					glVertex2f(i, ofGetHeight() / 2 + listPosVertexScan[i].z);
+					glVertex2f(i + 1, ofGetHeight() / 2 + listPosVertexScan[i + 1].z);
 				}
 				glEnd();
 			}
@@ -198,41 +223,53 @@ public:
 		ofSetColor(255);
 	}
 
-	/*
-	void ols() {
-		float avZ = 0.0;
-		float sstZ = 0.0;
-		float sstxy = 0.0;
-		float alp, bt;
-
-		//•½‹Ï’l‚ÌŽZo  
-		for (int i = 0; i < listPosVertexScan.size(); i++) {
-			avZ += listPosVertexScan[i][2];
-		}
-		avZ = avZ / listPosVertexScan.size();
-
-		//
-		for (int i = 0; i < listPosVertexScan.size(); i++) {
-			sstZ += (listPosVertexScan[i][2] - avZ) * (listPosVertexScan[i][2] - avZ);
-			//sstxy = sstxy + (x[i] - avx) * (y[i] - avy);
+	void createMesh() {
+		int cols = 20;
+		int rows = 20;
+		int size = 8;
+		int count = 0;
+		for (int col = 0; col < cols; col++) {
+			for (int row = 0; row < rows; row++) {
+				float positionZ = myArr[count+300].y*0.8;
+				std::cout << positionZ << std::endl;
+				positionZ += ofMap(ofNoise(float(col)/2, float(row)/2), 0, 1, 0, 10);
+				std::cout << "+noise"<<positionZ << std::endl;
+				meshCreate.addVertex(glm::vec3(col*size - cols*size / 2, row*size - rows*size / 2,positionZ));
+				count+=1;
+			}
 		}
 
-		//ŒX‚«‚ÆØ•Ð‚ÌŽZo  
-		bt = sstxy / sstx;
-		alp = avy - bt * avx;
+		for (int x = 0; x < cols - 1; x++) {
+			for (int y = 0; y < rows - 1; y++) {
+				meshCreate.addIndex(x + y * rows);
+				meshCreate.addIndex((x + 1) + y * rows);
+				meshCreate.addIndex(x + (y + 1) * cols);
+				meshCreate.addIndex((x + 1) + y * cols);
+				meshCreate.addIndex((x + 1) + (y + 1) * rows);
+				meshCreate.addIndex(x + (y + 1) * rows);
+			}
+		}
 
-		//‰ñ‹A’¼ü‚ðˆø‚­  
-		float x1 = map(xMin, xgMin, xgMax, plotX1, plotX2);
-		float x2 = map(xMax, xgMin, xgMax, plotX1, plotX2);
-		float y1 = alp + bt * xMin;
-		float y2 = alp + bt * xMax;
-		y1 = map(y1, ygMin, ygMax, plotY2, plotY1);
-		y2 = map(y2, ygMin, ygMax, plotY2, plotY1);
-		stroke(0, 0, 255);
-		strokeWeight(3);
-		line(x1, y1, x2, y2);
+		createEnd = true;
+		/*
+		string name;
+		if (currentFrame < 10) {
+			name = "000"+ofToString(currentFrame);
+		}
+		else if (currentFrame < 100) {
+			name = "00" + ofToString(currentFrame);
+		}
+		else if (currentFrame < 1000) {
+			name = "0" + ofToString(currentFrame);
+		}
+		else {
+			name = ofToString(currentFrame);
+		}
+		string fileName = "./screenShotForMovie/" + name + ".png";
+		imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+		imgToSave.save(fileName, OF_IMAGE_QUALITY_BEST);
+		*/
 	}
-	*/
 
 
 
@@ -262,8 +299,10 @@ public:
 	void mouseDragged(int _x, int _y, int _button) {
 	}
 	void mousePressed(int _x, int _y, int _button) {
+		IsUpdateCamera = false;
 	}
 	void mouseReleased(int _x, int _y, int _button) {
+		IsUpdateCamera = true;
 	}
 	void mouseEntered(int x, int y);
 	void mouseExited(int x, int y);
