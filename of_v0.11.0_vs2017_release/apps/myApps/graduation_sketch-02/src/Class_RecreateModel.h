@@ -7,25 +7,29 @@
 class Class_RecreateModel {
 public:
 	//using Ptr = shared_ptr<Class_Analysis>;
-	vector<glm::vec3> arrPos;
+	vector<glm::vec3>* arrPos;
 	ofMesh* mesh;
 	ofEasyCam* ezCam;
+	bool bFirst, bSecond;
 
 	Class_RecreateModel() {
-
 	}
 
-	void setup(ofMesh* _mesh, const vector<glm::vec3>& _resultArr, ofEasyCam* _cam) {
+	~Class_RecreateModel() {
+	}
+
+	void setup(ofMesh* _mesh, vector<glm::vec3>* _data, ofEasyCam* _cam) {
 		mesh = _mesh;
-		arrPos = _resultArr;
+		arrPos = _data;
 		ezCam = _cam;
+		bFirst = true;
+		bSecond = false;
 	}
 
 
 	void run() {
-		std::cout <<"yeah"<< std::endl;
-		createMesh();
-		display();
+		if(bFirst)createMesh();
+		if(bSecond)display();
 	}
 
 	void update() {
@@ -54,15 +58,12 @@ public:
 		int count = 0;
 		for (int col = 0; col < cols; col++) {
 			for (int row = 0; row < rows; row++) {
-				float positionZ = arrPos[count + 300].y * 0.8;
-				std::cout << positionZ << std::endl;
+				float positionZ = arrPos->at(count).y * 0.8;
 				positionZ += ofMap(ofNoise(float(col) / 2, float(row) / 2), 0, 1, 0, 10);
-				std::cout << "+noise" << positionZ << std::endl;
 				mesh->addVertex(glm::vec3(col * size - cols * size / 2, row * size - rows * size / 2, positionZ));
 				count += 1;
 			}
 		}
-
 		for (int x = 0; x < cols - 1; x++) {
 			for (int y = 0; y < rows - 1; y++) {
 				mesh->addIndex(x + y * rows);
@@ -73,5 +74,7 @@ public:
 				mesh->addIndex(x + (y + 1) * rows);
 			}
 		}
+		bFirst = false;
+		bSecond = true;
 	}
 };

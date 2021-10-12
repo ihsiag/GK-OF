@@ -53,6 +53,7 @@ public:
 	bool bThird;//create
 
 	bool bUpdateCamera;
+	bool bShowInfo;
 
 	//-----------Sliders
 	ofxFloatSlider modelShaderAlpha;
@@ -68,19 +69,17 @@ public:
 		bSecond = false;
 		bThird = false;
 		bUpdateCamera = true;
+		bShowInfo = true;
 
 		meshScan.load("./3D/can_piece_remesh02.ply");
 		scanModel.setup(&meshScan,&ezCam);
-		analyseModel.setup(&meshScan, arrResultAnalyseModel);
-		recreateModel.setup(&meshCreate, arrResultAnalyseModel, &ezCam);
+		analyseModel.setup(&meshScan, &arrResultAnalyseModel);
+		recreateModel.setup(&meshCreate, &arrResultAnalyseModel, &ezCam);
 	
 	}
 
 	void update() {
-		currentFrame += 1.0;
-		ofSetWindowTitle(ofToString(ofGetFrameRate()));
-		time = ofGetElapsedTimef();
-		mf.resetBasics();
+		mf.defaultUpdate(&currentFrame,&time);
 		if(bUpdateCamera)updateCamera();
 	}
 
@@ -90,12 +89,18 @@ public:
 
 		//-----------PhaseBEGIN
 		if (bFirst) { bSecond = scanModel.run(); }
-		if (bSecond) { bFirst = false; bThird = analyseModel.run(); }
+		if (bSecond) { bFirst = false; bThird = analyseModel.run();}
 		if (bThird) { bSecond = false; recreateModel.run(); }
 		//-----------PhaseEND
 
 		//-----------FrontLayerBEGIN
 		mf.makeGrid();
+		vector <string> infoList = {
+			"currentFrame : "+ofToString(currentFrame),
+			"frameRate : "+ofToString(ofGetFrameRate()),
+			"time_passed : "+ofToString(time)
+		};
+		if(bShowInfo)mf.showInfo(&infoList,&fontSize);
 		//-----------FrontLayerEND
 	}
 
@@ -108,30 +113,29 @@ public:
 		ezCam.lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
 	}
 
-
-
-
 	void keyPressed(int key) {
-		/*
 		switch (key) {
 		case 'f':
 			ofToggleFullscreen();
+			break;
+		case 'i':
+			bShowInfo = !bShowInfo;
 			break;
 		case 's':
 			mf.saveImage();
 			break;
 		}
-		*/
 	}
 	
 	void keyReleased(int key);
 	void mouseMoved(int x, int y);
 	void mouseDragged(int _x, int _y, int _button) {
-		//bUpdateCamera = false;
+		bUpdateCamera = false;
 	}
 	void mousePressed(int _x, int _y, int _button) {
 	}
 	void mouseReleased(int _x, int _y, int _button) {
+		bUpdateCamera = true;
 	}
 	void mouseEntered(int x, int y);
 	void mouseExited(int x, int y);

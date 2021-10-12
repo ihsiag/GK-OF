@@ -8,21 +8,23 @@ class Class_AnalyseModel {
 public:
 	//using Ptr = shared_ptr<Class_Analysis>;
 	ofMesh* mesh;
-	vector <glm::vec3> resultArr;
+	vector <glm::vec3>* resultArr;
 	bool bFirst,bSecond;
 	int frame;
 	float scl;
 
 	Class_AnalyseModel() {
+	}
+	~Class_AnalyseModel() {
+	}
+
+	void setup(ofMesh* _mesh,vector<glm::vec3>* _resultArr) {
+		mesh = _mesh;
+		resultArr = _resultArr;
 		bFirst = true;
 		bSecond = false;
 		frame = 0;
 		scl = 7.0;
-	}
-
-	void setup(ofMesh* _mesh,const vector<glm::vec3>& _resultArr) {
-		mesh = _mesh;
-		resultArr = _resultArr;
 	}
 
 
@@ -36,9 +38,8 @@ public:
 	}
 
 	void display() {
-		if (frame < resultArr.size()-1) {
+		if (frame < resultArr->size()-1) {
 			frame+=1;
-			std::cout << frame <<"fuck"<<resultArr.size() << std::endl;
 		}
 		else {
 			bSecond = false;
@@ -48,8 +49,8 @@ public:
 			glColor3f(1, 0, 0);
 			glBegin(GL_LINES);
 			for (int i = 0; i < frame - 1; i++) {
-				glVertex2f(i, ofGetHeight() / 2 + resultArr[i].y * scl);
-				glVertex2f(i + 1, ofGetHeight() / 2 + resultArr[i + 1].y * scl);
+				glVertex2f(i, ofGetHeight() / 2 + resultArr->at(i).y*scl);
+				glVertex2f(i + 1, ofGetHeight() / 2 + resultArr->at(i).y * scl);
 			}
 			glEnd();
 		}	
@@ -104,7 +105,8 @@ public:
 				}
 			}
 		}
-
+		
+		/*
 		// y 値計算＆結果出力
 		for (int k = 0; k <= M; k++){
 			printf("a%d = %10.6f\n", k, a[k][M + 1]);
@@ -116,6 +118,7 @@ public:
 				printf("%5.1f%5.1f\n", px, p);
 			}
 		}
+		*/
 
 		// y 値計算＆結果出力
 		/*
@@ -145,9 +148,8 @@ public:
 				py += a[k][M + 1] * pow(px, k)+ ofMap(ofNoise(px / 100, k / 100), 0, 1, -0.25, 0.25);
 				count++;
 			}
-			//cout << "x:" << px << ",y:" << py << endl;
 			//py *= scl;
-			resultArr.push_back(glm::vec3(px, py,0));
+			resultArr->push_back(glm::vec3(px, py,0));
 		}
 
 		//-----------gaussianJordanEND

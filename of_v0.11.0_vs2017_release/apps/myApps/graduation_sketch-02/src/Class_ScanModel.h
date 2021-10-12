@@ -13,7 +13,8 @@ public:
 	bool bScanEnd;
 	
 	Class_ScanModel() {
-
+	}
+	~Class_ScanModel() {
 	}
 
 	void setup(ofMesh* _mesh,ofEasyCam* _ezCam) {

@@ -7,7 +7,8 @@
 class Class_MyFunctions {
 public:
 	Class_MyFunctions() {
-
+	}
+	~Class_MyFunctions() {
 	}
 
 	void setup(ofEasyCam* _ezCam) {
@@ -22,9 +23,22 @@ public:
 		//_ezCam->enableMouseMiddleButton();
 	}
 
-	void resetBasics() {
+	void defaultUpdate(float* _currentFrame, float* _time) {
+		*_currentFrame += 1.0;
+		*_time = ofGetElapsedTimef();
+
 		ofBackground(10);
+		//fbo.begin();
 		glClearColor(0,0,0,0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		//fbo.end();
+	}
+
+	void showInfo(vector<string>* _infoList,int* _fontSize) {
+		glm::vec2 pos = glm::vec2(60, ofGetHeight() * 0.75+*_fontSize);
+		for (int i = 0; i < _infoList->size(); i++) {
+			ofDrawBitmapStringHighlight(_infoList->at(i), pos + glm::vec2(0, *_fontSize*1.5 * i));
+		}
 	}
 
 
@@ -67,7 +81,7 @@ public:
 #pragma mark -save
 	void saveVideo(const float& _currentFrame) { //frame<=99'999 %05d %[fill][width]d
 		string _name;
-		_name = ofToString(_currentFrame,5,0);
+		_name = ofToString(_currentFrame,5,5,0);
 		/*
 		if (_currentFrame < 10) {
 			_name = "0000" + ofToString(_currentFrame);
