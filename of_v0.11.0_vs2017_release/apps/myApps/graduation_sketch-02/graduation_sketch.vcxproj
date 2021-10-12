@@ -180,8 +180,6 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp" />
     <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.cpp" />
     <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.cpp" />
@@ -221,12 +219,10 @@
     <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ToonPass.cpp" />
     <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\VerticalTiltShifPass.cpp" />
     <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ofApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Class_Analysis.h" />
-    <ClInclude Include="src\ofApp-original.h" />
-    <ClInclude Include="src\ofApp.h" />
-    <ClInclude Include="src\myController.h" />
     <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h" />
     <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.h" />
     <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.h" />
@@ -311,6 +307,11 @@
     <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ToonPass.h" />
     <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\VerticalTiltShifPass.h" />
     <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.h" />
+    <ClInclude Include="src\Class_AnalyseModel.h" />
+    <ClInclude Include="src\Class_MyFunctions.h" />
+    <ClInclude Include="src\Class_RecreateModel.h" />
+    <ClInclude Include="src\Class_ScanModel.h" />
+    <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
