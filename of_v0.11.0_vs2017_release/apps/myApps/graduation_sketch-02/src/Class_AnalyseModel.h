@@ -29,7 +29,8 @@ public:
 
 
 	bool run() {
-		if (bFirst)calcLeastSquaresMethod();
+		//if (bFirst)calcLeastSquaresMethod();
+		if (bFirst)myCalc();
 		if (bSecond)display();
 		if (!bFirst && !bSecond) { return true; }else {return false;}
 	}
@@ -154,8 +155,25 @@ public:
 
 		//-----------gaussianJordanEND
 
+		//-----------BoolsBEGIN
 		bFirst = false;
 		bSecond = true;
+		//-----------BoolsBEGIN
+	}
+
+
+
+	void myCalc() {
+		int N = mesh->getNumVertices();
+		for (int i = 0; i < N-1; i++) {
+			glm::vec3 diff = mesh->getVertex(i + 1) - mesh->getVertex(i);
+			resultArr->push_back(diff);
+		}
+
+		//-----------BoolsBEGIN
+		bFirst = false;
+		//bSecond = true;
+		//-----------BoolsBEGIN
 	}
 
 	float sq(glm::vec2 pos1, glm::vec2 pos2) {

@@ -52,14 +52,14 @@ public:
 	}
 
 	void createMesh() {
-		int cols = 20;
-		int rows = 20;
-		int size = 8;
+		int cols = 40;
+		int rows = 40;
+		int size = 2;
 		int count = 0;
 		for (int col = 0; col < cols; col++) {
 			for (int row = 0; row < rows; row++) {
-				float positionZ = arrPos->at(count).y * 0.8;
-				positionZ += ofMap(ofNoise(float(col) / 2, float(row) / 2), 0, 1, 0, 10);
+				float positionZ = arrPos->at(count).y*1.2;
+				//positionZ += ofMap(ofNoise(float(col) / 2, float(row) / 2), 0, 1, 0, 10);
 				mesh->addVertex(glm::vec3(col * size - cols * size / 2, row * size - rows * size / 2, positionZ));
 				count += 1;
 			}

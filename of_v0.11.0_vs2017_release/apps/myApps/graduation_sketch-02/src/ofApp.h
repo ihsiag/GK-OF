@@ -47,6 +47,7 @@ public:
 	float time;
 	float currentFrame = -1.0;
 	int fontSize = 10;
+	int camValue;
 
 	bool bFirst;//scan
 	bool bSecond;//analysis
@@ -63,10 +64,10 @@ public:
 
 	//-----------STRUCTURE
 	void setup() {
-		mf.setup(&ezCam);
+		camValue = 200;
 		
-		bFirst = true;
-		bSecond = false;
+		bFirst = false;// true;
+		bSecond = true;// false;
 		bThird = false;
 		bUpdateCamera = true;
 		bShowInfo = true;
@@ -75,6 +76,8 @@ public:
 		scanModel.setup(&meshScan,&ezCam);
 		analyseModel.setup(&meshScan, &arrResultAnalyseModel);
 		recreateModel.setup(&meshCreate, &arrResultAnalyseModel, &ezCam);
+
+		mf.setup(&ezCam);
 	
 	}
 
@@ -107,7 +110,6 @@ public:
 
 	//-----------ThisTimeFunctions
 	void updateCamera() {
-		int camValue = 200;
 		float camRotationSpeed = currentFrame / 360;
 		ezCam.setPosition(camValue * sin(camRotationSpeed), camValue * cos(camRotationSpeed), camValue);
 		ezCam.lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
@@ -123,6 +125,14 @@ public:
 			break;
 		case 's':
 			mf.saveImage();
+			break;
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+			camValue = 400;
+			camValue /= 1 + key - '1';
 			break;
 		}
 	}
