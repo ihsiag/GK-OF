@@ -172,7 +172,7 @@ public:
 
 		//-----------BoolsBEGIN
 		bFirst = false;
-		//bSecond = true;
+		bSecond = true;
 		//-----------BoolsBEGIN
 	}
 

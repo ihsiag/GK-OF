@@ -12,6 +12,7 @@
 #include "Class_ScanModel.h"
 #include "Class_AnalyseModel.h"
 #include "Class_RecreateModel.h"
+#include "Class_Box2DStudy.h"
 
 
 
@@ -45,8 +46,8 @@ public:
 
 	//-----------GLOBAL
 	float time;
-	float currentFrame = -1.0;
-	int fontSize = 10;
+	float currentFrame;
+	int fontSize;
 	int camValue;
 
 	bool bFirst;//scan
@@ -64,14 +65,18 @@ public:
 
 	//-----------STRUCTURE
 	void setup() {
+		currentFrame = -1.0;
 		camValue = 200;
+		fontSize = 10;
 		
-		bFirst = false;// true;
-		bSecond = true;// false;
+		bFirst = true;
+		bSecond = false;
 		bThird = false;
+		
 		bUpdateCamera = true;
 		bShowInfo = true;
 
+		
 		meshScan.load("./3D/can_piece_remesh02.ply");
 		scanModel.setup(&meshScan,&ezCam);
 		analyseModel.setup(&meshScan, &arrResultAnalyseModel);
@@ -96,6 +101,8 @@ public:
 		if (bThird) { bSecond = false; recreateModel.run(); }
 		//-----------PhaseEND
 
+		
+		
 		//-----------FrontLayerBEGIN
 		mf.makeGrid();
 		vector <string> infoList = {
@@ -131,6 +138,10 @@ public:
 		case '3':
 		case '4':
 		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
 			camValue = 400;
 			camValue /= 1 + key - '1';
 			break;

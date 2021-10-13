@@ -7,6 +7,7 @@
 class Class_RecreateModel {
 public:
 	//using Ptr = shared_ptr<Class_Analysis>;
+
 	vector<glm::vec3>* arrPos;
 	ofMesh* mesh;
 	ofEasyCam* ezCam;
@@ -51,27 +52,28 @@ public:
 		mesh->drawVertices();
 	}
 
+	
 	void createMesh() {
 		int cols = 40;
 		int rows = 40;
-		int size = 2;
+		float size = 2;
 		int count = 0;
 		for (int col = 0; col < cols; col++) {
 			for (int row = 0; row < rows; row++) {
-				float positionZ = arrPos->at(count).y*1.2;
-				//positionZ += ofMap(ofNoise(float(col) / 2, float(row) / 2), 0, 1, 0, 10);
-				mesh->addVertex(glm::vec3(col * size - cols * size / 2, row * size - rows * size / 2, positionZ));
+				float positionZ = arrPos->at(count).y*0.1;
+				glm::vec3 pos = glm::vec3((col * size+ofRandom(-1,1) - cols * size / 2), (row * size+ofRandom(-1,1) - rows * size / 2), positionZ);
+				mesh->addVertex(pos);
 				count += 1;
 			}
 		}
-		for (int x = 0; x < cols - 1; x++) {
-			for (int y = 0; y < rows - 1; y++) {
-				mesh->addIndex(x + y * rows);
-				mesh->addIndex((x + 1) + y * rows);
-				mesh->addIndex(x + (y + 1) * cols);
-				mesh->addIndex((x + 1) + y * cols);
-				mesh->addIndex((x + 1) + (y + 1) * rows);
-				mesh->addIndex(x + (y + 1) * rows);
+		for (int col = 0; col < cols - 1; col++) {
+			for (int row = 0; row < rows - 1; row++) {
+				mesh->addIndex(col + rows*row);
+				mesh->addIndex((col + 1) + rows * row);
+				mesh->addIndex(col + rows*(row + 1));
+				mesh->addIndex((col + 1) + rows * row);
+				mesh->addIndex((col + 1) + rows * (row + 1));
+				mesh->addIndex(col +  rows*(row + 1));
 			}
 		}
 		bFirst = false;
