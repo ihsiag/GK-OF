@@ -296,9 +296,9 @@
     <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Class_Box2DStudy.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Class_AnalyseModel.h" />
+    <ClInclude Include="src\Class_Box2DStudy.h" />
     <ClInclude Include="src\Class_MyFunctions.h" />
     <ClInclude Include="src\Class_RecreateModel.h" />
     <ClInclude Include="src\Class_ScanModel.h" />

@@ -446,6 +446,9 @@
     <ClInclude Include="src\Class_RecreateModel.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Class_Box2DStudy.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

@@ -26,6 +26,8 @@ public:
 	Class_ScanModel scanModel;
 	Class_AnalyseModel analyseModel;
 	Class_RecreateModel recreateModel;
+	Class_Box2dStudy box2dStudy;
+	
 	ofCamera cam;
 	ofEasyCam ezCam;
 	ofTrueTypeFont font;
@@ -81,6 +83,7 @@ public:
 		scanModel.setup(&meshScan,&ezCam);
 		analyseModel.setup(&meshScan, &arrResultAnalyseModel);
 		recreateModel.setup(&meshCreate, &arrResultAnalyseModel, &ezCam);
+		box2dStudy.setup(&ezCam);
 
 		mf.setup(&ezCam);
 	
@@ -96,9 +99,12 @@ public:
 		//update();	
 
 		//-----------PhaseBEGIN
+		/*
 		if (bFirst) { bSecond = scanModel.run(); }
 		if (bSecond) { bFirst = false; bThird = analyseModel.run();}
 		if (bThird) { bSecond = false; recreateModel.run(); }
+		*/
+		box2dStudy.run();
 		//-----------PhaseEND
 
 		
@@ -129,6 +135,9 @@ public:
 			break;
 		case 'i':
 			bShowInfo = !bShowInfo;
+			break;
+		case 'c':
+			box2dStudy.addElement(glm::vec2(mouseX, mouseY));
 			break;
 		case 's':
 			mf.saveImage();

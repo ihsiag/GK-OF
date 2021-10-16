@@ -1,957 +1,957 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <ClCompile Include="src\ofApp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofApp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.cpp">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.cpp">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpTexture.cpp">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2d.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dBaseShape.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dCircle.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dConvexPoly.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dEdge.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dJoint.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dParticleSystem.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dPolygon.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dPolygonUtils.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dRect.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dRender.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dUtils.cpp">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2BroadPhase.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2CollideCircle.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2CollideEdge.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2CollidePolygon.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2Collision.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2Distance.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2DynamicTree.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2TimeOfImpact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2ChainShape.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2CircleShape.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2EdgeShape.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2PolygonShape.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2BlockAllocator.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Draw.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2FreeList.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Math.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Settings.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2StackAllocator.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Stat.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Timer.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2TrackedBlock.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Body.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2ContactManager.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Fixture.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Island.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2World.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2WorldCallbacks.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ChainAndCircleContact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ChainAndPolygonContact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2CircleContact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2Contact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ContactSolver.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2EdgeAndCircleContact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2EdgeAndPolygonContact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2PolygonAndCircleContact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2PolygonContact.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2DistanceJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2FrictionJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2GearJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2Joint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2MotorJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2MouseJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2PrismaticJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2PulleyJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2RevoluteJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2RopeJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2WeldJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2WheelJoint.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2Particle.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleAssembly.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleGroup.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleSystem.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2VoronoiDiagram.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Rope\b2Rope.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Rope</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition\b2Polygon.cpp">
-      <Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition\b2Triangle.cpp">
-      <Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Triangle\triangle.cpp">
-      <Filter>addons\ofxBox2d-master\libs\Triangle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxColorPicker.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxInputField.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\BleachBypassPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\BloomPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ContrastPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ConvolutionPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\DofAltPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\DofPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\EdgePass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\FakeSSSPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\FxaaPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\GodRaysPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\HorizontalTiltShifPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\HsbShiftPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\KaleidoscopePass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\LimbDarkeningPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\LUTPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\NoiseWarpPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\PixelatePass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\PostProcessing.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RenderPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RGBShiftPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RimHighlightingPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\SSAOPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ToonPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\VerticalTiltShifPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.cpp">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons">
-      <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader">
-      <UniqueIdentifier>{DE65D9F7-840A-CD0A-A555-EA3B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader\src">
-      <UniqueIdentifier>{B84008DC-4B5E-271B-05DA-D8C8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader\libs">
-      <UniqueIdentifier>{3D854F79-FA4A-75FA-FC0A-2B25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader\libs\assimp">
-      <UniqueIdentifier>{FE8B5295-D3A7-B9CD-89C9-2613}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include">
-      <UniqueIdentifier>{EDC34C4F-5D44-FB76-337E-EE48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include\assimp">
-      <UniqueIdentifier>{E66BABFA-76A1-EB8D-40FF-B940}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler">
-      <UniqueIdentifier>{A0C31C2E-6C01-8850-3B72-C818}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port">
-      <UniqueIdentifier>{BEEFB1FC-DD96-F59B-869C-D91A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI">
-      <UniqueIdentifier>{CA012BC2-060F-2F55-47FD-5ACF}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master">
-      <UniqueIdentifier>{93F9D8EC-EF82-F732-4E26-2F4C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\src">
-      <UniqueIdentifier>{EBDC6590-6C16-E1C5-651D-04A3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs">
-      <UniqueIdentifier>{7E89D2CF-365A-971D-74A6-4B2A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D">
-      <UniqueIdentifier>{7D450EDC-D79E-5C15-70C9-4F25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D\Collision">
-      <UniqueIdentifier>{C966F948-343A-63F5-2BB8-4176}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D\Collision\Shapes">
-      <UniqueIdentifier>{8F9358C7-546C-5758-D645-AA91}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D\Common">
-      <UniqueIdentifier>{23AACD47-15A3-D8FC-C0BB-9827}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D\Dynamics">
-      <UniqueIdentifier>{E5E77AE3-27F3-1A92-207B-283F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts">
-      <UniqueIdentifier>{7B406A6D-F26C-4D02-8D13-0997}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints">
-      <UniqueIdentifier>{09EB9806-D5FA-6B2E-3E8C-3A11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D\Particle">
-      <UniqueIdentifier>{75FA06BB-4696-6C97-587A-C9F8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Box2D\Rope">
-      <UniqueIdentifier>{C67D63DB-5ED7-217A-909A-7B44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\liquidfun">
-      <UniqueIdentifier>{DD838CAD-E1D4-F447-E43A-3058}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions">
-      <UniqueIdentifier>{D14412DC-65A9-5F29-B494-9E74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements">
-      <UniqueIdentifier>{0B2055B4-8102-F307-4A41-D5F8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint">
-      <UniqueIdentifier>{5D05767B-9170-02FC-C683-C44F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities">
-      <UniqueIdentifier>{7309F4EC-7DF6-2549-36AC-D09F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition">
-      <UniqueIdentifier>{9F158521-8399-6606-1048-E5F9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxBox2d-master\libs\Triangle">
-      <UniqueIdentifier>{8B2C2617-9484-BD02-5BD8-14FE}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxGui">
-      <UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxGui\src">
-      <UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxPostProcessing-master">
-      <UniqueIdentifier>{33AAFDC8-E7FE-F21A-D46D-98E0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxPostProcessing-master\src">
-      <UniqueIdentifier>{7A9345AF-CC1F-0D6F-AF3F-E86E}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Class_AnalyseModel.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Class_MyFunctions.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Class_RecreateModel.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Class_ScanModel.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofApp-1012.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.h">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.h">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpTexture.h">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpUtils.h">
-      <Filter>addons\ofxAssimpModelLoader\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ai_assert.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\anim.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\camera.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cexport.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cfileio.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cimport.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\color4.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\poppack1.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\pstdint.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\pushpack1.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\config.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultIOStream.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultIOSystem.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultLogger.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Defines.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\defs.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Exporter.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Importer.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\importerdesc.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\IOStream.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\IOSystem.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\light.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Logger.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\LogStream.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\material.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\matrix3x3.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\matrix4x4.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\mesh.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\metadata.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\NullLogger.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI\AndroidJNIIOSystem.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\postprocess.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ProgressHandler.hpp">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\quaternion.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\scene.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\SceneCombiner.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\texture.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\types.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\vector2.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\vector3.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\version.h">
-      <Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2d.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dBaseShape.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dCircle.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dContactListener.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dConvexPoly.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dEdge.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dJoint.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dParticleSystem.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dPolygon.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dPolygonUtils.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dRect.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dRender.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dUtils.h">
-      <Filter>addons\ofxBox2d-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Box2D.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2BroadPhase.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2Collision.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2Distance.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2DynamicTree.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2TimeOfImpact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2ChainShape.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2CircleShape.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2EdgeShape.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2PolygonShape.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2Shape.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2BlockAllocator.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Draw.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2FreeList.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2GrowableBuffer.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2GrowableStack.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2IntrusiveList.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Math.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Settings.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2SlabAllocator.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2StackAllocator.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Stat.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Timer.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2TrackedBlock.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Body.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2ContactManager.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Fixture.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Island.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2TimeStep.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2World.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2WorldCallbacks.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ChainAndCircleContact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ChainAndPolygonContact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2CircleContact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2Contact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ContactSolver.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2EdgeAndCircleContact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2EdgeAndPolygonContact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2PolygonAndCircleContact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2PolygonContact.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2DistanceJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2FrictionJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2GearJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2Joint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2MotorJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2MouseJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2PrismaticJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2PulleyJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2RevoluteJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2RopeJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2WeldJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2WheelJoint.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2Particle.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleAssembly.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleGroup.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleSystem.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2StackQueue.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2VoronoiDiagram.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Rope\b2Rope.h">
-      <Filter>addons\ofxBox2d-master\libs\Box2D\Rope</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint\Fixed.h">
-      <Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint\jtypes.h">
-      <Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition\b2Polygon.h">
-      <Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition\b2Triangle.h">
-      <Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Triangle\triangle.h">
-      <Filter>addons\ofxBox2d-master\libs\Triangle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxColorPicker.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiUtils.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxInputField.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\BleachBypassPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\BloomPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ContrastPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ConvolutionPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\DofAltPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\DofPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\EdgePass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\FakeSSSPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\FxaaPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\GodRaysPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\HorizontalTiltShifPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\HsbShiftPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\KaleidoscopePass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\LimbDarkeningPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\LUTPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\NoiseWarpPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ofxPostProcessing.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\PixelatePass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\PostProcessing.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RenderPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RGBShiftPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RimHighlightingPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\SSAOPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ToonPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\VerticalTiltShifPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.h">
-      <Filter>addons\ofxPostProcessing-master\src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Class_Box2DStudy.h">
-      <Filter>src</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="icon.rc" />
-  </ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.cpp">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.cpp">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpTexture.cpp">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2d.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dBaseShape.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dCircle.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dConvexPoly.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dEdge.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dJoint.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dParticleSystem.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dPolygon.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dPolygonUtils.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dRect.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dRender.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dUtils.cpp">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2BroadPhase.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2CollideCircle.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2CollideEdge.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2CollidePolygon.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2Collision.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2Distance.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2DynamicTree.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2TimeOfImpact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2ChainShape.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2CircleShape.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2EdgeShape.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2PolygonShape.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2BlockAllocator.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Draw.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2FreeList.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Math.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Settings.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2StackAllocator.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Stat.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Timer.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2TrackedBlock.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Body.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2ContactManager.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Fixture.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Island.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2World.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2WorldCallbacks.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ChainAndCircleContact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ChainAndPolygonContact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2CircleContact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2Contact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ContactSolver.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2EdgeAndCircleContact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2EdgeAndPolygonContact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2PolygonAndCircleContact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2PolygonContact.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2DistanceJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2FrictionJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2GearJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2Joint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2MotorJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2MouseJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2PrismaticJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2PulleyJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2RevoluteJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2RopeJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2WeldJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2WheelJoint.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2Particle.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleAssembly.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleGroup.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleSystem.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2VoronoiDiagram.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Rope\b2Rope.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Rope</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition\b2Polygon.cpp">
+			<Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition\b2Triangle.cpp">
+			<Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxBox2d-master\libs\Triangle\triangle.cpp">
+			<Filter>addons\ofxBox2d-master\libs\Triangle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxColorPicker.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxInputField.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\BleachBypassPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\BloomPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ContrastPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ConvolutionPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\DofAltPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\DofPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\EdgePass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\FakeSSSPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\FxaaPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\GodRaysPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\HorizontalTiltShifPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\HsbShiftPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\KaleidoscopePass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\LimbDarkeningPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\LUTPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\NoiseWarpPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\PixelatePass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\PostProcessing.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RenderPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RGBShiftPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\RimHighlightingPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\SSAOPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ToonPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\VerticalTiltShifPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.cpp">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons">
+			<UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader">
+			<UniqueIdentifier>{DE65D9F7-840A-CD0A-A555-EA3B}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader\src">
+			<UniqueIdentifier>{B84008DC-4B5E-271B-05DA-D8C8}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader\libs">
+			<UniqueIdentifier>{3D854F79-FA4A-75FA-FC0A-2B25}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader\libs\assimp">
+			<UniqueIdentifier>{FE8B5295-D3A7-B9CD-89C9-2613}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include">
+			<UniqueIdentifier>{EDC34C4F-5D44-FB76-337E-EE48}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include\assimp">
+			<UniqueIdentifier>{E66BABFA-76A1-EB8D-40FF-B940}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler">
+			<UniqueIdentifier>{A0C31C2E-6C01-8850-3B72-C818}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port">
+			<UniqueIdentifier>{BEEFB1FC-DD96-F59B-869C-D91A}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI">
+			<UniqueIdentifier>{CA012BC2-060F-2F55-47FD-5ACF}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master">
+			<UniqueIdentifier>{93F9D8EC-EF82-F732-4E26-2F4C}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\src">
+			<UniqueIdentifier>{EBDC6590-6C16-E1C5-651D-04A3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs">
+			<UniqueIdentifier>{7E89D2CF-365A-971D-74A6-4B2A}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D">
+			<UniqueIdentifier>{7D450EDC-D79E-5C15-70C9-4F25}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D\Collision">
+			<UniqueIdentifier>{C966F948-343A-63F5-2BB8-4176}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D\Collision\Shapes">
+			<UniqueIdentifier>{8F9358C7-546C-5758-D645-AA91}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D\Common">
+			<UniqueIdentifier>{23AACD47-15A3-D8FC-C0BB-9827}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D\Dynamics">
+			<UniqueIdentifier>{E5E77AE3-27F3-1A92-207B-283F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts">
+			<UniqueIdentifier>{7B406A6D-F26C-4D02-8D13-0997}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints">
+			<UniqueIdentifier>{09EB9806-D5FA-6B2E-3E8C-3A11}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D\Particle">
+			<UniqueIdentifier>{75FA06BB-4696-6C97-587A-C9F8}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Box2D\Rope">
+			<UniqueIdentifier>{C67D63DB-5ED7-217A-909A-7B44}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\liquidfun">
+			<UniqueIdentifier>{DD838CAD-E1D4-F447-E43A-3058}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions">
+			<UniqueIdentifier>{D14412DC-65A9-5F29-B494-9E74}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements">
+			<UniqueIdentifier>{0B2055B4-8102-F307-4A41-D5F8}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint">
+			<UniqueIdentifier>{5D05767B-9170-02FC-C683-C44F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities">
+			<UniqueIdentifier>{7309F4EC-7DF6-2549-36AC-D09F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition">
+			<UniqueIdentifier>{9F158521-8399-6606-1048-E5F9}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxBox2d-master\libs\Triangle">
+			<UniqueIdentifier>{8B2C2617-9484-BD02-5BD8-14FE}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGui">
+			<UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGui\src">
+			<UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxPostProcessing-master">
+			<UniqueIdentifier>{33AAFDC8-E7FE-F21A-D46D-98E0}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxPostProcessing-master\src">
+			<UniqueIdentifier>{7A9345AF-CC1F-0D6F-AF3F-E86E}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_AnalyseModel.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_Box2DStudy.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_MyFunctions.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_RecreateModel.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_ScanModel.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\ofApp-1012.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.h">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.h">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpTexture.h">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpUtils.h">
+			<Filter>addons\ofxAssimpModelLoader\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ai_assert.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\anim.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\camera.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cexport.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cfileio.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\cimport.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\color4.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\poppack1.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\pstdint.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler\pushpack1.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Compiler</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\config.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultIOStream.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultIOSystem.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\DefaultLogger.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Defines.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\defs.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Exporter.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Importer.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\importerdesc.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\IOStream.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\IOSystem.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\light.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\Logger.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\LogStream.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\material.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\matrix3x3.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\matrix4x4.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\mesh.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\metadata.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\NullLogger.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI\AndroidJNIIOSystem.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp\port\AndroidJNI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\postprocess.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\ProgressHandler.hpp">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\quaternion.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\scene.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\SceneCombiner.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\texture.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\types.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\vector2.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\vector3.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\assimp\version.h">
+			<Filter>addons\ofxAssimpModelLoader\libs\assimp\include\assimp</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2d.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dBaseShape.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dCircle.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dContactListener.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dConvexPoly.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dEdge.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dJoint.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dParticleSystem.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dPolygon.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dPolygonUtils.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dRect.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dRender.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\src\ofxBox2dUtils.h">
+			<Filter>addons\ofxBox2d-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Box2D.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2BroadPhase.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2Collision.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2Distance.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2DynamicTree.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\b2TimeOfImpact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2ChainShape.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2CircleShape.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2EdgeShape.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2PolygonShape.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Collision\Shapes\b2Shape.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Collision\Shapes</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2BlockAllocator.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Draw.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2FreeList.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2GrowableBuffer.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2GrowableStack.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2IntrusiveList.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Math.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Settings.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2SlabAllocator.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2StackAllocator.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Stat.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2Timer.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Common\b2TrackedBlock.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Body.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2ContactManager.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Fixture.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2Island.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2TimeStep.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2World.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\b2WorldCallbacks.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ChainAndCircleContact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ChainAndPolygonContact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2CircleContact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2Contact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2ContactSolver.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2EdgeAndCircleContact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2EdgeAndPolygonContact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2PolygonAndCircleContact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts\b2PolygonContact.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Contacts</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2DistanceJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2FrictionJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2GearJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2Joint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2MotorJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2MouseJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2PrismaticJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2PulleyJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2RevoluteJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2RopeJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2WeldJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints\b2WheelJoint.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Dynamics\Joints</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2Particle.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleAssembly.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleGroup.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2ParticleSystem.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2StackQueue.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Particle\b2VoronoiDiagram.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Particle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Box2D\Rope\b2Rope.h">
+			<Filter>addons\ofxBox2d-master\libs\Box2D\Rope</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint\Fixed.h">
+			<Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint\jtypes.h">
+			<Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Enhancements\FixedPoint</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition\b2Polygon.h">
+			<Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition\b2Triangle.h">
+			<Filter>addons\ofxBox2d-master\libs\liquidfun\Contributions\Utilities\ConvexDecomposition</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxBox2d-master\libs\Triangle\triangle.h">
+			<Filter>addons\ofxBox2d-master\libs\Triangle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxColorPicker.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiUtils.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxInputField.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\BleachBypassPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\BloomPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ContrastPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ConvolutionPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\DofAltPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\DofPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\EdgePass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\FakeSSSPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\FxaaPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\GodRaysPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\HorizontalTiltShifPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\HsbShiftPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\KaleidoscopePass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\LimbDarkeningPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\LUTPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\NoiseWarpPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ofxPostProcessing.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\PixelatePass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\PostProcessing.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RenderPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RGBShiftPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\RimHighlightingPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\SSAOPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ToonPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\VerticalTiltShifPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxPostProcessing-master\src\ZoomBlurPass.h">
+			<Filter>addons\ofxPostProcessing-master\src</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="icon.rc" />
+	</ItemGroup>
 </Project>

@@ -29,7 +29,7 @@ public:
 	ofRectangle area;
 
 	ofImage imgA, imgB;
-	static const int loadingImgNum = 1;
+	static const int loadingImgNum = 2;
 	ofImage imgs[loadingImgNum];
 
 	ofImage sdwA;
@@ -62,7 +62,7 @@ public:
 	ofxFloatSlider gridDistYSlider;
 	ofxIntSlider offGridMinSlider;
 	ofxIntSlider offGridMaxSlider;
-	
+
 	ofxIntSlider organicCenterNumSlider;
 	ofxFloatSlider organicRadiusMinSlider;
 	ofxFloatSlider organicRadiusMaxSlider;
@@ -70,7 +70,7 @@ public:
 	ofxIntSlider organicLeavesNumMaxSlider;
 	ofxFloatSlider organicDegreeMinSlider;
 	ofxFloatSlider organicDegreeMaxSlider;
-	
+
 	ofxIntSlider mainSeedSlider;
 	ofxIntSlider mainImgSelectSlider;
 	ofxFloatSlider mainScaleSlider;
@@ -105,10 +105,12 @@ public:
 
 		//---loading---//
 		//img
-		imgA.load("./img_leavesGray/grayA.png");
-		//imgA.load("./img_circles/A.png");
+		imgA.load("./img_Circles/A.png");
+		imgB.load("./img_circles/B.png");
 
 		imgs[0] = imgA;
+		imgs[1] = imgB;
+
 
 		originalW = imgA.getWidth();
 		originalH = imgA.getHeight();
@@ -130,7 +132,7 @@ public:
 
 		//---sliders---//
 		/*  gui.add(slider.setup("sliderName", initial, min, max); */
-		
+
 		gui.setup();
 
 
@@ -144,13 +146,12 @@ public:
 		gui.add(mainRandomScaleToggle.setup("mainRandomScale", false));
 		gui.add(mainRandomAlphaToggle.setup("mainRandomAlpha", false));
 
-		gui.add(areaWidthSlider.setup("areaWidth", 4000, 800, 4000));
-		
-		gui.add(areaHeightSlider.setup("areaHeight", 4000, 800, 4000));
-		gui.add(gridNumXSlider.setup("gridNumX", 3, 1, 45));
-		gui.add(gridNumYSlider.setup("gridNumY", 3, 1, 45));
-		gui.add(gridDistXSlider.setup("gridDistX", 60,10,200));
-		gui.add(gridDistYSlider.setup("gridDistY", 60, 10, 200));
+		gui.add(areaWidthSlider.setup("areaWidth", 2000, 900, 2000));
+		gui.add(areaHeightSlider.setup("areaHeight", 2000, 900, 2000));
+		gui.add(gridNumXSlider.setup("gridNumX", 6, 1, 45));
+		gui.add(gridNumYSlider.setup("gridNumY", 6, 1, 45));
+		gui.add(gridDistXSlider.setup("gridDistX", 185, 10, 200));
+		gui.add(gridDistYSlider.setup("gridDistY", 185, 10, 200));
 		gui.add(offGridMinSlider.setup("offGridMin", 0, 0, gridDistXSlider * 2));
 		gui.add(offGridMaxSlider.setup("offGridMax", 0, 0, gridDistXSlider * 4));
 
@@ -164,7 +165,7 @@ public:
 
 		gui.add(mainImgSelectSlider.setup("mainImgSelect", 0, 0, loadingImgNum - 1));
 		gui.add(mainSeedSlider.setup("mainSeed", 0, 0, 50));
-		gui.add(mainScaleSlider.setup("mainScale", 0.1, 0.01, 0.2));
+		gui.add(mainScaleSlider.setup("mainScale", 0.2, 0.01, 1.0));
 		gui.add(mainRandomScaleMinSlider.setup("mainRandomScaleMin", 1.000, 0.000, 1.000));
 		gui.add(mainRandomScaleMaxSlider.setup("mainRandomScaleMax", 1.200, 0.0000, 2.000));
 		gui.add(mainAlphaSlider.setup("mainAlphaSlider", 255, 0, 255));
@@ -179,9 +180,9 @@ public:
 		gui.add(offsetShadowYSlider.setup("offsetShadowY", 0, -20, 20));
 		gui.add(offsetShadowScaleSlider.setup("offsetShadowScale", 1.0, 0.8, 2.0));
 		gui.add(offsetShadowAlphaSlider.setup("offsetShadowAlpha", 30, 0, 200));
-		
+
 		gui.add(blurSlider.setup("blur", 9, 5, 13));
-		
+
 		gui.add(saveButton.setup("save image"));
 
 		//---camera---//
@@ -208,7 +209,7 @@ public:
 		fbo.allocate(4000, 4000, GL_RGBA);
 
 	}
-	
+
 	void update() {
 		time = ofGetElapsedTimef();
 		fbo.begin();
@@ -216,14 +217,14 @@ public:
 		fboRun();
 		fbo.end();
 	}
-	
+
 	void draw() {
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2, 0);
-		if (ofGetWidth() >= ofGetHeight()) {		
+		if (ofGetWidth() >= ofGetHeight()) {
 			float _tmpH = ofGetHeight();
 			float _tmpW = fbo.getWidth() * ofGetHeight() / fbo.getHeight();
-			fbo.draw(-_tmpW/2,-_tmpH/2,_tmpW,_tmpH);
+			fbo.draw(-_tmpW / 2, -_tmpH / 2, _tmpW, _tmpH);
 		}
 		else {
 			float _tmpW = ofGetWidth();
@@ -243,10 +244,10 @@ public:
 		cam.begin();
 		ofPushMatrix();
 		ofTranslate(-fbo.getWidth() / 2, -fbo.getHeight() / 2, 0);
-		
+
 		if (arrangeToGridToggle) { arrangeRandom(); }
 		else { arrangeOrganic(); }
-		
+
 		ofPopMatrix();
 		cam.end();
 
@@ -254,7 +255,7 @@ public:
 		if (drawAreaOUTToggle)drawAreaOUT();
 		if (saveButton)saveFBOtoImage();
 	}
-	
+
 	//----------CUSTOMFUNCS-----------//
 
 	void info() {
@@ -267,16 +268,16 @@ public:
 
 		for (int i = 0; i < 3; i++) {
 			ofSetColor(0, 80);
-			ofFill();		
+			ofFill();
 			ofRectangle bb = font.getStringBoundingBox(infoData[i], 0, 0);
-			ofDrawRectangle(_x-fontSize/2, _y  - bb.height - fontSize/2+ (bb.height+fontSize)*i, bb.width+fontSize, bb.height+fontSize);
+			ofDrawRectangle(_x - fontSize / 2, _y - bb.height - fontSize / 2 + (bb.height + fontSize) * i, bb.width + fontSize, bb.height + fontSize);
 			ofSetColor(255, 255);
-			font.drawString(infoData[i], _x, _y + (bb.height+fontSize)*i);
-		}			
+			font.drawString(infoData[i], _x, _y + (bb.height + fontSize) * i);
+		}
 	}
 
 	void setArea() {
-		area = ofRectangle(-areaWidthSlider / 2, -areaHeightSlider / 2, areaWidthSlider, areaHeightSlider);	
+		area = ofRectangle(-areaWidthSlider / 2, -areaHeightSlider / 2, areaWidthSlider, areaHeightSlider);
 	}
 
 	void drawAreaBG() {
@@ -321,7 +322,7 @@ public:
 		for (int y = 0; y < gridNumYSlider + 1; y++) {
 			for (int x = 0; x < gridNumXSlider + 1; x++) {
 				if (mainRandomImgToggle) { drawRandomImage(x * gridDistXSlider, y * gridDistYSlider); }
-				else{ drawSelectImage(mainImgSelectSlider, x * gridDistXSlider, y * gridDistYSlider); }
+				else { drawSelectImage(mainImgSelectSlider, x * gridDistXSlider, y * gridDistYSlider); }
 			}
 		}
 		ofPopMatrix();
@@ -353,8 +354,8 @@ public:
 					valueX = +offGrid;
 					valueY = +offGrid;
 				}
-				if (mainRandomImgToggle) { drawRandomImage(x * gridDistXSlider+valueX, y * gridDistYSlider+valueY); }
-				else { drawSelectImage(mainImgSelectSlider, x * gridDistXSlider+valueX, y * gridDistYSlider+valueY); }
+				if (mainRandomImgToggle) { drawRandomImage(x * gridDistXSlider + valueX, y * gridDistYSlider + valueY); }
+				else { drawSelectImage(mainImgSelectSlider, x * gridDistXSlider + valueX, y * gridDistYSlider + valueY); }
 			}
 		}
 		ofPopMatrix();
@@ -371,20 +372,20 @@ public:
 			float rad = sin(ofDegToRad(deg));
 			ofPushMatrix();
 			ofTranslate(x, y, 0);
-			if (drawGridToggle)drawCross(0,0, 20, 20);
-			ofRotateZ(-(leavesNum-1)*deg*0.5);
+			if (drawGridToggle)drawCross(0, 0, 20, 20);
+			ofRotateZ(-(leavesNum - 1) * deg * 0.5);
 			for (int i = 0; i < leavesNum; i++) {
 				float radius = ofRandom(organicRadiusMinSlider, organicRadiusMaxSlider);
-				float newX =cos((rad)*i - PI / 2) * radius;
-				float newY =sin((rad)*i - PI / 2) * radius;
+				float newX = cos(rad*i - PI / 2) * radius;
+				float newY = sin(rad*i - PI / 2) * radius;
 				ofPushMatrix();
 				ofTranslate(newX, newY, 0);
 				ofRotateZ(deg * i);
 				ofSetLineWidth(2);
-				if(drawGridToggle){ drawCross(0, 0, 20, 20); }
-				drawSelectImage(mainImgSelectSlider, 0,0);
+				if (drawGridToggle) { drawCross(0, 0, 20, 20); }
+				drawSelectImage(mainImgSelectSlider, 0, 0);
 				ofPopMatrix();
-			}	
+			}
 			ofPopMatrix();
 		}
 	}
@@ -399,17 +400,17 @@ public:
 			currentH = currentH * value;
 		}
 
-		float degreeZ = ofRandom(-mainAngleRangeZSlider,mainAngleRangeZSlider);
+		float degreeZ = ofRandom(-mainAngleRangeZSlider, mainAngleRangeZSlider);
 		float degreeX = ofRandom(-mainAngleRangeXSlider, mainAngleRangeXSlider);
 		float degreeY = ofRandom(-mainAngleRangeYSlider, mainAngleRangeYSlider);
 		float zPos = ofRandom(500);
 
-		
-		
+
+
 		ofPushMatrix();
-		ofTranslate(_x, _y ,0);
-		
-		
+		ofTranslate(_x, _y, 0);
+
+
 		//--shadow
 		ofPushMatrix();
 		ofTranslate(offsetShadowXSlider, offsetShadowYSlider, 0);
@@ -418,13 +419,13 @@ public:
 			ofRotateX(degreeX);
 			ofRotateY(degreeY);
 			ofRotateZ(degreeZ);
-		}		
+		}
 		ofSetColor(255, offsetShadowAlphaSlider);
-		if (arrangeToGridToggle) { sdws[_imgIndex].setAnchorPercent(0.5, 0.5); }
+		if (arrangeToGridToggle) {sdws[_imgIndex].setAnchorPercent(0.5, 0.5);}
 		else { sdws[_imgIndex].setAnchorPercent(0.5, 1.0); }
-		sdws[_imgIndex].draw(0,0, currentW*offsetShadowScaleSlider, currentH*offsetShadowScaleSlider);
+		sdws[_imgIndex].draw(0, 0, currentW * offsetShadowScaleSlider, currentH * offsetShadowScaleSlider);
 		ofPopMatrix();
-		
+
 
 		//--real
 		ofPushMatrix();
@@ -434,25 +435,33 @@ public:
 			ofRotateY(degreeY);
 			ofRotateZ(degreeZ);
 		}
-		if (mainRandomAlphaToggle) {ofSetColor(255, ofRandom(mainRandomAlphaMinSlider, mainRandomAlphaMaxSlider));}
+		if (mainRandomAlphaToggle) { ofSetColor(255, ofRandom(mainRandomAlphaMinSlider, mainRandomAlphaMaxSlider)); }
 		else { ofSetColor(255, mainAlphaSlider); }
-		if(arrangeToGridToggle){ imgs[_imgIndex].setAnchorPercent(0.5, 0.5); }
-		else{ imgs[_imgIndex].setAnchorPercent(0.5, 1.0); }
-		imgs[_imgIndex].draw(0, 0, currentW,currentH);
+		if (arrangeToGridToggle) { imgs[_imgIndex].setAnchorPercent(0.5, 0.5); }
+		else { imgs[_imgIndex].setAnchorPercent(0.5, 1.0); }
+		imgs[_imgIndex].draw(0, 0, currentW, currentH);
 		ofPopMatrix();
 
 		ofPopMatrix();
 	}
 
-	void drawRandomImage( int _x, int _y) {
+	void drawRandomImage(int _x, int _y) {
 		drawSelectImage(int(ofRandom(0, loadingImgNum)), _x, _y);
 	}
 
 	void drawCross(int _x, int _y, int _sizeX, int _sizeY) {
+		glLineWidth(3);
+		glColor3f(1, 1, 1);
 		ofPushMatrix();
 		ofTranslate(_x, _y);
-		ofDrawLine(-_sizeX / 2, 0, _sizeX / 2, 0);
-		ofDrawLine(0, -_sizeY / 2, 0, _sizeY / 2);
+		glBegin(GL_LINES);
+		glVertex2f(-_sizeX / 2, 0);
+		glVertex2f(_sizeX / 2, 0);
+		glEnd();
+		glBegin(GL_LINES);
+		glVertex2f(0, -_sizeY / 2);
+		glVertex2f(0, _sizeY / 2);
+		glEnd();
 		ofPopMatrix();
 	}
 
@@ -464,26 +473,32 @@ public:
 
 
 	void saveImage() {
-
-		string fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay())+ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
+		ofImage imgToSave;
+		string fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
 		imgToSave.grabScreen(ofGetWidth() / 2 + area.x, ofGetHeight() / 2 + area.y, area.getWidth(), area.getHeight());
 		imgToSave.save(fileName, OF_IMAGE_QUALITY_BEST);
 		std::cout << "img : " + fileName + " -exported" << std::endl;
 
-		
-		if (saveCheckerID01) {drawAreaBGToggle = true; saveCheckerID01 = false;}
-		if (saveCheckerID02) {drawAreaOUTToggle = true; saveCheckerID02 = false;}
-		if (saveCheckerID03) {drawGridToggle = true; saveCheckerID03 = false;}
+		if (saveCheckerID01) { drawAreaBGToggle = true; saveCheckerID01 = false; }
+		if (saveCheckerID02) { drawAreaOUTToggle = true; saveCheckerID02 = false; }
+		if (saveCheckerID03) { drawGridToggle = true; saveCheckerID03 = false; }
+	}
+
+	void saveFullScreenImage() {
+		string _fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
+		ofImage _imgToSave;
+		_imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+		_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
+		std::cout << "img : " + _fileName + " -exported" << std::endl;
 	}
 
 	void saveFBOtoImage() {
-
+		ofImage imgToSave;
 		string fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
 		fbo.readToPixels(pixels);
 		imgToSave.setFromPixels(pixels);
 		imgToSave.save(fileName, OF_IMAGE_QUALITY_BEST);
 		std::cout << "img : " + fileName + " -exported" << std::endl;
-
 
 		if (saveCheckerID01) { drawAreaBGToggle = true; saveCheckerID01 = false; }
 		if (saveCheckerID02) { drawAreaOUTToggle = true; saveCheckerID02 = false; }
@@ -495,9 +510,14 @@ public:
 
 	//----------DEFAULT-OTHER-----------//
 	void keyPressed(int key) {
-		if (key == 's') {
-			saveImage();
-		}
+		switch (key) {
+		case 'f':
+			ofToggleFullscreen();
+			break;
+		case 's':
+			saveFullScreenImage();
+			break;
+			}
 	};
 	void keyReleased(int key) {
 	};

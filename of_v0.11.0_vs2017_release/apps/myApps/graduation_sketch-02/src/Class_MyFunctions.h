@@ -13,6 +13,10 @@ public:
 
 	void setup(ofEasyCam* _ezCam) {
 		ofSetVerticalSync(true);
+		ofNoFill();
+		glClearColor(0, 0, 0, 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glColor3f(0, 0, 0);
 		//_ezCam->setNearClip(0.1);
 		//_ezCam->setFarClip(100000);
 		//_ezCam->setPosition(0, 0, 0);
@@ -28,9 +32,12 @@ public:
 		*_time = ofGetElapsedTimef();
 
 		ofBackground(10);
+		ofNoFill();
 		//fbo.begin();
 		glClearColor(0,0,0,0);
 		glClear(GL_COLOR_BUFFER_BIT);
+		glColor3f(0, 0, 0);
+		glLineWidth(1);
 		//fbo.end();
 	}
 
