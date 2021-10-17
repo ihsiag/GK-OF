@@ -12,10 +12,13 @@ public:
 	ofxBox2d box2d; //world
 	ofxBox2dEdge edge;
 	vector<shared_ptr<ofxBox2dCircle>> circles;
+	vector<glm::vec3> posArr;
 
 	int elementR = 30;
 	int resolution = 60;
 	float edgeR = ofGetHeight()/4;
+
+	int count = 0;
 
 	Class_Box2dStudy() {
 	}
@@ -41,6 +44,8 @@ public:
 		_edgeLine.close();
 		edge.addVertexes(_edgeLine);
 		edge.create(box2d.getWorld());
+
+		
 	}
 
 
@@ -54,6 +59,12 @@ public:
 
 	void update() {
 		//ofRemove(circles, removeShapeOffScreen);
+		//ofRemove(posArr,removeShapeOffScreen);
+		int elementN = 43;
+		if (count < elementN) {
+			addElement(glm::vec2(ofRandom(-1, 1), ofRandom(-1, 1)));
+		}
+		count++;
 		box2d.update();
 	}
 
@@ -78,6 +89,9 @@ public:
 
 
 	void createMesh() {
+		if (posArr.size() > 0) {
+
+		}
 	}
 
 	void showInfo() {
@@ -88,12 +102,13 @@ public:
 		ofDrawBitmapString(info, 60, ofGetHeight()*0.25);
 	}
 
-	void addElement(glm::vec2& _mouse) {
-		if (edge.inside(_mouse.x, _mouse.y)) {
+	void addElement(const glm::vec2& _pos) {
+		if (edge.inside(_pos.x, _pos.y)) {
 			auto circle = make_shared<ofxBox2dCircle>();
 			circle->setPhysics(3.0, 0.53, 0.1);
-			circle->setup(box2d.getWorld(), _mouse.x, _mouse.y, elementR);
+			circle->setup(box2d.getWorld(), _pos.x, _pos.y, elementR);
 			circles.push_back(circle);
+			posArr.push_back((glm::vec3(circle->getPosition().x, circle->getPosition().y,0)));
 		}
 	}
 
