@@ -6,6 +6,7 @@
 
 class Class_AnalyseModel {
 public:
+	bool bStageEnd;
 	//using Ptr = shared_ptr<Class_Analysis>;
 	ofMesh* mesh;
 	vector <glm::vec3>* resultArr;
@@ -19,6 +20,7 @@ public:
 	}
 
 	void setup(ofMesh* _mesh,vector<glm::vec3>* _resultArr) {
+		bStageEnd = false;
 		mesh = _mesh;
 		resultArr = _resultArr;
 		bFirst = true;
@@ -32,7 +34,8 @@ public:
 		//if (bFirst)calcLeastSquaresMethod();
 		if (bFirst)myCalc();
 		if (bSecond)display();
-		if (!bFirst && !bSecond) { return true; }else {return false;}
+		if (!bFirst && !bSecond) { bStageEnd = true;}
+		return bStageEnd;
 	}
 
 	void update() {

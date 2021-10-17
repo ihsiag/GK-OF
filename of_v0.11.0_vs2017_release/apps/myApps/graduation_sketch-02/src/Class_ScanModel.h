@@ -6,12 +6,12 @@
 
 class Class_ScanModel {
 public:
+	bool bStageEnd;
 	ofMesh* mesh;
 	ofEasyCam* ezCam;
 	int numVertex;
 	int indexVertex;
-	bool bScanEnd;
-	
+
 	Class_ScanModel() {
 	}
 	~Class_ScanModel() {
@@ -22,13 +22,13 @@ public:
 		ezCam = _ezCam;
 		numVertex = mesh->getNumVertices();
 		indexVertex = 0;
-		bScanEnd = false;
+		bStageEnd = false;
 	}
 
 	bool run() {
 		update();
 		display();
-		return bScanEnd;
+		return bStageEnd;
 	}
 
 	void update() {
@@ -36,7 +36,7 @@ public:
 			indexVertex++;
 		}
 		else {
-			bScanEnd = true;
+			bStageEnd = true;
 		}
 	}
 

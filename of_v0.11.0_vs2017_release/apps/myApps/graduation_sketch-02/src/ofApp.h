@@ -13,6 +13,7 @@
 #include "Class_AnalyseModel.h"
 #include "Class_RecreateModel.h"
 #include "Class_Box2DStudy.h"
+#include "Class_Delaunay.h"
 
 
 
@@ -27,6 +28,7 @@ public:
 	Class_AnalyseModel analyseModel;
 	Class_RecreateModel recreateModel;
 	Class_Box2dStudy box2dStudy;
+	Class_Delaunay delaunay;
 	
 	ofCamera cam;
 	ofEasyCam ezCam;
@@ -39,9 +41,9 @@ public:
 	
 	ofMesh meshScan;
 	ofMesh meshCreate;
-	//ofxAssimpModelLoader model;
 
 	vector <glm::vec3> arrResultAnalyseModel;
+	vector <glm::vec3> vertexArr;
 	
 	//ofVboMesh vboMesh;
 	ofFbo fbo;
@@ -54,7 +56,10 @@ public:
 
 	bool bFirst;//scan
 	bool bSecond;//analysis
-	bool bThird;//create
+	bool bThird;//box2d-vertex-xy
+	bool bFourth;//delaunary-mesh-xy
+	bool bFifth;//recreateModel-mesh-z
+	bool bSixth;//temporary END
 
 	bool bUpdateCamera;
 	bool bShowInfo;
@@ -71,9 +76,12 @@ public:
 		camValue = 200;
 		fontSize = 10;
 		
-		bFirst = true;
-		bSecond = false;
-		bThird = false;
+		bFirst = false;// true;
+		bSecond = false;// false;
+		bThird = true;// false;
+		bFourth = false;
+		bFifth = false;
+		bSixth = false;
 		
 		bUpdateCamera = true;
 		bShowInfo = true;
@@ -83,7 +91,8 @@ public:
 		scanModel.setup(&meshScan,&ezCam);
 		analyseModel.setup(&meshScan, &arrResultAnalyseModel);
 		recreateModel.setup(&meshCreate, &arrResultAnalyseModel, &ezCam);
-		box2dStudy.setup(&ezCam);
+		box2dStudy.setup(&vertexArr,&ezCam);
+		delaunay.setup(&vertexArr);
 
 		mf.setup(&ezCam);
 	
@@ -98,14 +107,15 @@ public:
 
 		//update();	
 
-		//-----------PhaseBEGIN
-		/*
+		//-----------StagesBEGIN
+		
 		if (bFirst) { bSecond = scanModel.run(); }
 		if (bSecond) { bFirst = false; bThird = analyseModel.run();}
-		if (bThird) { bSecond = false; recreateModel.run(); }
-		*/
-		box2dStudy.run();
-		//-----------PhaseEND
+		if (bThird) { bSecond = false; bFourth = box2dStudy.run(); }
+		if (bFourth) { bThird = false; bFifth = delaunay.run(); }
+		if (bFifth) { bFourth = false; bSixth = recreateModel.run(); }
+
+		//-----------StagesEND
 
 		
 		
@@ -173,6 +183,4 @@ public:
 	}
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-
-
 };

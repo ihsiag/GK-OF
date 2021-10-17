@@ -7,18 +7,20 @@
 
 class Class_Box2dStudy {
 public:
+	bool bStageEnd;
 	ofEasyCam* ezCam;
 
 	ofxBox2d box2d; //world
 	ofxBox2dEdge edge;
 	vector<shared_ptr<ofxBox2dCircle>> circles;
-	vector<glm::vec3> posArr;
+	vector<glm::vec3>* vertexArr;
 
 	int elementR = 30;
 	int resolution = 60;
 	float edgeR = ofGetHeight()/4;
 
 	int count = 0;
+	int endCount = 240;
 
 	Class_Box2dStudy() {
 	}
@@ -26,7 +28,9 @@ public:
 	~Class_Box2dStudy() {
 	}
 
-	void setup(ofEasyCam* _ezCam) {
+	void setup(vector<glm::vec3>* _vertexArr,ofEasyCam* _ezCam) {
+		vertexArr = _vertexArr;
+		bStageEnd = false;
 		ezCam = _ezCam;
 		ofSetLogLevel(OF_LOG_NOTICE);
 
@@ -49,22 +53,26 @@ public:
 	}
 
 
-	void run() {
+	bool run() {
 		update();
 		ezCam->begin();
 		display();
 		ezCam->end();
 		showInfo();
+		return bStageEnd;
 	}
 
 	void update() {
 		//ofRemove(circles, removeShapeOffScreen);
-		//ofRemove(posArr,removeShapeOffScreen);
+		//ofRemove(vertexArr,removeShapeOffScreen);
 		int elementN = 43;
 		if (count < elementN) {
 			addElement(glm::vec2(ofRandom(-1, 1), ofRandom(-1, 1)));
 		}
 		count++;
+		if (count > endCount) {
+			bStageEnd = true;
+		}
 		box2d.update();
 	}
 
@@ -89,7 +97,7 @@ public:
 
 
 	void createMesh() {
-		if (posArr.size() > 0) {
+		if (vertexArr->size() > 0) {
 
 		}
 	}
@@ -108,7 +116,7 @@ public:
 			circle->setPhysics(3.0, 0.53, 0.1);
 			circle->setup(box2d.getWorld(), _pos.x, _pos.y, elementR);
 			circles.push_back(circle);
-			posArr.push_back((glm::vec3(circle->getPosition().x, circle->getPosition().y,0)));
+			vertexArr->push_back((glm::vec3(circle->getPosition().x, circle->getPosition().y,0)));
 		}
 	}
 

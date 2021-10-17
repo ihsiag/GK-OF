@@ -7,7 +7,7 @@
 class Class_RecreateModel {
 public:
 	//using Ptr = shared_ptr<Class_Analysis>;
-
+	bool bStageEnd;
 	vector<glm::vec3>* arrPos;
 	ofMesh* mesh;
 	ofEasyCam* ezCam;
@@ -20,6 +20,7 @@ public:
 	}
 
 	void setup(ofMesh* _mesh, vector<glm::vec3>* _data, ofEasyCam* _cam) {
+		bStageEnd = false;
 		mesh = _mesh;
 		arrPos = _data;
 		ezCam = _cam;
@@ -28,9 +29,10 @@ public:
 	}
 
 
-	void run() {
+	bool run() {
 		if(bFirst)createMesh();
 		if(bSecond)display();
+		return bStageEnd;
 	}
 
 	void update() {
