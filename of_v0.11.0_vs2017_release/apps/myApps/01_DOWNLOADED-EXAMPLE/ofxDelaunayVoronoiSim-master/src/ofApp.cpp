@@ -26,7 +26,7 @@ void point::update(){
 	ofVec2f pos = position - ofVec2f(ofGetWidth() / 2, ofGetHeight() / 2);
 	if (pos.length() > globalRadius)
 	{
-		vel = speed*pos.getNormalized().rotate(ofRandom(-70,70));
+		vel = speed*pos.getNormalized().rotate(ofRandom(-70,70)/ 180 * M_PI);
 	}
 }
 void point::draw()

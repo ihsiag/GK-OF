@@ -5,28 +5,31 @@
 
 #define M_PI 3.141592
 
+//====================================================================================================================================
+//====================================================================================================================================
+//====================================================================================================================================
 class Class_DelaPoint {
 private:
 	glm::vec2 vel;
 	double speed;
 	double circleR;
-	double globalR;
+	double edgeR;
 public:
 	glm::vec2 pos;
 	Class_DelaPoint() {};
 	~Class_DelaPoint() {};
 
-	void setup(double& _globalR, double& _speed, double& _size) {
-		double r = ofRandom(0, _globalR);
+	void setup(double _edgeR, double _speed, double _size) {
+		double r = ofRandom(0, _edgeR);
 		double theta = ofRandom(0, 2 * M_PI);
 		double rad = -theta + M_PI / 2 - ofRandom(-70, 70) / 180 * M_PI;
 
 		pos = glm::vec2(ofGetWidth() / 2 + r * cos(theta), ofGetHeight() / 2 + r * sin(theta));
 		speed = ofRandom(_speed / 5, _speed);	
-		vel = glm::vec2(speed * sin(rad), speed * cos(rad));
+		vel = glm::vec2(speed * cos(rad), speed * sin(rad));
 
 		circleR = _size;
-		globalR = _globalR;
+		edgeR = _edgeR;
 	};
 	
 	void run() {
@@ -35,55 +38,60 @@ public:
 	};
 	
 	void update() {
-		pos -= vel;
+		//pos += vel;
 		glm::vec2 _pos = pos - glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2);
-		if (_pos.length() > globalR)
-		{
+		if (_pos.length() > edgeR){
 			vel = speed * glm::rotate(glm::normalize(_pos),ofRandom(-70, 70));
+			//glm::rotate(vel, ofRandom(-70, 70));
+			//vel = speed * ofVec2f(_pos).getNormalized().rotate(ofRandom(-70, 70));
 		}
 	};
 
 	void display() {
 		ofFill();
-		glColor3f(1, 1, 0);
+		glColor3f(0, 1, 0);
 		ofDrawCircle(pos, circleR);	
 	};
 
-	void setGlobalR(double& _globalR) {
-		globalR = _globalR;
+	void setGlobalR(double _edgeR) {
+		edgeR = _edgeR;
 	}
 };
 
+
+//====================================================================================================================================
+//====================================================================================================================================
+//====================================================================================================================================
 class Class_DelaCircle{
 private:
-	float r;
+	float triR;
 
 public:
-	vector<Class_DelaPoint> elements;
-	glm::vec2 center;
+	vector<Class_DelaPoint> triVertices;
+	glm::vec2 triCenter;
 	int shareside[3]; //01:0 12:1 20:2
 	int sharepoint[3];
 
 	Class_DelaCircle() {};
 	~Class_DelaCircle() {};
 	
-	void setup(vector<Class_DelaPoint> _elements) {
+	void setup(vector<Class_DelaPoint> _triVertices) {
 		//free
-		vector<Class_DelaPoint>().swap(elements);
+		vector<Class_DelaPoint>().swap(triVertices);
 		//外接円のパラメータの計算(３つの点から中心を求める)
-		elements = _elements;
-		double c = 2 * ((elements[1].pos.x - elements[0].pos.x) * (elements[2].pos.y - elements[0].pos.y) - (elements[1].pos.y - elements[0].pos.y) * (elements[2].pos.x - elements[0].pos.x));
+		triVertices = _triVertices;
+		double c = 2 * ((triVertices[1].pos.x - triVertices[0].pos.x) * (triVertices[2].pos.y - triVertices[0].pos.y) - (triVertices[1].pos.y - triVertices[0].pos.y) * (triVertices[2].pos.x - triVertices[0].pos.x));
 		double x1, x2, y1, y2, xy1, xy2;
-		x1 = (elements[2].pos.y - elements[0].pos.y);
-		x2 = (elements[0].pos.y - elements[1].pos.y);
-		y1 = (elements[0].pos.x - elements[2].pos.x);
-		y2 = (elements[1].pos.x - elements[0].pos.x);
-		xy1 = (pow(elements[1].pos.x, 2) - pow(elements[0].pos.x, 2) + pow(elements[1].pos.y, 2) - pow(elements[0].pos.y, 2));
-		xy2 = (pow(elements[2].pos.x, 2) - pow(elements[0].pos.x, 2) + pow(elements[2].pos.y, 2) - pow(elements[0].pos.y, 2));
+		x1 = (triVertices[2].pos.y - triVertices[0].pos.y);
+		x2 = (triVertices[0].pos.y - triVertices[1].pos.y);
+		y1 = (triVertices[0].pos.x - triVertices[2].pos.x);
+		y2 = (triVertices[1].pos.x - triVertices[0].pos.x);
+		xy1 = (pow(triVertices[1].pos.x, 2) - pow(triVertices[0].pos.x, 2) + pow(triVertices[1].pos.y, 2) - pow(triVertices[0].pos.y, 2));
+		xy2 = (pow(triVertices[2].pos.x, 2) - pow(triVertices[0].pos.x, 2) + pow(triVertices[2].pos.y, 2) - pow(triVertices[0].pos.y, 2));
 		
-		center.x = (x1 * xy1 + x2 * xy2) / c;
-		center.y = (y1 * xy1 + y2 * xy2) / c;
-		r = glm::vec2(center - elements[0].pos).length();
+		triCenter.x = (x1 * xy1 + x2 * xy2) / c;
+		triCenter.y = (y1 * xy1 + y2 * xy2) / c;
+		triR = glm::vec2(triCenter - triVertices[0].pos).length();
 
 		shareside[0] = 0;
 		shareside[1] = 0;
@@ -104,23 +112,23 @@ public:
 	void drawCenter() {
 		ofFill();
 		glColor3f(1, 0, 1);
-		ofDrawCircle(center, 6);
+		ofDrawCircle(triCenter, 6);
 	};
 	
 	void drawCircle() {
 		glLineWidth(0.3);
 		ofNoFill();
 		glColor3f(0, 0, 0);
-		ofDrawCircle(center, r);
+		ofDrawCircle(triCenter, triR);
 	};
 	
 	void drawTriangle() {
 		ofMesh mesh;
 		mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-		mesh.addVertex(ofPoint(elements[0].pos));
-		mesh.addVertex(ofPoint(elements[1].pos));
-		mesh.addVertex(ofPoint(elements[2].pos));
-		mesh.addVertex(ofPoint(elements[0].pos)); //2
+		mesh.addVertex(ofPoint(triVertices[0].pos));
+		mesh.addVertex(ofPoint(triVertices[1].pos));
+		mesh.addVertex(ofPoint(triVertices[2].pos));
+		//mesh.addVertex(ofPoint(triVertices[0].pos)); //2
 		
 		glColor3f(1, 1, 1);
 		mesh.draw();
@@ -132,8 +140,8 @@ public:
 	bool check(vector<Class_DelaPoint> _points) {
 		bool result = true;
 		for (int i = 0; i < _points.size(); i++){
-			float length = glm::vec2(center - _points[i].pos).length();
-			if (length < r - 0.01){
+			float length = glm::vec2(triCenter - _points[i].pos).length();
+			if (length < triR - 0.01){
 				result = false;
 			}
 		}
@@ -141,6 +149,9 @@ public:
 	};
 };
 
+//====================================================================================================================================
+//====================================================================================================================================
+//====================================================================================================================================
 class Class_DelaVoronoi {
 private:
 	double globalR;
@@ -211,7 +222,9 @@ public:
 	};
 };
 
-
+//====================================================================================================================================
+//====================================================================================================================================
+//====================================================================================================================================
 class Class_DelaTriangle {
 public:
 	Class_DelaTriangle() {};
@@ -228,6 +241,10 @@ public:
 	};
 };
 
+
+//====================================================================================================================================
+//====================================================================================================================================
+//====================================================================================================================================
 #pragma mark Class_Delaunay
 class Class_Delaunay {
 public:
@@ -236,7 +253,7 @@ public:
 	vector<glm::vec3>* vertexArr;
 
 	vector<Class_DelaPoint> points;
-	vector<Class_DelaCircle> circles;
+	vector<Class_DelaCircle> triCircles;
 	vector<Class_DelaVoronoi> voronois;
 
 	double dynamic_GLOBAL_RADIUS;
@@ -254,7 +271,7 @@ public:
 		
 		//free
 		vector<Class_DelaPoint>().swap(points);
-		vector<Class_DelaCircle>().swap(circles);
+		vector<Class_DelaCircle>().swap(triCircles);
 		vector<Class_DelaVoronoi>().swap(voronois);
 
 
@@ -278,9 +295,8 @@ public:
 			points[i].setGlobalR(dynamic_GLOBAL_RADIUS);
 			points[i].update();
 		}
-		if (points.size() > 2)
-		{
-			circles = getCircles();
+		if (points.size() > 2){
+			triCircles = getTriCircles();
 			voronois = getVoronois();
 			vector<Class_DelaVoronoi> _additionalVoronoi = getOutlierVoronois();
 			voronois.insert(voronois.end(), _additionalVoronoi.begin(), _additionalVoronoi.end());
@@ -297,73 +313,64 @@ public:
 		glLineWidth(1);
 		ofDrawCircle(glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2), dynamic_GLOBAL_RADIUS);
 
-		//動きまわる赤色の点の描画
-		for (int i = 0; i < points.size(); i++)
-		{
-			points[i].display();
-		}
-
 		//ボロノイの描画
-		for (int i = 0; i < voronois.size(); i++)
-		{
+		for (int i = 0; i < voronois.size(); i++){
 			voronois[i].display();
 		}
 
 		//ドロネーの描画
-		for (int i = 0; i < circles.size(); i++)
+		for (int i = 0; i < triCircles.size(); i++)
 		{
-			circles[i].drawTriangle();
-			circles[i].drawCircle();
-			circles[i].drawCenter();
+			triCircles[i].drawTriangle();
+			triCircles[i].drawCircle();
+			//triCircles[i].drawCenter();
 		}
 
-	}
+		//動きまわる赤色の点の描画
+		for (int i = 0; i < points.size(); i++) {
+			points[i].display();
+		}
 
-	void makeCircumcircle() {
+	};
 
-	}
-	vector<Class_DelaCircle> getCircles() {
+	vector<Class_DelaCircle> getTriCircles() {
 		//外接円の中に他のpointが存在しないpointの組み合わせを全探索
-		vector<Class_DelaCircle> _circles;
-		for (int i = 0; i < points.size() - 2; i++)
-		{
-			for (int j = i + 1; j < points.size() - 1; j++)
-			{
-				for (int k = j + 1; k < points.size(); k++)
-				{
-					vector <Class_DelaPoint>elements;
-					elements.push_back(points[i]);
-					elements.push_back(points[j]);
-					elements.push_back(points[k]);
+		vector<Class_DelaCircle> _triCircles;
+		for (int i = 0; i < points.size() - 2; i++){
+			for (int j = i + 1; j < points.size() - 1; j++){
+				for (int k = j + 1; k < points.size(); k++){
+					vector<Class_DelaPoint> _triVertices;
+					_triVertices.push_back(points[i]);
+					_triVertices.push_back(points[j]);
+					_triVertices.push_back(points[k]);
 
-					Class_DelaCircle delaCircle;
-					delaCircle.setup(elements);
+					Class_DelaCircle _triCircle;
+					_triCircle.setup(_triVertices);
 					//外接円内に他のpointがないか確認
-					if (delaCircle.check(points))
-					{
-						_circles.push_back(delaCircle);
+					if (_triCircle.check(points)){
+						_triCircles.push_back(_triCircle);
 					}
 				}
 			}
 		}
-		return _circles;
+		return _triCircles;
 	};
 	vector<Class_DelaVoronoi> getVoronois() {
 		vector<Class_DelaVoronoi> _voronois;
-		for (int i = 0; i < circles.size() - 1; i++) {
-			for (int j = i + 1; j < circles.size(); j++) {
+		for (int i = 0; i < triCircles.size() - 1; i++) {
+			for (int j = i + 1; j < triCircles.size(); j++) {
 				int sharepoint = 0;
 				for (int k = 0; k < 3; k++) {
-					circles[i].sharepoint[k] = 0;
-					circles[j].sharepoint[k] = 0;
+					triCircles[i].sharepoint[k] = 0;
+					triCircles[j].sharepoint[k] = 0;
 				}
 
 				//ドロネーで分割した三角形の中で頂点を共有しているものの洗い出し
 				for (int k = 0; k < 3; k++) {
 					for (int l = 0; l < 3; l++) {
-						if (ofVec2f(circles[i].elements[k].pos).match(ofVec2f(circles[j].elements[l].pos))) {
-							circles[i].sharepoint[k]++;
-							circles[j].sharepoint[l]++;
+						if (ofVec2f(triCircles[i].triVertices[k].pos).match(ofVec2f(triCircles[j].triVertices[l].pos))) {
+							triCircles[i].sharepoint[k]++;
+							triCircles[j].sharepoint[l]++;
 							sharepoint++;
 						}
 					}
@@ -372,35 +379,35 @@ public:
 				//頂点を２つ共有している場合ひとつの辺を共有していることになる
 				//辺を共有している場合はボロノイの線で繋がれる
 				if (sharepoint == 2) {
-					if (circles[i].sharepoint[0] > 0) {
-						if (circles[i].sharepoint[1] > 0) {
-							circles[i].shareside[0]++;
+					if (triCircles[i].sharepoint[0] > 0) {
+						if (triCircles[i].sharepoint[1] > 0) {
+							triCircles[i].shareside[0]++;
 						}
-						if (circles[i].sharepoint[2] > 0) {
-							circles[i].shareside[2]++;
-						}
-					}
-					else {
-						if (circles[i].sharepoint[1] > 0 && circles[i].sharepoint[2] > 0) {
-							circles[i].shareside[1]++;
-						}
-					}
-					if (circles[j].sharepoint[0] > 0) {
-						if (circles[j].sharepoint[1] > 0) {
-							circles[j].shareside[0]++;
-						}
-						if (circles[j].sharepoint[2] > 0) {
-							circles[j].shareside[2]++;
+						if (triCircles[i].sharepoint[2] > 0) {
+							triCircles[i].shareside[2]++;
 						}
 					}
 					else {
-						if (circles[j].sharepoint[1] > 0 && circles[j].sharepoint[2] > 0) {
-							circles[j].shareside[1]++;
+						if (triCircles[i].sharepoint[1] > 0 && triCircles[i].sharepoint[2] > 0) {
+							triCircles[i].shareside[1]++;
+						}
+					}
+					if (triCircles[j].sharepoint[0] > 0) {
+						if (triCircles[j].sharepoint[1] > 0) {
+							triCircles[j].shareside[0]++;
+						}
+						if (triCircles[j].sharepoint[2] > 0) {
+							triCircles[j].shareside[2]++;
+						}
+					}
+					else {
+						if (triCircles[j].sharepoint[1] > 0 && triCircles[j].sharepoint[2] > 0) {
+							triCircles[j].shareside[1]++;
 						}
 					}
 
 					Class_DelaVoronoi _voronoi;
-					_voronoi.setup(dynamic_GLOBAL_RADIUS, POINT_RADIUS, circles[i].center, circles[j].center);
+					_voronoi.setup(dynamic_GLOBAL_RADIUS, POINT_RADIUS, triCircles[i].triCenter, triCircles[j].triCenter);
 					_voronois.push_back(_voronoi);
 				}
 			}
@@ -409,13 +416,13 @@ public:
 	};
 	vector<Class_DelaVoronoi> getOutlierVoronois() {
 		vector<Class_DelaVoronoi> _voronois;
-		for (int i = 0; i < circles.size(); i++)
+		for (int i = 0; i < triCircles.size(); i++)
 		{
 			//移動点の外枠の探索
 			int share = 0;
 			for (int j = 0; j < 3; j++)
 			{
-				if (circles[i].shareside[j] > 0)
+				if (triCircles[i].shareside[j] > 0)
 				{
 					share++;
 				}
@@ -424,48 +431,48 @@ public:
 			{
 				for (int j = 0; j < 3; j++)
 				{
-					if (circles[i].shareside[j] == 0)
+					if (triCircles[i].shareside[j] == 0)
 					{
 						glm::vec2 p1, p2;
-						p1 = circles[i].center;
-						double dig1 = ofVec2f(circles[i].center - circles[i].elements[0].pos).angleRad(ofVec2f(circles[i].elements[1].pos - circles[i].elements[0].pos));
-						double dig2 = ofVec2f(circles[i].center - circles[i].elements[1].pos).angleRad(ofVec2f(circles[i].elements[2].pos - circles[i].elements[1].pos));
-						double dig3 = ofVec2f(circles[i].center - circles[i].elements[2].pos).angleRad(ofVec2f(circles[i].elements[0].pos - circles[i].elements[2].pos));
+						p1 = triCircles[i].triCenter;
+						double dig1 = ofVec2f(triCircles[i].triCenter - triCircles[i].triVertices[0].pos).angleRad(ofVec2f(triCircles[i].triVertices[1].pos - triCircles[i].triVertices[0].pos));
+						double dig2 = ofVec2f(triCircles[i].triCenter - triCircles[i].triVertices[1].pos).angleRad(ofVec2f(triCircles[i].triVertices[2].pos - triCircles[i].triVertices[1].pos));
+						double dig3 = ofVec2f(triCircles[i].triCenter - triCircles[i].triVertices[2].pos).angleRad(ofVec2f(triCircles[i].triVertices[0].pos - triCircles[i].triVertices[2].pos));
 
-						glm::vec2 direct = (circles[i].elements[j].pos + circles[i].elements[(j + 1) % 3].pos) / 2 - circles[i].center;
+						glm::vec2 direct = (triCircles[i].triVertices[j].pos + triCircles[i].triVertices[(j + 1) % 3].pos) / 2 - triCircles[i].triCenter;
 						direct = glm::normalize(direct);
 
 						if (j == 0)
 						{
 							if ((dig1 < 0 && dig2 > 0 && dig3 > 0) || (dig1 > 0 && dig2 < 0 && dig3 < 0))
 							{
-								p2 = circles[i].center - direct * 1000;
+								p2 = triCircles[i].triCenter - direct * 1000;
 							}
 							else
 							{
-								p2 = circles[i].center + direct * 1000;
+								p2 = triCircles[i].triCenter + direct * 1000;
 							}
 						}
 						else if (j == 1)
 						{
 							if ((dig1 > 0 && dig2 < 0 && dig3 >0) || (dig1 < 0 && dig2 > 0 && dig3 < 0))
 							{
-								p2 = circles[i].center - direct * 1000;
+								p2 = triCircles[i].triCenter - direct * 1000;
 							}
 							else
 							{
-								p2 = circles[i].center + direct * 1000;
+								p2 = triCircles[i].triCenter + direct * 1000;
 							}
 						}
 						else if (j == 2)
 						{
 							if ((dig1 > 0 && dig2 > 0 && dig3 < 0) || (dig1 < 0 && dig2 < 0 && dig3 > 0))
 							{
-								p2 = circles[i].center - direct * 10000;
+								p2 = triCircles[i].triCenter - direct * 10000;
 							}
 							else
 							{
-								p2 = circles[i].center + direct * 10000;
+								p2 = triCircles[i].triCenter + direct * 10000;
 							}
 						}
 
