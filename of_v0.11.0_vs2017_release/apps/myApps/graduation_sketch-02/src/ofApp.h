@@ -78,14 +78,18 @@ public:
 		
 		bFirst = false;// true;
 		bSecond = false;// false;
-		bThird = true;// false;
-		bFourth = false;
+		bThird = false;// false;
+		bFourth = true;// false;
 		bFifth = false;
 		bSixth = false;
 		
 		bUpdateCamera = true;
 		bShowInfo = true;
 
+
+		//free
+		vector <glm::vec3>().swap(arrResultAnalyseModel);
+		vector <glm::vec3>().swap(vertexArr);
 		
 		meshScan.load("./3D/can_piece_remesh02.ply");
 		scanModel.setup(&meshScan,&ezCam);
@@ -151,6 +155,9 @@ public:
 			break;
 		case 's':
 			mf.saveImage();
+			break;
+		case 'r':
+			delaunay.setup(&vertexArr);
 			break;
 		case '1':
 		case '2':
