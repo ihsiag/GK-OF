@@ -9,7 +9,7 @@ int main( ){
 	ofGLWindowSettings settings;
 	settings.setGLVersion(2, 1);
 	//settings.setSize(1024, 768);
-	settings.setSize(1500, 800);
+	settings.setSize(1990, 1080);
 	ofCreateWindow(settings);
 	
 

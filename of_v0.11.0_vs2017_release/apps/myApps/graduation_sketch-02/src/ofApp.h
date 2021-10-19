@@ -43,7 +43,7 @@ public:
 	ofMesh meshCreate;
 
 	vector <glm::vec3> arrResultAnalyseModel;
-	vector <glm::vec3> vertexArr;
+	vector<shared_ptr<ofxBox2dCircle>> circles;
 	
 	//ofVboMesh vboMesh;
 	ofFbo fbo;
@@ -76,10 +76,10 @@ public:
 		camValue = 200;
 		fontSize = 10;
 		
-		bFirst = false;// true;
-		bSecond = false;// false;
-		bThird = false;// false;
-		bFourth = true;// false;
+		bFirst = false;
+		bSecond = false;
+		bThird = true;
+		bFourth = false;
 		bFifth = false;
 		bSixth = false;
 		
@@ -89,14 +89,14 @@ public:
 
 		//free
 		vector <glm::vec3>().swap(arrResultAnalyseModel);
-		vector <glm::vec3>().swap(vertexArr);
+		vector<shared_ptr<ofxBox2dCircle>>().swap(circles);
 		
 		meshScan.load("./3D/can_piece_remesh02.ply");
 		scanModel.setup(&meshScan,&ezCam);
 		analyseModel.setup(&meshScan, &arrResultAnalyseModel);
 		recreateModel.setup(&meshCreate, &arrResultAnalyseModel, &ezCam);
-		box2dStudy.setup(&vertexArr,&ezCam);
-		delaunay.setup(&vertexArr);
+		box2dStudy.setup(&circles,&ezCam);
+		delaunay.setup(&circles,&ezCam);
 
 		mf.setup(&ezCam);
 	
@@ -116,7 +116,8 @@ public:
 		if (bFirst) { bSecond = scanModel.run(); }
 		if (bSecond) { bFirst = false; bThird = analyseModel.run();}
 		if (bThird) { bSecond = false; bFourth = box2dStudy.run(); }
-		if (bFourth) { bThird = false; bFifth = delaunay.run(); }
+		//if (bFourth) { bThird = false; bFifth = delaunay.run(); }
+		if (bThird) { bSecond = false; bFourth = delaunay.run(); }
 		if (bFifth) { bFourth = false; bSixth = recreateModel.run(); }
 
 		//-----------StagesEND
@@ -157,7 +158,8 @@ public:
 			mf.saveImage();
 			break;
 		case 'r':
-			delaunay.setup(&vertexArr);
+			delaunay.setup(&circles,&ezCam);
+			//setup();
 			break;
 		case '1':
 		case '2':

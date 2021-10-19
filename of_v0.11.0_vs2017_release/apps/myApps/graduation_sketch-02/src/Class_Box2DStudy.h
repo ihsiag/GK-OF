@@ -12,8 +12,7 @@ public:
 
 	ofxBox2d box2d; //world
 	ofxBox2dEdge edge;
-	vector<shared_ptr<ofxBox2dCircle>> circles;
-	vector<glm::vec3>* vertexArr;
+	vector<shared_ptr<ofxBox2dCircle>>* circles;
 
 	int elementR = 30;
 	int resolution = 60;
@@ -28,8 +27,8 @@ public:
 	~Class_Box2dStudy() {
 	}
 
-	void setup(vector<glm::vec3>* _vertexArr,ofEasyCam* _ezCam) {
-		vertexArr = _vertexArr;
+	void setup(vector<shared_ptr<ofxBox2dCircle>>* _circles,ofEasyCam* _ezCam) {
+		circles = _circles;
 		bStageEnd = false;
 		ezCam = _ezCam;
 		ofSetLogLevel(OF_LOG_NOTICE);
@@ -56,7 +55,7 @@ public:
 	bool run() {
 		update();
 		ezCam->begin();
-		display();
+		//display();
 		ezCam->end();
 		showInfo();
 		return bStageEnd;
@@ -65,25 +64,25 @@ public:
 	void update() {
 		//ofRemove(circles, removeShapeOffScreen);
 		//ofRemove(vertexArr,removeShapeOffScreen);
-		int elementN = 43;
+		int elementN = 40; //43
 		if (count < elementN) {
 			addElement(glm::vec2(ofRandom(-1, 1), ofRandom(-1, 1)));
 		}
 		count++;
 		if (count > endCount) {
-			bStageEnd = true;
+			//bStageEnd = true;
 		}
 		box2d.update();
 	}
 
 	void display() {
-		if (circles.size() > 0) {
-			for (auto& circle : circles) {
+		if (circles->size() > 0) {
+			for (int i = 0; i < circles->size();i++) {
 				ofFill();
 				glLineWidth(1);
 				//glColor3f(0.5,0.7,0.9);
 				glColor3f(1, 0, 0);
-				circle->draw();
+				circles->at(i)->draw();
 			}
 		}
 		glLineWidth(2);
@@ -97,9 +96,6 @@ public:
 
 
 	void createMesh() {
-		if (vertexArr->size() > 0) {
-
-		}
 	}
 
 	void showInfo() {
@@ -115,8 +111,7 @@ public:
 			auto circle = make_shared<ofxBox2dCircle>();
 			circle->setPhysics(3.0, 0.53, 0.1);
 			circle->setup(box2d.getWorld(), _pos.x, _pos.y, elementR);
-			circles.push_back(circle);
-			vertexArr->push_back((glm::vec3(circle->getPosition().x, circle->getPosition().y,0)));
+			circles->push_back(circle);
 		}
 	}
 
