@@ -38,9 +38,9 @@ public:
 	};
 	
 	void update() {
-		//pos += vel;
+		pos += vel;
 		glm::vec2 _pos = pos - glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2);
-		if (_pos.length() > edgeR){
+		if (ofVec2f(_pos).length() > edgeR){
 			vel = speed * glm::rotate(glm::normalize(_pos),ofRandom(-70, 70));
 			//glm::rotate(vel, ofRandom(-70, 70));
 			//vel = speed * ofVec2f(_pos).getNormalized().rotate(ofRandom(-70, 70));
@@ -53,7 +53,7 @@ public:
 		ofDrawCircle(pos, circleR);	
 	};
 
-	void setGlobalR(double _edgeR) {
+	void setEdgeR(double _edgeR) {
 		edgeR = _edgeR;
 	}
 };
@@ -89,9 +89,8 @@ public:
 		xy1 = (pow(triVertices[1].pos.x, 2) - pow(triVertices[0].pos.x, 2) + pow(triVertices[1].pos.y, 2) - pow(triVertices[0].pos.y, 2));
 		xy2 = (pow(triVertices[2].pos.x, 2) - pow(triVertices[0].pos.x, 2) + pow(triVertices[2].pos.y, 2) - pow(triVertices[0].pos.y, 2));
 		
-		triCenter.x = (x1 * xy1 + x2 * xy2) / c;
-		triCenter.y = (y1 * xy1 + y2 * xy2) / c;
-		triR = glm::vec2(triCenter - triVertices[0].pos).length();
+		triCenter = glm::vec2((x1 * xy1 + x2 * xy2) / c, (y1 * xy1 + y2 * xy2) / c);
+		triR = glm::distance(triCenter,triVertices[0].pos);
 
 		shareside[0] = 0;
 		shareside[1] = 0;
@@ -131,18 +130,19 @@ public:
 		//mesh.addVertex(ofPoint(triVertices[0].pos)); //2
 		
 		glColor3f(1, 1, 1);
-		mesh.draw();
+		//mesh.draw();
 		glColor3f(1, 0, 0);
 		glLineWidth(0.2);
 		mesh.drawWireframe();
 	};
 	
 	bool check(vector<Class_DelaPoint> _points) {
-		bool result = true;
+		bool result = false;
 		for (int i = 0; i < _points.size(); i++){
-			float length = glm::vec2(triCenter - _points[i].pos).length();
-			if (length < triR - 0.01){
-				result = false;
+			float length = glm::distance(triCenter,_points[i].pos);
+			
+			if (length < triR-0.01){
+				result = true;
 			}
 		}
 		return result;
@@ -177,7 +177,7 @@ public:
 		double Ax, Ay, Bx, By;
 		glm::vec2 center(ofGetWidth() / 2, ofGetHeight() / 2);
 		ofFill();
-		if ((point[0] - center).length() - globalR < 0 && (point[1] - center).length() - globalR < 0) {
+		if (glm::distance(point[0],center) - globalR < 0 && glm::distance(point[1],center) - globalR < 0) {
 			glColor3f(0, 0, 1);
 			glBegin(GL_LINES);
 			glVertex2f(point[0].x, point[0].y);
@@ -203,7 +203,7 @@ public:
 			}
 
 			glm::vec2 start, end;
-			if (((point[0] - center).length() - globalR) > 0)
+			if ((glm::distance(point[0],center) - globalR) > 0)
 			{
 				start = point[1];
 			}
@@ -256,29 +256,30 @@ public:
 	vector<Class_DelaCircle> triCircles;
 	vector<Class_DelaVoronoi> voronois;
 
-	double dynamic_GLOBAL_RADIUS;
+	double edgeR;
 	int GenNum;
 	int POINT_NUM = 10;
-	double GLOBAL_RADIUS = 230;
-	double POINT_RADIUS = 5;
-	double POINT_SPEED = 10;
+	double initialEdgeR = 230;
+	double POINT_RADIUS = 2;
+	double POINT_SPEED = 5;
 
 	Class_Delaunay() {}
 	~Class_Delaunay() {}
 
 	void setup(vector<glm::vec3>* _vertexArr) {
+		ofSetCircleResolution(36);
 		vertexArr = _vertexArr;
-		
+		edgeR = initialEdgeR;
 		//free
 		vector<Class_DelaPoint>().swap(points);
 		vector<Class_DelaCircle>().swap(triCircles);
 		vector<Class_DelaVoronoi>().swap(voronois);
 
-
+		//create & init points
 		for (int i = 0; i < POINT_NUM; i++) {
 			Class_DelaPoint _delaPoint;
 			double rad = ofRandom(0, 360) / 180 * M_PI;
-			_delaPoint.setup(GLOBAL_RADIUS, POINT_SPEED, POINT_RADIUS);
+			_delaPoint.setup(initialEdgeR, POINT_SPEED, POINT_RADIUS);
 			points.push_back(_delaPoint);
 		}
 	}
@@ -289,12 +290,14 @@ public:
 	}
 
 	void update() {
-		dynamic_GLOBAL_RADIUS = GLOBAL_RADIUS + GLOBAL_RADIUS / 4 * sin(ofGetElapsedTimef() / 2);
-		for (int i = 0; i < points.size(); i++)
-		{
-			points[i].setGlobalR(dynamic_GLOBAL_RADIUS);
+		//point moving
+		edgeR = initialEdgeR + initialEdgeR / 4 * sin(ofGetElapsedTimef() / 2);
+		for (int i = 0; i < points.size(); i++){
+			points[i].setEdgeR(edgeR);
 			points[i].update();
 		}
+
+		//init triCircles & voronois
 		if (points.size() > 2){
 			triCircles = getTriCircles();
 			voronois = getVoronois();
@@ -311,19 +314,21 @@ public:
 		glColor3f(0, 0, 0);
 		ofNoFill();
 		glLineWidth(1);
-		ofDrawCircle(glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2), dynamic_GLOBAL_RADIUS);
+		ofDrawCircle(glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2), edgeR);
 
 		//É{ÉçÉmÉCÇÃï`âÊ
+		
 		for (int i = 0; i < voronois.size(); i++){
 			voronois[i].display();
 		}
+		
 
 		//ÉhÉçÉlÅ[ÇÃï`âÊ
 		for (int i = 0; i < triCircles.size(); i++)
 		{
 			triCircles[i].drawTriangle();
 			triCircles[i].drawCircle();
-			//triCircles[i].drawCenter();
+			triCircles[i].drawCenter();
 		}
 
 		//ìÆÇ´Ç‹ÇÌÇÈê‘êFÇÃì_ÇÃï`âÊ
@@ -347,7 +352,7 @@ public:
 					Class_DelaCircle _triCircle;
 					_triCircle.setup(_triVertices);
 					//äOê⁄â~ì‡Ç…ëºÇÃpointÇ™Ç»Ç¢Ç©ämîF
-					if (_triCircle.check(points)){
+					if (!_triCircle.check(points)){
 						_triCircles.push_back(_triCircle);
 					}
 				}
@@ -407,7 +412,7 @@ public:
 					}
 
 					Class_DelaVoronoi _voronoi;
-					_voronoi.setup(dynamic_GLOBAL_RADIUS, POINT_RADIUS, triCircles[i].triCenter, triCircles[j].triCenter);
+					_voronoi.setup(edgeR, POINT_RADIUS, triCircles[i].triCenter, triCircles[j].triCenter);
 					_voronois.push_back(_voronoi);
 				}
 			}
@@ -477,7 +482,7 @@ public:
 						}
 
 						Class_DelaVoronoi _voronoi;
-						_voronoi.setup(dynamic_GLOBAL_RADIUS, POINT_RADIUS, p1, p2);
+						_voronoi.setup(edgeR, POINT_RADIUS, p1, p2);
 						_voronois.push_back(_voronoi);
 					}
 				}
