@@ -64,7 +64,7 @@ public:
 	void update() {
 		//ofRemove(circles, removeShapeOffScreen);
 		//ofRemove(vertexArr,removeShapeOffScreen);
-		int elementN = 40; //43
+		int elementN = 20; //43
 		if (count < elementN) {
 			addElement(glm::vec2(ofRandom(-1, 1), ofRandom(-1, 1)));
 		}

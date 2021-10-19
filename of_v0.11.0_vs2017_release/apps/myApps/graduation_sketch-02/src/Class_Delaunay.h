@@ -52,8 +52,8 @@ public:
 	};
 	void display() {
 		drawTriangle();
-		//drawCircle();
-		//drawCenter();
+		drawCircle();
+		drawCenter();
 	};
 
 	void drawCenter() {
