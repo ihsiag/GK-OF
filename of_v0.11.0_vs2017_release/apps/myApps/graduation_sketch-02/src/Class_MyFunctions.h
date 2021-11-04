@@ -79,8 +79,14 @@ public:
 	void drawCross(const int& _x, const int& _y, const int& _size) {
 		ofPushMatrix();
 		ofTranslate(_x, _y);
-		ofDrawLine(-_size / 2, 0, _size / 2, 0);
-		ofDrawLine(0, -_size / 2, 0, _size / 2);
+		glBegin(GL_LINES);
+		glVertex2f(-_size / 2, 0);
+		glVertex2f(_size / 2, 0);
+		glEnd();
+		glBegin(GL_LINES);
+		glVertex2f(0, -_size / 2);
+		glVertex2f(0, _size / 2);
+		glEnd();
 		ofPopMatrix();
 	}
 

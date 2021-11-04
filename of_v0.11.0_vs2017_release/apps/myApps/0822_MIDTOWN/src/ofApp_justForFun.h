@@ -19,21 +19,13 @@ public:
 	//------------OUTPUT----------//
 	ofImage imgToSave;
 	ofFbo fbo;
-	ofPixels pixels;
 	ofShader shader;
 
 	//-----------GLOBAL-----------//
 	float time;
 	float fontSize;
 
-	ofRectangle area;
-
-	ofImage imgA, imgB;
-	static const int loadingImgNum = 2;
-	ofImage imgs[loadingImgNum];
-
-	ofImage sdwA;
-	ofImage sdws[loadingImgNum];
+	vector<ofImage> imgs;
 
 	float originalW, originalH;
 	float currentW, currentH;
@@ -84,14 +76,7 @@ public:
 	ofxIntSlider mainAngleRangeXSlider;
 	ofxIntSlider mainAngleRangeYSlider;
 
-	ofxFloatSlider offsetShadowXSlider;
-	ofxFloatSlider offsetShadowYSlider;
-	ofxFloatSlider offsetShadowScaleSlider;
-	ofxFloatSlider offsetShadowAlphaSlider;
 
-	ofxFloatSlider blurSlider;
-
-	ofxButton saveButton;
 
 
 	//----------MAIN-----------//
@@ -105,20 +90,18 @@ public:
 
 		//---loading---//
 		//img
-		imgA.load("./img_Circles/A.png");
-		imgB.load("./img_circles/B.png");
-
-		imgs[0] = imgA;
-		imgs[1] = imgB;
-
-
-		originalW = imgA.getWidth();
-		originalH = imgA.getHeight();
-
-		//sdw
-		sdwA.load("./img_leavesGray/sdwA.png");
-		sdws[0] = sdwA;
-
+		string dirName = "./imgs_justForFun/";
+		ofDirectory dir(dirName);
+		dir.allowExt("png");//only show {}file ex)png,mp3,css
+		//dir.sort();
+		dir.listDir();
+		for (int i = 0; i < dir.size(); i++) {
+			ofImage _img;
+			_img.load(dir.getPath(i));
+			imgs.push_back(_img);
+		}
+		originalW = imgs[0].getWidth();
+		originalH = imgs[0].getHeight();
 
 		//shader
 		shader.load("", "./shaders/tone.frag");
@@ -137,9 +120,7 @@ public:
 
 
 		gui.add(drawAreaBGToggle.setup("drawAreaBG", true));
-		gui.add(drawAreaOUTToggle.setup("drawAreaOUT", true));
 		gui.add(drawGridToggle.setup("drawGrid", true));
-		gui.add(arrangeToGridToggle.setup("arrangeToGrid", true));
 
 		gui.add(mainRandomImgToggle.setup("mainRandomImg", false));
 		gui.add(mainRandomRotationToggle.setup("mainRandomRotation", false));
@@ -152,8 +133,7 @@ public:
 		gui.add(gridNumYSlider.setup("gridNumY", 6, 1, 45));
 		gui.add(gridDistXSlider.setup("gridDistX", 185, 10, 200));
 		gui.add(gridDistYSlider.setup("gridDistY", 185, 10, 200));
-		gui.add(offGridMinSlider.setup("offGridMin", 0, 0, gridDistXSlider * 2));
-		gui.add(offGridMaxSlider.setup("offGridMax", 0, 0, gridDistXSlider * 4));
+
 
 		gui.add(organicCenterNumSlider.setup("organicCenterNum", 30, 10, 1000));
 		gui.add(organicRadiusMinSlider.setup("organicRadiusMin", 50, 0, 200));
@@ -163,7 +143,7 @@ public:
 		gui.add(organicDegreeMinSlider.setup("organicDegreeMin", 20, 5, 80));
 		gui.add(organicDegreeMaxSlider.setup("organicDegreeMax", 20, 5, 80));
 
-		gui.add(mainImgSelectSlider.setup("mainImgSelect", 0, 0, loadingImgNum - 1));
+		gui.add(mainImgSelectSlider.setup("mainImgSelect", 0, 0, imgs.size()-1));
 		gui.add(mainSeedSlider.setup("mainSeed", 0, 0, 50));
 		gui.add(mainScaleSlider.setup("mainScale", 0.2, 0.01, 1.0));
 		gui.add(mainRandomScaleMinSlider.setup("mainRandomScaleMin", 1.000, 0.000, 1.000));
@@ -174,16 +154,7 @@ public:
 
 		gui.add(mainAngleRangeZSlider.setup("mainAngleRangeZ", 45, 0, 180));
 		gui.add(mainAngleRangeXSlider.setup("mainAngleRangeX", 0, 0, 180));
-		gui.add(mainAngleRangeYSlider.setup("mainAngleRangeY", 45, 0, 180));
-
-		gui.add(offsetShadowXSlider.setup("offsetShadowX", 0, -20, 20));
-		gui.add(offsetShadowYSlider.setup("offsetShadowY", 0, -20, 20));
-		gui.add(offsetShadowScaleSlider.setup("offsetShadowScale", 1.0, 0.8, 2.0));
-		gui.add(offsetShadowAlphaSlider.setup("offsetShadowAlpha", 30, 0, 200));
-
-		gui.add(blurSlider.setup("blur", 9, 5, 13));
-
-		gui.add(saveButton.setup("save image"));
+		gui.add(mainAngleRangeYSlider.setup("mainAngleRangeY", 0, 0, 180));
 
 		//---camera---//
 
@@ -198,7 +169,8 @@ public:
 
 		ofSetBackgroundAuto(true);
 		ofSetBackgroundColor(220);
-		ofEnableAlphaBlending();
+		//ofEnableAlphaBlending();
+		
 		//ofEnableBlendMode(); //OF_BLENDMODE_DISABLED, OF_BLENDMODE_ALPHA, OF_BLENDMODE_ADD, OF_BLENDMODE_SUBTRACT, OF_BLENDMODE_MULTIPLY, OF_BLENDMODE_SCREEN
 		ofSetFrameRate(30);
 		ofEnableAntiAliasing();
@@ -206,7 +178,7 @@ public:
 
 		ofSetWindowTitle("MIDTOWN2021_TEXTUREMAKE : by Gaishi Kudo");
 
-		fbo.allocate(4000, 4000, GL_RGBA);
+		fbo.allocate(2000, 2000, GL_RGBA);
 
 	}
 
@@ -237,23 +209,17 @@ public:
 	}
 
 	void fboRun() {
-		if (saveButton)saveChecker();
+		glEnable(GL_BLEND);
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 		setArea();
-		if (drawAreaBGToggle)drawAreaBG();
 
 		cam.begin();
 		ofPushMatrix();
 		ofTranslate(-fbo.getWidth() / 2, -fbo.getHeight() / 2, 0);
-
-		if (arrangeToGridToggle) { arrangeRandom(); }
-		else { arrangeOrganic(); }
-
+		arrangeOrganic();
 		ofPopMatrix();
 		cam.end();
-
-		if (drawGridToggle)showGrid();
-		if (drawAreaOUTToggle)drawAreaOUT();
-		if (saveButton)saveFBOtoImage();
+		showGrid();
 	}
 
 	//----------CUSTOMFUNCS-----------//
@@ -277,24 +243,15 @@ public:
 	}
 
 	void setArea() {
-		area = ofRectangle(-areaWidthSlider / 2, -areaHeightSlider / 2, areaWidthSlider, areaHeightSlider);
-	}
+		ofRectangle areaBG = ofRectangle(-fbo.getWidth() / 2, -fbo.getHeight() / 2, fbo.getWidth(), fbo.getHeight());
+		ofRectangle area = ofRectangle(-areaWidthSlider / 2, -areaHeightSlider / 2, areaWidthSlider, areaHeightSlider);
 
-	void drawAreaBG() {
 		ofPushMatrix();
 		ofTranslate(fbo.getWidth() / 2, fbo.getHeight() / 2);
 		ofFill();
+		ofSetColor(220);
+		ofDrawRectangle(areaBG);
 		ofSetColor(50, 200, 50);
-		ofDrawRectangle(area);
-		ofPopMatrix();
-	}
-
-	void drawAreaOUT() {
-		ofPushMatrix();
-		ofTranslate(fbo.getWidth() / 2, fbo.getHeight() / 2);
-		ofNoFill();
-		ofSetLineWidth(1);
-		ofSetColor(255, 255);
 		ofDrawRectangle(area);
 		ofPopMatrix();
 	}
@@ -308,7 +265,7 @@ public:
 		ofTranslate(fbo.getWidth() / 2 - gridDistXSlider * gridNumXSlider / 2, fbo.getHeight() / 2 - gridDistYSlider * gridNumYSlider / 2);
 		for (int y = 0; y < gridNumYSlider + 1; y++) {
 			for (int x = 0; x < gridNumXSlider + 1; x++) {
-				drawCross(x * gridDistXSlider, y * gridDistYSlider, 20, 20);
+				drawCross(x * gridDistXSlider, y * gridDistYSlider, 20);
 			}
 		}
 		ofPopMatrix();
@@ -372,7 +329,7 @@ public:
 			float rad = sin(ofDegToRad(deg));
 			ofPushMatrix();
 			ofTranslate(x, y, 0);
-			if (drawGridToggle)drawCross(0, 0, 20, 20);
+			if (drawGridToggle)drawCross(0, 0, 20);
 			ofRotateZ(-(leavesNum - 1) * deg * 0.5);
 			for (int i = 0; i < leavesNum; i++) {
 				float radius = ofRandom(organicRadiusMinSlider, organicRadiusMaxSlider);
@@ -382,7 +339,7 @@ public:
 				ofTranslate(newX, newY, 0);
 				ofRotateZ(deg * i);
 				ofSetLineWidth(2);
-				if (drawGridToggle) { drawCross(0, 0, 20, 20); }
+				if (drawGridToggle) { drawCross(0, 0, 20); }
 				drawSelectImage(mainImgSelectSlider, 0, 0);
 				ofPopMatrix();
 			}
@@ -405,29 +362,9 @@ public:
 		float degreeY = ofRandom(-mainAngleRangeYSlider, mainAngleRangeYSlider);
 		float zPos = ofRandom(500);
 
-
-
 		ofPushMatrix();
 		ofTranslate(_x, _y, 0);
 
-
-		//--shadow
-		ofPushMatrix();
-		ofTranslate(offsetShadowXSlider, offsetShadowYSlider, 0);
-		if (mainRandomRotationToggle) {
-			//ofTranslate(0, 0, -zPos);		
-			ofRotateX(degreeX);
-			ofRotateY(degreeY);
-			ofRotateZ(degreeZ);
-		}
-		ofSetColor(255, offsetShadowAlphaSlider);
-		if (arrangeToGridToggle) {sdws[_imgIndex].setAnchorPercent(0.5, 0.5);}
-		else { sdws[_imgIndex].setAnchorPercent(0.5, 1.0); }
-		sdws[_imgIndex].draw(0, 0, currentW * offsetShadowScaleSlider, currentH * offsetShadowScaleSlider);
-		ofPopMatrix();
-
-
-		//--real
 		ofPushMatrix();
 		if (mainRandomRotationToggle) {
 			//ofTranslate(0, 0, -zPos);
@@ -446,21 +383,20 @@ public:
 	}
 
 	void drawRandomImage(int _x, int _y) {
-		drawSelectImage(int(ofRandom(0, loadingImgNum)), _x, _y);
+		drawSelectImage(int(ofRandom(0, imgs.size())), _x, _y);
 	}
 
-	void drawCross(int _x, int _y, int _sizeX, int _sizeY) {
-		glLineWidth(3);
-		glColor3f(1, 1, 1);
+	void drawCross(const int& _x, const int& _y, const int& _size) {
+		glLineWidth(2);
 		ofPushMatrix();
 		ofTranslate(_x, _y);
 		glBegin(GL_LINES);
-		glVertex2f(-_sizeX / 2, 0);
-		glVertex2f(_sizeX / 2, 0);
+		glVertex2f(-_size / 2, 0);
+		glVertex2f(_size / 2, 0);
 		glEnd();
 		glBegin(GL_LINES);
-		glVertex2f(0, -_sizeY / 2);
-		glVertex2f(0, _sizeY / 2);
+		glVertex2f(0, -_size / 2);
+		glVertex2f(0, _size / 2);
 		glEnd();
 		ofPopMatrix();
 	}
@@ -471,38 +407,25 @@ public:
 		if (drawGridToggle) { drawGridToggle = false; saveCheckerID03 = true; }
 	}
 
-
 	void saveImage() {
-		ofImage imgToSave;
-		string fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
-		imgToSave.grabScreen(ofGetWidth() / 2 + area.x, ofGetHeight() / 2 + area.y, area.getWidth(), area.getHeight());
-		imgToSave.save(fileName, OF_IMAGE_QUALITY_BEST);
-		std::cout << "img : " + fileName + " -exported" << std::endl;
-
-		if (saveCheckerID01) { drawAreaBGToggle = true; saveCheckerID01 = false; }
-		if (saveCheckerID02) { drawAreaOUTToggle = true; saveCheckerID02 = false; }
-		if (saveCheckerID03) { drawGridToggle = true; saveCheckerID03 = false; }
-	}
-
-	void saveFullScreenImage() {
 		string _fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
 		ofImage _imgToSave;
 		_imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
 		_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
 		std::cout << "img : " + _fileName + " -exported" << std::endl;
-	}
-
-	void saveFBOtoImage() {
-		ofImage imgToSave;
-		string fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
-		fbo.readToPixels(pixels);
-		imgToSave.setFromPixels(pixels);
-		imgToSave.save(fileName, OF_IMAGE_QUALITY_BEST);
-		std::cout << "img : " + fileName + " -exported" << std::endl;
-
 		if (saveCheckerID01) { drawAreaBGToggle = true; saveCheckerID01 = false; }
 		if (saveCheckerID02) { drawAreaOUTToggle = true; saveCheckerID02 = false; }
 		if (saveCheckerID03) { drawGridToggle = true; saveCheckerID03 = false; }
+	}
+
+	void saveFBOtoImage(ofFbo* _fbo) {
+		string _fileName = "../EXPORTED/screenShots/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
+		ofPixels _pixels;
+		_fbo->readToPixels(_pixels);
+		ofImage _imgToSave;
+		_imgToSave.setFromPixels(_pixels);
+		_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
+		std::cout << "img : " + _fileName + " -exported" << std::endl;
 	}
 
 
@@ -515,7 +438,8 @@ public:
 			ofToggleFullscreen();
 			break;
 		case 's':
-			saveFullScreenImage();
+			//saveImage();
+			saveFBOtoImage(&fbo);
 			break;
 			}
 	};
