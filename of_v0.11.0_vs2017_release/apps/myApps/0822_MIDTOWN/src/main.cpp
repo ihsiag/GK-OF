@@ -1,5 +1,5 @@
 #include "ofMain.h"
-#include "ofApp_voronoi.h"
+#include "ofApp_justForFun.h"
 
 //========================================================================
 int main( ){

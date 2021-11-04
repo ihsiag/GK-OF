@@ -1331,6 +1331,9 @@
     <ClInclude Include="src\ofApp_voronoi.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\ofApp_justForFun.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

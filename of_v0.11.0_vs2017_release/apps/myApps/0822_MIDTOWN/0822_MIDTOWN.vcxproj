@@ -561,6 +561,7 @@
     <ClInclude Include="src\ofApp_arrangeLeaves.h" />
     <ClInclude Include="src\ofApp_arrangeLeavesAlpha.h" />
     <ClInclude Include="src\ofApp_arrangeLeavesGray.h" />
+    <ClInclude Include="src\ofApp_justForFun.h" />
     <ClInclude Include="src\ofApp_voronoi.h" />
   </ItemGroup>
   <ItemGroup>
