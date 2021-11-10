@@ -14,6 +14,7 @@
 #include "Class_RecreateModel.h"
 #include "Class_Box2DStudy.h"
 #include "Class_Delaunay.h"
+#include "Class_Buckling_A.h"
 
 
 
@@ -29,6 +30,7 @@ public:
 	Class_RecreateModel recreateModel;
 	Class_Box2dStudy box2dStudy;
 	Class_Delaunay delaunay;
+	Class_Buckling buckling;
 	
 	ofCamera cam;
 	ofEasyCam ezCam;
@@ -97,6 +99,8 @@ public:
 		recreateModel.setup(&meshCreate, &arrResultAnalyseModel, &ezCam);
 		box2dStudy.setup(&circles,&ezCam);
 		delaunay.setup(&circles,&ezCam);
+		buckling.setup(&meshScan, &ezCam)
+
 
 		mf.setup(&ezCam);
 	

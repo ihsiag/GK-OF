@@ -300,6 +300,7 @@
     <ClInclude Include="src\Class_AnalyseModel.h" />
     <ClInclude Include="src\Class_Box2DStudy-work.h" />
     <ClInclude Include="src\Class_Box2DStudy.h" />
+    <ClInclude Include="src\Class_Buckling_A.h" />
     <ClInclude Include="src\Class_Delaunay-work.h" />
     <ClInclude Include="src\Class_Delaunay.h" />
     <ClInclude Include="src\Class_MyFunctions.h" />

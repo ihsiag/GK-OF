@@ -455,6 +455,9 @@
 		<ClInclude Include="src\Class_Box2DStudy.h">
 			<Filter>src</Filter>
 		</ClInclude>
+		<ClInclude Include="src\Class_Buckling_A.h">
+			<Filter>src</Filter>
+		</ClInclude>
 		<ClInclude Include="src\Class_Delaunay-work.h">
 			<Filter>src</Filter>
 		</ClInclude>
