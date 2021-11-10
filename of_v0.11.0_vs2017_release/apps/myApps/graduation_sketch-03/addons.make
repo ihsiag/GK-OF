@@ -1,4 +1,5 @@
 ofxAssimpModelLoader
 ofxBox2d-master
+ofxBullet-master
 ofxGui
 ofxPostProcessing-master

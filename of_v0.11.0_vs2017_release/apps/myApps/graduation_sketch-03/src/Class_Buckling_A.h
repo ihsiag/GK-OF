@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofApp.h"
+#include "ofxBullet.h"
 
 #define M_PI 3.141592
 
@@ -15,6 +16,8 @@ private:
 public:
 	ofMesh* mesh;
 	ofEasyCam* ezCam;
+	ofxBulletBox ground;
+
 
 	Class_Buckling() {
 	};

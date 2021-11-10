@@ -78,9 +78,9 @@ public:
 		camValue = 200;
 		fontSize = 10;
 		
-		bFirst = false;
+		bFirst = true;
 		bSecond = false;
-		bThird = true;
+		bThird = false;
 		bFourth = false;
 		bFifth = false;
 		bSixth = false;
@@ -93,13 +93,13 @@ public:
 		vector <glm::vec3>().swap(arrResultAnalyseModel);
 		vector<shared_ptr<ofxBox2dCircle>>().swap(circles);
 		
-		meshScan.load("./3D/can_piece_remesh02.ply");
+		meshScan.load("./3D/test.ply");
 		scanModel.setup(&meshScan,&ezCam);
 		analyseModel.setup(&meshScan, &arrResultAnalyseModel);
 		recreateModel.setup(&meshCreate, &arrResultAnalyseModel, &ezCam);
 		box2dStudy.setup(&circles,&ezCam);
 		delaunay.setup(&circles,&ezCam);
-		buckling.setup(&meshScan, &ezCam)
+		buckling.setup(&meshScan, &ezCam);
 
 
 		mf.setup(&ezCam);
