@@ -1,0 +1,3 @@
+ofxAssimpModelLoader
+ofxBullet-master
+ofxGui
