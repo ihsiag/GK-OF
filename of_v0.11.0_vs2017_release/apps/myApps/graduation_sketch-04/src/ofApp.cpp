@@ -16,14 +16,11 @@ void ofApp::update() {
     ofRemove(crashedCans, shouldRemoveBunny);
 };
 
-/*
-void ofApp::eventListener() {
-    stiffness.addListener(this, &ofApp::onStiffnessChanged);
-}
 
-void ofApp::onStiffnessChanged(const ofVec3f& _stiffness) {
+
+void ofApp::onStiffnessChanged(const float& _stiffness) {
     for (int i = 0; i < crashedCans.size(); i++) {
-        crashedCans[i]->setStiffness(_stiffness.x, _stiffness.y, _stiffness.z);
+        //crashedCans[i]->setStiffness(_stiffness.x, _stiffness.y, _stiffness.z);
+        crashedCans[i]->setStiffness(_stiffness, _stiffness, _stiffness);
     }
 }
-*/

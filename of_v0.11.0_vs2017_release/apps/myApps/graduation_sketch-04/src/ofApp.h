@@ -32,7 +32,8 @@ public:
 
     //-----------SLIDER-----------//
     ofxPanel gui;
-    ofParameter<glm::vec3> stiffness;
+    //ofParameter<glm::vec3> stiffness;
+    ofxFloatSlider stiffness;
 
     void setup() {
         mf.setup(&cam);
@@ -45,11 +46,11 @@ public:
         //-----------SLIDER-----------//
         /*  gui.add(slider.setup("sliderName", initial, min, max); */
         gui.setup();
-        gui.add(stiffness.set("stiffness", glm::vec3(0.8), glm::vec3(0.01), glm::vec3(1.))); // this will create a slider group for your vec3 in the gui.
+        //gui.add(stiffness.set("stiffness", glm::vec3(0.8), glm::vec3(0.01), glm::vec3(1.))); // this will create a slider group for your vec3 in the gui.
+        gui.add(stiffness.setup("stiffness", 0.8, 0.01, 1.00));
 
         //-----------EVENTLISTENER-----------//
-        //eventListener();
-        //stiffness.addListener(this, &ofApp::onStiffnessLinearChanged);
+        stiffness.addListener(this, &ofApp::onStiffnessChanged);
 
         //-----------LOAD-----------//
         font.loadFont("./font/SourceCodePro-Light.ttf", fontSize);
@@ -82,7 +83,8 @@ public:
         cam.enableMouseInput();
     }
 
-    void eventListener();   
+    void onStiffnessChanged(const float& _stiffness);
+
     void update();
     
     void draw() {
@@ -178,12 +180,13 @@ public:
         crashedCan->getSoftBody()->m_cfg.kSS_SPLT_CL = 0;
         crashedCan->getSoftBody()->m_cfg.kSKHR_CL = 0.1f;
         crashedCan->getSoftBody()->m_cfg.kSK_SPLT_CL = 1;
-        crashedCan->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
+        //crashedCan->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
+        crashedCan->setStiffness(stiffness, stiffness, stiffness);
 
         crashedCans.push_back(crashedCan);
     }
     
-    //void onStiffnessChanged(const ofVec3f& _stiffness);
+   
 
 
     void keyPressed(int key) {
