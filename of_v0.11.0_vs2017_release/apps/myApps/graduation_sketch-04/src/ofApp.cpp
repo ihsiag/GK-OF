@@ -14,13 +14,18 @@ void ofApp::update() {
     world.update();
     ofRemove(rigidBodies, shouldRemoveRigidBody);
     ofRemove(crashedCans, shouldRemoveBunny);
+    for (int i = 0; i < crashedCans.size(); i++) {
+        //crashedCans[i]->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
+        //crashedCans[i]->setStiffness(stiffness, stiffness, stiffness);
+    }
 };
 
-
-
+ 
+/*
 void ofApp::onStiffnessChanged(const float& _stiffness) {
     for (int i = 0; i < crashedCans.size(); i++) {
         //crashedCans[i]->setStiffness(_stiffness.x, _stiffness.y, _stiffness.z);
         crashedCans[i]->setStiffness(_stiffness, _stiffness, _stiffness);
     }
-}
+    std::cout << "listener listening!!" << endl;
+}*/

@@ -32,8 +32,8 @@ public:
 
     //-----------SLIDER-----------//
     ofxPanel gui;
-    //ofParameter<glm::vec3> stiffness;
-    ofxFloatSlider stiffness;
+    ofParameter<glm::vec3> stiffness;
+
 
     void setup() {
         mf.setup(&cam);
@@ -46,11 +46,11 @@ public:
         //-----------SLIDER-----------//
         /*  gui.add(slider.setup("sliderName", initial, min, max); */
         gui.setup();
-        //gui.add(stiffness.set("stiffness", glm::vec3(0.8), glm::vec3(0.01), glm::vec3(1.))); // this will create a slider group for your vec3 in the gui.
-        gui.add(stiffness.setup("stiffness", 0.8, 0.01, 1.00));
+        gui.add(stiffness.set("stiffness", glm::vec3(0.8), glm::vec3(0.01), glm::vec3(1.))); // this will create a slider group for your vec3 in the gui.
 
         //-----------EVENTLISTENER-----------//
-        stiffness.addListener(this, &ofApp::onStiffnessChanged);
+        ofEventListener listener = stiffness.newListener([&](glm::vec3&) {this->onStiffnessChanged(stiffness); });
+        
 
         //-----------LOAD-----------//
         font.loadFont("./font/SourceCodePro-Light.ttf", fontSize);
@@ -71,11 +71,11 @@ public:
 
         //-----------ONCE-----------//
         ground = new ofxBulletBox();
-        ground->create(world.world, ofVec3f(0., 5.5, 0.), 0., 50., 1.f, 50.f);
+        ground->create(world.world, glm::vec3(0.), 0., 50., 1.f, 50.f);
         ground->setProperties(.25, .95);
         ground->add();
 
-        light.setPosition(0, -100, 0);
+        light.setPosition(0, -200, 0);
         //light.boom(100);
         light.setScale(glm::vec3(50));
 
@@ -83,7 +83,12 @@ public:
         cam.enableMouseInput();
     }
 
-    void onStiffnessChanged(const float& _stiffness);
+    void onStiffnessChanged(const glm::vec3& _stiffness) {
+        for (int i = 0; i < crashedCans.size(); i++) {
+            crashedCans[i]->setStiffness(_stiffness.x, _stiffness.y, _stiffness.z);
+        }
+        std::cout << "listener listening!!" << endl;
+    };
 
     void update();
     
@@ -92,15 +97,15 @@ public:
         //-----------3D-BEGIN-----------//
         ofEnableDepthTest();
         cam.begin();
-        if (bDrawDebug) world.drawDebug();
+        if (bDrawDebug) {
+            world.drawDebug();
+            mf.draw3DAxis();
+        }
         ofEnableLighting();
         light.enable();        
         
-        ofSetColor(34, 107, 126);
+        ofSetColor(240);
         ofNoFill();
-        ground->draw();
-        ofSetColor(34, 107, 126,30);
-        ofFill();
         ground->draw();
 
         glColor3f(1, 1, 0);
@@ -137,8 +142,8 @@ public:
 
 
         //-----------FRONT-LAYER-----------//
-        mf.makeGrid();
-        mf.showInfo(ssMain, font,fontSize);
+        mf.drawGrid();
+        mf.drawInfo(ssMain, font,fontSize);
         gui.draw();
     }
 
@@ -159,7 +164,8 @@ public:
         tquat.makeRotate(180, 1, 0, 0);
 
         float tscale = ofRandom(0.3, 1);
-        btTransform tt = ofGetBtTransform(ofVec3f(ofRandom(-5, 5) * tscale * 30, -15 * tscale * 30, 0), tquat);
+        //btTransform tt = ofGetBtTransform(ofVec3f(ofRandom(-5, 5) * tscale * 30, -15 * tscale * 30, 0), tquat);
+        btTransform tt = ofGetBtTransform(glm::vec3(0,50,200), tquat);
 
         shared_ptr<ofxBulletSoftTriMesh> crashedCan(new ofxBulletSoftTriMesh());
         crashedCan->create(&world, mesh, tt, 2 * tscale);
@@ -180,8 +186,7 @@ public:
         crashedCan->getSoftBody()->m_cfg.kSS_SPLT_CL = 0;
         crashedCan->getSoftBody()->m_cfg.kSKHR_CL = 0.1f;
         crashedCan->getSoftBody()->m_cfg.kSK_SPLT_CL = 1;
-        //crashedCan->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
-        crashedCan->setStiffness(stiffness, stiffness, stiffness);
+        crashedCan->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
 
         crashedCans.push_back(crashedCan);
     }
