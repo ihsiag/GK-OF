@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofApp.h"
+#include "ofxGui.h";
 
 
 class Class_MyFunctions {
@@ -10,6 +11,8 @@ public:
 	}
 	~Class_MyFunctions() {
 	}
+	const int margin = 8;
+
 #pragma mark -HELPER_DEFAULT
 //-------------------------------------------------------HELPER_DEFAULT-------------------------------------------------------//
 
@@ -46,11 +49,31 @@ public:
 
 #pragma mark -HELPER_2D
 //-------------------------------------------------------HELPER_2D-------------------------------------------------------//
+	glm::vec3 myGUIPos() {
+		glm::vec3 _pos = glm::vec3(ofGetWidth()*0.75+margin, ofGetHeight() * 0.25,0);
+		return _pos;
+	}
 
-	void drawInfo(const stringstream& _ss,const ofTrueTypeFont& _font,const int& _fontSize) {
+	float myGUIWidth() {
+		float _width = ofGetWidth() * 0.25 - margin;
+		return _width;
+	}
+
+	void setGUI(ofxGuiGroup& _gui) {
+		_gui.setup();
+		_gui.setDefaultWidth(myGUIWidth());
+		_gui.setWidthElements(myGUIWidth());
+		_gui.setPosition(myGUIPos());
+	}
+	
+	void drawInfo(const stringstream& _ss, const int& _indexPos, const ofTrueTypeFont& _font,const int& _fontSize) {
 		//TrueTypeFont
 		/*
-		glm::vec2 pos = glm::vec2(60, ofGetHeight() * 0.75+_fontSize);
+		glm::vec2 pos;
+		if (_indexPos == 0) pos = glm::vec2(60, ofGetHeight() * 0.25 +_fontSize);
+		if (_indexPos == 1) pos = glm::vec2(60, ofGetHeight() * 0.75 +_fontSize);
+		if (_indexPos == 2) pos = glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.25 + _fontSize);
+		if (_indexPos == 3) pos = glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.75 + _fontSize);
 		glColor3f(1, 1, 1);
 		_font.drawString(_ss.str().c_str(), pos.x,pos.y);
 		*/
@@ -58,7 +81,16 @@ public:
 		//Bitmap
 		//Width : 8pt , Height : 11pt
 		glColor3f(1, 1, 1);
-		glm::vec2 pos = glm::vec2(60, ofGetHeight() * 0.75 + 11);
+		glm::vec2 pos;
+		if (_indexPos == 0) pos = glm::vec2(60, ofGetHeight() * 0.25 + 11);
+		if (_indexPos == 1) pos = glm::vec2(60, ofGetHeight() * 0.75 + 11);
+		if (_indexPos == 2) pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.25 + 11);
+		if (_indexPos == 3) pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.75 + 11);
+		if (_indexPos == 4) pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.25 + 11);
+		if (_indexPos == 5) pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.75 + 11);
+		if (_indexPos == 6) pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.25 + 11);
+		if (_indexPos == 7) pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.75 + 11);
+		
 		//ofDrawBitmapStringHighlight(_ss.str().c_str(), pos, ofColor(0), ofColor(255));
 		ofDrawBitmapString(_ss.str().c_str(), pos);
 	}
@@ -72,7 +104,6 @@ public:
 
 		ofNoFill();
 		ofSetColor(50);
-		int margin = 8;
 		ofDrawRectangle(margin, margin, ofGetWidth() - margin * 2, ofGetHeight() - margin * 2);
 
 		ofFill();
@@ -129,8 +160,26 @@ public:
 		glEnd();
 	}
 
-	void getBoundingBox() {
-
+	float* getBoundingBox(ofMesh& _mesh){
+		float
+			min_x, max_x,
+			min_y, max_y,
+			min_z, max_z;
+		min_x = max_x = _mesh.getVertex(0).x;
+		min_y = max_y = _mesh.getVertex(0).y;
+		min_z = max_z = _mesh.getVertex(0).z;
+		for (int i = 0; i < _mesh.getNumVertices(); i++) {
+			if (_mesh.getVertex(i).x < min_x) min_x = _mesh.getVertex(i).x;
+			if (_mesh.getVertex(i).x > max_x) max_x = _mesh.getVertex(i).x;
+			if (_mesh.getVertex(i).y < min_y) min_y = _mesh.getVertex(i).y;
+			if (_mesh.getVertex(i).y > max_y) max_y = _mesh.getVertex(i).y;
+			if (_mesh.getVertex(i).z < min_z) min_z = _mesh.getVertex(i).z;
+			if (_mesh.getVertex(i).z > max_z) max_z = _mesh.getVertex(i).z;
+		}
+		float result[] = { min_x, max_x, min_y, max_y, min_z, max_z };
+		return result;
+		//glm::vec3 size = glm::vec3(max_x - min_x, max_y - min_y, max_z - min_z);
+		//glm::vec3 center = glm::vec3((min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2);
 	}
 
 #pragma mark -save

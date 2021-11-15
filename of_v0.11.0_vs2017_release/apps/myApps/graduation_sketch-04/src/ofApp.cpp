@@ -14,10 +14,12 @@ void ofApp::update() {
     world.update();
     ofRemove(rigidBodies, shouldRemoveRigidBody);
     ofRemove(crashedCans, shouldRemoveBunny);
+    /*
     for (int i = 0; i < crashedCans.size(); i++) {
-        //crashedCans[i]->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
-        //crashedCans[i]->setStiffness(stiffness, stiffness, stiffness);
-    }
+        crashedCans[i]->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
+        crashedCans[i]->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
+        crashedCans[i]->updateMesh(crashedCans[i]->getMesh());
+    }*/
 };
 
  
