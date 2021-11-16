@@ -1,4 +1,0 @@
-ofxXmlSettings
-ofxGenerative
-ofxMesh
-ofxUI

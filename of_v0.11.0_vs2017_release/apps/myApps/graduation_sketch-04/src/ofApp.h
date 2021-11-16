@@ -17,9 +17,12 @@ public:
     float meshBB[6];
     ofLight light;
 
+    stringstream ssGlobalLog;
+
     //-----------PHISICLIB-----------//
     ofxBulletWorldSoft world;   
     ofxBulletBox* ground;
+    glm::vec4 groundInfo;
     vector< shared_ptr<ofxBulletRigidBody> > rigidBodies;
     vector< shared_ptr<ofxBulletSoftTriMesh> > crashedCans;
     vector< shared_ptr<ofxBulletRigidBody>> crashers;
@@ -42,11 +45,15 @@ public:
     ofParameter<float> slider_kSS_SPLT_CL;
     ofParameter<float> slider_kSKHR_CL;
     ofParameter<float> slider_kSK_SPLT_CL;
+    
+    ofParameter<int> slider_selectModelIndex;
 
 
     void setup() {
-        mf.setup(&cam);
+        mf.setup(&ssGlobalLog);
+        mf.setCam(&cam);
         mf.setGUI(gui);
+        
         //-----------GLOBALVAL-----------//
         bDrawDebug = false;
         currentFrame = -1;
@@ -61,13 +68,15 @@ public:
         gui.add(slider_kSS_SPLT_CL.set("Soft vs rigid impulse split [0,1] (cluster only)", 0.5, 0., 1));
         gui.add(slider_kSKHR_CL.set("Soft vs kinetic hardness [0,1] (cluster only)", 0.1f, 0, 1.f));
         gui.add(slider_kSK_SPLT_CL.set("Soft vs rigid impulse split [0,1] (cluster only)", 0.5, 0., 1.));
+        gui.add(slider_selectModelIndex.set("SELECT MODEL INDEX", 0,0,10));
+
 
         //-----------EVENTLISTENER-----------//
         ofEventListener listener = stiffness.newListener([&](glm::vec3&) {this->onStiffnessChanged(stiffness); });
 
         //-----------LOAD-----------//
         font.loadFont("./font/SourceCodePro-Light.ttf", fontSize);
-        mesh.load("./3d/test-normal.ply");
+        mesh.load("./3d/test-normal-reduced.ply");
         mesh.setMode(OF_PRIMITIVE_TRIANGLES);
         float* meshBBPtr = mf.getBoundingBox(mesh);
         for (int i = 0; i < 6; i++) {
@@ -88,7 +97,8 @@ public:
 
         //-----------ONCE-----------//
         ground = new ofxBulletBox();
-        ground->create(world.world, glm::vec3(0.), 0., 50., 1.f, 50.f);
+        groundInfo = glm::vec4(50.f, 1.f, 50.f, 1.f);
+        ground->create(world.world, glm::vec3(0.,groundInfo.w/2,0.), 0.,groundInfo.x,groundInfo.y,groundInfo.z);
         ground->setProperties(.25, .95);
         ground->add();
 
@@ -99,13 +109,6 @@ public:
         //-----------GO-----------//
         cam.enableMouseInput();
     }
-
-    void onStiffnessChanged(const glm::vec3& _stiffness) {
-        for (int i = 0; i < crashedCans.size(); i++) {
-            crashedCans[i]->setStiffness(_stiffness.x, _stiffness.y, _stiffness.z);
-        }
-        std::cout << "listener listening!!" << endl;
-    };
 
     void update();
     
@@ -146,14 +149,17 @@ public:
         ofDisableDepthTest();
         //-----------3D-END-----------//
 
-        //-----------INFO-----------//
+        //-----------INFO-----------//--later put into update func.
         stringstream ssInstruct;
-        ssInstruct << "DEBUG     - H" << endl;
-        ssInstruct << "CAMERA    - MOUSE" << endl;
-        ssInstruct << "BALL      - SPACEBAR" << endl;
-        ssInstruct << "ADD MODEL - A" << endl;
-        ssInstruct << "DELETE    - D" << endl;
-        ssInstruct << "SAVE IMG  - S" << endl;
+        ssInstruct << "INSTRUCTIONS: " << endl;
+        ssInstruct << "> DEBUG     - H" << endl;
+        ssInstruct << "> CAMERA    - MOUSE" << endl;
+        ssInstruct << "> BALL      - SPACEBAR" << endl;
+        ssInstruct << "> ADD MODEL - A" << endl;
+        ssInstruct << "> DELETE    - D" << endl;
+        ssInstruct << "> SAVE IMG  - S" << endl;
+        ssInstruct << "> SELECT INDEX " << endl;
+        ssInstruct << "> SAVE MESH - M" << endl;
 
         stringstream ssProgramInfo;
         ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
@@ -161,7 +167,7 @@ public:
         ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
         ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
         ssProgramInfo << "CAMERA: " << cam.getPosition() << endl;
-        
+
         stringstream ssDebug;
         ssDebug << "AMOUT-CAN: " << ofToString(crashedCans.size(), 0) << endl;
         ssDebug << "AMOUT-BALL: " << ofToString(rigidBodies.size(), 0) << endl;
@@ -169,15 +175,12 @@ public:
             ssDebug << "MODEL ID: " << ofToString(i, 3) << " -> POSITION: " << crashedCans[i]->getPosition() << endl;
         }
 
-        stringstream ssAll;
-        ssAll << ssInstruct.str().c_str() << endl;
-        ssAll << ssProgramInfo.str().c_str() << endl;
-
         //-----------FRONT-LAYER-----------//
         mf.drawGrid();
         mf.drawInfo(ssInstruct, 0, font,fontSize);
         mf.drawInfo(ssProgramInfo, 1, font, fontSize);
-        mf.drawInfo(ssDebug, 2, font, fontSize);
+        mf.drawInfo(ssDebug, 3, font, fontSize);
+        mf.drawInfo(ssGlobalLog, 4, font, fontSize);
         gui.draw();
     }
 
@@ -210,21 +213,22 @@ public:
         glm::vec3 frc = glm::vec3(0, 1, 0);
     }
 
-    void AddModel() {
+    void addModel() {
         ofQuaternion tquat;
         tquat.makeRotate(180, 1, 0, 0);
 
-        float tscale = ofRandom(0.3, 1);
         //btTransform tt = ofGetBtTransform(ofVec3f(ofRandom(-5, 5) * tscale * 30, -15 * tscale * 30, 0), tquat);
-        btTransform tt = ofGetBtTransform(glm::vec3(ofRandom(-500,500),-(0-meshBB[2]),ofRandom(-500,500)), tquat);
+        float scaleVal = 0.1;
+        //btTransform tt = ofGetBtTransform(glm::vec3(ofRandom(-groundInfo.x/2,groundInfo.x/2),-(0-meshBB[2]),ofRandom(-groundInfo.x/2, groundInfo.x / 2)), tquat);
+        btTransform tt = ofGetBtTransform(glm::vec3(50.,-100,50.), tquat);
 
         shared_ptr<ofxBulletSoftTriMesh> crashedCan(new ofxBulletSoftTriMesh());
-        crashedCan->create(&world, mesh, tt, 2 * tscale);
+        crashedCan->create(&world, mesh, tt, 2);
 
         crashedCan->getSoftBody()->generateBendingConstraints(3, crashedCan->getSoftBody()->m_materials[0]);
-
-        crashedCan->getSoftBody()->randomizeConstraints();
-        crashedCan->getSoftBody()->scale(btVector3(0.025 * tscale, 0.025 * tscale, 0.025 * tscale));
+        //crashedCan->getSoftBody()->randomizeConstraints();
+        //crashedCan->getSoftBody()->scale(btVector3(0.025 * tscale, 0.025 * tscale, 0.025 * tscale));
+        crashedCan->getSoftBody()->scale(btVector3(scaleVal,scaleVal,scaleVal));
 
         crashedCan->getSoftBody()->m_cfg.collisions = btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_RS;
         crashedCan->getSoftBody()->generateClusters(6);
@@ -242,25 +246,27 @@ public:
         crashedCans.push_back(crashedCan);
     }
 
-    void drawModelPos() {
-        for (int i = 0; i < crashedCans.size(); i++) {
-            glm::vec3 _pos = crashedCans[i]->getPosition();
-            glLineWidth(1);
-            glColor4f(1, 0, 0, 0.7);
-            glBegin(GL_LINES);
-            glVertex3f(_pos.x, 0, -50);
-            glVertex3f(_pos.x, 0, 50);
-            glEnd();
-            glBegin(GL_LINES);
-            glVertex3f(-50, 0, _pos.z);
-            glVertex3f(50, 0, _pos.z);
-            glEnd();
+    void deleteModel() {
+        if (crashedCans.size()) {
+            crashedCans.erase(crashedCans.begin());
+        }
+        if (rigidBodies.size()) {
+            rigidBodies.erase(rigidBodies.begin());
         }
     }
 
+    void drawModelPos() {
+        for (int i = 0; i < crashedCans.size(); i++) {
+            mf.drawFoundCenter(crashedCans[i]->getPosition(),groundInfo.x,glm::vec3(0,1,0));
+        }
+    }
 
-    
-   
+    void onStiffnessChanged(const glm::vec3& _stiffness) {
+        for (int i = 0; i < crashedCans.size(); i++) {
+            crashedCans[i]->setStiffness(_stiffness.x, _stiffness.y, _stiffness.z);
+        }
+        ssGlobalLog << "listener listening!!" << endl;
+    };
 
 
     void keyPressed(int key) {
@@ -271,23 +277,25 @@ public:
         case 's':
             mf.saveImage();
             break;
+        case 'm':
+            if(crashedCans.size()>0)mf.saveMesh(crashedCans[slider_selectModelIndex%crashedCans.size()]->getMesh());
+            break;
         case 'h':
             bDrawDebug = !bDrawDebug;
             break;
-        case ' ':
+        case 'c':
             //shootBall();
             createCrasher();
             break;
         case 'a':
-            AddModel();
+            addModel();
             break;
         case 'd':
-            if (crashedCans.size()) {
-                crashedCans.erase(crashedCans.begin());
-            }
-            if (rigidBodies.size()) {
-                rigidBodies.erase(rigidBodies.begin());
-            }
+            deleteModel();
+            break;
+        case ' ':
+            ssGlobalLog << "sample text" << endl;
+            break;
         }
     }
 	
@@ -298,9 +306,7 @@ public:
 	void mousePressed(int x, int y, int button) {};
 	void mouseReleased(int x, int y, int button) {};
 	void windowResized(int w, int h) {
-        gui.setPosition(mf.myGUIPos());
-        gui.setDefaultWidth(mf.myGUIWidth());
-        gui.setWidthElements(mf.myGUIWidth());
+        mf.resizeGUI(gui);
     }
 	void dragEvent(ofDragInfo dragInfo) {};
 	void gotMessage(ofMessage msg) {};

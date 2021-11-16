@@ -10,16 +10,19 @@ bool shouldRemoveBunny(const shared_ptr<ofxBulletSoftTriMesh>& ab) {
 
 
 void ofApp::update() {
-    mf.defaultUpdate(&currentFrame, &time);
+    //-----------UPDATE-----------//
+    mf.defaultUpdate(&cam,&currentFrame, &time);
     world.update();
+
+    //-----------REMOVE-----------//
     ofRemove(rigidBodies, shouldRemoveRigidBody);
     ofRemove(crashedCans, shouldRemoveBunny);
+    
     /*
-    for (int i = 0; i < crashedCans.size(); i++) {
-        crashedCans[i]->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
-        crashedCans[i]->setStiffness(stiffness.get().x, stiffness.get().y, stiffness.get().z);
-        crashedCans[i]->updateMesh(crashedCans[i]->getMesh());
-    }*/
+    stringstream ssAll;
+    ssAll << ssInstruct.str().c_str() << endl;
+    ssAll << ssProgramInfo.str().c_str() << endl;
+    */
 };
 
  
