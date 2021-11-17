@@ -40,8 +40,8 @@ public:
 		//_ezCam->enableMouseMiddleButton();
 	}
 
-	void defaultUpdate(ofEasyCam* _ezCam,float* _currentFrame, float* _time) {
-		*_currentFrame += 1.0;
+	void defaultUpdate(ofEasyCam* _ezCam, unsigned long int* _currentFrame, float* _time) {
+		*_currentFrame += 1;
 		*_time = ofGetElapsedTimef();
 		glm::vec3 _tar = _ezCam->getLookAtDir();
 		_ezCam->lookAt(_tar, glm::vec3(0, -1, 0));
@@ -65,22 +65,26 @@ public:
 	}
 
 	float myGUIWidth() {
-		float _width = ofGetWidth() * 0.25 - margin;
+		float _width = ofGetWidth() * 0.25 - margin - margin;
 		return _width;
 	}
 
 	void setGUI(ofxGuiGroup& _gui) {
 		_gui.setup();
-		_gui.setDefaultWidth(myGUIWidth());
-		_gui.setWidthElements(myGUIWidth());
 		_gui.setPosition(myGUIPos());
-		_gui.setBackgroundColor(ofColor(0,0,0));
+		_gui.setSize(myGUIWidth(),0);
+		_gui.setWidthElements(myGUIWidth() * .98);
+		
+		_gui.setDefaultBackgroundColor(ofColor(0,0,255));
+		_gui.setDefaultHeaderBackgroundColor(ofColor(0,255,0));
+		_gui.setDefaultBorderColor(ofColor(255,255,0));
+		_gui.setDefaultFillColor(ofColor(255,0,0));
 	}
 
 	void resizeGUI(ofxGuiGroup& _gui) {
-		_gui.setDefaultWidth(myGUIWidth());
-		_gui.setWidthElements(myGUIWidth());
 		_gui.setPosition(myGUIPos());
+		_gui.setSize(myGUIWidth(), 0);
+		_gui.setWidthElements(myGUIWidth() * .98);
 	}
 	
 
@@ -206,29 +210,52 @@ public:
 		//glm::vec3 center = glm::vec3((min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2);
 	}
 
-	void drawFoundCenter(const glm::vec3& _pos, float _size, const glm::vec3& _normal) {
-		if (_pos.x<_size/2 && _pos.x>-_size/2 && _pos.z<_size / 2 && _pos.z>-_size / 2) { //NEED TO IMPROVE LATER
-			glLineWidth(1);
-			glColor4f(1, 0, 0, 0.7);
-			ofPushMatrix();
-			ofRotate(90, _normal.y, _normal.x, 0);
-			glBegin(GL_LINES);
-			glVertex3f(_pos.x, -_size / 2, 0);
-			glVertex3f(_pos.x, _size / 2, 0);
-			glEnd();
-			glBegin(GL_LINES);
-			glVertex3f(-_size / 2, _pos.z, 0);
-			glVertex3f(_size / 2, _pos.z, 0);
-			glEnd();
+	void drawFoundCenter(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normal) {
+		glColor4f(1, 0, 1, 0.7);
+		if (_normal.z == 1) {
+			if (_pos.x<_size.x / 2 && _pos.x>-_size.x / 2 && _pos.y<_size.y / 2 && _pos.y>-_size.y / 2) {
+				glLineWidth(1);
+				glColor4f(1, 0, 1, 0.7);
+				glBegin(GL_LINES);
+				glVertex3f(_pos.x, -_size.y / 2, 0);
+				glVertex3f(_pos.x, _size.y / 2, 0);
+				glEnd();
+				glBegin(GL_LINES);
+				glVertex3f(-_size.x / 2, _pos.y, 0);
+				glVertex3f(_size.x / 2, _pos.y, 0);
+				glEnd();
 
-			glPointSize(4);
-			glBegin(GL_POINTS);
-			glVertex3f(_pos.x, -_size / 2, 0);
-			glVertex3f(_pos.x, _size / 2, 0);
-			glVertex3f(-_size / 2, _pos.z, 0);
-			glVertex3f(_size / 2, _pos.z, 0);
-			glEnd();
-			ofPopMatrix();
+				glPointSize(4);
+				glBegin(GL_POINTS);
+				glVertex3f(_pos.x, -_size.y / 2, 0);
+				glVertex3f(_pos.x, _size.y / 2, 0);
+				glVertex3f(-_size.x / 2, _pos.y, 0);
+				glVertex3f(_size.x / 2, _pos.y, 0);
+				glVertex3f(_pos.x, _pos.y, 0);
+				glEnd();
+			}
+		}
+		if (_normal.y == 1) {
+			if (_pos.x<_size.x / 2 && _pos.x>-_size.x / 2 && _pos.z<_size.y / 2 && _pos.z>-_size.y / 2) {
+				glLineWidth(1);
+				glBegin(GL_LINES);
+				glVertex3f(_pos.x, 0, -_size.y / 2);
+				glVertex3f(_pos.x, 0, _size.y / 2);
+				glEnd();
+				glBegin(GL_LINES);
+				glVertex3f(-_size.x / 2, 0, _pos.z);
+				glVertex3f(_size.x / 2, 0, _pos.z);
+				glEnd();
+
+				glPointSize(4);
+				glBegin(GL_POINTS);
+				glVertex3f(_pos.x, 0, -_size.y / 2);
+				glVertex3f(_pos.x, 0, _size.y / 2);
+				glVertex3f(-_size.x / 2, 0, _pos.z);
+				glVertex3f(_size.x / 2, 0, _pos.z);
+				glVertex3f(_pos.x,0, _pos.z);
+				glEnd();
+			}
 		}
 	}
 
