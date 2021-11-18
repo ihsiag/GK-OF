@@ -325,7 +325,7 @@ bool ofxGuiGroup::mouseScrolled(ofMouseEventArgs & args){
 
 void ofxGuiGroup::generateDraw(){
 	border.clear();
-	border.setFillColor(ofColor(thisBorderColor, 180));
+	border.setFillColor(ofColor(thisBorderColor)); 
 	border.setFilled(true);
 	border.rectangle(b.x, b.y + spacingNextElement, b.width + 1, b.height);
 

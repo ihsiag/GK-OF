@@ -14,6 +14,7 @@ public:
     ofEasyCam cam;
     ofTrueTypeFont font;
     ofMesh mesh;
+    float meshScaleFactor;
     float meshBB[6];
     ofLight light;
 
@@ -68,7 +69,7 @@ public:
         /*  gui.add(slider.setup("sliderName", initial, min, max); */       
         gui.add(stiffness.set("stiffness", glm::vec3(0.8), glm::vec3(0.01), glm::vec3(1.))); // this will create a slider group for your vec3 in the gui.
         gui.add(slider_piteration.set("Positions solver iterations", 2, 0, 4));
-        gui.add(slider_kDF.set(" Dynamic friction coefficient [0,1]", 0.5, 0, 1));
+        gui.add(slider_kDF.set("Dynamic friction coefficient [0,1]", 0.5, 0, 1));
         gui.add(slider_kSSHR_CL.set("Soft vs soft hardness[0, 1](cluster only)", 0.5, 0, 1));
         gui.add(slider_kSS_SPLT_CL.set("Soft vs rigid impulse split [0,1] (cluster only)", 0.5, 0., 1));
         gui.add(slider_kSKHR_CL.set("Soft vs kinetic hardness [0,1] (cluster only)", 0.1f, 0, 1.f));
@@ -83,10 +84,9 @@ public:
         font.loadFont("./font/SourceCodePro-Light.ttf", fontSize);
         mesh.load("./3d/test-normal-reduced.ply");
         mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-        glm::vec3 _centroid = mesh.getCentroid();
-        float _scaleFactor = 0.05;
+        meshScaleFactor = 0.05;
         for (int i = 0; i < mesh.getNumVertices(); i++) {
-            mesh.getVertices()[i] = mesh.getVertices()[i]*_scaleFactor;
+            mesh.getVertices()[i] = mesh.getVertices()[i]*meshScaleFactor;
         }
         float* meshBBPtr = mf.getBoundingBox(mesh);
         for (int i = 0; i < 6; i++) {
@@ -131,7 +131,7 @@ public:
             world.drawDebug();
             mf.draw3DAxis();
             drawModelPos();
-            mf.drawFoundCenter(glm::vec3(mouseOnWorld.x, 10, mouseOnWorld.y), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
+            mf.drawFoundCenterTo3D(glm::vec3(mouseOnWorld.x, 10, mouseOnWorld.y), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
         }
         
         ofEnableLighting();
@@ -144,6 +144,15 @@ public:
         glColor3f(1, 1, 0);
         for (int i = 0; i < rigidBodies.size(); i++) {
             rigidBodies[i]->draw();
+        }
+
+        for (int i = 0; i < crashers.size(); i++) {
+            ofFill();
+            glColor3f(0.5, 0.5, 0.5);
+            crashers[i]->draw();
+            ofNoFill();
+            glColor3f(0.8, 0.8, 0.8);
+            crashers[i]->draw();          
         }
 
         glLineWidth(2);
@@ -164,31 +173,12 @@ public:
         ofDisableDepthTest();
         //-----------3D-END-----------//
 
-        //-----------INFO-----------//--later put into update func.
+        //-----------FRONT-LAYER-----------//
         stringstream ssInstruct;
-        ssInstruct << "INSTRUCTIONS: " << endl;
-        ssInstruct << "> DEBUG              - H" << endl;
-        ssInstruct << "> CAMERA             - MOUSE" << endl;
-        ssInstruct << "> ADD CRASHER        - C" << endl;
-        ssInstruct << "> ADD MODEL          - A" << endl;
-        ssInstruct << "> DELETE             - D" << endl;
-        ssInstruct << "> SAVE IMG           - S" << endl;
-        ssInstruct << "> SAVE SELECTED MESH - M" << endl;
-
         stringstream ssProgramInfo;
-        ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
-        ssProgramInfo << "DEVELOPER: " << "GAISHI KUDO" << endl;
-        ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
-        ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
-        ssProgramInfo << "CAMERA: " << cam.getPosition() << endl;
-
         stringstream ssDebug;
-        ssDebug << "AMOUT-CAN: " << ofToString(crashedCans.size(), 0) << endl;
-        ssDebug << "AMOUT-CRASHER: " << ofToString(rigidBodies.size(), 0) << endl;
-        for (int i = 0; i < crashedCans.size(); i++) {
-            ssDebug << "MODEL ID: " << ofToString(i, 3) << " -> POSITION: " << crashedCans[i]->getPosition() << endl;
-        }
-        ssDebug << "WORLD MOUSE: " << mouseOnWorld << endl;
+        createInfo(ssInstruct,ssProgramInfo,ssDebug);
+        
 
         //-----------FRONT-LAYER-----------//
         drawMyGraph();
@@ -201,36 +191,32 @@ public:
         gui.draw();
     }
 
-    void shootBall() {
-        shared_ptr< ofxBulletSphere > ss(new ofxBulletSphere());
-        ss->create(world.world, cam.getPosition(), 0.75, 1.);
-        ss->add();
 
-        ofVec3f frc = -cam.getPosition();
-        frc.normalize();
-        ss->applyCentralForce(frc * 2000);
-
-        rigidBodies.push_back(ss);
-    }
-
-    void createCrasher() {
+    void addBox() {
         shared_ptr< ofxBulletBox > ceiling(new ofxBulletBox());
 
         ceiling->create(world.world, glm::vec3(0, -30, 0), 2., 50., 1.f, 50.f);
        // ceiling->setProperties(.25, .95);
         ceiling->add();
-
         glm::vec3 frc = glm::vec3(0, 1, 0);
         ceiling->applyCentralForce(frc * 2000);
-
         rigidBodies.push_back(ceiling);
 
-        ssGlobalLog << "CRASHER ADDED." << endl;
+        ssGlobalLog << "ADDED BOX." << endl;
     }
 
-    void crashController() {
-        glm::vec3 frc = glm::vec3(0, 1, 0);
+    void addCylinder(const glm::vec2& _pos) {
+        shared_ptr< ofxBulletCylinder > cylinder(new ofxBulletCylinder());
+        ofQuaternion tquat;
+        tquat.makeRotate(ofRandom(180), ofRandom(1), ofRandom(1), ofRandom(1));
+        btTransform tt = ofGetBtTransform(glm::vec3(_pos.x, ofRandom(-10, -30), _pos.y), tquat);
+        cylinder->create(world.world, tt, 4., 1.,5.);
+        cylinder->add();
+        crashers.push_back(cylinder);
+
+        ssGlobalLog << "ADDED CYLINDER" << endl;
     }
+
 
     void addModel(const glm::vec2& _pos) {
         ofQuaternion tquat;
@@ -264,7 +250,7 @@ public:
 
         crashedCans.push_back(crashedCan);
 
-        ssGlobalLog << "MODEL ADDED." << endl;
+        ssGlobalLog << "ADDED MODEL" << endl;
     }
 
     void deleteModel() {
@@ -274,64 +260,53 @@ public:
         if (rigidBodies.size()) {
             rigidBodies.erase(rigidBodies.begin());
         }
+        if (crashers.size()) {
+            crashers.erase(crashers.begin());
+        }
     }
 
     void drawModelPos() {
         for (int i = 0; i < crashedCans.size(); i++) {
-            mf.drawFoundCenter(crashedCans[i]->getPosition(),glm::vec2(groundInfo.x,groundInfo.z),glm::vec3(0,1,0));
-        }
-    }
-
-    void createMyGraph(const glm::vec2& _pos, const glm::vec2& _size) {
-        ofRectangle _r;
-        ofColor _boarderColor = ofColor(50);
-        ofColor _backgroundColor = ofColor(0);
-        _r = ofRectangle(_pos, _size.x, _size.y);
-        glm::vec2 graphCenter = glm::vec2(_pos + _size / 2);
-        ofFill();
-        ofSetColor(_backgroundColor);
-        ofDrawRectangle(_r);
-        ofNoFill();
-        ofSetLineWidth(2);
-        ofSetColor(_boarderColor);
-        ofDrawRectangle(_r);
-        ofSetLineWidth(1);
-        ofPushMatrix();
-        ofTranslate(_pos + _size / 2); //translate to graphcenter          
-        //axis
-        glLineWidth(1);
-        glColor4f(1, 0, 0, 0.5); //x= red
-        glBegin(GL_LINES);
-        glVertex2f(-_size.x / 2, 0);
-        glVertex2f(_size.x / 2, 0);
-        glEnd();
-        glColor4f(0, 0, 1, 0.5); //z = blue
-        glBegin(GL_LINES);
-        glVertex2f(0, -_size.y / 2);
-        glVertex2f(0, _size.y / 2);
-        glEnd();
-        for (int i = 0; i < crashedCans.size(); i++) {
-            glm::vec3 _mappedCenter = crashedCans[i]->getPosition() / glm::vec3(groundInfo.x, 1, -groundInfo.z) * glm::vec3(_size.x, 1, _size.y);
-            mf.drawFoundCenter(glm::vec3(_mappedCenter.x, _mappedCenter.z,0), _size, glm::vec3(0, 0, 1));
-        }
-        glm::vec2 _mouseOnGraph = glm::vec2(ofGetMouseX(), ofGetMouseY());
-        _mouseOnGraph = _mouseOnGraph - graphCenter;
-        mf.drawFoundCenter(glm::vec3(_mouseOnGraph, 0), _size, glm::vec3(0, 0, 1));
-        ofPopMatrix();
-
-        if (_mouseOnGraph.x<_size.x / 2 && _mouseOnGraph.x>-_size.x / 2 && _mouseOnGraph.y<_size.y / 2 && _mouseOnGraph.y>-_size.y / 2) {
-            glm::vec2 _mouseOnWorld = _mouseOnGraph / _size * glm::vec2(groundInfo.x, -groundInfo.z);
-            mouseOnWorld = _mouseOnWorld;
-        }
-        else {
-            //mouseOnWorld = glm::vec2(ofRandom(-groundInfo.x/2,groundInfo.x/2), ofRandom(-groundInfo.z,groundInfo.z));
+            mf.drawFoundCenterTo3D(crashedCans[i]->getPosition(),glm::vec2(groundInfo.x,groundInfo.z),glm::vec3(0,1,0));
         }
     }
 
     void drawMyGraph() {
-        createMyGraph(glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.50), glm::vec2(ofGetHeight() * 0.25 - 8));
+        mf.setGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z),&mouseOnWorld);
+        for (int i = 0; i < crashedCans.size(); i++) {
+            mf.putEachDataOnGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z),crashedCans[i]->getPosition(),glm::vec3(0,1,0));
+        }      
     }
 
+    void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
+        //-----------INFO-----------//--later put into update func.
+
+        _ssInstruct << "INSTRUCTIONS: " << endl;
+        _ssInstruct << "> DEBUG              - H" << endl;
+        _ssInstruct << "> CAMERA             - MOUSE" << endl;
+        _ssInstruct << "> ADD CYLINDER        - C" << endl;
+        _ssInstruct << "> ADD BOX            - B" << endl;
+        _ssInstruct << "> ADD MODEL          - A" << endl;
+        _ssInstruct << "> DELETE             - D" << endl;
+        _ssInstruct << "> SAVE IMG           - S" << endl;
+        _ssInstruct << "> SAVE SELECTED MESH - M" << endl;
+        _ssInstruct << "> CLEAR GLOBAL LOG   - L" << endl;
+
+
+        _ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
+        _ssProgramInfo << "DEVELOPER: " << "GAISHI KUDO" << endl;
+        _ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
+        _ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
+        _ssProgramInfo << "CAMERA: " << cam.getPosition() << endl;
+
+
+        _ssDebug << "AMOUT-CAN: " << ofToString(crashedCans.size(), 0) << endl;
+        _ssDebug << "AMOUT-CRASHER: " << ofToString(rigidBodies.size(), 0) << endl;
+        for (int i = 0; i < crashedCans.size(); i++) {
+            _ssDebug << "MODEL ID: " << ofToString(i, 3) << " -> POSITION: " << crashedCans[i]->getPosition() << endl;
+        }
+        _ssDebug << "WORLD MOUSE: " << mouseOnWorld << endl;
+    }
 
     void onStiffnessChanged(const glm::vec3& _stiffness) {
         for (int i = 0; i < crashedCans.size(); i++) {
@@ -350,7 +325,7 @@ public:
             mf.saveImage();
             break;
         case 'm':
-            if (crashedCans.size() > 0)mf.saveMesh(crashedCans[slider_selectModelIndex % crashedCans.size()]->getMesh());
+            if (crashedCans.size() > 0)mf.saveMesh(crashedCans[slider_selectModelIndex % crashedCans.size()]->getMesh(),1/meshScaleFactor);
             break;
         case 'h':
             bDrawDebug = !bDrawDebug;
@@ -361,9 +336,11 @@ public:
                 ssGlobalLog << "DEBUG MODE OFF" << endl;
             }
             break;
+        case 'b':
+            addBox();
+            break;
         case 'c':
-            //shootBall();
-            createCrasher();
+            addCylinder(mouseOnWorld);
             break;
         case 'a':
             addModel(mouseOnWorld);
@@ -373,6 +350,13 @@ public:
             break;
         case ' ':
             ssGlobalLog << "sample text" << endl;
+            break;
+        case 'l':
+            // バッファをクリアします。
+            ssGlobalLog.str("");
+            // 状態をクリアします。
+            ssGlobalLog.clear(std::stringstream::goodbit);
+            ssGlobalLog << "CLEARED LOG" << endl;
             break;
         }
     }

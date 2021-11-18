@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofApp.h"
 #include "ofxGui.h";
+#include "ofxBaseGui.h";
 
 
 class Class_MyFunctions {
@@ -75,16 +76,101 @@ public:
 		_gui.setSize(myGUIWidth(),0);
 		_gui.setWidthElements(myGUIWidth() * .98);
 		
-		_gui.setDefaultBackgroundColor(ofColor(0,0,255));
-		_gui.setDefaultHeaderBackgroundColor(ofColor(0,255,0));
-		_gui.setDefaultBorderColor(ofColor(255,255,0));
-		_gui.setDefaultFillColor(ofColor(255,0,0));
+		_gui.setDefaultBackgroundColor(ofColor(0));
+		_gui.setBackgroundColor(ofColor(0));
+		_gui.setDefaultHeaderBackgroundColor(ofColor(0));
+		_gui.setHeaderBackgroundColor(ofColor(0));
+		_gui.setDefaultBorderColor(ofColor(30));
+		_gui.setBorderColor(ofColor(30));
+		_gui.setDefaultFillColor(ofColor(60));
+		_gui.setFillColor(ofColor(60));
 	}
 
 	void resizeGUI(ofxGuiGroup& _gui) {
 		_gui.setPosition(myGUIPos());
 		_gui.setSize(myGUIWidth(), 0);
 		_gui.setWidthElements(myGUIWidth() * .98);
+	}
+
+	void setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorld) {
+
+		glm::vec2 _pos;
+		if (_indexPos == 0) _pos = glm::vec2(60, ofGetHeight() * 0.25);
+		if (_indexPos == 1) _pos = glm::vec2(60, ofGetHeight() * 0.50);
+		if (_indexPos == 2) _pos = glm::vec2(60, ofGetHeight() * 0.75);
+		if (_indexPos == 3) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.25 );
+		if (_indexPos == 4) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.50 );
+		if (_indexPos == 5) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.75 );
+		if (_indexPos == 6) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.25 );
+		if (_indexPos == 7) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.50 );
+		if (_indexPos == 8) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.75 );
+		if (_indexPos == 9) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.25 );
+		if (_indexPos == 10) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.50 );
+		if (_indexPos == 11) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.75 );
+
+		ofRectangle _r;
+		ofColor _boarderColor = ofColor(50);
+		ofColor _backgroundColor = ofColor(0);
+		_r = ofRectangle(_pos, _size.x, _size.y);
+		glm::vec2 graphCenter = glm::vec2(_pos + _size / 2);
+		ofFill();
+		ofSetColor(_backgroundColor);
+		ofDrawRectangle(_r);
+		ofNoFill();
+		ofSetLineWidth(2);
+		ofSetColor(_boarderColor);
+		ofDrawRectangle(_r);
+		ofSetLineWidth(1);
+		ofPushMatrix();
+		ofTranslate(_pos + _size / 2); //translate to graphcenter          
+		//axis
+		glLineWidth(1);
+		glColor4f(1, 0, 0, 0.5); //x= red
+		glBegin(GL_LINES);
+		glVertex2f(-_size.x / 2, 0);
+		glVertex2f(_size.x / 2, 0);
+		glEnd();
+		glColor4f(0, 0, 1, 0.5); //z = blue
+		glBegin(GL_LINES);
+		glVertex2f(0, -_size.y / 2);
+		glVertex2f(0, _size.y / 2);
+		glEnd();
+
+		//mouse
+		glm::vec2 _mouseOnGraph = glm::vec2(ofGetMouseX(), ofGetMouseY());
+		_mouseOnGraph = _mouseOnGraph - graphCenter;
+		drawFoundCenterTo2D(glm::vec3(_mouseOnGraph, 0), _size, glm::vec3(0, 0, 1));
+		ofPopMatrix();
+
+		//mouseToWorld
+		if (_mouseOnGraph.x<_size.x / 2 && _mouseOnGraph.x>-_size.x / 2 && _mouseOnGraph.y<_size.y / 2 && _mouseOnGraph.y>-_size.y / 2) {
+			*_mouseOnWorld = _mouseOnGraph / _size * glm::vec2(_originalSize.x, -_originalSize.y);
+		}
+		else {
+			//mouseOnWorld = glm::vec2(ofRandom(-_originalSize.x/2,_originalSize.x/2), ofRandom(-_originalSize.y/2,_originalSize.y/2));
+		}			
+	}
+
+	void putEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize,glm::vec3& _data,const glm::vec3& _normalOfData) {
+		glm::vec2 _pos;
+		if (_indexPos == 0) _pos = glm::vec2(60, ofGetHeight() * 0.25);
+		if (_indexPos == 1) _pos = glm::vec2(60, ofGetHeight() * 0.50);
+		if (_indexPos == 2) _pos = glm::vec2(60, ofGetHeight() * 0.75);
+		if (_indexPos == 3) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.25);
+		if (_indexPos == 4) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.50);
+		if (_indexPos == 5) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.75);
+		if (_indexPos == 6) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.25);
+		if (_indexPos == 7) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.50);
+		if (_indexPos == 8) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.75);
+		if (_indexPos == 9) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.25);
+		if (_indexPos == 10) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.50);
+		if (_indexPos == 11) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.75);
+		
+		glm::vec3 _mappedCenter = _data / glm::vec3(_originalSize.x, 1, -_originalSize.y) * glm::vec3(_size.x, 1, _size.y);
+		ofPushMatrix();
+		ofTranslate(_pos + _size / 2); //translate to graphcenter  
+		drawFoundCenterTo2D(_mappedCenter, _size,_normalOfData);
+		ofPopMatrix();
 	}
 	
 
@@ -105,22 +191,22 @@ public:
 		//Bitmap
 		//Width : 8pt , Height : 11pt
 		glColor3f(1, 1, 1);
-		glm::vec2 pos;
-		if (_indexPos == 0) pos = glm::vec2(60, ofGetHeight() * 0.25 + 11);
-		if (_indexPos == 1) pos = glm::vec2(60, ofGetHeight() * 0.50 + 11);
-		if (_indexPos == 2) pos = glm::vec2(60, ofGetHeight() * 0.75 + 11);
-		if (_indexPos == 3) pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.25 + 11);
-		if (_indexPos == 4) pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.50 + 11);
-		if (_indexPos == 5) pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.75 + 11);
-		if (_indexPos == 6) pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.25 + 11);
-		if (_indexPos == 7) pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.50 + 11);
-		if (_indexPos == 8) pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.75 + 11);
-		if (_indexPos == 9) pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.25 + 11);
-		if (_indexPos == 10) pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.50 + 11);
-		if (_indexPos == 11) pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.75 + 11);
+		glm::vec2 _pos;
+		if (_indexPos == 0) _pos = glm::vec2(60, ofGetHeight() * 0.25 + 11);
+		if (_indexPos == 1) _pos = glm::vec2(60, ofGetHeight() * 0.50 + 11);
+		if (_indexPos == 2) _pos = glm::vec2(60, ofGetHeight() * 0.75 + 11);
+		if (_indexPos == 3) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.25 + 11);
+		if (_indexPos == 4) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.50 + 11);
+		if (_indexPos == 5) _pos = glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.75 + 11);
+		if (_indexPos == 6) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.25 + 11);
+		if (_indexPos == 7) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.50 + 11);
+		if (_indexPos == 8) _pos = glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.75 + 11);
+		if (_indexPos == 9) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.25 + 11);
+		if (_indexPos == 10) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.50 + 11);
+		if (_indexPos == 11) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.75 + 11);
 		
-		//ofDrawBitmapStringHighlight(_ss.str().c_str(), pos, ofColor(0), ofColor(255));
-		ofDrawBitmapString(_ss.str().c_str(), pos);
+		//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));
+		ofDrawBitmapString(_ss.str().c_str(), _pos);
 	}
 
 	void drawGrid() {
@@ -210,9 +296,9 @@ public:
 		//glm::vec3 center = glm::vec3((min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2);
 	}
 
-	void drawFoundCenter(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normal) {
+	void drawFoundCenterTo3D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalPlaneToDraw) {
 		glColor4f(1, 0, 1, 0.7);
-		if (_normal.z == 1) {
+		if (_normalPlaneToDraw.z == 1) {
 			if (_pos.x<_size.x / 2 && _pos.x>-_size.x / 2 && _pos.y<_size.y / 2 && _pos.y>-_size.y / 2) {
 				glLineWidth(1);
 				glColor4f(1, 0, 1, 0.7);
@@ -235,7 +321,7 @@ public:
 				glEnd();
 			}
 		}
-		if (_normal.y == 1) {
+		if (_normalPlaneToDraw.y == 1) {
 			if (_pos.x<_size.x / 2 && _pos.x>-_size.x / 2 && _pos.z<_size.y / 2 && _pos.z>-_size.y / 2) {
 				glLineWidth(1);
 				glBegin(GL_LINES);
@@ -254,6 +340,56 @@ public:
 				glVertex3f(-_size.x / 2, 0, _pos.z);
 				glVertex3f(_size.x / 2, 0, _pos.z);
 				glVertex3f(_pos.x,0, _pos.z);
+				glEnd();
+			}
+		}
+	}
+
+	void drawFoundCenterTo2D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalOfData) {
+		glColor4f(1, 0, 1, 0.7);
+		if (_normalOfData.z == 1) {
+			if (_pos.x<_size.x / 2 && _pos.x>-_size.x / 2 && _pos.y<_size.y / 2 && _pos.y>-_size.y / 2) {
+				glLineWidth(1);
+				glColor4f(1, 0, 1, 0.7);
+				glBegin(GL_LINES);
+				glVertex3f(_pos.x, -_size.y / 2, 0);
+				glVertex3f(_pos.x, _size.y / 2, 0);
+				glEnd();
+				glBegin(GL_LINES);
+				glVertex3f(-_size.x / 2, _pos.y, 0);
+				glVertex3f(_size.x / 2, _pos.y, 0);
+				glEnd();
+
+				glPointSize(4);
+				glBegin(GL_POINTS);
+				glVertex3f(_pos.x, -_size.y / 2, 0);
+				glVertex3f(_pos.x, _size.y / 2, 0);
+				glVertex3f(-_size.x / 2, _pos.y, 0);
+				glVertex3f(_size.x / 2, _pos.y, 0);
+				glVertex3f(_pos.x, _pos.y, 0);
+				glEnd();
+			}
+		}
+		if (_normalOfData.y == 1) {
+			if (_pos.x<_size.x / 2 && _pos.x>-_size.x / 2 && _pos.z<_size.y / 2 && _pos.z>-_size.y / 2) {
+				glLineWidth(1);
+				glColor4f(1, 0, 1, 0.7);
+				glBegin(GL_LINES);
+				glVertex3f(_pos.x, -_size.y / 2, 0);
+				glVertex3f(_pos.x, _size.y / 2, 0);
+				glEnd();
+				glBegin(GL_LINES);
+				glVertex3f(-_size.x / 2, _pos.z, 0);
+				glVertex3f(_size.x / 2, _pos.z, 0);
+				glEnd();
+
+				glPointSize(4);
+				glBegin(GL_POINTS);
+				glVertex3f(_pos.x, -_size.y / 2, 0);
+				glVertex3f(_pos.x, _size.y / 2, 0);
+				glVertex3f(-_size.x / 2, _pos.z, 0);
+				glVertex3f(_size.x / 2, _pos.z, 0);
+				glVertex3f(_pos.x, _pos.z, 0);
 				glEnd();
 			}
 		}
@@ -306,9 +442,14 @@ public:
 		*ssLog << "img : " + _fileName + " -exported" << std::endl;
 	}
 
-	void saveMesh(ofMesh& _pcMesh) {
+	void saveMesh(ofMesh& _mesh, const float& _scaleFactor) {
 		string _fileName = "./meshExport/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".ply";
-		_pcMesh.save(_fileName);
+		glm::vec3 _centroid = _mesh.getCentroid();
+		for (int i = 0; i < _mesh.getNumVertices(); i++) {
+			_mesh.getVertex(i) = (_mesh.getVertex(i) - _centroid) * _scaleFactor;;
+		}
+		
+		_mesh.save(_fileName);
 		*ssLog << "mesh : " + _fileName + " -exported" << endl;
 	}
 };

@@ -8,6 +8,10 @@ bool shouldRemoveBunny(const shared_ptr<ofxBulletSoftTriMesh>& ab) {
     return ab->getPosition().y > 15;
 }
 
+bool shouldRemoveCrasher(const shared_ptr<ofxBulletRigidBody>& ab) {
+    return ab->getPosition().y > 15;
+}
+
 
 void ofApp::update() {
     //-----------UPDATE-----------//
@@ -17,7 +21,9 @@ void ofApp::update() {
     //-----------REMOVE-----------//
     ofRemove(rigidBodies, shouldRemoveRigidBody);
     ofRemove(crashedCans, shouldRemoveBunny);
+    ofRemove(crashers, shouldRemoveCrasher);
     
+
     /*
     stringstream ssAll;
     ssAll << ssInstruct.str().c_str() << endl;
