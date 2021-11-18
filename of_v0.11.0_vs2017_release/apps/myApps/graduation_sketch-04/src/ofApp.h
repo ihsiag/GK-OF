@@ -164,6 +164,10 @@ public:
             crashedCans[i]->draw();
             glColor3f(0.8, 0.8, 0.8);
             crashedCans[i]->getMesh().drawWireframe();
+            ofDisableLighting();
+            glColor3f(1., 1., 1.);
+            if (bDrawDebug)ofDrawBitmapString("MODEL ID: " + ofToString(i), crashedCans[i]->getPosition());
+            ofEnableLighting();
         }
         glLineWidth(1);
         //-----------LIGHT-END-----------//
@@ -284,7 +288,7 @@ public:
         _ssInstruct << "INSTRUCTIONS: " << endl;
         _ssInstruct << "> DEBUG              - H" << endl;
         _ssInstruct << "> CAMERA             - MOUSE" << endl;
-        _ssInstruct << "> ADD CYLINDER        - C" << endl;
+        _ssInstruct << "> ADD CYLINDER       - C" << endl;
         _ssInstruct << "> ADD BOX            - B" << endl;
         _ssInstruct << "> ADD MODEL          - A" << endl;
         _ssInstruct << "> DELETE             - D" << endl;
