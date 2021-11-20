@@ -97,7 +97,7 @@ public:
 		_gui.setWidthElements(myGUIWidth() * .98);
 	}
 
-	void setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorld) {
+	void setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorldPlane) {
 
 		glm::vec2 _pos;
 		if (_indexPos == 0) _pos = glm::vec2(60, ofGetHeight() * 0.25);
@@ -113,10 +113,9 @@ public:
 		if (_indexPos == 10) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.50 );
 		if (_indexPos == 11) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.75 );
 
-		ofRectangle _r;
 		ofColor _boarderColor = ofColor(50);
 		ofColor _backgroundColor = ofColor(0);
-		_r = ofRectangle(_pos, _size.x, _size.y);
+		ofRectangle _r = ofRectangle(_pos, _size.x, _size.y);
 		glm::vec2 graphCenter = glm::vec2(_pos + _size / 2);
 		ofFill();
 		ofSetColor(_backgroundColor);
@@ -149,10 +148,7 @@ public:
 
 		//mouseToWorld
 		if (_mouseOnGraph.x<_size.x / 2 && _mouseOnGraph.x>-_size.x / 2 && _mouseOnGraph.y<_size.y / 2 && _mouseOnGraph.y>-_size.y / 2) {
-			*_mouseOnWorld = _mouseOnGraph / _size * glm::vec2(_originalSize.x, -_originalSize.y);
-		}
-		else {
-			//mouseOnWorld = glm::vec2(ofRandom(-_originalSize.x/2,_originalSize.x/2), ofRandom(-_originalSize.y/2,_originalSize.y/2));
+			*_mouseOnWorldPlane = _mouseOnGraph / _size * glm::vec2(_originalSize.x, _originalSize.y);
 		}			
 	}
 
@@ -171,7 +167,9 @@ public:
 		if (_indexPos == 10) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.50);
 		if (_indexPos == 11) _pos = glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.75);
 		
-		glm::vec3 _mappedCenter = _data / glm::vec3(_originalSize.x, 1, -_originalSize.y) * glm::vec3(_size.x, 1, _size.y);
+		glm::vec3 _mappedCenter;
+		if (_normalOfData.y == 1) _mappedCenter = _data / glm::vec3(_originalSize.x, 1, _originalSize.y) * glm::vec3(_size.x, 1, _size.y);
+		if (_normalOfData.z == 1) _mappedCenter = _data / glm::vec3(_originalSize.x, _originalSize.y, 1) * glm::vec3(_size.x, _size.y, 1);
 		ofPushMatrix();
 		ofTranslate(_pos + _size / 2); //translate to graphcenter  
 		drawFoundCenterTo2D(_mappedCenter, _size,_normalOfData);
@@ -429,32 +427,47 @@ public:
 		_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
 	}
 
+	stringstream makeFileName(const string& _folderName, const string& _fileType) {
+		stringstream _ss;
+		_ss << _folderName;
+		_ss << ofGetYear();
+		_ss << setfill('0') << setw(2) << ofGetMonth();
+		_ss << setfill('0') << setw(2) << ofGetDay() << "-";
+		_ss << setfill('0') << setw(2) << ofGetHours();
+		_ss << setfill('0') << setw(2) << ofGetMinutes();
+		_ss << setfill('0') << setw(2) << ofGetSeconds();
+		_ss << _fileType;
+		return _ss;
+	}
+
 	void saveImage() {
-		string _fileName = "./screenShot/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
+		string _fileName = makeFileName("./screenShot/",".png").str().c_str();
 		ofImage _imgToSave;
 		_imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
 		_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
-		*ssLog << "img : " + _fileName + " -exported" << std::endl;
+		*ssLog << "EXPORTED SCREEN : " + _fileName << std::endl;
 	}
 
 	void saveFBOtoImage(ofFbo* _fbo) {
-		string _fileName = "./screenShot/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".png";
+		string _fileName = makeFileName("./fboShot/", ".png").str().c_str();
 		ofPixels _pixels;
 		_fbo->readToPixels(_pixels);
 		ofImage _imgToSave;
 		_imgToSave.setFromPixels(_pixels);
 		_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
-		*ssLog << "img : " + _fileName + " -exported" << std::endl;
+		*ssLog << "EXPORTED FBO : " + _fileName<< std::endl;
 	}
 
 	void saveMesh(ofMesh& _mesh, const float& _scaleFactor) {
-		string _fileName = "./meshExport/" + ofToString(ofGetMonth()) + ofToString(ofGetDay()) + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".ply";
+		string _fileName = makeFileName("./meshExport/", ".ply").str().c_str();
+		ofMesh _meshToSave = _mesh;
 		glm::vec3 _centroid = _mesh.getCentroid();
+		*ssLog << _centroid << endl;
 		for (int i = 0; i < _mesh.getNumVertices(); i++) {
-			_mesh.getVertex(i) = (_mesh.getVertex(i) - _centroid) * _scaleFactor;;
+			_meshToSave.getVertices()[i] = (_mesh.getVertex(i) - _centroid) * _scaleFactor;;
 		}
-		
-		_mesh.save(_fileName);
-		*ssLog << "mesh : " + _fileName + " -exported" << endl;
+		_meshToSave.save(_fileName);
+		*ssLog << "EXPORTED MESH : " + _fileName<< endl;
+		//free(&_meshToSave);
 	}
 };

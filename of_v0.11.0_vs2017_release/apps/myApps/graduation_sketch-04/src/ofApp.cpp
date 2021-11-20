@@ -45,12 +45,8 @@ void ofApp::setup() {
 
     //-----------CAMERA-----------//
     cam.disableMouseInput();
-    cam.setDistance(14);
-    cam.setPosition(ofVec3f(0, -35.f, -35.f));    
-    cam.lookAt(ofVec3f(0, -10, 0), ofVec3f(0, 1, 0));
-    cam.setVFlip(true);
-
-
+    resetCamera();
+    
     //-----------INITLIB-----------//
     world.setup();
     world.setCamera(&cam);
@@ -102,7 +98,7 @@ void ofApp::draw() {
         world.drawDebug();
         mf.draw3DAxis();
         drawModelPos();
-        mf.drawFoundCenterTo3D(glm::vec3(mouseOnWorld.x, 10, mouseOnWorld.y), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
+        mf.drawFoundCenterTo3D(glm::vec3(mouseOnWorldPlane.x, 10, mouseOnWorldPlane.y), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
     }
 
     ofEnableLighting();
@@ -264,6 +260,12 @@ void ofApp::drawBodies(){
 }
 
 //-----------THISTIME-FUNCS-----------//
+void ofApp::resetCamera() {
+    cam.setDistance(14);
+    cam.setPosition(ofVec3f(0, -35.f, 35.f));
+    cam.lookAt(ofVec3f(0, -5, 0), ofVec3f(0, 1, 0));
+    cam.setVFlip(true);
+}
 void ofApp::createGUI() {
     /*  gui.add(slider.setup("sliderName", initial, min, max); */
     gui.add(stiffness.set("stiffness", glm::vec3(0.8), glm::vec3(0.01), glm::vec3(1.))); // this will create a slider group for your vec3 in the gui.
@@ -281,10 +283,13 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
 
     _ssInstruct << "INSTRUCTIONS: " << endl;
     _ssInstruct << "> DEBUG              - H" << endl;
-    _ssInstruct << "> CAMERA             - MOUSE" << endl;
+    _ssInstruct << "> ROTATE CAMERA      - RIGHT-BUTTON" << endl;
+    _ssInstruct << "> MOVE CAMERA        - SHIFT + RIGHT-BUTTON" << endl;
+    _ssInstruct << "> RESET CAMERA       - R" << endl;
     _ssInstruct << "> ADD CYLINDER       - C" << endl;
     _ssInstruct << "> ADD BOX            - B" << endl;
     _ssInstruct << "> ADD MODEL          - A" << endl;
+    _ssInstruct << "> PICK OBJECT        - LEFT-BUTTON" << endl;
     _ssInstruct << "> DELETE             - D" << endl;
     _ssInstruct << "> SAVE IMG           - S" << endl;
     _ssInstruct << "> SAVE SELECTED MESH - M" << endl;
@@ -303,11 +308,11 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     for (int i = 0; i < models.size(); i++) {
         _ssDebug << "MODEL ID: " << ofToString(i, 3) << " -> POSITION: " << models[i]->getPosition() << endl;
     }
-    _ssDebug << "MOUSE WORLD POS: " << mouseOnWorld << endl;
+    _ssDebug << "MOUSE WORLD POS: " << mouseOnWorldPlane << endl;
     _ssDebug << "MOUSE PICK POS: " << mousePickPos << endl;
 }
 void ofApp::drawMyGraph() {
-    mf.setGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorld);
+    mf.setGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorldPlane);
     for (int i = 0; i < models.size(); i++) {
         mf.putEachDataOnGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), models[i]->getPosition(), glm::vec3(0, 1, 0));
     }

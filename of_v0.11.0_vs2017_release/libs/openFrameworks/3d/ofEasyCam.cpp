@@ -400,7 +400,7 @@ void ofEasyCam::mouseReleased(ofMouseEventArgs & mouse){
 		// Check if it's double click
 		unsigned long curTap = ofGetElapsedTimeMillis();
 		if(lastTap != 0 && curTap - lastTap < doubleclickTime){
-			reset();
+			//reset(); //EDITTED BY GAISHI KUDO
 			return;
 		}
 		lastTap = curTap;

@@ -47,7 +47,7 @@ public:
     float time;
     int fontSize;
 
-    glm::vec2 mouseOnWorld;
+    glm::vec2 mouseOnWorldPlane;
 
     //-----------SLIDER-----------//
     //ofxPanel gui;
@@ -79,26 +79,30 @@ public:
     void drawBodies();
 
     //-----------THISTIME-FUNCS-----------//
+    void resetCamera();
+
     void createGUI();
     void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
     void drawMyGraph();
 
     //-----------EVENT-FUNCS-----------//
     void mousePickEvent(ofxBulletMousePickEvent& e);
-
+  
 
     //-----------EVENT-----------//
     void keyPressed(int key) {
 
         switch (key) {
-
+        case 'r':
+            resetCamera();
+            break;
         case 'f':
             ofToggleFullscreen();
             break;
         case 's':
             mf.saveImage();
             break;
-        case 'm':
+        case 'm':            
             if (models.size() > 0)mf.saveMesh(models[slider_selectModelIndex % models.size()]->getMesh(),1/meshScaleFactor);
             break;
         case 'h':
@@ -114,16 +118,15 @@ public:
             addBox();
             break;
         case 'c':
-            addCylinder(mouseOnWorld);
+            addCylinder(mouseOnWorldPlane);
             break;
         case 'a':
-            addModel(mouseOnWorld);
+            addModel(mouseOnWorldPlane);
             break;
         case 'd':
             deleteModel();
             break;
         case ' ':
-            ssGlobalLog << "sample text" << endl;
             break;
         case 'l':
             // バッファをクリアします。
