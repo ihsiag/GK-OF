@@ -178,6 +178,9 @@ public:
 	bool hasInteraction(TransformType type, int mouseButton, int key = -1);
 	bool hasInteraction(int mouseButton, int key);
 	void removeAllInteractions();
+
+	/// ADDED BY GAISHI KUDO
+	void setScrollFlip(const bool& _bool);
 protected:
 	virtual void onPositionChanged() ;
 private:
@@ -224,6 +227,7 @@ private:
 	void mousePressed(ofMouseEventArgs & mouse);
 	void mouseReleased(ofMouseEventArgs & mouse);
 	void mouseScrolled(ofMouseEventArgs & mouse);
+	
 	void updateMouse(const glm::vec2 & mouse);
 	/// \brief Returns the up axis vector;
 	glm::vec3 up() const;
@@ -278,4 +282,7 @@ private:
 		TransformType transformType;
 	};
 	std::vector<interaction> interactions;
+
+	/// ADDED BY GAISHI KUDO
+	int IsScrollFlipped; //-1 = true
 };

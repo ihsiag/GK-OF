@@ -25,6 +25,8 @@ ofEasyCam::ofEasyCam(){
 	addInteraction(TRANSFORM_TRANSLATE_Z, OF_MOUSE_BUTTON_RIGHT);
 	addInteraction(TRANSFORM_TRANSLATE_XY, OF_MOUSE_BUTTON_MIDDLE);
 	
+	/// ADDED BY GAISHI KUDO
+	IsScrollFlipped = 1; //false
 }
 //----------------------------------------
 void ofEasyCam::update(ofEventArgs & args){
@@ -427,11 +429,16 @@ void ofEasyCam::mouseScrolled(ofMouseEventArgs & mouse){
 			translate.z = sensitivityScroll * mouse.scrollY / viewport.height;
 			mouseAtScroll = mouse;
 		}else{
-			translate.z = mouse.scrollY * 30 * sensitivityTranslate.z * (getDistance() + std::numeric_limits<float>::epsilon())/ area.height;
+			translate.z = IsScrollFlipped * mouse.scrollY * 30 * sensitivityTranslate.z * (getDistance() + std::numeric_limits<float>::epsilon())/ area.height;
 		}
 		currentTransformType = TRANSFORM_SCALE;
 		bIsScrolling = true;
 	}
+}
+
+void ofEasyCam::setScrollFlip(const bool& _bool) {
+	if (_bool)IsScrollFlipped = -1;
+	if (!_bool)IsScrollFlipped = 1;
 }
 
 //----------------------------------------

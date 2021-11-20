@@ -4,6 +4,7 @@
 #include "Class_MyFunctions.h"
 #include "ofxBullet.h"
 #include "ofxGui.h"
+#include "ofEvent.h"
 
 
 class ofApp : public ofBaseApp{
@@ -82,11 +83,8 @@ public:
     void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
     void drawMyGraph();
 
-    
-
     //-----------EVENT-FUNCS-----------//
     void mousePickEvent(ofxBulletMousePickEvent& e);
-    void onStiffnessChanged(const glm::vec3& _stiffness);
 
 
     //-----------EVENT-----------//
@@ -142,7 +140,6 @@ public:
 	void mouseMoved(int x, int y ) {};
 	void mouseDragged(int x, int y, int button) {};
 	void mousePressed(int x, int y, int button) {
-        ssGlobalLog << "MOUSE PICK POS: " << mousePickPos << endl;
     };
 	void mouseReleased(int x, int y, int button) {
         mousePickIndex = -1;

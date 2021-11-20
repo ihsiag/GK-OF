@@ -19,6 +19,7 @@ public:
 
 	void setup(stringstream* _ssGlobalLog) {
 		ofSetVerticalSync(true);
+		ofSetFrameRate(40);
 		ofNoFill();
 		glClearColor(0, 0, 0, 0);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -30,22 +31,26 @@ public:
 		
 	}
 
-	void setCam(ofEasyCam* _ezCam) {
-		_ezCam->setNearClip(0.1);
-		_ezCam->setFarClip(100000);
+	void setCam(ofEasyCam* _cam) {
+		_cam->removeAllInteractions();
 		//_ezCam->setPosition(0, 0, 0);
 		//_ezCam->lookAt(glm::vec3(0, 0, 0),glm::vec3(0,0,1));
 		//_ezCam->enableOrtho();
 		//_ezCam->disableMouseInput();
 		//_ezCam->enableMouseInput();
 		//_ezCam->enableMouseMiddleButton();
+		_cam->setNearClip(0.1);
+		_cam->setFarClip(100000);
+		_cam->addInteraction(ofEasyCam::TRANSFORM_TRANSLATE_XY, OF_MOUSE_BUTTON_RIGHT, OF_KEY_SHIFT);
+		_cam->setScrollFlip(true); //you need to customize your ofEasyCam
+		_cam->addInteraction(ofEasyCam::TRANSFORM_ROTATE, OF_MOUSE_BUTTON_RIGHT);
 	}
 
-	void defaultUpdate(ofEasyCam* _ezCam, unsigned long int* _currentFrame, float* _time) {
+	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time) {
 		*_currentFrame += 1;
 		*_time = ofGetElapsedTimef();
-		glm::vec3 _tar = _ezCam->getLookAtDir();
-		_ezCam->lookAt(_tar, glm::vec3(0, -1, 0));
+		
+		_cam->lookAt(_cam->getPosition()+_cam->getLookAtDir(), _cam->getUpAxis());
 
 		ofBackground(10);
 		ofNoFill();

@@ -12,7 +12,7 @@ void ofApp::setup() {
 	world.setup();
 	// enables mouse Pick events //
 	world.enableGrabbing();
-	ofAddListener(world.MOUSE_PICK_EVENT, this, &ofApp::mousePickEvent);
+	//ofAddListener(world.MOUSE_PICK_EVENT, this, &ofApp::mousePickEvent);
 
 	world.enableCollisionEvents();
 	ofAddListener(world.COLLISION_EVENT, this, &ofApp::onCollision);
@@ -77,6 +77,7 @@ void ofApp::setup() {
 
 		bounds[i]->create( world.world, startLoc, 0., dimens.x, dimens.y, dimens.z );
 		bounds[i]->setProperties(.25, .95);
+		bounds[i]->setActivationState(DISABLE_DEACTIVATION);
 		bounds[i]->add();
 	}
     
@@ -100,13 +101,15 @@ void ofApp::update() {
 		ofVec3f mouseLoc = camera.screenToWorld( ofVec3f((float)ofGetMouseX(), (float)ofGetMouseY(), 0) );
 		mouseLoc.z += 15;
 		ofVec3f diff;
+		/*
 		for(int i = 0; i < shapes.size(); i++) {
 			diff = mouseLoc - shapes[i]->getPosition();
 			diff *= 2.f;
 			if (!bAddCenterAttract) diff *= -1.f;
 			shapes[i]->applyCentralForce( diff );
-		}
+		}*/
 	}
+	
 
 	world.update();
 	ofSetWindowTitle(ofToString(ofGetFrameRate(), 0));
@@ -169,6 +172,7 @@ void ofApp::draw() {
 	ss << "force direction(f): " << bAddCenterAttract << endl;
 	ss << "add spherers (s)" << endl;
 	ss << "add boxes (b)" << endl;
+	ss << "MOUSEPICKPOS: " << mousePickPos << endl;
 	ofDrawBitmapString(ss.str().c_str(), 10, 10);
 }
 

@@ -4,11 +4,15 @@ bool shouldRemoveRigidBody(const shared_ptr<ofxBulletRigidBody>& ab) {
     return ab->getPosition().y > 15;
 }
 
-bool shouldRemoveBunny(const shared_ptr<ofxBulletSoftTriMesh>& ab) {
+bool shouldRemoveModel(const shared_ptr<ofxBulletSoftTriMesh>& ab) {
     return ab->getPosition().y > 15;
 }
 
 bool shouldRemoveCrasher(const shared_ptr<ofxBulletRigidBody>& ab) {
+    return ab->getPosition().y > 15;
+}
+
+bool shouldRemoveKinematicBody(const shared_ptr<ofxBulletRigidBody>& ab) {
     return ab->getPosition().y > 15;
 }
 
@@ -42,9 +46,9 @@ void ofApp::setup() {
     //-----------CAMERA-----------//
     cam.disableMouseInput();
     cam.setDistance(14);
-    cam.setPosition(ofVec3f(0, -35.f, -35.f));
-    cam.lookAt(ofVec3f(0, -5, 0), ofVec3f(0, -1, 0));
-
+    cam.setPosition(ofVec3f(0, -35.f, -35.f));    
+    cam.lookAt(ofVec3f(0, -10, 0), ofVec3f(0, 1, 0));
+    cam.setVFlip(true);
 
 
     //-----------INITLIB-----------//
@@ -67,12 +71,11 @@ void ofApp::setup() {
     light.setScale(glm::vec3(50));
 
     //-----------EVENTLISTENER-----------//
-    ofEvent STIFFNESS_CHANGED_EVENT
-    ofAddListener(listener, this, &ofApp::onStiffnessChanged);
     ofAddListener(world.MOUSE_PICK_EVENT, this, &ofApp::mousePickEvent);
 
     //-----------GO-----------//
     cam.enableMouseInput();
+    
 }
 
 
@@ -83,8 +86,9 @@ void ofApp::update() {
 
     //-----------REMOVE-----------//
     ofRemove(rigidBodies, shouldRemoveRigidBody);
-    ofRemove(models, shouldRemoveBunny);
+    ofRemove(models, shouldRemoveModel);
     ofRemove(crashers, shouldRemoveCrasher);
+    ofRemove(kinematicBodies, shouldRemoveKinematicBody);
     
 };
 
@@ -138,13 +142,13 @@ void ofApp::draw() {
 void ofApp::addKinematicBody() {
     for (int i = 0; i < 5; i++) {
         shared_ptr< ofxBulletBox > kinematicBody(new ofxBulletBox());
-        glm::vec3 kinematicBodyInfo = glm::vec3(1., 1., 1.);
-        kinematicBody->create(world.world, glm::vec3(ofRandom(-groundInfo.x / 2, groundInfo.x / 2), -kinematicBodyInfo.y / 2, ofRandom(-groundInfo.z / 2, groundInfo.z / 2)), 0., kinematicBodyInfo.x, kinematicBodyInfo.y, kinematicBodyInfo.z);
-        kinematicBody->enableKinematic();
-        //kinematicBody->getRigidBody()->setFlags().collisions = btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_RS;
+        glm::vec3 kinematicBodyInfo = glm::vec3(2., 2., 2.);
+        kinematicBody->create(world.world, glm::vec3(ofRandom(-groundInfo.x / 2, groundInfo.x/2),-groundInfo.y/2, ofRandom(-groundInfo.z / 2, groundInfo.z / 2)),1.,kinematicBodyInfo.x,kinematicBodyInfo.y,kinematicBodyInfo.z);
+        // ceiling->setProperties(.25, .95);
         kinematicBody->add();
         kinematicBodies.push_back(kinematicBody);
     }
+    ssGlobalLog << "ADDED KINEMATIC BODIES." << endl;
 }
 void ofApp::addBox() {
     shared_ptr< ofxBulletBox > ceiling(new ofxBulletBox());
@@ -188,7 +192,6 @@ void ofApp::addModel(const glm::vec2& _pos) {
 
     model->getSoftBody()->m_cfg.collisions = btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_RS;
     model->getSoftBody()->generateClusters(6);
-
     model->add();
 
     model->getSoftBody()->m_cfg.piterations = slider_piteration;//2; //Positions solver iterations
@@ -219,7 +222,7 @@ void ofApp::drawModelPos() {
         mf.drawFoundCenterTo3D(models[i]->getPosition(), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
     }
 }
-void ofApp::drawBodies() {
+void ofApp::drawBodies(){
     glColor3f(1, 1, 0);
     for (int i = 0; i < rigidBodies.size(); i++) {
         rigidBodies[i]->draw();
@@ -250,15 +253,14 @@ void ofApp::drawBodies() {
     }
     glLineWidth(1);
 
-    ofFill();
-    glColor3f(0.8, 0.8, 0.8);
+    ofFill();   
     for (int i = 0; i < kinematicBodies.size(); i++) {
+        glColor3f(0.8, 0.8, 0.8);
         if (mousePickIndex == i) {
             ofSetColor(255, 0, 0);
         }
         kinematicBodies[i]->draw();
     }
-
 }
 
 //-----------THISTIME-FUNCS-----------//
@@ -272,7 +274,7 @@ void ofApp::createGUI() {
     gui.add(slider_kSKHR_CL.set("Soft vs kinetic hardness [0,1] (cluster only)", 0.1f, 0, 1.f));
     gui.add(slider_kSK_SPLT_CL.set("Soft vs rigid impulse split [0,1] (cluster only)", 0.5, 0., 1.));
     gui.add(slider_selectModelIndex.set("SELECT MODEL INDEX", 0, 0, 10));
-    gui.add(slider_timestep.set("slider", 10, 0, 100));
+    gui.add(slider_timestep.set("slider", 0.05, 0, 100));
 }
 void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
     //-----------INFO-----------//--later put into update func.
@@ -301,7 +303,8 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     for (int i = 0; i < models.size(); i++) {
         _ssDebug << "MODEL ID: " << ofToString(i, 3) << " -> POSITION: " << models[i]->getPosition() << endl;
     }
-    _ssDebug << "WORLD MOUSE: " << mouseOnWorld << endl;
+    _ssDebug << "MOUSE WORLD POS: " << mouseOnWorld << endl;
+    _ssDebug << "MOUSE PICK POS: " << mousePickPos << endl;
 }
 void ofApp::drawMyGraph() {
     mf.setGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorld);
@@ -322,9 +325,3 @@ void ofApp::mousePickEvent(ofxBulletMousePickEvent& e) {
         }
     }
 }
-void ofApp::onStiffnessChanged(const glm::vec3& _stiffness) {
-    for (int i = 0; i < models.size(); i++) {
-        models[i]->setStiffness(_stiffness.x, _stiffness.y, _stiffness.z);
-    }
-    ssGlobalLog << "listener listening!!" << endl;
-};
