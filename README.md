@@ -1,16 +1,23 @@
 # 00_myOf
 
-You should include ClassMyFunctions.h when you run a program in this repository
+00-version:of_v0.11.2_vs2017_release
+
+01-Add projectGenerator shortcut-link to your startup menu
+[C:\Users\---\AppData\Roaming\Microsoft\Windows\Start Menu\Programs]
+
+02-You should include ClassMyFunctions.h when you run a program in this repository
 
 
-ADDONS LIST that I added myself
+03-ADDONS LIST that You have to download and put into addon folder manually.
 - ofxBullet
+- ofxGuiExtended
+- ofxBox2D
 
 
-CHANGES that I did to the exsiting addons
+04-CHANGES LIST that you have to modify your exsiting addons by yourself
 
 //--------------------------------------------------------------------
--To ofEasyCam.h
+- To ofEasyCam.h
 public:
 /// ADDED BY GAISHI KUDO
 	void setScrollFlip(const bool& _bool);
@@ -20,7 +27,7 @@ private:
 	int IsScrollFlipped; //-1 = true
 
 
--To ofEasyCam.cpp
+- To ofEasyCam.cpp
 constructor(){
     /// ADDED BY GAISHI KUDO
 	IsScrollFlipped = 1; //false
