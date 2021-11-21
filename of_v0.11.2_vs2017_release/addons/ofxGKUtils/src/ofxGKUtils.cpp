@@ -50,18 +50,22 @@ void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame
 }
 
 glm::vec2 ofxGKUtils::getPosLayout4x4(const int& _index) {
-	if (_index == 0) return glm::vec2(60, ofGetHeight() * 0.25);
-	if (_index == 1) return glm::vec2(60, ofGetHeight() * 0.50);
-	if (_index == 2) return glm::vec2(60, ofGetHeight() * 0.75);
-	if (_index == 3) return glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.25);
-	if (_index == 4) return glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.50);
-	if (_index == 5) return glm::vec2(ofGetWidth() * 0.25 + margin, ofGetHeight() * 0.75);
-	if (_index == 6) return glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.25);
-	if (_index == 7) return glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.50);
-	if (_index == 8) return glm::vec2(ofGetWidth() * 0.50 + margin, ofGetHeight() * 0.75);
-	if (_index == 9) return glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.25);
-	if (_index == 10) return glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.50);
-	if (_index == 11) return glm::vec2(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.75);
+	if (_index == 0) return glm::vec2(0,0);
+	if (_index == 1) return glm::vec2(0, ofGetHeight() * 0.25);
+	if (_index == 2) return glm::vec2(0, ofGetHeight() * 0.50);
+	if (_index == 3) return glm::vec2(0, ofGetHeight() * 0.75);
+	if (_index == 4) return glm::vec2(ofGetWidth() * 0.25, 0);
+	if (_index == 5) return glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
+	if (_index == 6) return glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.50);
+	if (_index == 7) return glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.75);
+	if (_index == 8) return glm::vec2(ofGetWidth() * 0.50, 0);
+	if (_index == 9) return glm::vec2(ofGetWidth() * 0.50, ofGetHeight() * 0.25);
+	if (_index == 10) return glm::vec2(ofGetWidth() * 0.50, ofGetHeight() * 0.50);
+	if (_index == 11) return glm::vec2(ofGetWidth() * 0.50, ofGetHeight() * 0.75);
+	if (_index == 12) return glm::vec2(ofGetWidth() * 0.75, 0);
+	if (_index == 13) return glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.25);
+	if (_index == 14) return glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.50);
+	if (_index == 15) return glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.75);
 }
 
 //-------------------------------------------------------HELPER_GUI-------------------------------------------------------//
@@ -142,6 +146,7 @@ void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const
 
 void ofxGKUtils::putEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec3& _data, const glm::vec3& _normalOfData) {
 	glm::vec2 _pos = getPosLayout4x4(_indexPos);
+	_pos.x += margin;
 	glm::vec3 _mappedCenter;
 	if (_normalOfData.y == 1) _mappedCenter = _data / glm::vec3(_originalSize.x, 1, _originalSize.y) * glm::vec3(_size.x, 1, _size.y);
 	if (_normalOfData.z == 1) _mappedCenter = _data / glm::vec3(_originalSize.x, _originalSize.y, 1) * glm::vec3(_size.x, _size.y, 1);
@@ -156,13 +161,13 @@ void ofxGKUtils::putEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _s
 
 void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos, const ofTrueTypeFont& _font, const int& _fontSize) {
 	//TrueTypeFont
-	/*
 	glm::vec2 _pos = getPosLayout4x4(_indexPos);
 	_pos.y += _fontSize;
 	glColor3f(1, 1, 1);
 	_font.drawString(_ss.str().c_str(), _pos.x, _pos.y);
-	*/
+}
 
+void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos) {
 	//Bitmap
 	//Width : 8pt , Height : 11pt
 	glColor3f(1, 1, 1);

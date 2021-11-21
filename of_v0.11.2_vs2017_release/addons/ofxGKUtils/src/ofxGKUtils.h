@@ -40,6 +40,7 @@ public:
 
 //-------------------------------------------------------HELPER_2D-------------------------------------------------------//
 	void drawInfo(const stringstream& _ss, const int& _indexPos, const ofTrueTypeFont& _font, const int& _fontSize);
+	void drawInfo(const stringstream& _ss, const int& _indexPos);
 	void drawGrid();
 	void drawCross(const int& _x, const int& _y, const int& _size);
 

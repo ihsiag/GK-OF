@@ -32,14 +32,19 @@ class ofApp : public ofBaseApp{
 
 		//-----------FOR-LIB-----------//
 		void setupFbos();
-		void setupFbo(const int& _index);
 		void runFbos();
-		void runFbo(const int& _index);
 		void drawFbos();
+		void setupFbo(const int& _index);
+		void runFbo(const int& _index);
+		void drawFbo(const int& _index);
+
+		void resizeFbos();
+		void resizeFbo(const int& _index);
 
 		//-----------THIS-TIME-FUNCS-----------//
 		void resetCamera();
 		void loadMeshes();
+		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
 
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
