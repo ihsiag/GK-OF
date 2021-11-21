@@ -12,6 +12,7 @@
 - ofxBullet
 - ofxGuiExtended
 - ofxBox2D
+- ofxPostProcessing
 
 
 04-CHANGES LIST that you have to modify your exsiting addons by yourself
