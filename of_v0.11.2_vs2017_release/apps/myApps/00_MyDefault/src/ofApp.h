@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Class_MyFunctions.h"
+#include "ofxGKUtils.h"
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
@@ -9,7 +9,7 @@ class ofApp : public ofBaseApp{
 
 	public:
 		//-----------DEFAULT-----------//
-		Class_MyFunctions mf;		
+		ofxGKUtils gk;		
 		ofEasyCam cam;
 		unsigned long int currentFrame;
 		float time;
@@ -50,7 +50,9 @@ class ofApp : public ofBaseApp{
 		void mouseReleased(int x, int y, int button) {}
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
-		void windowResized(int w, int h) {}
+		void windowResized(int w, int h) {
+			gk.resizeGUI(gui);
+		}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}
 		

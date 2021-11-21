@@ -18,9 +18,9 @@ bool shouldRemoveKinematicBody(const shared_ptr<ofxBulletRigidBody>& ab) {
 
 
 void ofApp::setup() {
-    mf.setup(&ssGlobalLog);
-    mf.setCam(&cam);
-    mf.setGUI(gui);
+    gk.setup(&ssGlobalLog);
+    gk.setCam(&cam);
+    gk.setGUI(gui);
 
     //-----------GLOBALVAL-----------//
     bDrawDebug = false;
@@ -38,7 +38,7 @@ void ofApp::setup() {
     for (int i = 0; i < mesh.getNumVertices(); i++) {
         mesh.getVertices()[i] = mesh.getVertices()[i] * meshScaleFactor;
     }
-    float* meshBBPtr = mf.getBoundingBox(mesh);
+    float* meshBBPtr = gk.getBoundingBox(mesh);
     for (int i = 0; i < 6; i++) {
         meshBB[i] = meshBBPtr[i];
     }
@@ -77,7 +77,7 @@ void ofApp::setup() {
 
 void ofApp::update() {
     //-----------UPDATE-----------//
-    mf.defaultUpdate(&cam,&currentFrame, &time);
+    gk.defaultUpdate(&cam,&currentFrame, &time);
     world.update();
 
     //-----------REMOVE-----------//
@@ -96,9 +96,9 @@ void ofApp::draw() {
     cam.begin();
     if (bDrawDebug) { //debug
         world.drawDebug();
-        mf.draw3DAxis();
+        gk.draw3DAxis();
         drawModelPos();
-        mf.drawFoundCenterTo3D(glm::vec3(mouseOnWorldPlane.x, 10, mouseOnWorldPlane.y), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
+        gk.drawFoundCenterTo3D(glm::vec3(mouseOnWorldPlane.x, 10, mouseOnWorldPlane.y), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
     }
 
     ofEnableLighting();
@@ -125,11 +125,11 @@ void ofApp::draw() {
 
     //-----------FRONT-LAYER-----------//
     drawMyGraph();
-    mf.drawGrid();
-    mf.drawInfo(ssInstruct, 0, font, fontSize);
-    mf.drawInfo(ssProgramInfo, 1, font, fontSize);
-    mf.drawInfo(ssDebug, 3, font, fontSize);
-    mf.drawInfo(ssGlobalLog, 4, font, fontSize);
+    gk.drawGrid();
+    gk.drawInfo(ssInstruct, 0, font, fontSize);
+    gk.drawInfo(ssProgramInfo, 1, font, fontSize);
+    gk.drawInfo(ssDebug, 3, font, fontSize);
+    gk.drawInfo(ssGlobalLog, 4, font, fontSize);
 
     gui.draw();
 }
@@ -215,7 +215,7 @@ void ofApp::deleteModel() {
 }
 void ofApp::drawModelPos() {
     for (int i = 0; i < models.size(); i++) {
-        mf.drawFoundCenterTo3D(models[i]->getPosition(), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
+        gk.drawFoundCenterTo3D(models[i]->getPosition(), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
     }
 }
 void ofApp::drawBodies(){
@@ -312,9 +312,9 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssDebug << "MOUSE PICK POS: " << mousePickPos << endl;
 }
 void ofApp::drawMyGraph() {
-    mf.setGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorldPlane);
+    gk.setGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorldPlane);
     for (int i = 0; i < models.size(); i++) {
-        mf.putEachDataOnGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), models[i]->getPosition(), glm::vec3(0, 1, 0));
+        gk.putEachDataOnGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), models[i]->getPosition(), glm::vec3(0, 1, 0));
     }
 }
 

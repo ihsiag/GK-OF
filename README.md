@@ -5,7 +5,7 @@
 01-Add projectGenerator shortcut-link to your startup menu
 [C:\Users\---\AppData\Roaming\Microsoft\Windows\Start Menu\Programs]
 
-02-You should include ClassMyFunctions.h when you run a program in this repository
+02-You should include ofxGKUtils.h into your project when you use and run a program in this repository.
 
 
 03-ADDONS LIST that You have to download and put into addon folder manually.

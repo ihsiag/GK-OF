@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Class_MyFunctions.h"
+#include "ofxGKUtils.h"
 #include "ofxBullet.h"
 #include "ofxGui.h"
 #include "ofEvent.h"
@@ -11,7 +11,7 @@ class ofApp : public ofBaseApp{
 
 public:
     //-----------BASIC-----------//
-    Class_MyFunctions mf;
+    ofxGKUtils gk;
     ofEasyCam cam;
     ofTrueTypeFont font;
     ofMesh mesh;
@@ -100,10 +100,10 @@ public:
             ofToggleFullscreen();
             break;
         case 's':
-            mf.saveImage();
+            gk.saveImage();
             break;
         case 'm':            
-            if (models.size() > 0)mf.saveMesh(models[slider_selectModelIndex % models.size()]->getMesh(),1/meshScaleFactor);
+            if (models.size() > 0)gk.saveMesh(models[slider_selectModelIndex % models.size()]->getMesh(),1/meshScaleFactor);
             break;
         case 'h':
             bDrawDebug = !bDrawDebug;
@@ -148,7 +148,7 @@ public:
         mousePickIndex = -1;
     };
 	void windowResized(int w, int h) {
-        mf.resizeGUI(gui);
+        gk.resizeGUI(gui);
     }
 	void dragEvent(ofDragInfo dragInfo) {};
 	void gotMessage(ofMessage msg) {};

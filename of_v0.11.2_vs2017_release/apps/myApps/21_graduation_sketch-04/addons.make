@@ -1,3 +1,3 @@
-ofxAssimpModelLoader
 ofxBullet-master
+ofxGKUtils
 ofxGui

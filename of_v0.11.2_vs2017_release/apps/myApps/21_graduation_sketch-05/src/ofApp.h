@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Class_MyFunctions.h"
+#include "ofxGKUtils.h"
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
@@ -9,7 +9,7 @@ class ofApp : public ofBaseApp{
 
 	public:
 		//-----------DEFAULT-----------//
-		Class_MyFunctions mf;		
+		ofxGKUtils gk;		
 		ofEasyCam cam;
 		unsigned long int currentFrame;
 		float time;
@@ -17,6 +17,10 @@ class ofApp : public ofBaseApp{
 
 		//-----------GLOBAL-----------//
 		vector<ofMesh> meshes;
+		vector<ofFbo> fbos;
+
+		int numFbos;
+		glm::vec2 sizeFbo;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
@@ -27,14 +31,22 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		//-----------FOR-LIB-----------//
-
+		void setupFbos();
+		void setupFbo(const int& _index);
+		void runFbos();
+		void runFbo(const int& _index);
+		void drawFbos();
 
 		//-----------THIS-TIME-FUNCS-----------//
 		void resetCamera();
+		void loadMeshes();
 
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
 			switch (key) {
+			case 'f':
+				ofToggleFullscreen();
+				break;
 			case ' ':
 				resetCamera();
 				break;
@@ -47,7 +59,9 @@ class ofApp : public ofBaseApp{
 		void mouseReleased(int x, int y, int button) {}
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
-		void windowResized(int w, int h) {}
+		void windowResized(int w, int h) {
+			gk.resizeGUI(gui);
+		}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}
 		
