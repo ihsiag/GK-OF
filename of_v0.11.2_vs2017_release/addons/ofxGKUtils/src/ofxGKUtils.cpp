@@ -69,9 +69,10 @@ glm::vec2 ofxGKUtils::getPosLayout4x4(const int& _index) {
 }
 
 //-------------------------------------------------------HELPER_GUI-------------------------------------------------------//
-glm::vec3 ofxGKUtils::myGUIPos() {
-	glm::vec3 _pos = glm::vec3(ofGetWidth() * 0.75 + margin, ofGetHeight() * 0.25, 0);
-	return _pos;
+glm::vec3 ofxGKUtils::myGUIPos(const int& _indexPos) {
+	glm::vec2 _pos = getPosLayout4x4(_indexPos);
+	_pos.x += margin;
+	return glm::vec3(_pos, 0);
 }
 
 float ofxGKUtils::myGUIWidth() {
@@ -81,7 +82,7 @@ float ofxGKUtils::myGUIWidth() {
 
 void ofxGKUtils::setGUI(ofxGuiGroup& _gui) {
 	_gui.setup();
-	_gui.setPosition(myGUIPos());
+	_gui.setPosition(myGUIPos(13));
 	_gui.setSize(myGUIWidth(), 0);
 	_gui.setWidthElements(myGUIWidth() * .98);
 
@@ -96,7 +97,7 @@ void ofxGKUtils::setGUI(ofxGuiGroup& _gui) {
 }
 
 void ofxGKUtils::resizeGUI(ofxGuiGroup& _gui) {
-	_gui.setPosition(myGUIPos());
+	_gui.setPosition(myGUIPos(13));
 	_gui.setSize(myGUIWidth(), 0);
 	_gui.setWidthElements(myGUIWidth() * .98);
 }
@@ -104,7 +105,12 @@ void ofxGKUtils::resizeGUI(ofxGuiGroup& _gui) {
 void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorldPlane) {
 
 	glm::vec2 _pos = getPosLayout4x4(_indexPos);
-
+	if (_indexPos < 4) {
+		_pos.x += 60;
+	}
+	else {
+		_pos.x += margin;
+	};
 	ofColor _boarderColor = ofColor(50);
 	ofColor _backgroundColor = ofColor(0);
 	ofRectangle _r = ofRectangle(_pos, _size.x, _size.y);
@@ -162,6 +168,12 @@ void ofxGKUtils::putEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _s
 void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos, const ofTrueTypeFont& _font, const int& _fontSize) {
 	//TrueTypeFont
 	glm::vec2 _pos = getPosLayout4x4(_indexPos);
+	if (_indexPos < 4) {
+		_pos.x += 60;
+	}
+	else {
+		_pos.x += margin;
+	};
 	_pos.y += _fontSize;
 	glColor3f(1, 1, 1);
 	_font.drawString(_ss.str().c_str(), _pos.x, _pos.y);
@@ -172,6 +184,11 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos) {
 	//Width : 8pt , Height : 11pt
 	glColor3f(1, 1, 1);
 	glm::vec2 _pos = getPosLayout4x4(_indexPos);
+	if (_indexPos < 4) {
+		_pos.x += 60;
+	}else{
+		_pos.x += margin;
+	};
 	_pos.y += 11;
 
 	//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));

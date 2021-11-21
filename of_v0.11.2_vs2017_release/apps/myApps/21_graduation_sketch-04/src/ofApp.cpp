@@ -126,10 +126,10 @@ void ofApp::draw() {
     //-----------FRONT-LAYER-----------//
     drawMyGraph();
     gk.drawGrid();
-    gk.drawInfo(ssInstruct, 0, font, fontSize);
-    gk.drawInfo(ssProgramInfo, 1, font, fontSize);
-    gk.drawInfo(ssDebug, 3, font, fontSize);
-    gk.drawInfo(ssGlobalLog, 4, font, fontSize);
+    gk.drawInfo(ssInstruct, 1);
+    gk.drawInfo(ssProgramInfo, 2);
+    gk.drawInfo(ssDebug, 5);
+    gk.drawInfo(ssGlobalLog, 6);
 
     gui.draw();
 }
@@ -312,9 +312,9 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssDebug << "MOUSE PICK POS: " << mousePickPos << endl;
 }
 void ofApp::drawMyGraph() {
-    gk.setGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorldPlane);
+    gk.setGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorldPlane);
     for (int i = 0; i < models.size(); i++) {
-        gk.putEachDataOnGraphGUI(10, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), models[i]->getPosition(), glm::vec3(0, 1, 0));
+        gk.putEachDataOnGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), models[i]->getPosition(), glm::vec3(0, 1, 0));
     }
 }
 

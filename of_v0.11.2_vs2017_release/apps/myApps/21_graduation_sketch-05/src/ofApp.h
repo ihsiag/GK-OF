@@ -4,6 +4,7 @@
 #include "ofxGKUtils.h"
 #include "ofxGui.h"
 #include "ofEasyCam.h"
+#include "Class_SmallScreen.h"
 
 class ofApp : public ofBaseApp{
 
@@ -15,12 +16,12 @@ class ofApp : public ofBaseApp{
 		float time;
 		stringstream ssGlobalLog;
 
+		//-----------LIB-----------//
+		vector<Class_SmallScreen> smallScreens;
+
 		//-----------GLOBAL-----------//
 		vector<ofMesh> meshes;
-		vector<ofFbo> fbos;
-
-		int numFbos;
-		glm::vec2 sizeFbo;
+		int numSmallScreens;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
@@ -31,15 +32,9 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		//-----------FOR-LIB-----------//
-		void setupFbos();
-		void runFbos();
-		void drawFbos();
-		void setupFbo(const int& _index);
-		void runFbo(const int& _index);
-		void drawFbo(const int& _index);
+		void setupSmallScreen(const int& _index);
+		void resizeSmallScreen(const int& _index);
 
-		void resizeFbos();
-		void resizeFbo(const int& _index);
 
 		//-----------THIS-TIME-FUNCS-----------//
 		void resetCamera();
@@ -52,7 +47,7 @@ class ofApp : public ofBaseApp{
 			case 'f':
 				ofToggleFullscreen();
 				break;
-			case ' ':
+			case 'r':
 				resetCamera();
 				break;
 			}
@@ -66,6 +61,9 @@ class ofApp : public ofBaseApp{
 		void mouseExited(int x, int y) {}
 		void windowResized(int w, int h) {
 			gk.resizeGUI(gui);
+			for (int i = 0; i < smallScreens.size(); i++) {
+				resizeSmallScreen(i);
+			}
 		}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}

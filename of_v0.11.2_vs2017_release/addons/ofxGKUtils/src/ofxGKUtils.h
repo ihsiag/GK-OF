@@ -30,7 +30,7 @@ public:
 
 
 //-------------------------------------------------------HELPER_GUI-------------------------------------------------------//
-	glm::vec3 myGUIPos();
+	glm::vec3 myGUIPos(const int& _indexPos);
 	float myGUIWidth();
 	void setGUI(ofxGuiGroup& _gui);
 	void resizeGUI(ofxGuiGroup& _gui);

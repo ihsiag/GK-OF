@@ -4,27 +4,36 @@
 void ofApp::setup(){
     //-----------DEFAULT-----------//
     gk.setup(&ssGlobalLog);
-    //gk.setCam(&cam);
+    gk.setCam(&cam);
     gk.setGUI(gui);
-    //resetCamera();
+    resetCamera();
 
     //-----------LOADING-----------//
     loadMeshes();
-    setupFbos();
+    numSmallScreens = 16;
+    for (int i = 0; i < numSmallScreens; i++) {
+        setupSmallScreen(i);
+    }
 
 }
 
 
 void ofApp::update(){
     gk.defaultUpdate(&cam, &currentFrame, &time);
-    runFbos();
 }
 
 
 void ofApp::draw(){
-    drawFbos();
-
-    //-----------FRONT-LAYER-----------//
+    ofPushMatrix();
+    //ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2);
+    cam.begin();
+    //-----------MAIN-LAYER-----------//
+    for (int i = 0; i < numSmallScreens; i++) {
+        smallScreens[i].display();
+    }
+    cam.end();
+    ofPopMatrix();
+    //-----------INFO-----------//
     stringstream ssInstruct;
     stringstream ssProgramInfo;
     stringstream ssDebug;
@@ -33,83 +42,38 @@ void ofApp::draw(){
 
     //-----------FRONT-LAYER-----------//
     gk.drawGrid();
-    gk.drawInfo(ssInstruct, 0);
-    gk.drawInfo(ssProgramInfo, 1);
-    gk.drawInfo(ssDebug, 3);
-    gk.drawInfo(ssGlobalLog, 4);
+    gk.drawInfo(ssInstruct, 1);
+    gk.drawInfo(ssProgramInfo, 2);
+    gk.drawInfo(ssDebug, 5);
+    gk.drawInfo(ssGlobalLog, 6);
 
     //gui.draw();
 }
 
 
 //-----------FOR-LIB-----------//
-void ofApp::setupFbos() {
-    sizeFbo = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
-    numFbos = 16;
-    for (int i=0; i < numFbos; i++) {
-        setupFbo(i);
+
+void ofApp::setupSmallScreen(const int& _index) {
+    Class_SmallScreen _smallScreen;
+    glm::vec2 _pos = gk.getPosLayout4x4(_index);
+    glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
+    if(_index<meshes.size()){ 
+        _smallScreen.setup(_pos, _size, &meshes[_index],&cam);
     }
-}
-
-void ofApp::resizeFbos() {
-    sizeFbo = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
-    for (int i = 0; i < numFbos; i++) {
-        resizeFbo(i);
+    else {
+        _smallScreen.setup(_pos, _size,&cam);
     }
+    smallScreens.push_back(_smallScreen);
 }
 
-void ofApp::runFbos() {
-    for (int i = 0; i < numFbos; i++) {
-        runFbo(i);
-    }
-}
-
-void ofApp::drawFbos() {
-    for (int i = 0; i < numFbos; i++) {
-        drawFbo(i);
-    }
-}
-
-void ofApp::setupFbo(const int& _index) {
-    ofFbo _fbo;
-    _fbo.allocate(sizeFbo.x, sizeFbo.y);
-    fbos.push_back(_fbo);
-}
-
-
-
-void ofApp::runFbo(const int& _index) {
-    fbos[_index].begin();
-    ofClear(0);
-    ofColor _col = ofColor(ofRandom(255));
-    ofSetColor(_col);
-    ofFill();
-    ofDrawRectangle(0, 0, fbos[_index].getWidth(), fbos[_index].getHeight());
-    
-    cam.begin();
-    gk.draw3DAxis();
-    cam.end();
-    
-    fbos[_index].end();
-}
-
-void ofApp::drawFbo(const int& _index) {
-    fbos[_index].draw(gk.getPosLayout4x4(_index));
-}
-
-
-void ofApp::resizeFbo(const int& _index) {
-    for (int i = 0; i < numFbos; i++) {
-        fbos[_index].clear();
-        if (!fbos[_index].isAllocated()) {
-            fbos[_index].allocate(sizeFbo.x, sizeFbo.y);
-        }
-    }
+void ofApp::resizeSmallScreen(const int& _index) {
+    glm::vec2 _pos = gk.getPosLayout4x4(_index);
+    glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
+    smallScreens[_index].resize(_pos,_size);
 }
 
 //-----------THIS-TIME-FUNCS-----------//
 void ofApp::resetCamera() {
-    cam.setDistance(14);
     cam.enableOrtho();
     cam.setPosition(glm::vec3(0,0,500));
     cam.lookAt(ofVec3f(0,0,0));
@@ -119,13 +83,14 @@ void ofApp::loadMeshes() {
 	string _dirName = "./meshExport/";
 	ofDirectory _dir(_dirName);
 	_dir.allowExt("ply");//only show {}file ex)png,mp3,css
-	//_dir.sort();
+	_dir.sort();
 	_dir.listDir();
 	for (int i = 0; i < _dir.size(); i++) {
 		ofMesh _mesh;
 		_mesh.load(_dir.getPath(i));
 		meshes.push_back(_mesh);
 	}
+    cout << meshes.size() << endl;
 }
 
 void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
