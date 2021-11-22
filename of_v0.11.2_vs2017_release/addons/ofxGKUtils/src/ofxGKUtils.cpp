@@ -195,6 +195,17 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos) {
 	ofDrawBitmapString(_ss.str().c_str(), _pos);
 }
 
+void ofxGKUtils::drawInfo(const stringstream& _ss, const glm::vec2& _xyPos) {
+	//Bitmap
+	//Width : 8pt , Height : 11pt
+	glColor3f(1, 1, 1);
+	glm::vec2 _pos = _xyPos;
+	_pos.y += 11;
+
+	//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));
+	ofDrawBitmapString(_ss.str().c_str(), _pos);
+}
+
 void ofxGKUtils::drawGrid() {
 	const int _size = 10;
 	ofNoFill();
@@ -244,6 +255,25 @@ void ofxGKUtils::draw3DAxis() {
 	const int _size = 1000;
 	const float _alpha = 0.5;
 	glLineWidth(2);
+	glColor4f(1, 0, 0, _alpha);//x = red
+	glBegin(GL_LINES);
+	glVertex3f(-_size / 2, 0, 0);
+	glVertex3f(_size / 2, 0, 0);
+	glEnd();
+	glColor4f(0, 1, 0, _alpha);//y = green
+	glBegin(GL_LINES);
+	glVertex3f(0, -_size / 2, 0);
+	glVertex3f(0, _size / 2, 0);
+	glColor4f(0, 0, 1, _alpha);//z = blue
+	glBegin(GL_LINES);
+	glVertex3f(0, 0, -_size / 2);
+	glVertex3f(0, 0, _size / 2);
+	glEnd();
+}
+
+//default size = 1000;
+void ofxGKUtils::draw3DAxis(const float& _size,const float& _lineWidth, const float& _alpha) {
+	glLineWidth(_lineWidth);
 	glColor4f(1, 0, 0, _alpha);//x = red
 	glBegin(GL_LINES);
 	glVertex3f(-_size / 2, 0, 0);

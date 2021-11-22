@@ -14,7 +14,6 @@ void ofApp::setup(){
     for (int i = 0; i < numSmallScreens; i++) {
         setupSmallScreen(i);
     }
-
 }
 
 
@@ -24,15 +23,15 @@ void ofApp::update(){
 
 
 void ofApp::draw(){
-    ofPushMatrix();
-    //ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2);
     cam.begin();
     //-----------MAIN-LAYER-----------//
+    ofPushMatrix();
+    ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2);
     for (int i = 0; i < numSmallScreens; i++) {
-        smallScreens[i].display();
+        smallScreens[i].run();
     }
-    cam.end();
     ofPopMatrix();
+    cam.end();
     //-----------INFO-----------//
     stringstream ssInstruct;
     stringstream ssProgramInfo;
@@ -58,10 +57,10 @@ void ofApp::setupSmallScreen(const int& _index) {
     glm::vec2 _pos = gk.getPosLayout4x4(_index);
     glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
     if(_index<meshes.size()){ 
-        _smallScreen.setup(_pos, _size, &meshes[_index],&cam);
+        _smallScreen.setup(_pos, _size, &meshes[_index]);
     }
     else {
-        _smallScreen.setup(_pos, _size,&cam);
+        _smallScreen.setup(_pos, _size);
     }
     smallScreens.push_back(_smallScreen);
 }
@@ -69,14 +68,16 @@ void ofApp::setupSmallScreen(const int& _index) {
 void ofApp::resizeSmallScreen(const int& _index) {
     glm::vec2 _pos = gk.getPosLayout4x4(_index);
     glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
-    smallScreens[_index].resize(_pos,_size);
+    smallScreens[_index].onWindowResized(_pos,_size);
 }
 
 //-----------THIS-TIME-FUNCS-----------//
 void ofApp::resetCamera() {
     cam.enableOrtho();
     cam.setPosition(glm::vec3(0,0,500));
-    cam.lookAt(ofVec3f(0,0,0));
+    cam.setVFlip(true);
+    cam.lookAt(ofVec3f(0,0,0),glm::vec3(0,-1,0));
+    cam.disableMouseInput();
 }
 
 void ofApp::loadMeshes() {

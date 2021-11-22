@@ -195,8 +195,8 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Class_SmallScreen.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\Class_SmallScreen.h" />
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\ofxGKUtils.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h" />

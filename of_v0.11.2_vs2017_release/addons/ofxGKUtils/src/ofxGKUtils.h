@@ -41,12 +41,14 @@ public:
 //-------------------------------------------------------HELPER_2D-------------------------------------------------------//
 	void drawInfo(const stringstream& _ss, const int& _indexPos, const ofTrueTypeFont& _font, const int& _fontSize);
 	void drawInfo(const stringstream& _ss, const int& _indexPos);
+	void drawInfo(const stringstream& _ss, const glm::vec2& _xyPos);
 	void drawGrid();
 	void drawCross(const int& _x, const int& _y, const int& _size);
 
 
 //-------------------------------------------------------HELPER_3D-------------------------------------------------------//
 	void draw3DAxis();
+	void draw3DAxis(const float& _size,const float& _lineWidth,const float& _alpha);
 	float* getBoundingBox(ofMesh& _mesh);
 	void drawFoundCenterTo3D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalPlaneToDraw);
 	void drawFoundCenterTo2D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalOfData);
