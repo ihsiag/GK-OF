@@ -21,6 +21,7 @@ class ofApp : public ofBaseApp{
 
 		//-----------GLOBAL-----------//
 		vector<ofMesh> meshes;
+		vector<string> meshNames;
 		int numSmallScreens;
 
 		//-----------SLIDER-----------//
@@ -50,6 +51,8 @@ class ofApp : public ofBaseApp{
 			case 'r':
 				resetCamera();
 				break;
+			case 's':
+				gk.saveImage();
 			}
 		}
 		void keyReleased(int key) {}

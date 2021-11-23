@@ -12,14 +12,16 @@ public:
 	glm::vec2 pos;
 	glm::vec2 size;
 	ofMesh* mesh;
+	string* meshName;
 
 	glm::vec2 mouseOnScreenPlane;
 	glm::vec2 rotationAngle;
 
-	void setup(const glm::vec2& _pos, const glm::vec2& _size, ofMesh* _mesh) {
+	void setup(const glm::vec2& _pos, const glm::vec2& _size, ofMesh* _mesh, string* _meshName) {
 		pos = _pos;
 		size = _size;
 		mesh = _mesh;
+		meshName = _meshName;
 		//gk.setCam(&classCam);
 		//resetCamera();
 	}
@@ -28,6 +30,7 @@ public:
 		pos = _pos;
 		size = _size;
 		mesh = nullptr;
+		meshName = nullptr;
 		//gk.setCam(&classCam);
 		//resetCamera();
 	}
@@ -53,6 +56,7 @@ public:
 		ofPushMatrix();
 		ofTranslate(pos);
 		ofDrawRectangle(0,0, size.x, size.y);
+		ofPushMatrix();
 		ofTranslate(size / 2);
 		glColor3f(1, 0, 0);
 		gk.drawCross(0, 0, 15);				
@@ -62,7 +66,7 @@ public:
 			gk.draw3DAxis(size.y*0.8,2,0.3);
 			glColor3f(0.8,0.8,0.8);
 			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
+			glCullFace(GL_FRONT);
 			glLineWidth(0.5);
 			mesh->drawFaces();
 			glColor4f(0.6, 0.5, 0.5,1);
@@ -70,6 +74,11 @@ public:
 			glPointSize(0.2);
 			glDisable(GL_CULL_FACE);
 		}
+		stringstream _ss;
+		_ss << "fileInfo" << endl;
+		_ss << *meshName << endl;
+		ofPopMatrix();
+		gk.drawInfo(_ss, glm::vec2(size.x/2,size.y-25));
 		ofPopMatrix();
 		
 	}
@@ -95,7 +104,7 @@ public:
 
 	glm::vec2 getRotationAngleFromMouseOnScreenPlane() {
 		float angleX = ofMap(mouseOnScreenPlane.x, 0, size.x, -180, 180);
-		float angleY = ofMap(mouseOnScreenPlane.y, 0, size.y, -180, 180);
+		float angleY = ofMap(mouseOnScreenPlane.y, size.y, 0, -180, 180);
 		return glm::vec2(angleX, angleY);
 	}
 

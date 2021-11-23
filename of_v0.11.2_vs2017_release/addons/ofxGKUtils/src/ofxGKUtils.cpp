@@ -113,7 +113,7 @@ void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const
 	};
 	ofColor _boarderColor = ofColor(50);
 	ofColor _backgroundColor = ofColor(0);
-	ofRectangle _r = ofRectangle(_pos, _size.x, _size.y);
+	ofRectangle _r = ofRectangle(_pos, _size);
 	glm::vec2 graphCenter = glm::vec2(_pos + _size / 2);
 	ofFill();
 	ofSetColor(_backgroundColor);
@@ -146,7 +146,7 @@ void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const
 
 	//mouseToWorld
 	if (_mouseOnGraph.x<_size.x / 2 && _mouseOnGraph.x>-_size.x / 2 && _mouseOnGraph.y<_size.y / 2 && _mouseOnGraph.y>-_size.y / 2) {
-		*_mouseOnWorldPlane = _mouseOnGraph / _size * glm::vec2(_originalSize.x, _originalSize.y);
+		*_mouseOnWorldPlane = _mouseOnGraph / _size * _originalSize;
 	}
 }
 

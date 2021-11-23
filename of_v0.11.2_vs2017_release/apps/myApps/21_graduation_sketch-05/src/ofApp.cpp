@@ -6,6 +6,7 @@ void ofApp::setup(){
     gk.setup(&ssGlobalLog);
     gk.setCam(&cam);
     gk.setGUI(gui);
+    //glEnable(GL_DEPTH_TEST);
     resetCamera();
 
     //-----------LOADING-----------//
@@ -27,9 +28,9 @@ void ofApp::draw(){
     //-----------MAIN-LAYER-----------//
     ofPushMatrix();
     ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2);
-    for (int i = 0; i < numSmallScreens; i++) {
-        smallScreens[i].run();
-    }
+    for (auto& smallScreen : smallScreens) {
+        smallScreen.run();
+    }   
     ofPopMatrix();
     cam.end();
     //-----------INFO-----------//
@@ -57,7 +58,7 @@ void ofApp::setupSmallScreen(const int& _index) {
     glm::vec2 _pos = gk.getPosLayout4x4(_index);
     glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
     if(_index<meshes.size()){ 
-        _smallScreen.setup(_pos, _size, &meshes[_index]);
+        _smallScreen.setup(_pos, _size, &meshes[_index],&meshNames[_index]);
     }
     else {
         _smallScreen.setup(_pos, _size);
@@ -90,6 +91,7 @@ void ofApp::loadMeshes() {
 		ofMesh _mesh;
 		_mesh.load(_dir.getPath(i));
 		meshes.push_back(_mesh);
+        meshNames.push_back(_dir.getPath(i));
 	}
     cout << meshes.size() << endl;
 }
