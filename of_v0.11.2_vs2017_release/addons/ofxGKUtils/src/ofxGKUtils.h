@@ -34,8 +34,9 @@ public:
 	float myGUIWidth();
 	void setGUI(ofxGuiGroup& _gui);
 	void resizeGUI(ofxGuiGroup& _gui);
-	void setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorldPlane);
-	void putEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec3& _data, const glm::vec3& _normalOfData);
+	void setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize);
+	void drawMouseOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorldPlane);
+	void drawEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec3& _data, const glm::vec3& _normalOfData);
 
 
 //-------------------------------------------------------HELPER_2D-------------------------------------------------------//
@@ -49,6 +50,7 @@ public:
 //-------------------------------------------------------HELPER_3D-------------------------------------------------------//
 	void draw3DAxis();
 	void draw3DAxis(const float& _size,const float& _lineWidth,const float& _alpha);
+	void draw3DCADGrid(const float& _sizeUnit, const int& _numUnit, const glm::vec3& _normalPlaneToDraw, const float& _lineWidth, const glm::vec4& _col);
 	float* getBoundingBox(ofMesh& _mesh);
 	void drawFoundCenterTo3D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalPlaneToDraw);
 	void drawFoundCenterTo2D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalOfData);

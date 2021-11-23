@@ -312,9 +312,10 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssDebug << "MOUSE PICK POS: " << mousePickPos << endl;
 }
 void ofApp::drawMyGraph() {
-    gk.setGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorldPlane);
+    gk.setGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z));
+    gk.drawMouseOnGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), &mouseOnWorldPlane);
     for (int i = 0; i < models.size(); i++) {
-        gk.putEachDataOnGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), models[i]->getPosition(), glm::vec3(0, 1, 0));
+        gk.drawEachDataOnGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(groundInfo.x, groundInfo.z), models[i]->getPosition(), glm::vec3(0, 1, 0));
     }
 }
 

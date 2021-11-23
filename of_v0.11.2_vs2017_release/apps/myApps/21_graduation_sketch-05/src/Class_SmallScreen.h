@@ -60,11 +60,12 @@ public:
 		ofTranslate(size / 2);
 		glColor3f(1, 0, 0);
 		gk.drawCross(0, 0, 15);				
-		if (mesh) {
+		if (mesh->hasVertices()) {
 			ofRotateX(rotationAngle.y);
 			ofRotateY(rotationAngle.x);
 			gk.draw3DAxis(size.y*0.8,2,0.3);
 			glColor3f(0.8,0.8,0.8);
+			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
 			glLineWidth(0.5);
@@ -73,6 +74,7 @@ public:
 			mesh->drawWireframe();
 			glPointSize(0.2);
 			glDisable(GL_CULL_FACE);
+			glDisable(GL_DEPTH_TEST);
 		}
 		stringstream _ss;
 		_ss << "fileInfo" << endl;

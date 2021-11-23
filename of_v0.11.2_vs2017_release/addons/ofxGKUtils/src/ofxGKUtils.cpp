@@ -36,8 +36,8 @@ void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame
 	*_currentFrame += 1;
 	*_time = ofGetElapsedTimef();
 
-	_cam->lookAt(_cam->getPosition() + _cam->getLookAtDir(), _cam->getUpAxis());
-
+	//_cam->lookAt(_cam->getPosition() + _cam->getLookAtDir(), _cam->getUpAxis());
+	//_cam->lookAt(_cam->getTarget(), _cam->getUpAxis());
 	ofBackground(10);
 	ofNoFill();
 	//fbo.begin();
@@ -102,7 +102,7 @@ void ofxGKUtils::resizeGUI(ofxGuiGroup& _gui) {
 	_gui.setWidthElements(myGUIWidth() * .98);
 }
 
-void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorldPlane) {
+void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize) {
 
 	glm::vec2 _pos = getPosLayout4x4(_indexPos);
 	if (_indexPos < 4) {
@@ -111,10 +111,9 @@ void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const
 	else {
 		_pos.x += margin;
 	};
-	ofColor _boarderColor = ofColor(50);
-	ofColor _backgroundColor = ofColor(0);
-	ofRectangle _r = ofRectangle(_pos, _size);
-	glm::vec2 graphCenter = glm::vec2(_pos + _size / 2);
+	const ofColor _boarderColor = ofColor(50);
+	const ofColor _backgroundColor = ofColor(0);
+	const ofRectangle _r = ofRectangle(_pos, _pos + _size);
 	ofFill();
 	ofSetColor(_backgroundColor);
 	ofDrawRectangle(_r);
@@ -123,9 +122,9 @@ void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const
 	ofSetColor(_boarderColor);
 	ofDrawRectangle(_r);
 	ofSetLineWidth(1);
+	//axis
 	ofPushMatrix();
 	ofTranslate(_pos + _size / 2); //translate to graphcenter          
-	//axis
 	glLineWidth(1);
 	glColor4f(1, 0, 0, 0.5); //x= red
 	glBegin(GL_LINES);
@@ -137,22 +136,39 @@ void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const
 	glVertex2f(0, -_size.y / 2);
 	glVertex2f(0, _size.y / 2);
 	glEnd();
+	ofPopMatrix();
+}
 
+void ofxGKUtils::drawMouseOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorldPlane) {
+	glm::vec2 _pos = getPosLayout4x4(_indexPos);
+	if (_indexPos < 4) {
+		_pos.x += 60;
+	}
+	else {
+		_pos.x += margin;
+	};	
 	//mouse
 	glm::vec2 _mouseOnGraph = glm::vec2(ofGetMouseX(), ofGetMouseY());
+	glm::vec2 graphCenter = glm::vec2(_pos + _size / 2);
 	_mouseOnGraph = _mouseOnGraph - graphCenter;
+	ofPushMatrix();
+	ofTranslate(_pos + _size / 2);
 	drawFoundCenterTo2D(glm::vec3(_mouseOnGraph, 0), _size, glm::vec3(0, 0, 1));
 	ofPopMatrix();
-
 	//mouseToWorld
 	if (_mouseOnGraph.x<_size.x / 2 && _mouseOnGraph.x>-_size.x / 2 && _mouseOnGraph.y<_size.y / 2 && _mouseOnGraph.y>-_size.y / 2) {
 		*_mouseOnWorldPlane = _mouseOnGraph / _size * _originalSize;
 	}
 }
 
-void ofxGKUtils::putEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec3& _data, const glm::vec3& _normalOfData) {
+void ofxGKUtils::drawEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec3& _data, const glm::vec3& _normalOfData) {
 	glm::vec2 _pos = getPosLayout4x4(_indexPos);
-	_pos.x += margin;
+	if (_indexPos < 4) {
+		_pos.x += 60;
+	}
+	else {
+		_pos.x += margin;
+	};
 	glm::vec3 _mappedCenter;
 	if (_normalOfData.y == 1) _mappedCenter = _data / glm::vec3(_originalSize.x, 1, _originalSize.y) * glm::vec3(_size.x, 1, _size.y);
 	if (_normalOfData.z == 1) _mappedCenter = _data / glm::vec3(_originalSize.x, _originalSize.y, 1) * glm::vec3(_size.x, _size.y, 1);
@@ -288,6 +304,44 @@ void ofxGKUtils::draw3DAxis(const float& _size,const float& _lineWidth, const fl
 	glVertex3f(0, 0, -_size / 2);
 	glVertex3f(0, 0, _size / 2);
 	glEnd();
+}
+
+void ofxGKUtils::draw3DCADGrid(const float& _sizeUnit, const int& _numUnit, const glm::vec3& _normalPlaneToDraw, const float& _lineWidth, const glm::vec4& _col) {
+
+	glLineWidth(_lineWidth);
+	glColor4f(_col.r, _col.g, _col.b, _col.a);
+	if (_normalPlaneToDraw.z == 1) {		
+		//hori
+		for (int i = 0; i < _numUnit+1; i++) {
+			glBegin(GL_LINES);
+			glVertex3f(-_sizeUnit * _numUnit / 2,0, -_sizeUnit * _numUnit / 2 + _sizeUnit * i);
+			glVertex3f(+_sizeUnit * _numUnit / 2,0, -_sizeUnit * _numUnit / 2 + _sizeUnit * i);
+			glEnd();
+		}
+		//vert
+		for (int i = 0; i < _numUnit+1; i++) {
+			glBegin(GL_LINES);
+			glVertex3f(-_sizeUnit * _numUnit / 2 + _sizeUnit * i,0, -_sizeUnit * _numUnit / 2);
+			glVertex3f(-_sizeUnit * _numUnit / 2 + _sizeUnit * i,0, _sizeUnit * _numUnit / 2);
+			glEnd();
+		}
+	}
+	if (_normalPlaneToDraw.y == 1) {
+		//hori
+		for (int i = 0; i < _numUnit+1; i++) {
+			glBegin(GL_LINES);
+			glVertex3f(-_sizeUnit * _numUnit / 2,0, -_sizeUnit * _numUnit / 2 + _sizeUnit * i);
+			glVertex3f(+_sizeUnit * _numUnit / 2,0, -_sizeUnit * _numUnit / 2 + _sizeUnit * i);
+			glEnd();
+		}
+		//vert
+		for (int i = 0; i < _numUnit+1; i++) {
+			glBegin(GL_LINES);
+			glVertex3f(-_sizeUnit * _numUnit / 2 + _sizeUnit * i,0, -_sizeUnit * _numUnit / 2);
+			glVertex3f(-_sizeUnit * _numUnit / 2 + _sizeUnit * i,0, _sizeUnit * _numUnit / 2);
+			glEnd();
+		}
+	}
 }
 
 float* ofxGKUtils::getBoundingBox(ofMesh& _mesh) {

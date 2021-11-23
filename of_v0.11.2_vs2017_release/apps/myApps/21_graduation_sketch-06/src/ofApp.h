@@ -5,20 +5,30 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
+#include "Class_MyFace.h"
+
+
 class ofApp : public ofBaseApp{
 
 	public:
+
 		//-----------DEFAULT-----------//
 		ofxGKUtils gk;		
 		ofEasyCam cam;
 		unsigned long int currentFrame;
 		float time;
 		stringstream ssGlobalLog;
+		glm::vec2 mouseOnWorldPlane;
 
 		//-----------GLOBAL-----------//
-		ofMesh importedMesh;
-		ofMesh checkedMesh;
-		ofNode transformInfo;
+		bool bModified;
+		bool bDebug;
+		bool bHideMainMesh;
+
+
+		ofMesh mainMesh;
+		ofNode modifyInfo;
+		glm::vec3 selectingVertex;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
@@ -30,14 +40,29 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		//-----------FOR-LIB-----------//
+		vector<Class_MyFace> myFaces;
+		vector < glm::vec3 > verticesHolder;
 
+		void checkVerticesHolder();
 
-		//-----------THIS-TIME-FUNCS-----------//
+		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
-		void loadMesh(const string& _dirName,ofMesh* _mesh);
+		void drawCamPosition();
 		void createGUI();
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
-		void resetMeshMatrix(ofMesh* _mesh);
+		void loadLatestMesh(const string& _dirName, ofMesh* _mesh);
+		void drawMainMesh();
+
+		//-----------THIS-TIME-FUNCS-----------//
+		void importMesh();
+		void modifyMesh();
+		ofMesh getModifiedMesh(ofMesh* _mesh);
+		void updateMesh();
+
+		glm::vec3 vertexPicker(const ofMesh& _mesh,stringstream& _ssDebug);
+			//-----------DEBUG-FUNC-----------//
+		void ofApp::debugDot();
+
 
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
@@ -48,20 +73,38 @@ class ofApp : public ofBaseApp{
 			case 'r':
 				resetCamera();
 				break;
-			case 'm':
-				resetMeshMatrix(&importedMesh);
-				gk.saveMesh(importedMesh, 1);
+			case 'u':
+				updateMesh();
 				break;
-			case 't':
-				loadMesh("./meshExport/", &checkedMesh);
-				importedMesh.clear();
+			case 'm' :
+				gk.saveMesh(mainMesh, 1);
+				break;
+			case 'h':
+				bHideMainMesh = !bHideMainMesh;
+				//bDebug = !bDebug;
+				break;
+			case 's' :
+				gk.saveImage();
+				break;
+			case 'l':
+				// バッファをクリアします。
+				ssGlobalLog.str("");
+				// 状態をクリアします。
+				ssGlobalLog.clear(std::stringstream::goodbit);
+				ssGlobalLog << "CLEARED LOG" << endl;
+				break;
 			}
 		}
 		void keyReleased(int key) {}
 		void mouseMoved(int x, int y) {}
 		void mouseDragged(int x, int y, int button) {}
-		void mousePressed(int x, int y, int button) {}
-		void mouseReleased(int x, int y, int button) {}
+		void mousePressed(ofMouseEventArgs& args) {
+			if (args.button == OF_MOUSE_BUTTON_LEFT) {
+				verticesHolder.push_back(selectingVertex);
+			}
+		}
+		void mouseReleased(int x, int y, int button) {
+		}
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
 		void windowResized(int w, int h) {
