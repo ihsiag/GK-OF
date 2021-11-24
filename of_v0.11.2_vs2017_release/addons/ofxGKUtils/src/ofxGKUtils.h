@@ -51,10 +51,12 @@ public:
 	void draw3DAxis();
 	void draw3DAxis(const float& _size,const float& _lineWidth,const float& _alpha);
 	void draw3DCADGrid(const float& _sizeUnit, const int& _numUnit, const glm::vec3& _normalPlaneToDraw, const float& _lineWidth, const glm::vec4& _col);
-	float* getBoundingBox(ofMesh& _mesh);
+	float* getBoundingBox(const ofMesh& _mesh);
+	float* getBoundingBox(const ofMesh& _mesh,const glm::vec3& _planeNormal); //not work need help
 	void drawFoundCenterTo3D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalPlaneToDraw);
 	void drawFoundCenterTo2D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalOfData);
-
+	ofMesh getModifiedMesh(ofMesh* _mesh, const ofNode& _modifyInfo);
+	vector<glm::vec3> getModifiedVertices(vector<glm::vec3>* _vertices, const ofNode& _modifyInfo);
 
 //-------------------------------------------------------HELPER_SAVE-------------------------------------------------------//
 	void saveVideo(const float& _currentFrame);

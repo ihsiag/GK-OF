@@ -11,7 +11,9 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog) {
 	glColor3f(0, 0, 0);
 	glLineWidth(1);
 	glPointSize(1);
-	ofEnableAlphaBlending();
+	//ofEnableAlphaBlending();
+	glEnable(GL_BLEND);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE);
 	ssLog = _ssGlobalLog;
 
 	margin = 8;
@@ -344,7 +346,7 @@ void ofxGKUtils::draw3DCADGrid(const float& _sizeUnit, const int& _numUnit, cons
 	}
 }
 
-float* ofxGKUtils::getBoundingBox(ofMesh& _mesh) {
+float* ofxGKUtils::getBoundingBox(const ofMesh& _mesh) {
 	float
 		min_x, max_x,
 		min_y, max_y,
@@ -359,6 +361,30 @@ float* ofxGKUtils::getBoundingBox(ofMesh& _mesh) {
 		if (_mesh.getVertex(i).y > max_y) max_y = _mesh.getVertex(i).y;
 		if (_mesh.getVertex(i).z < min_z) min_z = _mesh.getVertex(i).z;
 		if (_mesh.getVertex(i).z > max_z) max_z = _mesh.getVertex(i).z;
+	}
+	float result[] = { min_x, max_x, min_y, max_y, min_z, max_z };
+	return result;
+	//glm::vec3 size = glm::vec3(max_x - min_x, max_y - min_y, max_z - min_z);
+	//glm::vec3 center = glm::vec3((min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2);
+}
+
+float* ofxGKUtils::getBoundingBox(const ofMesh& _mesh,const glm::vec3& _planeNormal) {
+	float
+		min_x, max_x,
+		min_y, max_y,
+		min_z, max_z;
+	min_x = max_x = _planeNormal.x - _mesh.getVertex(0).x;
+	min_y = max_y = _planeNormal.y - _mesh.getVertex(0).y;
+	min_z = max_z = _planeNormal.z - _mesh.getVertex(0).z;
+	for (int i = 0; i < _mesh.getNumVertices(); i++) {
+		float _theta = glm::angle(glm::normalize(_planeNormal), glm::vec3(0, 1, 0));
+		glm::vec3 _orientedVertexPos = _mesh.getVertex(i)/cos(_theta);
+		if (_orientedVertexPos.x < min_x) min_x = _orientedVertexPos.x;
+		if (_orientedVertexPos.x > max_x) max_x = _orientedVertexPos.x;
+		if (_orientedVertexPos.y < min_y) min_y = _orientedVertexPos.y;
+		if (_orientedVertexPos.y > max_y) max_y = _orientedVertexPos.y;
+		if (_orientedVertexPos.z < min_z) min_z = _orientedVertexPos.z;
+		if (_orientedVertexPos.z > max_z) max_z = _orientedVertexPos.z;
 	}
 	float result[] = { min_x, max_x, min_y, max_y, min_z, max_z };
 	return result;
@@ -463,6 +489,32 @@ void ofxGKUtils::drawFoundCenterTo2D(const glm::vec3& _pos, glm::vec2 _size, con
 			glEnd();
 		}
 	}
+}
+
+ofMesh ofxGKUtils::getModifiedMesh(ofMesh* _mesh, const ofNode& _modifyInfo) {
+	auto mat = _modifyInfo.getGlobalTransformMatrix();
+	for (auto& v : _mesh->getVertices()) {
+		v = glm::vec3(mat * glm::vec4(v, 1));
+	}
+	auto mat2 = _modifyInfo.getOrientationQuat();
+	for (auto& v : _mesh->getNormals()) {
+		v = glm::vec3(mat2 * glm::vec4(v, 1));
+	}
+	return *_mesh;
+}
+
+vector<glm::vec3> ofxGKUtils::getModifiedVertices(vector<glm::vec3>* _vertices,const ofNode& _modifyInfo) {
+	auto mat = _modifyInfo.getGlobalTransformMatrix();
+	for (auto& v : *_vertices) {
+		v = glm::vec3(mat * glm::vec4(v, 1));
+	}
+	/*
+	auto mat2 = _modifyInfo.getOrientationQuat();
+	for (auto& v : *_normals) {
+		v = glm::vec3(mat2 * glm::vec4(v, 1));
+	}
+	*/
+	return *_vertices;
 }
 
 #pragma mark -save
