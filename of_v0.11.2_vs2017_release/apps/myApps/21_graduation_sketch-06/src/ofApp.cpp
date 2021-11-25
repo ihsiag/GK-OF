@@ -15,7 +15,7 @@ void ofApp::setup(){
     bDebug = false;
     bHideMainMesh = false;
     bHideAddedMesh = true;// false;
-    bHideFlatSrf = true;// false;
+    bHideMyPlane = true;// false;
 
     verticesPosHolder.reserve(3);
 }
@@ -104,11 +104,12 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
     _ssProgramInfo << "CAMERA: " << cam.getPosition() << endl;
     _ssProgramInfo << "CAMERA LOOK DIR: " << cam.getLookAtDir() << endl;
-  
-    _ssDebug << "CURRENT-FACE-NUM: " << myFaces.size() << endl;
+    
+    _ssDebug << "DEBUG-STATE: " << bDebug << endl;
+    _ssDebug << "CURRENT MY-PLANE NUM: " << myPlanes.size() << endl;
     _ssDebug << "HIDE MAIN-MESH: " << bHideMainMesh << endl;
     _ssDebug << "HIDE ADDED-MESH: " << bHideAddedMesh << endl;
-    _ssDebug << "HIDE FLAT-SRF: " << bHideFlatSrf << endl;
+    _ssDebug << "HIDE FLAT-SRF: " << bHideMyPlane << endl;
 }
 
 void ofApp::loadLatestMesh(const string& _dirName, ofMesh* _mesh) {
@@ -184,16 +185,16 @@ glm::vec3 ofApp::getCurrentVertex(const ofMesh& _mesh, stringstream& _ssDebug) {
 
 void ofApp::checkVerticesHolder() {
     if (verticesPosHolder.size() > 2) {
-        addFace();
+        addMyPlane();
     }
 }
 
-void ofApp::addFace() {
-    Class_MyFace _myFace;
+void ofApp::addMyPlane() {
+    Class_MyPlane _myPlane;
     ofMesh _mesh;
     _mesh.addVertices(verticesPosHolder);
-    _myFace.setup(_mesh, myFaces.size(), &ssGlobalLog);
-    myFaces.push_back(_myFace);
+    _myPlane.setup(_mesh, myPlanes.size(), &ssGlobalLog);
+    myPlanes.push_back(_myPlane);
     verticesPosHolder.erase(verticesPosHolder.begin(), verticesPosHolder.end());
 }
 
@@ -202,16 +203,16 @@ void ofApp::draw3DBeforeModified() {
     ofMultMatrix(modifyInfo.getGlobalTransformMatrix());
     if (mainMesh.hasVertices()) {
         drawMainMesh();
-        if (bDebug) debugDot();
     }
+    if (bDebug) debugDot();
     ofPopMatrix();
 }
 
 void ofApp::draw3DAfterModified() {
-    for (auto& myFace : myFaces) {
-        if (!bHideAddedMesh)myFace.drawInputMesh();
-        if (!bHideFlatSrf)myFace.drawFlatSrf();
-        myFace.drawInputMeshVertices();
+    for (auto& myPlane : myPlanes) {
+        if (!bHideAddedMesh)myPlane.drawInputMesh();
+        if (!bHideMyPlane)myPlane.drawMyPlane();
+        myPlane.drawInputMeshVertices();
     }
     if (!bHideMainMesh)drawMainMesh();
 }

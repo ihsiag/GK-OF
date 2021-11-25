@@ -5,7 +5,8 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
-#include "Class_MyFace.h"
+#include "Class_MyPlane.h"
+#include "Class_MyNewFace.h"
 
 
 class ofApp : public ofBaseApp{
@@ -25,7 +26,7 @@ class ofApp : public ofBaseApp{
 		bool bDebug;
 		bool bHideMainMesh;
 		bool bHideAddedMesh;
-		bool bHideFlatSrf;
+		bool bHideMyPlane;
 
 
 		ofMesh mainMesh;
@@ -42,7 +43,7 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		//-----------FOR-LIB-----------//
-		vector<Class_MyFace> myFaces;
+		vector<Class_MyPlane> myPlanes;
 		
 		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
@@ -59,11 +60,18 @@ class ofApp : public ofBaseApp{
 		glm::vec3 getCurrentVertex(const ofMesh& _mesh,stringstream& _ssDebug);
 		vector < glm::vec3 > verticesPosHolder;
 		void checkVerticesHolder();
-		void addFace();
+		void addMyPlane();
 
 		void draw3DBeforeModified();
 		void draw3DAfterModified();
 		void drawMainMesh();
+
+		//loop-begin-îCà”ÇÃñ Ç™ê⁄ÇµÇƒÇ¢ÇÈñ Ç∑Ç◊Çƒ 
+		void findPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive); //return line
+		void findLineIntersection(); //input intersection line & return point
+		//loop-end
+		void makeMyNewFace(const vector<glm::vec3>& _vertices);
+		void addMyNewFace();
 
 		//-----------DEBUG-FUNC-----------//
 		void ofApp::debugDot();
@@ -71,8 +79,8 @@ class ofApp : public ofBaseApp{
 
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
-			//for (auto& myFace : myFaces) {
-			//	myFace.keyPressed(key);// used:key -> none
+			//for (auto& myPlane : myPlanes) {
+			//	myPlane.keyPressed(key);// used:key -> none
 			//}
 			switch (key) {
 			case 'f':
@@ -94,13 +102,13 @@ class ofApp : public ofBaseApp{
 				bHideAddedMesh = !bHideAddedMesh;
 				break;
 			case '3':
-				bHideFlatSrf = !bHideFlatSrf;
+				bHideMyPlane = !bHideMyPlane;
 				break;
 			case 's' :
 				gk.saveImage();
 				break;
 			case 'z':
-				if (myFaces.size())myFaces.pop_back();
+				if (myPlanes.size())myPlanes.pop_back();
 				break;
 			case 'h':
 				bDebug = !bDebug;
