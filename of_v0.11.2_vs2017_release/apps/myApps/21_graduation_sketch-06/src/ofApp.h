@@ -5,8 +5,9 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
-#include "Class_MyPlane.h"
-#include "Class_MyNewFace.h"
+#include "utils/Class_MyPlane.h"
+#include "utils/Class_MyNewFace.h"
+#include "utils/Class_MyLineSimple.h"
 
 
 class ofApp : public ofBaseApp{
@@ -36,7 +37,6 @@ class ofApp : public ofBaseApp{
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
 		ofParameter<glm::vec3> rotationSlider;
-
 		
 		void setup();
 		void update();
@@ -66,14 +66,19 @@ class ofApp : public ofBaseApp{
 		void draw3DAfterModified();
 		void drawMainMesh();
 
+		vector<Class_MyLineSimple> intersectLines;
+		//loop-begin-”CˆÓ‚Ì–Ê‚ªÚ‚µ‚Ä‚¢‚é–Ê‚·‚×‚Ä
+		void findPlaneIntersections();
+		vector<glm::vec3> getPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive); //return line (point&vector)
+		void scalePlaneEdge(Class_MyLineSimple* _edge, const glm::vec3& _scalCenter, const float& _scaleFactor);
+		
 
-		//loop-begin-”CˆÓ‚Ì–Ê‚ªÚ‚µ‚Ä‚¢‚é–Ê‚·‚×‚Ä 
-		void findPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive); //return line
 		void findLineIntersection(); //input intersection line & return point
 		//loop-end
 		void makeMyNewFace(const vector<glm::vec3>& _vertices);
 		void addMyNewFace();
 
+		void drawIntersections();
 		//-----------DEBUG-FUNC-----------//
 		void ofApp::debugDot();
 
@@ -120,6 +125,15 @@ class ofApp : public ofBaseApp{
 				// ó‘Ô‚ğƒNƒŠƒA‚µ‚Ü‚·B
 				ssGlobalLog.clear(std::stringstream::goodbit);
 				ssGlobalLog << "CLEARED LOG" << endl;
+				break;
+			case ' ':
+				findPlaneIntersections();
+				break;
+			case 'c':
+				myPlanes.erase(myPlanes.begin(), myPlanes.end());
+				intersectLines.erase(intersectLines.begin(), intersectLines.end());
+				bModified = !bModified;
+				ssGlobalLog << "CLEARED-ARRAYS" << endl;
 				break;
 			}
 		}

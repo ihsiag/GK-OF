@@ -11,9 +11,9 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog) {
 	glColor3f(0, 0, 0);
 	glLineWidth(1);
 	glPointSize(1);
-	//ofEnableAlphaBlending();
-	glEnable(GL_BLEND);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE);
+	ofEnableAlphaBlending();
+	//glEnable(GL_BLEND);
+	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE);
 	ssLog = _ssGlobalLog;
 
 	margin = 8;

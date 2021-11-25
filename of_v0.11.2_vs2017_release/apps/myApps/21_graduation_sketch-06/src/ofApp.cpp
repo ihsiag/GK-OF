@@ -56,7 +56,7 @@ void ofApp::draw(){
     gk.drawInfo(ssProgramInfo, 2);
     gk.drawInfo(ssDebug, 5);
     gk.drawInfo(ssGlobalLog, 6);
-    gui.draw();
+    if(!bModified)gui.draw();
     drawCamPosition();
 }
 
@@ -212,8 +212,13 @@ void ofApp::draw3DAfterModified() {
     for (auto& myPlane : myPlanes) {
         if (!bHideAddedMesh)myPlane.drawInputMesh();
         if (!bHideMyPlane)myPlane.drawMyPlane();
-        myPlane.drawInputMeshVertices();
+        if (bDebug) {
+            myPlane.drawMyPlaneNormal();
+            myPlane.drawMyPlaneCentroid();
+        }
+        myPlane.drawInputMeshVertices();       
     }
+    if(bDebug)drawIntersections();
     if (!bHideMainMesh)drawMainMesh();
 }
 
@@ -243,10 +248,75 @@ void ofApp::drawMainMesh() {
     glDisable(GL_CULL_FACE);
 }
 
-void ofApp::findPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive) {
+
+
+void ofApp::findPlaneIntersections() {
+    intersectLines.erase(intersectLines.begin(), intersectLines.end());
+    /* -> check this line!! you need to meke kumiawase with saiki func
+    int _pickNum = 2;
+    int _N = myPlanes.size();
+    for (int i = 0; i < _N * (_N - 1) / _pickNum; i++) {
+        if (i + 1 < _N) {
+            combi(myPlanes[i], myPlanes[i + 1]);
+        }
+        else if (i+ 2< _N{
+            combi(myPlanes[i + 1], myPlanes[i + 2]);
+            }
+        else if (i + 3 < _N) {
+            combi(myPlanes[i + 2], myPlanes[i + 3]);
+        }      
+    }
+    */
+    for (auto& _myPlaneActive : myPlanes) {
+        vector<glm::vec3> _intersectPoints = getPlaneIntersection(myPlanes[0], _myPlaneActive);
+        Class_MyLineSimple _intersectLine;
+        if (_intersectPoints.size() == 2) {
+            _intersectLine.setup(_intersectPoints[0], _intersectPoints[1]);
+            intersectLines.push_back(_intersectLine);
+        }
+    }
     
+    ssGlobalLog << "INTERSECT - LINES: [" << intersectLines.size() << "] FOUND" << endl;
+}
+vector<glm::vec3> ofApp::getPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive) {
+    int _lengthMax = 100;
+    vector<glm::vec3>  _intersectPoints;
+    vector<Class_MyLineSimple> _edges =  _myPlaneActive.edges;
+    for (auto& _edge : _edges) { 
+        glm::vec3 _intersectPoint;
+        scalePlaneEdge(&_edge, _myPlaneActive.centroid, _lengthMax);
+        float _innerA = glm::dot(_myPlanePassive.normal, _edge.a - _myPlanePassive.centroid);
+        float _innerB = glm::dot(_myPlanePassive.normal, _edge.b - _myPlanePassive.centroid);
+        if (abs(_innerA) < 0.000001) { _innerA = 0.0; }
+        if (abs(_innerB) < 0.000001) { _innerB = 0.0; }
+        if ((_innerA > 0 && _innerB < 0) || (_innerA < 0 && _innerB > 0)) {
+               // _bIntersect = true;
+            _intersectPoint = (_edge.b - _edge.a) * abs(_innerA) / (abs(_innerA) + abs(_innerB)) + _edge.a;
+            _intersectPoints.push_back(_intersectPoint);
+        }       
+    }
+    return _intersectPoints;
+}
+void ofApp::scalePlaneEdge(Class_MyLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _scaleFactor) {
+    _edge->a = glm::normalize(_edge->a - _scaleCenter) * _scaleFactor + _scaleCenter;
+    _edge->b = glm::normalize(_edge->b - _scaleCenter) * _scaleFactor + _scaleCenter;
 }
 
+void ofApp::drawIntersections() {
+    for (auto& intersectLine : intersectLines) {
+        glLineWidth(3);
+        glColor3f(0.4, 0.4, 0.9);
+        intersectLine.drawLine();
+    }
+    for (auto& myPlane : myPlanes) {
+        for (auto edge : myPlane.edges) {
+            glLineWidth(1);
+            glColor3f(0.9, 0.4, 0.4);
+            scalePlaneEdge(&edge, myPlane.centroid, 100);
+            edge.drawLine();
+        }
+    }
+}
 
 
 
