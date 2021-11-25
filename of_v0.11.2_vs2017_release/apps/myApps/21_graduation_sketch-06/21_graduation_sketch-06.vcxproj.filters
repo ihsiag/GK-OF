@@ -107,6 +107,9 @@
     <ClInclude Include="src\Class_MyPlane.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Class_MyNewFace.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

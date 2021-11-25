@@ -8,18 +8,6 @@ class Class_MyPlane {
 	public:
 		int ID;
 		//equation of plane :ax + by + cz + d = 0;
-		void planeEquation() { 
-			glm::vec3 centroid = originalMesh.getCentroid();
-			float a, b, c, d, x, y, z;
-			a = normal.x;
-			b = normal.y;
-			c = normal.z;
-			x = centroid.x;
-			y = centroid.y;
-			z = centroid.z;
-			d = a*x + b*y + c*z;
-			d * -1;
-		}
 		glm::vec3 normal;
 		vector<glm::vec3> vertices;
 

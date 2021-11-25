@@ -66,6 +66,7 @@ class ofApp : public ofBaseApp{
 		void draw3DAfterModified();
 		void drawMainMesh();
 
+
 		//loop-begin-”CˆÓ‚Ì–Ê‚ªÚ‚µ‚Ä‚¢‚é–Ê‚·‚×‚Ä 
 		void findPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive); //return line
 		void findLineIntersection(); //input intersection line & return point

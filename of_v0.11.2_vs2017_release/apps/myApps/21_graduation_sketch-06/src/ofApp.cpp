@@ -61,7 +61,7 @@ void ofApp::draw(){
 }
 
 //-----------FOR-LIB-----------//
-//addFace();
+//addMyPlane();
 
 //-----------THIS-TIME-UTILS-----------//
 void ofApp::resetCamera() {
@@ -242,6 +242,13 @@ void ofApp::drawMainMesh() {
     glEnd();
     glDisable(GL_CULL_FACE);
 }
+
+void ofApp::findPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive) {
+    
+}
+
+
+
 
 //-----------DEBUG-----------//
 void ofApp::debugDot() {

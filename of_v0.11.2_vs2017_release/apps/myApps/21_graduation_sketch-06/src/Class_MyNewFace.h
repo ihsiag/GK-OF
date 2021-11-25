@@ -7,9 +7,9 @@
 class Class_MyNewFace {
 	public:
 		int ID;
-
 		Class_MyNewFace() {}
 		~Class_MyNewFace() {}
+
 		void setup() {		
 		};
 				
