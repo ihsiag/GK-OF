@@ -6,6 +6,10 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
+#include "geos/GKPoint.h"
+#include "geos/GKPlane.h"
+#include "geos/GKLineSimple.h"
+
 using namespace std;
 
 #endif
@@ -50,13 +54,24 @@ public:
 //-------------------------------------------------------HELPER_3D-------------------------------------------------------//
 	void draw3DAxis();
 	void draw3DAxis(const float& _size,const float& _lineWidth,const float& _alpha);
-	void draw3DCADGrid(const float& _sizeUnit, const int& _numUnit, const glm::vec3& _normalPlaneToDraw, const float& _lineWidth, const glm::vec4& _col);
+	void draw3DPlaneGrid(const float& _sizeUnit, const int& _numUnit, const glm::vec3& _normalPlaneToDraw, const float& _lineWidth, const glm::vec4& _col);
 	float* getBoundingBox(const ofMesh& _mesh);
 	float* getBoundingBox(const ofMesh& _mesh,const glm::vec3& _planeNormal); //not work need help
 	void drawFoundCenterTo3D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalPlaneToDraw);
 	void drawFoundCenterTo2D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalOfData);
-	ofMesh getModifiedMesh(ofMesh* _mesh, const ofNode& _modifyInfo);
-	vector<glm::vec3> getModifiedVertices(vector<glm::vec3>* _vertices, const ofNode& _modifyInfo);
+	ofMesh getModifiedMesh(const ofMesh& _mesh, const ofNode& _modifyInfo);
+	vector<glm::vec3> getModifiedVertices(const vector<glm::vec3>& _vertices, const ofNode& _modifyInfo);
+	vector<glm::vec3> getOnPlaneVertices(const vector<glm::vec3>& _vertices, const ofNode& _modifyInfo); //not work need help
+	glm::vec3 getPolarFromRectangular(glm::vec3& _coord);//->glm::polar(v)
+	glm::vec3 getPolarFromRectangular(GKPoint& _gkPoint); //->glm::polar(v)
+	glm::vec3 getRectangularFromPolar(glm::vec3& _coord);//->glm::euclidean(v)
+	glm::vec3 getRectangularFromPolar(GKPoint& _gkPoint);//->glm::euclidean(v)
+	void sortPolars(vector<glm::vec3>* _coords);
+	void sortPolars(vector<GKPoint>* _gkPoints);
+//-------------------------------------------------------HELPER_CALC-------------------------------------------------------//
+	int factorial(int _n);
+	int totalNumCombination(int _n, int _r);
+	vector<glm::vec2> getIndexList_nC2(int _n);
 
 //-------------------------------------------------------HELPER_SAVE-------------------------------------------------------//
 	void saveVideo(const float& _currentFrame);

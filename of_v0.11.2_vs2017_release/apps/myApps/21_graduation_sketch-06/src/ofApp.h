@@ -5,9 +5,6 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
-#include "utils/Class_MyPlane.h"
-#include "utils/Class_MyNewFace.h"
-#include "utils/Class_MyLineSimple.h"
 
 
 class ofApp : public ofBaseApp{
@@ -27,7 +24,8 @@ class ofApp : public ofBaseApp{
 		bool bDebug;
 		bool bHideMainMesh;
 		bool bHideAddedMesh;
-		bool bHideMyPlane;
+		bool bHideGKPlane;
+		bool bHideGKPlaneScaled;
 
 
 		ofMesh mainMesh;
@@ -43,7 +41,8 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		//-----------FOR-LIB-----------//
-		vector<Class_MyPlane> myPlanes;
+		vector<GKPlane> gkPlanes;
+		vector<GKPlane> gkNewPlanes;
 		
 		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
@@ -60,18 +59,20 @@ class ofApp : public ofBaseApp{
 		glm::vec3 getCurrentVertex(const ofMesh& _mesh,stringstream& _ssDebug);
 		vector < glm::vec3 > verticesPosHolder;
 		void checkVerticesHolder();
-		void addMyPlane();
+		void addGKPlane();
 
 		void draw3DBeforeModified();
 		void draw3DAfterModified();
 		void drawMainMesh();
 
-		vector<Class_MyLineSimple> intersectLines;
+		vector<GKLineSimple> intersectLines;
 		//loop-begin-îCà”ÇÃñ Ç™ê⁄ÇµÇƒÇ¢ÇÈñ Ç∑Ç◊Çƒ
 		void findPlaneIntersections();
-		vector<glm::vec3> getPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive); //return line (point&vector)
-		void scalePlaneEdge(Class_MyLineSimple* _edge, const glm::vec3& _scalCenter, const float& _scaleFactor);
+		vector<glm::vec3> getPlaneIntersection(const GKPlane& _gkPlanePassive, const GKPlane& _gkPlaneActive); //return line (point&vector)
+		void scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scalCenter, const float& _scaleFactor);
 		
+		void splitPlanes();
+		GKPlane splitPlaneWithIntersectLine(const GKPlane& _gkPlane,const GKLineSimple& _gkLine);
 
 		void findLineIntersection(); //input intersection line & return point
 		//loop-end
@@ -85,8 +86,8 @@ class ofApp : public ofBaseApp{
 
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
-			//for (auto& myPlane : myPlanes) {
-			//	myPlane.keyPressed(key);// used:key -> none
+			//for (auto& gkPlane : gkPlanes) {
+			//	gkPlane.keyPressed(key);// used:key -> none
 			//}
 			switch (key) {
 			case 'f':
@@ -108,13 +109,16 @@ class ofApp : public ofBaseApp{
 				bHideAddedMesh = !bHideAddedMesh;
 				break;
 			case '3':
-				bHideMyPlane = !bHideMyPlane;
+				bHideGKPlane = !bHideGKPlane;
 				break;
+			case '4':
+				bHideGKPlaneScaled = !bHideGKPlaneScaled;
 			case 's' :
 				gk.saveImage();
 				break;
 			case 'z':
-				if (myPlanes.size())myPlanes.pop_back();
+				if (gkPlanes.size())gkPlanes.pop_back();
+				if (intersectLines.size())intersectLines.pop_back();
 				break;
 			case 'h':
 				bDebug = !bDebug;
@@ -130,7 +134,7 @@ class ofApp : public ofBaseApp{
 				findPlaneIntersections();
 				break;
 			case 'c':
-				myPlanes.erase(myPlanes.begin(), myPlanes.end());
+				gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());
 				intersectLines.erase(intersectLines.begin(), intersectLines.end());
 				bModified = !bModified;
 				ssGlobalLog << "CLEARED-ARRAYS" << endl;

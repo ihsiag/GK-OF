@@ -15,7 +15,8 @@ void ofApp::setup(){
     bDebug = false;
     bHideMainMesh = false;
     bHideAddedMesh = true;// false;
-    bHideMyPlane = true;// false;
+    bHideGKPlane = true;// false;
+    bHideGKPlaneScaled = false;
 
     verticesPosHolder.reserve(3);
 }
@@ -39,7 +40,7 @@ void ofApp::draw(){
     cam.begin();  
     glEnable(GL_DEPTH_TEST);
     gk.draw3DAxis();
-    gk.draw3DCADGrid(10, 50, glm::vec3(0, 1, 0), 1, glm::vec4(glm::vec3(0.3), 1)); 
+    gk.draw3DPlaneGrid(10, 50, glm::vec3(0, 1, 0), 1, glm::vec4(glm::vec3(0.3), 1)); 
     if (!bModified)draw3DBeforeModified();
     if (bModified)draw3DAfterModified();
     glDisable(GL_DEPTH_TEST);
@@ -61,7 +62,7 @@ void ofApp::draw(){
 }
 
 //-----------FOR-LIB-----------//
-//addMyPlane();
+//addGKPlane();
 
 //-----------THIS-TIME-UTILS-----------//
 void ofApp::resetCamera() {
@@ -106,10 +107,10 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssProgramInfo << "CAMERA LOOK DIR: " << cam.getLookAtDir() << endl;
     
     _ssDebug << "DEBUG-STATE: " << bDebug << endl;
-    _ssDebug << "CURRENT MY-PLANE NUM: " << myPlanes.size() << endl;
+    _ssDebug << "CURRENT MY-PLANE NUM: " << gkPlanes.size() << endl;
     _ssDebug << "HIDE MAIN-MESH: " << bHideMainMesh << endl;
     _ssDebug << "HIDE ADDED-MESH: " << bHideAddedMesh << endl;
-    _ssDebug << "HIDE FLAT-SRF: " << bHideMyPlane << endl;
+    _ssDebug << "HIDE FLAT-SRF: " << bHideGKPlane << endl;
 }
 
 void ofApp::loadLatestMesh(const string& _dirName, ofMesh* _mesh) {
@@ -118,10 +119,10 @@ void ofApp::loadLatestMesh(const string& _dirName, ofMesh* _mesh) {
     _dir.allowExt("ply");//only show {}file ex)png,mp3,css
     _dir.sort();
     _dir.listDir();
-    ssGlobalLog << _dir.size() << endl;
     if (_dir.size() > 0) {
         _mesh->load(_dir.getPath(_dir.size() - 1));
     }
+    ssGlobalLog << "IMPORTED MESH" << endl;
 }
 
 
@@ -167,9 +168,11 @@ glm::vec3 ofApp::getCurrentVertex(const ofMesh& _mesh, stringstream& _ssDebug) {
        }
     }
 
+    /*
     glLineWidth(1);
     glColor3f(0, 1, 0);
     ofDrawLine(nearestVertex2D, mouse);
+    */
 
     ofNoFill();
     ofSetColor(ofColor::yellow);
@@ -185,16 +188,16 @@ glm::vec3 ofApp::getCurrentVertex(const ofMesh& _mesh, stringstream& _ssDebug) {
 
 void ofApp::checkVerticesHolder() {
     if (verticesPosHolder.size() > 2) {
-        addMyPlane();
+        addGKPlane();
     }
 }
 
-void ofApp::addMyPlane() {
-    Class_MyPlane _myPlane;
+void ofApp::addGKPlane() {
+    GKPlane _gkPlane;
     ofMesh _mesh;
     _mesh.addVertices(verticesPosHolder);
-    _myPlane.setup(_mesh, myPlanes.size(), &ssGlobalLog);
-    myPlanes.push_back(_myPlane);
+    _gkPlane.setup(_mesh, 0);
+    gkPlanes.push_back(_gkPlane);
     verticesPosHolder.erase(verticesPosHolder.begin(), verticesPosHolder.end());
 }
 
@@ -209,14 +212,14 @@ void ofApp::draw3DBeforeModified() {
 }
 
 void ofApp::draw3DAfterModified() {
-    for (auto& myPlane : myPlanes) {
-        if (!bHideAddedMesh)myPlane.drawInputMesh();
-        if (!bHideMyPlane)myPlane.drawMyPlane();
+    for (auto& gkPlane : gkPlanes) {
+        if (!bHideAddedMesh)gkPlane.drawInputMesh();
+        if (!bHideGKPlane)gkPlane.drawGKPlane();
         if (bDebug) {
-            myPlane.drawMyPlaneNormal();
-            myPlane.drawMyPlaneCentroid();
+            gkPlane.drawGKPlaneNormal();
+            gkPlane.drawGKPlaneCentroid();
         }
-        myPlane.drawInputMeshVertices();       
+        gkPlane.drawInputMeshVertices();       
     }
     if(bDebug)drawIntersections();
     if (!bHideMainMesh)drawMainMesh();
@@ -252,41 +255,30 @@ void ofApp::drawMainMesh() {
 
 void ofApp::findPlaneIntersections() {
     intersectLines.erase(intersectLines.begin(), intersectLines.end());
-    /* -> check this line!! you need to meke kumiawase with saiki func
-    int _pickNum = 2;
-    int _N = myPlanes.size();
-    for (int i = 0; i < _N * (_N - 1) / _pickNum; i++) {
-        if (i + 1 < _N) {
-            combi(myPlanes[i], myPlanes[i + 1]);
-        }
-        else if (i+ 2< _N{
-            combi(myPlanes[i + 1], myPlanes[i + 2]);
-            }
-        else if (i + 3 < _N) {
-            combi(myPlanes[i + 2], myPlanes[i + 3]);
-        }      
-    }
-    */
-    for (auto& _myPlaneActive : myPlanes) {
-        vector<glm::vec3> _intersectPoints = getPlaneIntersection(myPlanes[0], _myPlaneActive);
-        Class_MyLineSimple _intersectLine;
+    //-> check this line!! you need to meke kumiawase with saiki func
+    vector<glm::vec2> _indexSetList = gk.getIndexList_nC2(gkPlanes.size());
+    ssGlobalLog << "COMBINATION SET NUM: [" << _indexSetList.size() <<"] FOUND" << endl;
+    ssGlobalLog << "COMBINATION SET NUM IDEAL: [" << gk.totalNumCombination(gkPlanes.size(),2) << "] FOUND" << endl;
+    for (auto& indexSet : _indexSetList) {
+        ssGlobalLog << "SHOW : " << indexSet << endl;
+        GKPlane& _gkPlanePassive = gkPlanes[indexSet.x];
+        GKPlane& _gkPlaneActive = gkPlanes[indexSet.y];
+        vector<glm::vec3> _intersectPoints = getPlaneIntersection(_gkPlanePassive, _gkPlaneActive);
         if (_intersectPoints.size() == 2) {
-            _intersectLine.setup(_intersectPoints[0], _intersectPoints[1]);
-            intersectLines.push_back(_intersectLine);
+            intersectLines.push_back(GKLineSimple(_intersectPoints[0], _intersectPoints[1]));
         }
     }
-    
-    ssGlobalLog << "INTERSECT - LINES: [" << intersectLines.size() << "] FOUND" << endl;
+    ssGlobalLog << "INTERSECT LINES: [" << intersectLines.size() << "] FOUND" << endl;
 }
-vector<glm::vec3> ofApp::getPlaneIntersection(const Class_MyPlane& _myPlanePassive, const Class_MyPlane& _myPlaneActive) {
+vector<glm::vec3> ofApp::getPlaneIntersection(const GKPlane& _gkPlanePassive, const GKPlane& _gkPlaneActive) {
     int _lengthMax = 100;
     vector<glm::vec3>  _intersectPoints;
-    vector<Class_MyLineSimple> _edges =  _myPlaneActive.edges;
+    vector<GKLineSimple> _edges =  _gkPlaneActive.edges;
     for (auto& _edge : _edges) { 
         glm::vec3 _intersectPoint;
-        scalePlaneEdge(&_edge, _myPlaneActive.centroid, _lengthMax);
-        float _innerA = glm::dot(_myPlanePassive.normal, _edge.a - _myPlanePassive.centroid);
-        float _innerB = glm::dot(_myPlanePassive.normal, _edge.b - _myPlanePassive.centroid);
+        //scalePlaneEdge(&_edge, _gkPlaneActive.centroid, _lengthMax);
+        float _innerA = glm::dot(_gkPlanePassive.normal, _edge.a - _gkPlanePassive.centroid);
+        float _innerB = glm::dot(_gkPlanePassive.normal, _edge.b - _gkPlanePassive.centroid);
         if (abs(_innerA) < 0.000001) { _innerA = 0.0; }
         if (abs(_innerB) < 0.000001) { _innerB = 0.0; }
         if ((_innerA > 0 && _innerB < 0) || (_innerA < 0 && _innerB > 0)) {
@@ -297,9 +289,46 @@ vector<glm::vec3> ofApp::getPlaneIntersection(const Class_MyPlane& _myPlanePassi
     }
     return _intersectPoints;
 }
-void ofApp::scalePlaneEdge(Class_MyLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _scaleFactor) {
+void ofApp::scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _scaleFactor) {
     _edge->a = glm::normalize(_edge->a - _scaleCenter) * _scaleFactor + _scaleCenter;
     _edge->b = glm::normalize(_edge->b - _scaleCenter) * _scaleFactor + _scaleCenter;
+}
+
+void ofApp::splitPlanes() {   
+    /*
+    for ( auto& thePlane: _PlanesWithLines){
+        for (auto& gkLine : _gkLinesOnthePlane) {
+            newPlanes.push_back(splitPlanes(thePlane, gkLine));
+        }
+    }
+    */
+}
+GKPlane ofApp::splitPlaneWithIntersectLine(const GKPlane& _gkPlane, const GKLineSimple& _gkLine) {
+    vector<GKPoint> _gkPointsPolar;
+    for (auto vertex : _gkPlane.vertices) {
+        //here you need to getOnPlaneVertices()
+        _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(vertex),0));
+    }
+    glm::vec3 _tmp = _gkLine.a;
+    _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(_tmp), 1));
+    _tmp = _gkLine.b;
+    _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(_tmp), 1));
+    gk.sortPolars(&_gkPointsPolar);
+    
+    vector<glm::vec3> _verticesForA, _verticesForB;
+    bool bFaceBBegin = false;
+    for (auto& gkPoint : _gkPointsPolar) {
+        if (bFaceBBegin == false && gkPoint.state == 1)bFaceBBegin = true;
+        if (bFaceBBegin == true && gkPoint.state == 1)bFaceBBegin = false;
+        if (bFaceBBegin)_verticesForB.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+        else _verticesForA.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+    }
+    GKPlane _splittedFaceA, _splittedFaceB;
+    
+    _splittedFaceA.setup(_verticesForA, 1);
+    _splittedFaceB.setup(_verticesForB, 1);
+    if (_splittedFaceA.hasInside(_gkPlane.centroid))return _splittedFaceA;
+    else return _splittedFaceB;  
 }
 
 void ofApp::drawIntersections() {
@@ -308,12 +337,14 @@ void ofApp::drawIntersections() {
         glColor3f(0.4, 0.4, 0.9);
         intersectLine.drawLine();
     }
-    for (auto& myPlane : myPlanes) {
-        for (auto edge : myPlane.edges) {
-            glLineWidth(1);
-            glColor3f(0.9, 0.4, 0.4);
-            scalePlaneEdge(&edge, myPlane.centroid, 100);
-            edge.drawLine();
+    if (!bHideGKPlaneScaled) {
+        for (auto& gkPlane : gkPlanes) {
+            for (auto edge : gkPlane.edges) {
+                glLineWidth(1);
+                glColor3f(0.9, 0.4, 0.4);
+                scalePlaneEdge(&edge, gkPlane.centroid, 100);
+                edge.drawLine();
+            }
         }
     }
 }
