@@ -60,9 +60,6 @@
     <Filter Include="addons\ofxGKUtils\src">
       <UniqueIdentifier>{2D05EAB6-6705-1220-C579-3E7E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxGKUtils\src\geos">
-      <UniqueIdentifier>{8806BF91-49A4-68FC-D028-F34D}</UniqueIdentifier>
-    </Filter>
     <Filter Include="addons\ofxGui">
       <UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
     </Filter>
@@ -77,14 +74,14 @@
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\geos\GKLineSimple.h">
-      <Filter>addons\ofxGKUtils\src\geos</Filter>
+    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKLineSimple.h">
+      <Filter>addons\ofxGKUtils\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\geos\GKPlane.h">
-      <Filter>addons\ofxGKUtils\src\geos</Filter>
+    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPlane.h">
+      <Filter>addons\ofxGKUtils\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\geos\GKPoint.h">
-      <Filter>addons\ofxGKUtils\src\geos</Filter>
+    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPoint.h">
+      <Filter>addons\ofxGKUtils\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\ofxGKUtils.h">
       <Filter>addons\ofxGKUtils\src</Filter>
@@ -124,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
       <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Class_ForSplit.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

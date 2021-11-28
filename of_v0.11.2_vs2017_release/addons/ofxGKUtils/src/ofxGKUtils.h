@@ -6,9 +6,11 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
-#include "geos/GKPoint.h"
-#include "geos/GKPlane.h"
-#include "geos/GKLineSimple.h"
+
+#include "GKPoint.h"
+#include "GKPlane.h"
+#include "GKLineSimple.h"
+
 
 using namespace std;
 
@@ -62,10 +64,10 @@ public:
 	ofMesh getModifiedMesh(const ofMesh& _mesh, const ofNode& _modifyInfo);
 	vector<glm::vec3> getModifiedVertices(const vector<glm::vec3>& _vertices, const ofNode& _modifyInfo);
 	vector<glm::vec3> getOnPlaneVertices(const vector<glm::vec3>& _vertices, const ofNode& _modifyInfo); //not work need help
-	glm::vec3 getPolarFromRectangular(glm::vec3& _coord);//->glm::polar(v)
-	glm::vec3 getPolarFromRectangular(GKPoint& _gkPoint); //->glm::polar(v)
-	glm::vec3 getRectangularFromPolar(glm::vec3& _coord);//->glm::euclidean(v)
-	glm::vec3 getRectangularFromPolar(GKPoint& _gkPoint);//->glm::euclidean(v)
+	glm::vec3 getPolarFromRectangular(const glm::vec3& _coord);//->glm::polar(v)
+	glm::vec3 getPolarFromRectangular(const GKPoint& _gkPoint); //->glm::polar(v)
+	glm::vec3 getRectangularFromPolar(const glm::vec3& _coord);//->glm::euclidean(v)
+	glm::vec3 getRectangularFromPolar(const GKPoint& _gkPoint);//->glm::euclidean(v)
 	void sortPolars(vector<glm::vec3>* _coords);
 	void sortPolars(vector<GKPoint>* _gkPoints);
 //-------------------------------------------------------HELPER_CALC-------------------------------------------------------//

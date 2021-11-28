@@ -113,6 +113,9 @@ void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const
 	else {
 		_pos.x += margin;
 	};
+	if (_indexPos % 4 == 0){
+		_pos.y += 60;
+	}
 	const ofColor _boarderColor = ofColor(50);
 	const ofColor _backgroundColor = ofColor(0);
 	const ofRectangle _r = ofRectangle(_pos, _pos + _size);
@@ -148,7 +151,10 @@ void ofxGKUtils::drawMouseOnGraphGUI(const int& _indexPos, const glm::vec2& _siz
 	}
 	else {
 		_pos.x += margin;
-	};	
+	};
+	if (_indexPos % 4 == 0) {
+		_pos.y += 60;
+	}
 	//mouse
 	glm::vec2 _mouseOnGraph = glm::vec2(ofGetMouseX(), ofGetMouseY());
 	glm::vec2 graphCenter = glm::vec2(_pos + _size / 2);
@@ -171,6 +177,9 @@ void ofxGKUtils::drawEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _
 	else {
 		_pos.x += margin;
 	};
+	if (_indexPos % 4 == 0) {
+		_pos.y += 60;
+	}
 	glm::vec3 _mappedCenter;
 	if (_normalOfData.y == 1) _mappedCenter = _data / glm::vec3(_originalSize.x, 1, _originalSize.y) * glm::vec3(_size.x, 1, _size.y);
 	if (_normalOfData.z == 1) _mappedCenter = _data / glm::vec3(_originalSize.x, _originalSize.y, 1) * glm::vec3(_size.x, _size.y, 1);
@@ -192,6 +201,9 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos, const o
 	else {
 		_pos.x += margin;
 	};
+	if (_indexPos % 4 == 0) {
+		_pos.y += 60;
+	}
 	_pos.y += _fontSize;
 	glColor3f(1, 1, 1);
 	_font.drawString(_ss.str().c_str(), _pos.x, _pos.y);
@@ -206,6 +218,9 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos) {
 	}else{
 		_pos.x += margin;
 	};
+	if (_indexPos % 4 == 0) {
+		_pos.y += 60;
+	}
 	_pos.y += 11;
 
 	//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));
@@ -518,8 +533,8 @@ vector<glm::vec3> ofxGKUtils::getModifiedVertices(const vector<glm::vec3>& _inpu
 
 vector<glm::vec3> ofxGKUtils::getOnPlaneVertices(const vector<glm::vec3>& _inputVertices, const ofNode& _modifyInfo) {
 	vector<glm::vec3> _vertices = _inputVertices;
-	auto mat = _modifyInfo.getGlobalTransformMatrix();
-	mat = 1 / mat;
+	auto mat = glm::inverse(_modifyInfo.getGlobalTransformMatrix());
+	mat = - mat;
 	for (auto& v : _vertices) {
 		v = glm::vec3(mat * glm::vec4(v, 1));
 	}
@@ -532,60 +547,47 @@ vector<glm::vec3> ofxGKUtils::getOnPlaneVertices(const vector<glm::vec3>& _input
 	return _vertices;
 }
 
-glm::vec3 ofxGKUtils::getPolarFromRectangular(glm::vec3& _coord) {
-	//(d,lat,lng) lat<90,lng <180
-	float _distance = glm::length(_coord);
-	glm::vec3 _tmp = _coord;
-	_tmp.z = 0;
-	float _lat = glm::angle(_coord, _tmp);
-	if (_coord.z < 0)_lat *= -1;
-	float _lng = glm::angle(_tmp, glm::vec3(1, 0, 0));
-	if (_coord.y < 0)_lng *= -1;
-	return glm::vec3(_distance,_lat,_lng);//radians
+glm::vec3 ofxGKUtils::getPolarFromRectangular(const glm::vec3& _coord) {
+	//(r,theta,phi) theta <90,phi <180
+	float _r = glm::length(_coord);
+	float _theta = 1 / cos(_coord.z / _r);
+	float _phi = 1 / tan(_coord.y / _coord.x);
+	return glm::vec3(_r, _theta, _phi);
 }
 
-glm::vec3 ofxGKUtils::getPolarFromRectangular(GKPoint& _gkPoint) {
-	//(d,lat,lng) lat<90,lng <180
-	
-	glm::vec3& _coord = _gkPoint.pos;
-	float _distance = glm::length(_coord);
-	glm::vec3 _tmp = _coord;
-	_tmp.z = 0;
-	float _lat = glm::angle(_coord, _tmp);
-	if (_coord.z < 0)_lat *= -1;
-	float _lng = glm::angle(_tmp, glm::vec3(1, 0, 0));
-	if (_coord.y < 0)_lng *= -1;
-	return glm::vec3(_distance, _lat, _lng);//radians
+glm::vec3 ofxGKUtils::getPolarFromRectangular(const GKPoint& _gkPoint) {
+	//(r,theta,phi) theta <90,phi <180
+	float _r = glm::length(_gkPoint.pos);
+	float _theta = 1 / cos(_gkPoint.pos.z / _r);
+	float _phi = 1 / tan(_gkPoint.pos.y / _gkPoint.pos.x);
+	return glm::vec3(_r, _theta, _phi);
 }
 
-glm::vec3 ofxGKUtils::getRectangularFromPolar(glm::vec3& _coord) {
-	float _distance = _coord.x;
-	float _lat = _coord.y;
-	float _lng = _coord.z;
-	glm::vec3 _vecX = glm::vec3(1, 0, 0);
-	glm::rotateX(_vecX, _lat);
-	glm::rotateZ(_vecX, _lng);
-	_vecX *= _distance;
-	return _vecX;
+glm::vec3 ofxGKUtils::getRectangularFromPolar(const glm::vec3& _coord) {
+	//x=r*sin(theta)*cos(phi)
+	//y=r*sin(theta)*sin(phi)
+	//z=r*cos(thata)
+	float _x = _coord.x * sin(_coord.y) * cos(_coord.z);
+	float _y = _coord.x * sin(_coord.y) * sin(_coord.z);
+	float _z = _coord.x * cos(_coord.y);
+	return glm::vec3(_x, _y, _z);
 }
 
-glm::vec3 ofxGKUtils::getRectangularFromPolar(GKPoint& _gkPoint) {
-	glm::vec3& _coord = _gkPoint.pos;
-	float _distance = _coord.x;
-	float _lat = _coord.y;
-	float _lng = _coord.z;
-	glm::vec3 _vecX = glm::vec3(1, 0, 0);
-	glm::rotateX(_vecX, _lat);
-	glm::rotateZ(_vecX, _lng);
-	_vecX *= _distance;
-	return _vecX;
+glm::vec3 ofxGKUtils::getRectangularFromPolar(const GKPoint& _gkPoint) {
+	//x=r*sin(theta)*cos(phi)
+	//y=r*sin(theta)*sin(phi)
+	//z=r*cos(thata)
+	float _x = _gkPoint.pos.x * sin(_gkPoint.pos.y) * cos(_gkPoint.pos.z);
+	float _y = _gkPoint.pos.x * sin(_gkPoint.pos.y) * sin(_gkPoint.pos.z);
+	float _z = _gkPoint.pos.x * cos(_gkPoint.pos.y);
+	return glm::vec3(_x, _y, _z);
 }
 
 void ofxGKUtils::sortPolars(vector<glm::vec3>* _coords) {
 	for (int i = 0; i < _coords->size(); i++) {
 		for (int j = 0; j < _coords->size(); j++) {
 			if (_coords->at(i).z < _coords->at(j).z) {
-				swap(_coords[i], _coords[j]);
+				swap(_coords->at(i), _coords->at(j));
 			}
 		}
 	}
@@ -594,8 +596,8 @@ void ofxGKUtils::sortPolars(vector<glm::vec3>* _coords) {
 void ofxGKUtils::sortPolars(vector<GKPoint>* _gkPoints) {
 	for (int i = 0; i < _gkPoints->size(); i++) {
 		for (int j = 0; j < _gkPoints->size(); j++) {
-			if (_gkPoints->at(i).z < _gkPoints->at(j).z) {
-				swap(_gkPoints[i], _gkPoints[j]);
+			if (_gkPoints->at(i).pos.z < _gkPoints->at(j).pos.z) {
+				swap(_gkPoints->at(i), _gkPoints->at(j));
 			}
 		}
 	}

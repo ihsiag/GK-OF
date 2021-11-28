@@ -10,6 +10,8 @@
 class ofApp : public ofBaseApp{
 
 	public:
+		vector<glm::vec3> special;
+		vector<glm::vec3> specialTwo;
 
 		//-----------DEFAULT-----------//
 		ofxGKUtils gk;		
@@ -26,6 +28,7 @@ class ofApp : public ofBaseApp{
 		bool bHideAddedMesh;
 		bool bHideGKPlane;
 		bool bHideGKPlaneScaled;
+		bool bHideGKPlaneNew;
 
 
 		ofMesh mainMesh;
@@ -42,7 +45,7 @@ class ofApp : public ofBaseApp{
 
 		//-----------FOR-LIB-----------//
 		vector<GKPlane> gkPlanes;
-		vector<GKPlane> gkNewPlanes;
+		vector<GKPlane> gkPlanesNew;
 		
 		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
@@ -68,7 +71,8 @@ class ofApp : public ofBaseApp{
 		vector<GKLineSimple> intersectLines;
 		//loop-begin-任意の面が接している面すべて
 		void findPlaneIntersections();
-		vector<glm::vec3> getPlaneIntersection(const GKPlane& _gkPlanePassive, const GKPlane& _gkPlaneActive); //return line (point&vector)
+		void findPlaneIntersectionsBeta();
+		vector<glm::vec3> getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane); //return line (point&vector)
 		void scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scalCenter, const float& _scaleFactor);
 		
 		void splitPlanes();
@@ -113,6 +117,7 @@ class ofApp : public ofBaseApp{
 				break;
 			case '4':
 				bHideGKPlaneScaled = !bHideGKPlaneScaled;
+				break;
 			case 's' :
 				gk.saveImage();
 				break;
@@ -124,14 +129,14 @@ class ofApp : public ofBaseApp{
 				bDebug = !bDebug;
 				break;
 			case 'l':
-				// バッファをクリアします。
 				ssGlobalLog.str("");
-				// 状態をクリアします。
 				ssGlobalLog.clear(std::stringstream::goodbit);
 				ssGlobalLog << "CLEARED LOG" << endl;
 				break;
 			case ' ':
-				findPlaneIntersections();
+				//findPlaneIntersections();
+				findPlaneIntersectionsBeta();
+
 				break;
 			case 'c':
 				gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());

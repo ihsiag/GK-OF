@@ -16,6 +16,7 @@ void ofApp::setup(){
     bHideMainMesh = false;
     bHideAddedMesh = true;// false;
     bHideGKPlane = true;// false;
+    bHideGKPlaneNew = false;
     bHideGKPlaneScaled = false;
 
     verticesPosHolder.reserve(3);
@@ -53,10 +54,10 @@ void ofApp::draw(){
 
     //-----------FRONT-LAYER-----------//
     gk.drawGrid();
-    gk.drawInfo(ssInstruct, 1);
-    gk.drawInfo(ssProgramInfo, 2);
-    gk.drawInfo(ssDebug, 5);
-    gk.drawInfo(ssGlobalLog, 6);
+    gk.drawInfo(ssInstruct, 0);
+    gk.drawInfo(ssProgramInfo, 1);
+    gk.drawInfo(ssDebug, 4);
+    gk.drawInfo(ssGlobalLog, 5);
     if(!bModified)gui.draw();
     drawCamPosition();
 }
@@ -74,8 +75,8 @@ void ofApp::resetCamera() {
 }
 
 void ofApp::drawCamPosition() {
-    gk.setGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(10 * 50));
-    gk.drawEachDataOnGraphGUI(14, glm::vec2(ofGetHeight() * 0.25), glm::vec2(10 * 50 *2),cam.getPosition(),glm::vec3(0,1,0));
+    gk.setGraphGUI(12, glm::vec2(ofGetHeight() * 0.25- 60), glm::vec2(10 * 50));
+    gk.drawEachDataOnGraphGUI(12, glm::vec2(ofGetHeight() * 0.25-60), glm::vec2(10 * 50 *2),cam.getPosition(),glm::vec3(0,1,0));
 }
 
 void ofApp::createGUI() {
@@ -138,7 +139,7 @@ void ofApp::modifyMesh() {
 }
 
 void ofApp::updateMesh() {
-    mainMesh = gk.getModifiedMesh(&mainMesh,modifyInfo);
+    mainMesh = gk.getModifiedMesh(mainMesh,modifyInfo);
     //gk.saveMesh(getModifiedMesh(&mainMesh), 1);
     //mainMesh.clear();
     //loadLatestMesh("./meshExport/", &mainMesh);
@@ -199,6 +200,7 @@ void ofApp::addGKPlane() {
     _gkPlane.setup(_mesh, 0);
     gkPlanes.push_back(_gkPlane);
     verticesPosHolder.erase(verticesPosHolder.begin(), verticesPosHolder.end());
+    ssGlobalLog << "ADDED GKPLANE" << endl;
 }
 
 void ofApp::draw3DBeforeModified() {
@@ -221,6 +223,7 @@ void ofApp::draw3DAfterModified() {
         }
         gkPlane.drawInputMeshVertices();       
     }
+    if (bHideGKPlaneNew)for (auto& gkPlaneNew : gkPlanesNew) { gkPlaneNew.drawGKPlane(); }
     if(bDebug)drawIntersections();
     if (!bHideMainMesh)drawMainMesh();
 }
@@ -270,15 +273,35 @@ void ofApp::findPlaneIntersections() {
     }
     ssGlobalLog << "INTERSECT LINES: [" << intersectLines.size() << "] FOUND" << endl;
 }
-vector<glm::vec3> ofApp::getPlaneIntersection(const GKPlane& _gkPlanePassive, const GKPlane& _gkPlaneActive) {
+void ofApp::findPlaneIntersectionsBeta() {
+    intersectLines.erase(intersectLines.begin(), intersectLines.end());
+    
+    for (int i = 0; i < gkPlanes.size(); i++) {
+        for (int j = 0; j < gkPlanes.size(); j++) {
+            if (i != j) {
+                GKPlane _gkPlane = gkPlanes[i];
+                GKPlane _gkPlaneCutter = gkPlanes[j];
+                vector<glm::vec3> _intersectPoints = getPlaneIntersection(_gkPlaneCutter, _gkPlane);
+                if (_intersectPoints.size() == 2) {            
+                    GKLineSimple _intersectLine = GKLineSimple(_intersectPoints[0], _intersectPoints[1]);
+                    intersectLines.push_back(_intersectLine);
+                    GKPlane _gkPlaneNew = splitPlaneWithIntersectLine(_gkPlane, _intersectLine);
+                    //gkPlanesNew.push_back(_gkPlaneNew);
+                }
+            }          
+        }
+    }
+    ssGlobalLog << "INTERSECT LINES: [" << intersectLines.size() << "] FOUND" << endl;
+}
+vector<glm::vec3> ofApp::getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane) {
     int _lengthMax = 100;
     vector<glm::vec3>  _intersectPoints;
-    vector<GKLineSimple> _edges =  _gkPlaneActive.edges;
+    vector<GKLineSimple> _edges =  _gkPlane.edges;
     for (auto& _edge : _edges) { 
         glm::vec3 _intersectPoint;
         //scalePlaneEdge(&_edge, _gkPlaneActive.centroid, _lengthMax);
-        float _innerA = glm::dot(_gkPlanePassive.normal, _edge.a - _gkPlanePassive.centroid);
-        float _innerB = glm::dot(_gkPlanePassive.normal, _edge.b - _gkPlanePassive.centroid);
+        float _innerA = glm::dot(_gkPlaneCutter.normal, _edge.a - _gkPlaneCutter.centroid);
+        float _innerB = glm::dot(_gkPlaneCutter.normal, _edge.b - _gkPlaneCutter.centroid);
         if (abs(_innerA) < 0.000001) { _innerA = 0.0; }
         if (abs(_innerB) < 0.000001) { _innerB = 0.0; }
         if ((_innerA > 0 && _innerB < 0) || (_innerA < 0 && _innerB > 0)) {
@@ -305,30 +328,66 @@ void ofApp::splitPlanes() {
 }
 GKPlane ofApp::splitPlaneWithIntersectLine(const GKPlane& _gkPlane, const GKLineSimple& _gkLine) {
     vector<GKPoint> _gkPointsPolar;
-    for (auto vertex : _gkPlane.vertices) {
-        //here you need to getOnPlaneVertices()
+    for (auto& v : _gkPlane.vertices) {
+        cout << "originalVertices: " << v << endl;
+    }
+    vector<glm::vec3> _vertices = gk.getOnPlaneVertices(_gkPlane.vertices, _gkPlane.modifyInfo);
+    for (auto& v : _vertices) {
+        v.z = 0;
+        cout << "modifiedVertices: " << v << endl;
+    }
+    for (auto &vertex : _vertices) {       
         _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(vertex),0));
     }
-    glm::vec3 _tmp = _gkLine.a;
-    _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(_tmp), 1));
-    _tmp = _gkLine.b;
-    _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(_tmp), 1));
+    vector<glm::vec3> _gkLineVertices;
+    _gkLineVertices.push_back(_gkLine.a);
+    _gkLineVertices.push_back(_gkLine.b);
+    _gkLineVertices = gk.getOnPlaneVertices(_gkLineVertices, _gkPlane.modifyInfo);
+    _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(_gkLineVertices[0]), 1));
+    _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(_gkLineVertices[1]), 1));
+    for (auto& v : _gkPointsPolar) {
+        cout << "beforeSort-PointsPolar: " << v.pos << endl;
+    }
     gk.sortPolars(&_gkPointsPolar);
-    
+    for (auto& v : _gkPointsPolar) {
+        cout << "afterSort-PointsPolar: " << v.pos << endl;
+        
+    }
+      
     vector<glm::vec3> _verticesForA, _verticesForB;
     bool bFaceBBegin = false;
     for (auto& gkPoint : _gkPointsPolar) {
-        if (bFaceBBegin == false && gkPoint.state == 1)bFaceBBegin = true;
-        if (bFaceBBegin == true && gkPoint.state == 1)bFaceBBegin = false;
-        if (bFaceBBegin)_verticesForB.push_back(gk.getRectangularFromPolar(gkPoint.pos));
-        else _verticesForA.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+        if (gkPoint.state == 1) {
+            _verticesForA.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+            _verticesForB.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+            bFaceBBegin = !bFaceBBegin;
+        }
+        else {
+            if (bFaceBBegin)_verticesForB.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+            else _verticesForA.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+        }       
     }
-    GKPlane _splittedFaceA, _splittedFaceB;
+    ssGlobalLog << "verticesForA: " << _verticesForA.size() << endl;
+    for (auto& v : _verticesForA) {
+        ssGlobalLog << "POSA: " << v << endl;
+    }
+    ssGlobalLog << "verticesForB: " << _verticesForB.size() << endl;
+    for (auto& v : _verticesForB) {
+        ssGlobalLog << "POSB: " << v << endl;
+    }
     
+    GKPlane _splittedFaceA, _splittedFaceB;
+    gk.getModifiedVertices(_verticesForA,_gkPlane.modifyInfo);
+    gk.getModifiedVertices(_verticesForB, _gkPlane.modifyInfo);
+    special = _verticesForA;
+    specialTwo = _verticesForB;
+    /*
     _splittedFaceA.setup(_verticesForA, 1);
     _splittedFaceB.setup(_verticesForB, 1);
     if (_splittedFaceA.hasInside(_gkPlane.centroid))return _splittedFaceA;
-    else return _splittedFaceB;  
+    else return _splittedFaceB;
+    */
+    return GKPlane();
 }
 
 void ofApp::drawIntersections() {
@@ -336,6 +395,8 @@ void ofApp::drawIntersections() {
         glLineWidth(3);
         glColor3f(0.4, 0.4, 0.9);
         intersectLine.drawLine();
+        glPointSize(8);
+        intersectLine.drawVertices();
     }
     if (!bHideGKPlaneScaled) {
         for (auto& gkPlane : gkPlanes) {
@@ -347,6 +408,20 @@ void ofApp::drawIntersections() {
             }
         }
     }
+    glLineWidth(3);
+    glColor3f(0.3, 1, 0.3);
+    glBegin(GL_LINES);
+    for (auto& v : special) {
+        glVertex3f(v.x, v.y, v.z);
+    }
+    glEnd();
+
+    glColor3f(0.7, 1, 0.3);
+    glBegin(GL_LINES);
+    for (auto& v : specialTwo) {
+        glVertex3f(v.x, v.y, v.z);
+    }
+    glEnd();
 }
 
 
