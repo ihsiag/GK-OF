@@ -51,6 +51,23 @@ void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame
 	//fbo.end();
 }
 
+void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time, const glm::vec4& _col) {
+	*_currentFrame += 1;
+	*_time = ofGetElapsedTimef();
+
+	//_cam->lookAt(_cam->getPosition() + _cam->getLookAtDir(), _cam->getUpAxis());
+	//_cam->lookAt(_cam->getTarget(), _cam->getUpAxis());
+	ofNoFill();
+	ofBackground(_col.r*255, _col.g*255, _col.b*255);
+	//fbo.begin();
+	glClearColor(0,0,0,0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0, 0, 0);
+	glLineWidth(1);
+	glPointSize(1);
+	//fbo.end();
+}
+
 glm::vec2 ofxGKUtils::getPosLayout4x4(const int& _index) {
 	if (_index == 0) return glm::vec2(0,0);
 	if (_index == 1) return glm::vec2(0, ofGetHeight() * 0.25);
@@ -208,6 +225,7 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos, const o
 	glColor3f(1, 1, 1);
 	_font.drawString(_ss.str().c_str(), _pos.x, _pos.y);
 }
+
 void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos) {
 	//Bitmap
 	//Width : 8pt , Height : 11pt
@@ -226,6 +244,7 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos) {
 	//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));
 	ofDrawBitmapString(_ss.str().c_str(), _pos);
 }
+
 void ofxGKUtils::drawInfo(const stringstream& _ss, const glm::vec2& _xyPos) {
 	//Bitmap
 	//Width : 8pt , Height : 11pt
@@ -534,7 +553,8 @@ vector<glm::vec3> ofxGKUtils::getModifiedVertices(const vector<glm::vec3>& _inpu
 vector<glm::vec3> ofxGKUtils::getOnPlaneVertices(const vector<glm::vec3>& _inputVertices, const ofNode& _modifyInfo) {
 	vector<glm::vec3> _vertices = _inputVertices;
 	auto mat = glm::inverse(_modifyInfo.getGlobalTransformMatrix());
-	mat = - mat;
+	glm::quat _tmp = glm::quat(PI, 0, 0, 1);
+	//mat = - mat;
 	for (auto& v : _vertices) {
 		v = glm::vec3(mat * glm::vec4(v, 1));
 	}
@@ -550,16 +570,16 @@ vector<glm::vec3> ofxGKUtils::getOnPlaneVertices(const vector<glm::vec3>& _input
 glm::vec3 ofxGKUtils::getPolarFromRectangular(const glm::vec3& _coord) {
 	//(r,theta,phi) theta <90,phi <180
 	float _r = glm::length(_coord);
-	float _theta = 1 / cos(_coord.z / _r);
-	float _phi = 1 / tan(_coord.y / _coord.x);
+	float _theta = acos(_coord.z / _r);
+	float _phi = atan2(_coord.y , _coord.x);
 	return glm::vec3(_r, _theta, _phi);
 }
 
 glm::vec3 ofxGKUtils::getPolarFromRectangular(const GKPoint& _gkPoint) {
 	//(r,theta,phi) theta <90,phi <180
 	float _r = glm::length(_gkPoint.pos);
-	float _theta = 1 / cos(_gkPoint.pos.z / _r);
-	float _phi = 1 / tan(_gkPoint.pos.y / _gkPoint.pos.x);
+	float _theta = acos(_gkPoint.pos.z / _r);
+	float _phi = atan2(_gkPoint.pos.y , _gkPoint.pos.x);
 	return glm::vec3(_r, _theta, _phi);
 }
 

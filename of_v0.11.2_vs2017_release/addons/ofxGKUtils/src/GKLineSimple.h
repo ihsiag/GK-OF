@@ -37,6 +37,14 @@ class GKLineSimple {
 			glEnd();
 		}
 
+		vector<glm::vec3> getVertices() {
+			vector<glm::vec3> _vertices;
+			_vertices.reserve(2);
+			_vertices.push_back(a);
+			_vertices.push_back(b);
+			return _vertices;
+		}
+
 		float getLength() {
 			return glm::distance(a, b);
 		}

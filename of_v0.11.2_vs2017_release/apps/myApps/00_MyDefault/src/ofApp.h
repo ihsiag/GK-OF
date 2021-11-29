@@ -9,12 +9,13 @@ class ofApp : public ofBaseApp{
 
 	public:
 		//-----------DEFAULT-----------//
-		ofxGKUtils gk;		
+		ofxGKUtils gk;
 		ofEasyCam cam;
 		unsigned long int currentFrame;
 		float time;
 		stringstream ssGlobalLog;
-
+		glm::vec2 mouseOnWorldPlane;
+		
 		//-----------GLOBAL-----------//
 
 
@@ -29,11 +30,19 @@ class ofApp : public ofBaseApp{
 		//-----------FOR-LIB-----------//
 
 
-		//-----------THIS-TIME-FUNCS-----------//
+		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
+		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
+		
+		//-----------THIS-TIME-FUNCS-----------//
+		
+		//-----------DEBUG-FUNC-----------//
 
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
+			//for (auto& gkPlane : gkPlanes) {
+			//	gkPlane.keyPressed(key);// used:key -> none
+			//}
 			switch (key) {
 			case 'f':
 				ofToggleFullscreen();
@@ -55,5 +64,7 @@ class ofApp : public ofBaseApp{
 		}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}
+
+		//-----------NO-InUSE-----------//
 		
 };

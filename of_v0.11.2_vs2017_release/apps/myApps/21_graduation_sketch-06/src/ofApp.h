@@ -67,15 +67,14 @@ class ofApp : public ofBaseApp{
 		void draw3DBeforeModified();
 		void draw3DAfterModified();
 		void drawMainMesh();
+		void drawGKPlanes();
+		void drawGKPlanesNew();
 
 		vector<GKLineSimple> intersectLines;
 		//loop-begin-îCà”ÇÃñ Ç™ê⁄ÇµÇƒÇ¢ÇÈñ Ç∑Ç◊Çƒ
-		void findPlaneIntersections();
 		void findPlaneIntersectionsBeta();
 		vector<glm::vec3> getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane); //return line (point&vector)
 		void scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scalCenter, const float& _scaleFactor);
-		
-		void splitPlanes();
 		GKPlane splitPlaneWithIntersectLine(const GKPlane& _gkPlane,const GKLineSimple& _gkLine);
 
 		void findLineIntersection(); //input intersection line & return point
@@ -84,6 +83,7 @@ class ofApp : public ofBaseApp{
 		void addMyNewFace();
 
 		void drawIntersections();
+		void drawLeftPieces();
 		//-----------DEBUG-FUNC-----------//
 		void ofApp::debugDot();
 
@@ -118,12 +118,18 @@ class ofApp : public ofBaseApp{
 			case '4':
 				bHideGKPlaneScaled = !bHideGKPlaneScaled;
 				break;
+			case '5':
+				bHideGKPlaneNew = !bHideGKPlaneNew;
+				break;
 			case 's' :
 				gk.saveImage();
 				break;
 			case 'z':
 				if (gkPlanes.size())gkPlanes.pop_back();
+				if (gkPlanesNew.size())gkPlanesNew.pop_back();
 				if (intersectLines.size())intersectLines.pop_back();
+				if (special.size())special.pop_back();
+				if (specialTwo.size())specialTwo.pop_back();
 				break;
 			case 'h':
 				bDebug = !bDebug;
@@ -134,14 +140,16 @@ class ofApp : public ofBaseApp{
 				ssGlobalLog << "CLEARED LOG" << endl;
 				break;
 			case ' ':
-				//findPlaneIntersections();
 				findPlaneIntersectionsBeta();
-
 				break;
 			case 'c':
 				gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());
 				intersectLines.erase(intersectLines.begin(), intersectLines.end());
+				gkPlanesNew.erase(gkPlanesNew.begin(), gkPlanes.end());
 				bModified = !bModified;
+				ssGlobalLog.str("");
+				ssGlobalLog.clear(std::stringstream::goodbit);
+				ssGlobalLog << "CLEARED LOG" << endl;
 				ssGlobalLog << "CLEARED-ARRAYS" << endl;
 				break;
 			}

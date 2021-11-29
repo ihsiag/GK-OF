@@ -214,16 +214,8 @@ void ofApp::draw3DBeforeModified() {
 }
 
 void ofApp::draw3DAfterModified() {
-    for (auto& gkPlane : gkPlanes) {
-        if (!bHideAddedMesh)gkPlane.drawInputMesh();
-        if (!bHideGKPlane)gkPlane.drawGKPlane();
-        if (bDebug) {
-            gkPlane.drawGKPlaneNormal();
-            gkPlane.drawGKPlaneCentroid();
-        }
-        gkPlane.drawInputMeshVertices();       
-    }
-    if (bHideGKPlaneNew)for (auto& gkPlaneNew : gkPlanesNew) { gkPlaneNew.drawGKPlane(); }
+    drawGKPlanes();
+    if(!bHideGKPlaneNew)drawGKPlanesNew();
     if(bDebug)drawIntersections();
     if (!bHideMainMesh)drawMainMesh();
 }
@@ -253,26 +245,23 @@ void ofApp::drawMainMesh() {
     glEnd();
     glDisable(GL_CULL_FACE);
 }
-
-
-
-void ofApp::findPlaneIntersections() {
-    intersectLines.erase(intersectLines.begin(), intersectLines.end());
-    //-> check this line!! you need to meke kumiawase with saiki func
-    vector<glm::vec2> _indexSetList = gk.getIndexList_nC2(gkPlanes.size());
-    ssGlobalLog << "COMBINATION SET NUM: [" << _indexSetList.size() <<"] FOUND" << endl;
-    ssGlobalLog << "COMBINATION SET NUM IDEAL: [" << gk.totalNumCombination(gkPlanes.size(),2) << "] FOUND" << endl;
-    for (auto& indexSet : _indexSetList) {
-        ssGlobalLog << "SHOW : " << indexSet << endl;
-        GKPlane& _gkPlanePassive = gkPlanes[indexSet.x];
-        GKPlane& _gkPlaneActive = gkPlanes[indexSet.y];
-        vector<glm::vec3> _intersectPoints = getPlaneIntersection(_gkPlanePassive, _gkPlaneActive);
-        if (_intersectPoints.size() == 2) {
-            intersectLines.push_back(GKLineSimple(_intersectPoints[0], _intersectPoints[1]));
+void ofApp::drawGKPlanes() {
+    for (auto& gkPlane : gkPlanes) {
+        if (!bHideAddedMesh)gkPlane.drawInputMesh();
+        if (!bHideGKPlane)gkPlane.drawGKPlane();
+        if (bDebug) {
+            gkPlane.drawGKPlaneNormal();
+            gkPlane.drawGKPlaneCentroid();
         }
+        gkPlane.drawInputMeshVertices();
     }
-    ssGlobalLog << "INTERSECT LINES: [" << intersectLines.size() << "] FOUND" << endl;
 }
+void ofApp::drawGKPlanesNew() {
+    for (auto& gkPlaneNew : gkPlanesNew) { 
+        gkPlaneNew.drawGKPlane();
+    }
+}
+
 void ofApp::findPlaneIntersectionsBeta() {
     intersectLines.erase(intersectLines.begin(), intersectLines.end());
     
@@ -286,13 +275,29 @@ void ofApp::findPlaneIntersectionsBeta() {
                     GKLineSimple _intersectLine = GKLineSimple(_intersectPoints[0], _intersectPoints[1]);
                     intersectLines.push_back(_intersectLine);
                     GKPlane _gkPlaneNew = splitPlaneWithIntersectLine(_gkPlane, _intersectLine);
-                    //gkPlanesNew.push_back(_gkPlaneNew);
+                    gkPlanesNew.push_back(_gkPlaneNew);
                 }
             }          
         }
     }
+    /*
+    vector<glm::vec2> _indexSetList = gk.getIndexList_nC2(gkPlanes.size());
+    for (auto& indexSet : _indexSetList) {
+        GKPlane _gkPlane = gkPlanes[indexSet.x];
+        GKPlane _gkPlaneCutter = gkPlanes[indexSet.y];       
+        vector<glm::vec3> _intersectPoints = getPlaneIntersection(_gkPlaneCutter, _gkPlane);
+        if (_intersectPoints.size() == 2) {
+            GKLineSimple _intersectLine = GKLineSimple(_intersectPoints[0], _intersectPoints[1]);
+            intersectLines.push_back(_intersectLine);
+            GKPlane _gkPlaneNew = splitPlaneWithIntersectLine(_gkPlane, _intersectLine);
+            gkPlanesNew.push_back(_gkPlaneNew);
+        }
+    }
+    */
     ssGlobalLog << "INTERSECT LINES: [" << intersectLines.size() << "] FOUND" << endl;
 }
+
+
 vector<glm::vec3> ofApp::getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane) {
     int _lengthMax = 100;
     vector<glm::vec3>  _intersectPoints;
@@ -317,77 +322,70 @@ void ofApp::scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scaleCenter, c
     _edge->b = glm::normalize(_edge->b - _scaleCenter) * _scaleFactor + _scaleCenter;
 }
 
-void ofApp::splitPlanes() {   
-    /*
-    for ( auto& thePlane: _PlanesWithLines){
-        for (auto& gkLine : _gkLinesOnthePlane) {
-            newPlanes.push_back(splitPlanes(thePlane, gkLine));
-        }
-    }
-    */
-}
+
 GKPlane ofApp::splitPlaneWithIntersectLine(const GKPlane& _gkPlane, const GKLineSimple& _gkLine) {
     vector<GKPoint> _gkPointsPolar;
-    for (auto& v : _gkPlane.vertices) {
-        cout << "originalVertices: " << v << endl;
+    vector<glm::vec3> _onPlaneGKPlaneVertices = gk.getOnPlaneVertices(_gkPlane.vertices, _gkPlane.modifyInfo);
+    for (auto& v : _onPlaneGKPlaneVertices) {
+        //v.z = 0;
+        _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(v), 0)); //0 means pts from GKPlane
     }
-    vector<glm::vec3> _vertices = gk.getOnPlaneVertices(_gkPlane.vertices, _gkPlane.modifyInfo);
-    for (auto& v : _vertices) {
-        v.z = 0;
-        cout << "modifiedVertices: " << v << endl;
+    vector<glm::vec3> _onPlaneGKLineVertices = gk.getOnPlaneVertices({ _gkLine.a,_gkLine.b}, _gkPlane.modifyInfo);
+    for (auto& v : _onPlaneGKLineVertices) {
+        //v.z = 0;
+        _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(v), 1)); //1 means pts from GKLine
     }
-    for (auto &vertex : _vertices) {       
-        _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(vertex),0));
+    
+    for (auto& v : _onPlaneGKPlaneVertices) {
+        cout << "original: " << v << endl;
     }
-    vector<glm::vec3> _gkLineVertices;
-    _gkLineVertices.push_back(_gkLine.a);
-    _gkLineVertices.push_back(_gkLine.b);
-    _gkLineVertices = gk.getOnPlaneVertices(_gkLineVertices, _gkPlane.modifyInfo);
-    _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(_gkLineVertices[0]), 1));
-    _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(_gkLineVertices[1]), 1));
-    for (auto& v : _gkPointsPolar) {
-        cout << "beforeSort-PointsPolar: " << v.pos << endl;
+    for (auto& v : _onPlaneGKLineVertices) {
+        cout << "original: " << v << endl;
+    }
+    for (auto& gp : _gkPointsPolar) {
+        cout << "polar: "<< gp.pos << endl;
     }
     gk.sortPolars(&_gkPointsPolar);
-    for (auto& v : _gkPointsPolar) {
-        cout << "afterSort-PointsPolar: " << v.pos << endl;
-        
+    for (auto& gp : _gkPointsPolar) {
+        cout << "sorted polar: " << gp.pos << " state: " << gp.state << endl;
+    }
+    for (auto& gp : _gkPointsPolar) {
+        cout << "sorted original: " << gk.getRectangularFromPolar(gp.pos) << " state: " << gp.state << endl;
     }
       
     vector<glm::vec3> _verticesForA, _verticesForB;
     bool bFaceBBegin = false;
     for (auto& gkPoint : _gkPointsPolar) {
         if (gkPoint.state == 1) {
-            _verticesForA.push_back(gk.getRectangularFromPolar(gkPoint.pos));
-            _verticesForB.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+            _verticesForA.push_back(gkPoint.pos);
+            _verticesForB.push_back(gkPoint.pos);
             bFaceBBegin = !bFaceBBegin;
         }
         else {
-            if (bFaceBBegin)_verticesForB.push_back(gk.getRectangularFromPolar(gkPoint.pos));
-            else _verticesForA.push_back(gk.getRectangularFromPolar(gkPoint.pos));
+            if (bFaceBBegin)_verticesForB.push_back(gkPoint.pos);
+            else _verticesForA.push_back(gkPoint.pos);
         }       
     }
-    ssGlobalLog << "verticesForA: " << _verticesForA.size() << endl;
     for (auto& v : _verticesForA) {
-        ssGlobalLog << "POSA: " << v << endl;
+        v = gk.getRectangularFromPolar(v);
     }
-    ssGlobalLog << "verticesForB: " << _verticesForB.size() << endl;
     for (auto& v : _verticesForB) {
-        ssGlobalLog << "POSB: " << v << endl;
+        v = gk.getRectangularFromPolar(v);
     }
     
     GKPlane _splittedFaceA, _splittedFaceB;
-    gk.getModifiedVertices(_verticesForA,_gkPlane.modifyInfo);
-    gk.getModifiedVertices(_verticesForB, _gkPlane.modifyInfo);
+    ssGlobalLog << "vA-Num: "<<_verticesForA.size() << endl;
+    ssGlobalLog << "vB-Num: "<<_verticesForB.size() << endl;
+
+    _verticesForA = gk.getModifiedVertices(_verticesForA,_gkPlane.modifyInfo);
+    _verticesForB = gk.getModifiedVertices(_verticesForB, _gkPlane.modifyInfo);
     special = _verticesForA;
     specialTwo = _verticesForB;
-    /*
+  
     _splittedFaceA.setup(_verticesForA, 1);
     _splittedFaceB.setup(_verticesForB, 1);
     if (_splittedFaceA.hasInside(_gkPlane.centroid))return _splittedFaceA;
     else return _splittedFaceB;
-    */
-    return GKPlane();
 }
 
 void ofApp::drawIntersections() {
@@ -408,16 +406,20 @@ void ofApp::drawIntersections() {
             }
         }
     }
+}
+
+void ofApp::drawLeftPieces() {
     glLineWidth(3);
     glColor3f(0.3, 1, 0.3);
-    glBegin(GL_LINES);
+    glBegin(GL_LINE_LOOP);
+
     for (auto& v : special) {
         glVertex3f(v.x, v.y, v.z);
     }
     glEnd();
 
-    glColor3f(0.7, 1, 0.3);
-    glBegin(GL_LINES);
+    glColor3f(1, 0.3, 0.3);
+    glBegin(GL_LINE_LOOP);
     for (auto& v : specialTwo) {
         glVertex3f(v.x, v.y, v.z);
     }

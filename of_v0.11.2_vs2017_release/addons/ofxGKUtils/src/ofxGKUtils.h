@@ -32,6 +32,7 @@ public:
 	void setup(stringstream* _ssGlobalLog);
 	void setCam(ofEasyCam* _cam);
 	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time);
+	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time, const glm::vec4& _col);
 	glm::vec2 getPosLayout4x4(const int& _index);
 
 
