@@ -554,7 +554,6 @@ vector<glm::vec3> ofxGKUtils::getOnPlaneVertices(const vector<glm::vec3>& _input
 	vector<glm::vec3> _vertices = _inputVertices;
 	auto mat = glm::inverse(_modifyInfo.getGlobalTransformMatrix());
 	glm::quat _tmp = glm::quat(PI, 0, 0, 1);
-	//mat = - mat;
 	for (auto& v : _vertices) {
 		v = glm::vec3(mat * glm::vec4(v, 1));
 	}

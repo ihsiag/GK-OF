@@ -102,15 +102,16 @@ class GKPlane  {
 		}		
 		bool hasInside(const glm::vec3& _vertex) {
 			bool _result = true;
-			glm::vec3 _preDir;
-			for (int i = 0; i < vertices.size(); i++) {
-				glm::vec3 _dir = glm::normalize(glm::cross(vertices[i + 1] - vertices[i], _vertex - vertices[i+1]));
-				if (i!=0 && _preDir != _dir) {
-					_result = false;
-					break;
-				}
-				else {
-					_preDir = _dir;
+			glm::vec3 _mainDir;
+			for (int i = 0; i < vertices.size()-1; i++) {
+				glm::vec3 _dir = glm::normalize(glm::cross(vertices[i + 1] - vertices[i], _vertex - vertices[i + 1]));
+				if (i == 0) {
+					_mainDir = _dir;
+				}else{
+					if (glm::angle(_dir,_mainDir)>PI/4) {
+						_result = false;
+						break;
+					}
 				}
 			}
 			return _result;
