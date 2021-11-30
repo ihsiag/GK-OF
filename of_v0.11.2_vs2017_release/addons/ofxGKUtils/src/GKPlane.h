@@ -7,7 +7,7 @@
 #include "ofxGKUtils.h"
 #include "GKLineSimple.h"
 
-#endif
+
 
 
 class GKPlane  {
@@ -47,34 +47,31 @@ class GKPlane  {
 			getGKPlaneEdges();
 		}
 				
-		//-----------THIS-TIME-UTILS-----------//
+		//-----------THIS-TIME-UTILS-----------AUTO//
 		void drawGKPlane() {
 			if (bMadeGKPlane) {
-				ofFill();
-				glColor4f(0.8, 0.2, 0.2, 0.8);
-
 				//ofPushMatrix();
 				//ofMultMatrix(modifyInfo.getGlobalTransformMatrix());
 				//ofDrawCircle(0,0, 20);
 				//ofPopMatrix();
-
-
-				glBegin(GL_POLYGON);
+				ofFill();
+				glBegin(GL_POLYGON);				
+				glColor4f(0.8, 0.2, 0.2, 0.8);
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
-				glEnd();
+				glEnd();				
+				glBegin(GL_LINE_LOOP);
 				ofNoFill();
 				glColor4f(1, 0.4, 0.4, 1);
 				glLineWidth(2);
-				glBegin(GL_LINE_LOOP);
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
 				glEnd();
+				glBegin(GL_POINTS);
 				glColor4f(1, 0.4, 0.4, 1);
 				glPointSize(4);
-				glBegin(GL_POINTS);
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
@@ -99,23 +96,7 @@ class GKPlane  {
 				gkDrawCross(0, 0, 10); //clonedFrom ofxGKUtils
 				ofPopMatrix();
 			}
-		}		
-		bool hasInside(const glm::vec3& _vertex) {
-			bool _result = true;
-			glm::vec3 _mainDir;
-			for (int i = 0; i < vertices.size()-1; i++) {
-				glm::vec3 _dir = glm::normalize(glm::cross(vertices[i + 1] - vertices[i], _vertex - vertices[i + 1]));
-				if (i == 0) {
-					_mainDir = _dir;
-				}else{
-					if (glm::angle(_dir,_mainDir)>PI/4) {
-						_result = false;
-						break;
-					}
-				}
-			}
-			return _result;
-		}
+		}	
 		void drawInputMesh() {
 			if (originalMesh.hasVertices()) {
 				glColor4f(0, 1, 1, 0.5);
@@ -129,6 +110,85 @@ class GKPlane  {
 			if (originalMesh.hasVertices()) {
 				glColor4f(0.6, 0.6, 0.9, 1);
 				glPointSize(10);
+				originalMesh.drawVertices();
+			}
+		}
+		bool hasInside(const glm::vec3& _vertex) {
+			bool _result = true;
+			glm::vec3 _mainDir;
+			for (int i = 0; i < vertices.size() - 1; i++) {
+				glm::vec3 _dir = glm::normalize(glm::cross(vertices[i + 1] - vertices[i], _vertex - vertices[i + 1]));
+				if (i == 0) {
+					_mainDir = _dir;
+				}
+				else {
+					if (glm::angle(_dir, _mainDir) > PI / 4) {
+						_result = false;
+						break;
+					}
+				}
+			}
+			return _result;
+		}
+		//-----------THIS-TIME-UTILS-----------CUSTOM//
+		void drawGKPlane(const glm::vec4& _faceCol, const glm::vec4& _edgeCol, const float& _lineWidth) {
+			if (bMadeGKPlane) {
+				ofFill();
+				glBegin(GL_POLYGON);
+				glColor4f(_faceCol.r, _faceCol.g, _faceCol.b, _faceCol.a);
+				for (auto& vertex : vertices) {
+					glVertex3f(vertex.x, vertex.y, vertex.z);
+				}
+				glEnd();
+				ofNoFill();						
+				glBegin(GL_LINE_LOOP);
+				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);
+				glLineWidth(_lineWidth);
+				for (auto& vertex : vertices) {
+					glVertex3f(vertex.x, vertex.y, vertex.z);
+				}
+				glEnd();				
+				glBegin(GL_POINTS);
+				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);
+				glPointSize(_lineWidth * 2);
+				for (auto& vertex : vertices) {
+					glVertex3f(vertex.x, vertex.y, vertex.z);
+				}
+				glEnd();
+			}
+		}
+		void drawGKPlaneNormal(const glm::vec4& _debugCol, const float& _size,const float& _lineWidth) {
+			if (bMadeGKPlane) {
+				glBegin(GL_LINES);
+				glLineWidth(_lineWidth);
+				glColor4f(_debugCol.r, _debugCol.g, _debugCol.b, _debugCol.a);
+				glVertex3f(centroid.x, centroid.y, centroid.z);
+				glVertex3f(centroid.x + normal.x * _size, centroid.y + normal.y * _size, centroid.z + normal.z * _size);
+				glEnd();
+			}
+		}
+		void drawGKPlaneCentroid(const glm::vec4& _debugCol, const float& _size, const float& _lineWidth) {
+			if (bMadeGKPlane) {
+				ofPushMatrix();
+				ofMultMatrix(modifyInfo.getGlobalTransformMatrix());
+				glColor4f(_debugCol.r, _debugCol.g, _debugCol.b, _debugCol.a);
+				gkDrawCross(0, 0, _size); //clonedFrom ofxGKUtils
+				ofPopMatrix();
+			}
+		}
+		void drawInputMesh(const glm::vec4& _faceCol, const glm::vec4& _edgeCol, const float& _lineWidth) {
+			if (originalMesh.hasVertices()) {
+				glColor4f(_faceCol.r, _faceCol.g, _faceCol.b, _faceCol.a);
+				originalMesh.drawFaces();
+				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);
+				glLineWidth(_lineWidth);
+				originalMesh.drawWireframe();
+			}
+		};
+		void drawInputMeshVertices(const glm::vec4& _vertexCol, const float& _pointSize) {
+			if (originalMesh.hasVertices()) {
+				glColor4f(_vertexCol.r, _vertexCol.g, _vertexCol.b, _vertexCol.a);
+				glPointSize(_pointSize);
 				originalMesh.drawVertices();
 			}
 		}
@@ -233,3 +293,5 @@ class GKPlane  {
 			return _vertices;
 		}
 };
+
+#endif

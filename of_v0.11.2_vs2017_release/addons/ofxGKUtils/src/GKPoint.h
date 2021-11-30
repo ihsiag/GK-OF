@@ -6,7 +6,7 @@
 #include "ofMain.h"
 #include "ofxGKUtils.h"
 
-#endif
+
 
 class GKPoint {
 	public:
@@ -50,3 +50,4 @@ class GKPoint {
 private:
 	
 };
+#endif

@@ -5,6 +5,9 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
+#include "Class_Delaunay.h"
+#include "Class_GKSplit.h"
+
 
 
 class ofApp : public ofBaseApp{
@@ -44,9 +47,16 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		//-----------FOR-LIB-----------//
+		
+
+		set<Tercel::Vector>   delaVertices;
+		set<Tercel::Triangle> delaTriangles;
+		
+		vector<GKLineSimple> intersectLines;
 		vector<GKPlane> gkPlanes;
 		vector<GKPlane> gkPlanesNew;
-		
+		vector<GKSplit> gkSplits;
+
 		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
 		void drawCamPosition();
@@ -56,6 +66,8 @@ class ofApp : public ofBaseApp{
 
 
 		//-----------THIS-TIME-FUNCS-----------//
+		void initParam();
+		void initSet();
 		void importMesh();	
 		void modifyMesh();
 		void updateMesh();
@@ -70,7 +82,6 @@ class ofApp : public ofBaseApp{
 		void drawGKPlanes();
 		void drawGKPlanesNew();
 
-		vector<GKLineSimple> intersectLines;
 		//loop-begin-îCà”ÇÃñ Ç™ê⁄ÇµÇƒÇ¢ÇÈñ Ç∑Ç◊Çƒ
 		void findPlaneIntersectionsBeta();
 		vector<glm::vec3> getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane); //return line (point&vector)
@@ -84,6 +95,15 @@ class ofApp : public ofBaseApp{
 
 		void drawIntersections();
 		void drawLeftPieces();
+
+		void setTestDela();
+		void drawTestDela();
+
+		void setDela();
+		void drawDela();
+
+		void setGKSplits();
+		void runGKSplits();
 		//-----------DEBUG-FUNC-----------//
 		void ofApp::debugDot();
 
@@ -130,6 +150,7 @@ class ofApp : public ofBaseApp{
 				if (intersectLines.size())intersectLines.pop_back();
 				if (special.size())special.pop_back();
 				if (specialTwo.size())specialTwo.pop_back();
+				delaVertices.erase(delaVertices.begin(), delaVertices.end());
 				break;
 			case 'h':
 				bDebug = !bDebug;
@@ -141,6 +162,7 @@ class ofApp : public ofBaseApp{
 				break;
 			case ' ':
 				findPlaneIntersectionsBeta();
+				setDela();
 				break;
 			case 'c':
 				gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());

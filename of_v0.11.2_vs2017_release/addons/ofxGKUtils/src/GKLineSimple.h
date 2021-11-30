@@ -5,7 +5,7 @@
 #include "ofMain.h"
 #include "ofxGKUtils.h"
 
-#endif
+
 
 class GKLineSimple {
 	public:
@@ -55,3 +55,4 @@ class GKLineSimple {
 	
 private:
 };
+#endif

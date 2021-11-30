@@ -14,8 +14,6 @@
 
 using namespace std;
 
-#endif
-
 class ofxGKUtils {
 public:
 	ofxGKUtils() {
@@ -84,3 +82,4 @@ public:
 	void saveFBOtoImage(ofFbo* _fbo);
 	void saveMesh(ofMesh& _mesh, const float& _scaleFactor);
 };
+#endif

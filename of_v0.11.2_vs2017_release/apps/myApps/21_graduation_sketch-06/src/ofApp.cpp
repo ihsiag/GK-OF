@@ -1,25 +1,12 @@
 #include "ofApp.h"
 
 
-void ofApp::setup(){
-    gk.setup(&ssGlobalLog);
-    gk.setCam(&cam);
-    gk.setGUI(gui);
+void ofApp::setup(){   
+    initParam();
+    initSet();
     createGUI();
     resetCamera();
-    importMesh();
-
-    modifyInfo = ofNode();
-    modifyInfo.setPosition(0, 0, 0);
-    bModified = false;
-    bDebug = false;
-    bHideMainMesh = false;
-    bHideAddedMesh = true;// false;
-    bHideGKPlane = true;// false;
-    bHideGKPlaneNew = false;
-    bHideGKPlaneScaled = false;
-
-    verticesPosHolder.reserve(3);
+    importMesh();  
 }
 
 void ofApp::update(){
@@ -66,6 +53,27 @@ void ofApp::draw(){
 //addGKPlane();
 
 //-----------THIS-TIME-UTILS-----------//
+void ofApp::initParam(){
+    modifyInfo = ofNode();
+    
+    modifyInfo.setPosition(0, 0, 0);
+    bModified = false;
+    bDebug = false;
+    bHideMainMesh = false;
+    bHideAddedMesh = true;// false;
+    bHideGKPlane = true;// false;
+    bHideGKPlaneNew = false;
+    bHideGKPlaneScaled = false;
+
+    verticesPosHolder.reserve(3);
+}
+
+void ofApp::initSet() {
+    gk.setup(&ssGlobalLog);
+    gk.setCam(&cam);
+    gk.setGUI(gui);
+}
+
 void ofApp::resetCamera() {
     cam.setDistance(14);
     //cam.enableOrtho();
@@ -215,6 +223,7 @@ void ofApp::draw3DBeforeModified() {
 
 void ofApp::draw3DAfterModified() {
     drawGKPlanes();
+    drawTestDela();
     if(!bHideGKPlaneNew)drawGKPlanesNew();
     if(bDebug)drawIntersections();
     if (!bHideMainMesh)drawMainMesh();
@@ -245,6 +254,7 @@ void ofApp::drawMainMesh() {
     glEnd();
     glDisable(GL_CULL_FACE);
 }
+
 void ofApp::drawGKPlanes() {
     for (auto& gkPlane : gkPlanes) {
         if (!bHideAddedMesh)gkPlane.drawInputMesh();
@@ -256,6 +266,7 @@ void ofApp::drawGKPlanes() {
         gkPlane.drawInputMeshVertices();
     }
 }
+
 void ofApp::drawGKPlanesNew() {
     for (auto& gkPlaneNew : gkPlanesNew) { 
         gkPlaneNew.drawGKPlane();
@@ -276,7 +287,7 @@ void ofApp::findPlaneIntersectionsBeta() {
                     intersectLines.push_back(_intersectLine);
                     GKPlane _gkPlaneNew = splitPlaneWithIntersectLine(_gkPlane, _intersectLine);
                     gkPlanesNew.push_back(_gkPlaneNew);
-                }
+                }  
             }          
         }
     }
@@ -297,7 +308,6 @@ void ofApp::findPlaneIntersectionsBeta() {
     ssGlobalLog << "INTERSECT LINES: [" << intersectLines.size() << "] FOUND" << endl;
 }
 
-
 vector<glm::vec3> ofApp::getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane) {
     int _lengthMax = 100;
     vector<glm::vec3>  _intersectPoints;
@@ -317,11 +327,11 @@ vector<glm::vec3> ofApp::getPlaneIntersection(const GKPlane& _gkPlaneCutter, con
     }
     return _intersectPoints;
 }
+
 void ofApp::scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _scaleFactor) {
     _edge->a = glm::normalize(_edge->a - _scaleCenter) * _scaleFactor + _scaleCenter;
     _edge->b = glm::normalize(_edge->b - _scaleCenter) * _scaleFactor + _scaleCenter;
 }
-
 
 GKPlane ofApp::splitPlaneWithIntersectLine(const GKPlane& _gkPlane, const GKLineSimple& _gkLine) {
     vector<GKPoint> _gkPointsPolar;
@@ -432,6 +442,86 @@ void ofApp::drawLeftPieces() {
     glEnd();
 }
 
+void ofApp::setTestDela() {
+    // ======================================    
+// 頂点集合にランダムでデータをセット  
+// ======================================   
+    delaTriangles.erase(delaTriangles.begin(), delaTriangles.end());
+    for (int i = 0; i < 200; ++i) {
+        Tercel::Vector v; // ベクトルを宣言  
+        float r = 50;
+        float phi = ofRandom(-PI, PI);
+        float theta = ofRandom(0,PI);
+
+        v.x = r * cos(phi) * cos(theta);
+        v.y = r * sin(phi);
+        v.z = r * cos(phi) * sin(theta);
+
+        delaVertices.insert(v);
+    }
+
+    // ======================================    
+      // Delaunay分割を行う関数  
+      // ======================================    
+
+      // 結果は第2引数（std::set<Tercel::Triangle> 型）に格納される。  
+      //   
+      // Tercel::Triangle のメンバには、3つの頂点p1, p2, p3 があって、  
+      // いずれも Tercel::Vertex オブジェクトへのポインタになっている  
+      // これらのポインタは、vertices リストの要素を参照している。  
+    Tercel::Delaunay3d::getDelaunayTriangles(delaVertices, &delaTriangles);
+    //                                       ~~~~~~~~  ~~~~~~~~~~  
+    //                                       頂点集合  三角形集合  
+    //                                       （参照） （ポインタ）
+}
+
+void ofApp::drawTestDela() {
+    if (delaTriangles.size() > 0) {
+        for (std::set<Tercel::Triangle>::iterator it = delaTriangles.begin(); it != delaTriangles.end(); ++it) {
+            Tercel::Triangle t = *it;  // 三角形取得 
+            /*
+            ofFill();
+            glBegin(GL_LINE_LOOP);
+            glLineWidth(3);
+            glColor3f(0.4,0.5,0.8);
+            for (int i = 0; i < 3; i++) {
+                glm::vec3 p1 = t.p[i]->pos;
+                glm::vec3 p2 = t.p[(i + 1) % 3]->pos;
+                glm::vec3 p3 = t.p[(i + 2) % 3]->pos;
+
+                glVertex3f(p1.x, p1.y,p1.z);
+                glVertex3f(p2.x, p2.y, p2.z);
+                glVertex3f(p3.x, p3.y, p3.z);
+                }
+            glEnd();
+            */
+        }
+    }
+}
+
+void ofApp::setDela() {
+    delaTriangles.erase(delaTriangles.begin(), delaTriangles.end());
+    delaVertices.erase(delaVertices.begin(), delaVertices.end());
+    for (auto& gp : gkPlanes) {
+        Tercel::Vector v;
+        v.set(gp.centroid);
+        delaVertices.insert(v);
+    }
+    Tercel::Delaunay3d::getDelaunayTriangles(delaVertices, &delaTriangles);
+}
+
+void ofApp::drawDela() {
+}
+
+void ofApp::setGKSplits() {
+
+}
+
+void ofApp::runGKSplits() {
+    for (auto& gkSplit : gkSplits) {
+        gkSplit.splitExcute();
+    }
+}
 
 
 //-----------DEBUG-----------//
