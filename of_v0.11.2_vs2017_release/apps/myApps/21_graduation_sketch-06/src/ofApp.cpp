@@ -205,7 +205,7 @@ void ofApp::addGKPlane() {
     GKPlane _gkPlane;
     ofMesh _mesh;
     _mesh.addVertices(verticesPosHolder);
-    _gkPlane.setup(_mesh, 0);
+    _gkPlane.setup(_mesh, gkPlanes.size()+1);
     gkPlanes.push_back(_gkPlane);
     verticesPosHolder.erase(verticesPosHolder.begin(), verticesPosHolder.end());
     ssGlobalLog << "ADDED GKPLANE" << endl;
@@ -344,25 +344,8 @@ GKPlane ofApp::splitPlaneWithIntersectLine(const GKPlane& _gkPlane, const GKLine
     for (auto& v : _onPlaneGKLineVertices) {
         //v.z = 0;
         _gkPointsPolar.push_back(GKPoint(gk.getPolarFromRectangular(v), 1)); //1 means pts from GKLine
-    }
-
-    for (auto& v : _onPlaneGKPlaneVertices) {
-        cout << "original: " << v << endl;
-    }
-    for (auto& v : _onPlaneGKLineVertices) {
-        cout << "original: " << v << endl;
-    }
-    for (auto& gp : _gkPointsPolar) {
-        cout << "polar: " << gp.pos << endl;
-    }
+    }  
     gk.sortPolars(&_gkPointsPolar);
-    for (auto& gp : _gkPointsPolar) {
-        cout << "sorted polar: " << gp.pos << " state: " << gp.state << endl;
-    }
-    for (auto& gp : _gkPointsPolar) {
-        cout << "sorted original: " << gk.getRectangularFromPolar(gp.pos) << " state: " << gp.state << endl;
-    }
-
     vector<glm::vec3> _verticesForA, _verticesForB;
     bool bFaceBBegin = false;
     for (auto& gkPoint : _gkPointsPolar) {
@@ -499,22 +482,13 @@ void ofApp::drawTestDela() {
     }
 }
 
-void ofApp::setDela() {
-    delaTriangles.erase(delaTriangles.begin(), delaTriangles.end());
-    delaVertices.erase(delaVertices.begin(), delaVertices.end());
-    for (auto& gp : gkPlanes) {
-        Tercel::Vector v;
-        v.set(gp.centroid);
-        delaVertices.insert(v);
-    }
-    Tercel::Delaunay3d::getDelaunayTriangles(delaVertices, &delaTriangles);
-}
 
 void ofApp::drawDela() {
 }
 
 void ofApp::setGKSplits() {
-
+    delaTriangles.erase(delaTriangles.begin(), delaTriangles.end());
+    GKDelaunay::Delaunay3d::getDelaunayTriangles(gkPlanes, &delaTriangles);
 }
 
 void ofApp::runGKSplits() {

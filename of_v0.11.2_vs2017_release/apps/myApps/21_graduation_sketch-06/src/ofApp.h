@@ -6,6 +6,7 @@
 #include "ofEasyCam.h"
 
 #include "Class_Delaunay.h"
+#include "Class_GKDelaunay.h"
 #include "Class_GKSplit.h"
 
 
@@ -48,9 +49,7 @@ class ofApp : public ofBaseApp{
 
 		//-----------FOR-LIB-----------//
 		
-
-		set<Tercel::Vector>   delaVertices;
-		set<Tercel::Triangle> delaTriangles;
+		set<GKDelaunay::Triangle> delaTriangles;
 		
 		vector<GKLineSimple> intersectLines;
 		vector<GKPlane> gkPlanes;
@@ -150,7 +149,6 @@ class ofApp : public ofBaseApp{
 				if (intersectLines.size())intersectLines.pop_back();
 				if (special.size())special.pop_back();
 				if (specialTwo.size())specialTwo.pop_back();
-				delaVertices.erase(delaVertices.begin(), delaVertices.end());
 				break;
 			case 'h':
 				bDebug = !bDebug;

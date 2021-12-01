@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef GK_DELAUNAY3D_H  
-#define GK_DELAUNAY3D_H  
+#ifndef DELAUNAY3D_H  
+#define DELAUNAY3D_H  
 
 #include "ofMain.h"
 #include "ofxGKUtils.h"

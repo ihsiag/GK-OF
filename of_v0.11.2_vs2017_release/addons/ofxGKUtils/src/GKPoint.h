@@ -13,7 +13,9 @@ class GKPoint {
 		// int ID;
 		int state;
 		glm::vec3 pos;
-
+		GKPoint(){
+			state = 0;
+		}
 		GKPoint(const glm::vec3& _vertex) {
 			pos = _vertex;
 			state = 0;
