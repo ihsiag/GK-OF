@@ -446,7 +446,7 @@ namespace Tercel {
                 // --------------------------------------    
                 for (TetraIter tIter = tetraSet.begin(); tIter != tetraSet.end(); ){
                     if (hugeTetrahedron.hasCommonPoints(*tIter))
-                        tetraSet.erase(tIter++);
+                        tIter = tetraSet.erase(tIter);
                     else ++tIter;
                 }
 

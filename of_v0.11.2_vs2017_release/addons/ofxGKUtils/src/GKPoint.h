@@ -48,8 +48,24 @@ class GKPoint {
 			glVertex3f(pos.x, pos.y, pos.z);
 			glEnd();			
 		}
-	
+		
+
+		//-----------OPERATOR-----------// -> mainly For Sort Algo.
+
+		bool operator==(const GKPoint& _gp) const{
+			return pos.x == _gp.pos.x && pos.y == _gp.pos.y && pos.z == _gp.pos.z;
+		}
+
+		bool operator<(const GKPoint& _gp) const {
+			return pos.x != _gp.pos.x ? pos.x < _gp.pos.x :
+				pos.y != _gp.pos.y ? pos.y < _gp.pos.y :
+				pos.z < _gp.pos.z;
+		}
+
+
 private:
+	
+
 	
 };
 #endif

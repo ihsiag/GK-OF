@@ -222,8 +222,8 @@ void ofApp::draw3DBeforeModified() {
 }
 
 void ofApp::draw3DAfterModified() {
+    drawDela();
     drawGKPlanes();
-    drawTestDela();
     if(!bHideGKPlaneNew)drawGKPlanesNew();
     if(bDebug)drawIntersections();
     if (!bHideMainMesh)drawMainMesh();
@@ -425,76 +425,68 @@ void ofApp::drawLeftPieces() {
     glEnd();
 }
 
-void ofApp::setTestDela() {
-    // ======================================    
-// 頂点集合にランダムでデータをセット  
-// ======================================   
-    delaTriangles.erase(delaTriangles.begin(), delaTriangles.end());
-    for (int i = 0; i < 200; ++i) {
-        Tercel::Vector v; // ベクトルを宣言  
-        float r = 50;
-        float phi = ofRandom(-PI, PI);
-        float theta = ofRandom(0,PI);
 
-        v.x = r * cos(phi) * cos(theta);
-        v.y = r * sin(phi);
-        v.z = r * cos(phi) * sin(theta);
-
-        delaVertices.insert(v);
-    }
-
-    // ======================================    
-      // Delaunay分割を行う関数  
-      // ======================================    
-
-      // 結果は第2引数（std::set<Tercel::Triangle> 型）に格納される。  
-      //   
-      // Tercel::Triangle のメンバには、3つの頂点p1, p2, p3 があって、  
-      // いずれも Tercel::Vertex オブジェクトへのポインタになっている  
-      // これらのポインタは、vertices リストの要素を参照している。  
-    Tercel::Delaunay3d::getDelaunayTriangles(delaVertices, &delaTriangles);
-    //                                       ~~~~~~~~  ~~~~~~~~~~  
-    //                                       頂点集合  三角形集合  
-    //                                       （参照） （ポインタ）
+void ofApp::setDela() {
+    
 }
 
-void ofApp::drawTestDela() {
-    if (delaTriangles.size() > 0) {
-        for (std::set<Tercel::Triangle>::iterator it = delaTriangles.begin(); it != delaTriangles.end(); ++it) {
-            Tercel::Triangle t = *it;  // 三角形取得 
-            /*
-            ofFill();
+
+void ofApp::setGKSplits() {
+    tDelaTriangles.erase(tDelaTriangles.begin(), tDelaTriangles.end());
+    tDelaVertices.erase(tDelaVertices.begin(), tDelaVertices.end());
+    for (auto& gpl : gkPlanes) {
+        Tercel::Vector v = Tercel::Vector(gpl.centroid);
+        tDelaVertices.insert(v);
+    }
+    Tercel::Delaunay3d::getDelaunayTriangles(tDelaVertices, &tDelaTriangles);
+    ssGlobalLog << "T-DELA-TRIANGLES NUM: " << tDelaTriangles.size() << endl;
+
+    gkDelaTriangles.erase(gkDelaTriangles.begin(), gkDelaTriangles.end());
+    gkDelaTriangles = gkDela.getDelaunayTriangles(gkPlanes);
+    ssGlobalLog << "GK-DELA-TRIANGLES NUM: " << gkDelaTriangles.size() << endl;
+}
+
+void ofApp::drawDela() {
+    
+    if (tDelaTriangles.size() > 0) {      
+        for (auto triItr = tDelaTriangles.begin(); triItr != tDelaTriangles.end(); ++triItr) {
+            Tercel::Triangle tri = *triItr;  // 三角形取得 
             glBegin(GL_LINE_LOOP);
             glLineWidth(3);
-            glColor3f(0.4,0.5,0.8);
-            for (int i = 0; i < 3; i++) {
-                glm::vec3 p1 = t.p[i]->pos;
-                glm::vec3 p2 = t.p[(i + 1) % 3]->pos;
-                glm::vec3 p3 = t.p[(i + 2) % 3]->pos;
+            glColor3f(0.8,0.5,0.4);
+            glm::vec3 p1 = tri.p[0]->pos;
+            glm::vec3 p2 = tri.p[1]->pos;
+            glm::vec3 p3 = tri.p[2]->pos;
 
-                glVertex3f(p1.x, p1.y,p1.z);
-                glVertex3f(p2.x, p2.y, p2.z);
-                glVertex3f(p3.x, p3.y, p3.z);
-                }
+            glVertex3f(p1.x, p1.y,p1.z);
+            glVertex3f(p2.x, p2.y, p2.z);
+            glVertex3f(p3.x, p3.y, p3.z);
             glEnd();
-            */
+        }
+    }
+
+    if (gkDelaTriangles.size()) {
+        for (auto& gdt : gkDelaTriangles) {
+            GKPoint _a = gdt.vertices[0];
+            GKPoint _b = gdt.vertices[1];
+            GKPoint _c = gdt.vertices[2];
+            glBegin(GL_LINE_LOOP);
+            glLineWidth(3);
+            glColor3f(0.4, 0.5, 0.8);
+            glVertex3f(_a.pos.x, _a.pos.y, _a.pos.z);
+            glVertex3f(_b.pos.x, _b.pos.y, _b.pos.z);
+            glVertex3f(_c.pos.x, _c.pos.y, _c.pos.z);
+            glEnd();
         }
     }
 }
 
-
-void ofApp::drawDela() {
-}
-
-void ofApp::setGKSplits() {
-    delaTriangles.erase(delaTriangles.begin(), delaTriangles.end());
-    GKDelaunay::Delaunay3d::getDelaunayTriangles(gkPlanes, &delaTriangles);
-}
-
 void ofApp::runGKSplits() {
+    /*
     for (auto& gkSplit : gkSplits) {
         gkSplit.splitExcute();
     }
+    */
 }
 
 

@@ -7,7 +7,6 @@
 
 #include "Class_Delaunay.h"
 #include "Class_GKDelaunay.h"
-#include "Class_GKSplit.h"
 
 
 
@@ -48,13 +47,17 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		//-----------FOR-LIB-----------//
+		set<Tercel::Triangle> tDelaTriangles;
+		set<Tercel::Vector> tDelaVertices;
 		
-		set<GKDelaunay::Triangle> delaTriangles;
+		GKDelaunay3d gkDela;
+		vector<DelaTriangle> gkDelaTriangles;
+
 		
 		vector<GKLineSimple> intersectLines;
 		vector<GKPlane> gkPlanes;
 		vector<GKPlane> gkPlanesNew;
-		vector<GKSplit> gkSplits;
+		//vector<GKSplit> gkSplits;
 
 		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
@@ -95,8 +98,6 @@ class ofApp : public ofBaseApp{
 		void drawIntersections();
 		void drawLeftPieces();
 
-		void setTestDela();
-		void drawTestDela();
 
 		void setDela();
 		void drawDela();
@@ -159,8 +160,8 @@ class ofApp : public ofBaseApp{
 				ssGlobalLog << "CLEARED LOG" << endl;
 				break;
 			case ' ':
-				findPlaneIntersectionsBeta();
-				setDela();
+				//findPlaneIntersectionsBeta();
+				setGKSplits();
 				break;
 			case 'c':
 				gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());
