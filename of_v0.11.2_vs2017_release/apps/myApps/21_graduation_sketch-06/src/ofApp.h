@@ -7,6 +7,7 @@
 
 #include "Class_Delaunay.h"
 #include "Class_GKDelaunay.h"
+#include "Class_GKSplit.h"
 
 
 
@@ -32,6 +33,7 @@ class ofApp : public ofBaseApp{
 		bool bHideGKPlane;
 		bool bHideGKPlaneScaled;
 		bool bHideGKPlaneNew;
+		bool bHideGDL;
 
 
 		ofMesh mainMesh;
@@ -46,10 +48,7 @@ class ofApp : public ofBaseApp{
 		void update();
 		void draw();
 
-		//-----------FOR-LIB-----------//
-		set<Tercel::Triangle> tDelaTriangles;
-		set<Tercel::Vector> tDelaVertices;
-		
+		//-----------FOR-LIB-----------//		
 		GKDelaunay3d gkDela;
 		vector<DelaTriangle> gkDelaTriangles;
 
@@ -57,7 +56,7 @@ class ofApp : public ofBaseApp{
 		vector<GKLineSimple> intersectLines;
 		vector<GKPlane> gkPlanes;
 		vector<GKPlane> gkPlanesNew;
-		//vector<GKSplit> gkSplits;
+		vector<GKSplit> gkSplits;
 
 		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
@@ -114,6 +113,9 @@ class ofApp : public ofBaseApp{
 			//	gkPlane.keyPressed(key);// used:key -> none
 			//}
 			switch (key) {
+			case 'h':
+				bDebug = !bDebug;
+				break;
 			case 'f':
 				ofToggleFullscreen();
 				break;
@@ -123,11 +125,8 @@ class ofApp : public ofBaseApp{
 			case 'u':
 				updateMesh();
 				break;
-			case 'm' :
-				//gk.saveMesh(generatedMesh, 1);
-				break;
 			case '1':
-				bHideMainMesh = !bHideMainMesh;				
+				bHideMainMesh = !bHideMainMesh;
 				break;
 			case '2':
 				bHideAddedMesh = !bHideAddedMesh;
@@ -141,8 +140,10 @@ class ofApp : public ofBaseApp{
 			case '5':
 				bHideGKPlaneNew = !bHideGKPlaneNew;
 				break;
-			case 's' :
-				gk.saveImage();
+			case '6':
+				break;
+			case '7':
+				bHideGDL = !bHideGDL;
 				break;
 			case 'z':
 				if (gkPlanes.size())gkPlanes.pop_back();
@@ -151,17 +152,11 @@ class ofApp : public ofBaseApp{
 				if (special.size())special.pop_back();
 				if (specialTwo.size())specialTwo.pop_back();
 				break;
-			case 'h':
-				bDebug = !bDebug;
-				break;
+
 			case 'l':
 				ssGlobalLog.str("");
 				ssGlobalLog.clear(std::stringstream::goodbit);
 				ssGlobalLog << "CLEARED LOG" << endl;
-				break;
-			case ' ':
-				//findPlaneIntersectionsBeta();
-				setGKSplits();
 				break;
 			case 'c':
 				gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());
@@ -172,6 +167,16 @@ class ofApp : public ofBaseApp{
 				ssGlobalLog.clear(std::stringstream::goodbit);
 				ssGlobalLog << "CLEARED LOG" << endl;
 				ssGlobalLog << "CLEARED-ARRAYS" << endl;
+				break;
+			case 's':
+				gk.saveImage();
+				break;
+			case 'm':
+				//gk.saveMesh(generatedMesh, 1);
+				break;
+			case ' ':
+				//findPlaneIntersectionsBeta();
+				setGKSplits();
 				break;
 			}
 		}

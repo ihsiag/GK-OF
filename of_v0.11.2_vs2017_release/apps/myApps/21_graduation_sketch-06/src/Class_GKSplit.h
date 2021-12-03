@@ -13,11 +13,13 @@ public:
     vector<GKLineSimple> intersectLines;
     
 	GKSplit(){}
+    GKSplit(const GKPlane& _mainPlane) {
+        mainPlane = _mainPlane;
+    }
 	~GKSplit(){}
 
-    void set(const GKPlane& _mainPlane, const vector<GKPlane>& _cutterPlaneList) {
+    void set(const GKPlane& _mainPlane) {
         mainPlane = _mainPlane;
-        cutterPlaneList = _cutterPlaneList;
     };
     void addCutter(const GKPlane& _cutterPlane) {
         cutterPlaneList.push_back(_cutterPlane);

@@ -53,8 +53,18 @@ class GKPoint {
 		//-----------OPERATOR-----------// -> mainly For Sort Algo.
 
 		bool operator==(const GKPoint& _gp) const{
+			if (abs(_gp.pos.x - pos.x) < 0.00001 && abs(_gp.pos.y - pos.y) < 0.00001 && abs(_gp.pos.z - pos.z) < 0.00001) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		/*
+		bool operator==(const GKPoint& _gp) const {
 			return pos.x == _gp.pos.x && pos.y == _gp.pos.y && pos.z == _gp.pos.z;
 		}
+		*/
 
 		bool operator<(const GKPoint& _gp) const {
 			return pos.x != _gp.pos.x ? pos.x < _gp.pos.x :

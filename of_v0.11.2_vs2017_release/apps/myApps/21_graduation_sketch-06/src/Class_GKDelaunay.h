@@ -32,6 +32,18 @@
         }
         ~DelaTriangle() {}
         vector<GKPoint> vertices;  // 頂点座標 
+        GKPoint getCentroid() {
+            GKPoint _c = GKPoint(glm::vec3(0));
+            for (auto v : vertices) {
+                _c.pos += v.pos;
+            }
+            _c.pos /= 3;
+            return _c;
+        }
+
+        float getRadius(const GKPoint& _centroid) {
+            return glm::distance(vertices[0].pos, _centroid.pos);
+        }
 
         //-----------OPERATOR-----------// -> mainly For Sort Algo.
 
@@ -60,7 +72,7 @@
             }
             return _centroid.pos / 4;
         }
-        float getRadius(const GKPoint _centroid) {
+        float getRadius(const GKPoint& _centroid) {
             return glm::distance(vertices[0].pos, _centroid.pos);
         }
 
@@ -99,8 +111,10 @@
             }
             tetras.push_back(hugeTetrahedron);
              
-            for (auto gpItr = _gkPlanes.begin(); gpItr != _gkPlanes.end();){
+            for (auto gpItr = _gkPlanes.begin(); gpItr != _gkPlanes.end();gpItr++){
                 GKPoint gp = GKPoint(gpItr->centroid,gpItr->state);
+                
+                //
                 // 追加候補の四面体を保持する一時マップ
                 vector<DelaTetrahedron> tmpTetras;
                 for (auto tetItr = tetras.begin(); tetItr != tetras.end();) {                 
@@ -137,21 +151,38 @@
                         tmpTetras.push_back(DelaTetrahedron(_vertices));
 
                         tetItr = tetras.erase(tetItr);
-                        
                     }
-                    else ++tetItr;
+                    else {
+                        ++tetItr;
+                    }
                 }
+                
+                //
                 //一時保持マップで重複チェックし、問題のないものだけ四面体セットに追加
-                for (auto& tet : tmpTetras) {
-                    for (auto& tetCheck : tmpTetras) {
-                        if (tet.getCentroid().pos != tetCheck.getCentroid().pos) {
-                            if (tet.getRadius(tet.getCentroid()) != tetCheck.getRadius(tet.getCentroid())) {
-                                tetras.push_back(tet);
+                {
+                    vector<bool> shouldDelete;
+                    shouldDelete.reserve(tmpTetras.size());
+                    for (int i = 0; i < tmpTetras.size(); i++) {
+                        shouldDelete.push_back(false);
+                    }
+                    for (int i = 0; i < tmpTetras.size(); i++) {
+                        for (int j = 0; j < tmpTetras.size(); j++) {
+                            if (i != j) {
+                                if (tmpTetras[i].getCentroid().pos == tmpTetras[j].getCentroid().pos) {
+                                    if (abs(tmpTetras[i].getRadius(tmpTetras[i].getCentroid()) - tmpTetras[j].getRadius(tmpTetras[j].getCentroid())) < 0.01) {
+                                        shouldDelete[i] = true;
+                                        break;
+                                    }
+                                }
                             }
-                        }                        
+                        }
+                    }
+                    for (int i = 0; i < shouldDelete.size(); i++) {
+                        if (shouldDelete[i] == false) {
+                            tetras.push_back(tmpTetras[i]);
+                        }
                     }
                 }
-                gpItr++;
             }
    
             // 最後に、外部三角形の頂点を削除       
@@ -165,34 +196,62 @@
             }
 
             // そして、伝説へ…  (triangleに返していく)
-            vector<DelaTriangle> _triangles;
+            
+            vector<DelaTriangle> tmpTris;
             for (auto tetItr = tetras.begin(); tetItr != tetras.end(); ++tetItr) {
                 DelaTetrahedron tetra = *tetItr;
                 vector<GKPoint> _vertices;
                 _vertices.push_back(tetra.vertices[0]);
                 _vertices.push_back(tetra.vertices[1]);
                 _vertices.push_back(tetra.vertices[2]);
-                _triangles.push_back(DelaTriangle(_vertices));
+
+                tmpTris.push_back(DelaTriangle(_vertices));
 
                 _vertices.erase(_vertices.begin(), _vertices.end());
                 _vertices.push_back(tetra.vertices[0]);
                 _vertices.push_back(tetra.vertices[2]);
                 _vertices.push_back(tetra.vertices[3]);
-                _triangles.push_back(DelaTriangle(_vertices));
+                tmpTris.push_back(DelaTriangle(_vertices));
 
                 _vertices.erase(_vertices.begin(), _vertices.end());
                 _vertices.push_back(tetra.vertices[0]);
                 _vertices.push_back(tetra.vertices[3]);
                 _vertices.push_back(tetra.vertices[1]);
-                _triangles.push_back(DelaTriangle(_vertices));
+                tmpTris.push_back(DelaTriangle(_vertices));
 
                 _vertices.erase(_vertices.begin(), _vertices.end());
                 _vertices.push_back(tetra.vertices[1]);
                 _vertices.push_back(tetra.vertices[2]);
                 _vertices.push_back(tetra.vertices[3]);
-                _triangles.push_back(DelaTriangle(_vertices));
+                tmpTris.push_back(DelaTriangle(_vertices));
             }
-            return _triangles;
+            
+            vector<DelaTriangle> tris;
+            {
+                vector<bool> shouldDelete;
+                shouldDelete.reserve(tmpTris.size());
+                for (int i = 0; i < tmpTris.size(); i++) {
+                    shouldDelete.push_back(false);
+                }
+                for (int i = 0; i < tmpTris.size(); i++) {
+                    for (int j = 0; j < tmpTris.size(); j++) {
+                        if (i != j) {
+                            if (tmpTris[i].getCentroid().pos == tmpTris[j].getCentroid().pos) {
+                                if (abs(tmpTris[i].getRadius(tmpTris[i].getCentroid()) - tmpTris[j].getRadius(tmpTris[j].getCentroid())) < 0.01) {
+                                    shouldDelete[i] = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                for (int i = 0; i < shouldDelete.size(); i++) {
+                    if (shouldDelete[i] == false) {
+                        tris.push_back(tmpTris[i]);
+                    }
+                }
+            }
+            return tris;
         };
     private:
         // ======================================    

@@ -66,7 +66,13 @@ namespace Tercel {
         class Triangle {
         public:
             const static size_t NUM_VERTEX = 3;
-            const Vector* p[NUM_VERTEX];  // 頂点座標  
+            const Vector* p[NUM_VERTEX];  // 頂点座標
+            static void getCentroid(const Triangle& _t,glm::vec3* _center) {
+                for (int i = 0; i < NUM_VERTEX; i++) {
+                   *_center +=_t.p[i]->pos;
+                }
+                *_center /= NUM_VERTEX;
+            }
 
             // ======================================    
             // 等価性の判定  

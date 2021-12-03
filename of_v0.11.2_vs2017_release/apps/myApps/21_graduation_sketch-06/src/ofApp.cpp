@@ -36,13 +36,14 @@ void ofApp::draw(){
     
     //-----------2D-LAYER-----------//
     if (bModified)selectingVertexPos = getCurrentVertex(mainMesh, ssDebug);
+
     //-----------INFO-----------//
     createInfo(ssInstruct, ssProgramInfo, ssDebug);
 
     //-----------FRONT-LAYER-----------//
     gk.drawGrid();
-    gk.drawInfo(ssInstruct, 0);
-    gk.drawInfo(ssProgramInfo, 1);
+    gk.drawInfo(ssInstruct, 1);
+    gk.drawInfo(ssProgramInfo, 0);
     gk.drawInfo(ssDebug, 4);
     gk.drawInfo(ssGlobalLog, 5);
     if(!bModified)gui.draw();
@@ -62,8 +63,9 @@ void ofApp::initParam(){
     bHideMainMesh = false;
     bHideAddedMesh = true;// false;
     bHideGKPlane = true;// false;
-    bHideGKPlaneNew = false;
     bHideGKPlaneScaled = false;
+    bHideGKPlaneNew = false;
+    bHideGDL = false;
 
     verticesPosHolder.reserve(3);
 }
@@ -94,19 +96,26 @@ void ofApp::createGUI() {
 void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
     //-----------INFO-----------//--later put into update func.
     _ssInstruct << "INSTRUCTIONS: " << endl;
-    _ssInstruct << "> DEBUG               - H" << endl;
-    _ssInstruct << "> FULL-SCREEN         - F" << endl;
-    _ssInstruct << "> ROTATE CAMERA       - RIGHT-BUTTON" << endl;
-    _ssInstruct << "> MOVE CAMERA         - SHIFT + RIGHT-BUTTON" << endl;
-    _ssInstruct << "> RESET CAMERA        - R" << endl;
-    _ssInstruct << "> UPDATE MESH         - U" << endl;
-    _ssInstruct << "> HIDE MAIN-MESH      - 1" << endl;
-    _ssInstruct << "> HIDE ADDED-MESH     - 2" << endl;
-    _ssInstruct << "> HIDE FLAT-SRF       - 3" << endl;
-    _ssInstruct << "> BACK                - Z" << endl;
-    _ssInstruct << "> SAVE IMG            - S" << endl;
-    _ssInstruct << "> SAVE GENERATED-MESH - M" << endl;
-    _ssInstruct << "> CLEAR GLOBAL LOG    - L" << endl;
+    _ssInstruct << "> DEBUG                 - H" << endl;
+    _ssInstruct << "> FULL-SCREEN           - F" << endl;
+    _ssInstruct << "> ROTATE CAMERA         - RIGHT-BUTTON" << endl;
+    _ssInstruct << "> MOVE CAMERA           - SHIFT + RIGHT-BUTTON" << endl;
+    _ssInstruct << "> RESET CAMERA          - R" << endl;
+    _ssInstruct << "> UPDATE MESH           - U" << endl;
+    _ssInstruct << "> HIDE MAIN-MESH        - 1" << endl;
+    _ssInstruct << "> HIDE ADDED-MESH       - 2" << endl;
+    _ssInstruct << "> HIDE FLAT-SRF         - 3" << endl;
+    _ssInstruct << "> HIDE FLAT-SRF-SCALED  - 4" << endl;
+    _ssInstruct << "> HIDE GENERATED-SRF    - 5" << endl;
+    _ssInstruct << "> (HIDE TERCEL TRI)     - 6" << endl;
+    _ssInstruct << "> HIDE GK TRI           - 7" << endl;
+    _ssInstruct << "> BACK                  - Z" << endl;
+    _ssInstruct << "> CLEAR GLOBAL LOG      - L" << endl;
+    _ssInstruct << "> CLEAR ALL             - C" << endl;
+    _ssInstruct << "> SAVE IMG              - S" << endl;
+    _ssInstruct << "> (SAVE GENERATED-MESH) - M" << endl;
+    _ssInstruct << "> TEST                  - SPACE-BAR" << endl;
+    
 
     _ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
     _ssProgramInfo << "DEVELOPER: " << "GAISHI KUDO" << endl;
@@ -432,51 +441,39 @@ void ofApp::setDela() {
 
 
 void ofApp::setGKSplits() {
-    tDelaTriangles.erase(tDelaTriangles.begin(), tDelaTriangles.end());
-    tDelaVertices.erase(tDelaVertices.begin(), tDelaVertices.end());
-    for (auto& gpl : gkPlanes) {
-        Tercel::Vector v = Tercel::Vector(gpl.centroid);
-        tDelaVertices.insert(v);
-    }
-    Tercel::Delaunay3d::getDelaunayTriangles(tDelaVertices, &tDelaTriangles);
-    ssGlobalLog << "T-DELA-TRIANGLES NUM: " << tDelaTriangles.size() << endl;
-
+    ssGlobalLog << "PLANES NUM: " << gkPlanes.size() << endl;
     gkDelaTriangles.erase(gkDelaTriangles.begin(), gkDelaTriangles.end());
     gkDelaTriangles = gkDela.getDelaunayTriangles(gkPlanes);
     ssGlobalLog << "GK-DELA-TRIANGLES NUM: " << gkDelaTriangles.size() << endl;
+    for (auto& gpl : gkPlanes) {
+        gkSplits.emplace_back(gpl);
+    }
+    for (auto& gs : gkSplits) {
+
+        //gs.addCutter();
+    }
 }
 
 void ofApp::drawDela() {
-    
-    if (tDelaTriangles.size() > 0) {      
-        for (auto triItr = tDelaTriangles.begin(); triItr != tDelaTriangles.end(); ++triItr) {
-            Tercel::Triangle tri = *triItr;  // ŽOŠpŒ`Žæ“¾ 
-            glBegin(GL_LINE_LOOP);
-            glLineWidth(3);
-            glColor3f(0.8,0.5,0.4);
-            glm::vec3 p1 = tri.p[0]->pos;
-            glm::vec3 p2 = tri.p[1]->pos;
-            glm::vec3 p3 = tri.p[2]->pos;
-
-            glVertex3f(p1.x, p1.y,p1.z);
-            glVertex3f(p2.x, p2.y, p2.z);
-            glVertex3f(p3.x, p3.y, p3.z);
-            glEnd();
-        }
-    }
-
-    if (gkDelaTriangles.size()) {
-        for (auto& gdt : gkDelaTriangles) {
-            GKPoint _a = gdt.vertices[0];
-            GKPoint _b = gdt.vertices[1];
-            GKPoint _c = gdt.vertices[2];
-            glBegin(GL_LINE_LOOP);
-            glLineWidth(3);
-            glColor3f(0.4, 0.5, 0.8);
-            glVertex3f(_a.pos.x, _a.pos.y, _a.pos.z);
-            glVertex3f(_b.pos.x, _b.pos.y, _b.pos.z);
-            glVertex3f(_c.pos.x, _c.pos.y, _c.pos.z);
-            glEnd();
+    if (!bHideGDL) {
+        if (gkDelaTriangles.size()) {
+            for (auto& gdt : gkDelaTriangles) {
+                GKPoint _a = gdt.vertices[0];
+                GKPoint _b = gdt.vertices[1];
+                GKPoint _c = gdt.vertices[2];
+                glBegin(GL_LINE_LOOP);
+                glLineWidth(3);
+                glColor3f(0.4, 0.5, 0.8);
+                glVertex3f(_a.pos.x, _a.pos.y, _a.pos.z);
+                glVertex3f(_b.pos.x, _b.pos.y, _b.pos.z);
+                glVertex3f(_c.pos.x, _c.pos.y, _c.pos.z);
+                glEnd();
+                cam.end();
+                ofDrawBitmapStringHighlight(ofToString(_a.state), cam.worldToScreen(_a.pos));
+                ofDrawBitmapStringHighlight(ofToString(_b.state), cam.worldToScreen(_b.pos));
+                ofDrawBitmapStringHighlight(ofToString(_c.state), cam.worldToScreen(_c.pos));
+                cam.begin();
+            }
         }
     }
 }
