@@ -177,6 +177,7 @@ class ofApp : public ofBaseApp{
 			case ' ':
 				//findPlaneIntersectionsBeta();
 				setGKSplits();
+				runGKSplits();
 				break;
 			}
 		}

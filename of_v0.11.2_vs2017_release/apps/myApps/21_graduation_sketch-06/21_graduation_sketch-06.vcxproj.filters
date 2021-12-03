@@ -131,6 +131,9 @@
     <ClInclude Include="src\Class_GKSplit.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Class_GKNetwork.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

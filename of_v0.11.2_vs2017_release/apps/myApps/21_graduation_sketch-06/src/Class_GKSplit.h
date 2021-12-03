@@ -6,15 +6,18 @@
 #include "ofMain.h"
 #include "ofxGKUtils.h"
 
+
+
 class GKSplit {
 public:
 	GKPlane mainPlane;
 	vector<GKPlane> cutterPlaneList;
     vector<GKLineSimple> intersectLines;
-    
+    int state;
 	GKSplit(){}
     GKSplit(const GKPlane& _mainPlane) {
         mainPlane = _mainPlane;
+        state = _mainPlane.state;
     }
 	~GKSplit(){}
 
@@ -22,7 +25,18 @@ public:
         mainPlane = _mainPlane;
     };
     void addCutter(const GKPlane& _cutterPlane) {
-        cutterPlaneList.push_back(_cutterPlane);
+        if (_cutterPlane.state != mainPlane.state) {
+            if (cutterPlaneList.size()) {
+                for (auto& cp : cutterPlaneList) {
+                    if (_cutterPlane.state != cp.state) {
+                        cutterPlaneList.push_back(_cutterPlane);
+                    }
+                }
+            }
+            else {
+                cutterPlaneList.push_back(_cutterPlane);
+            }
+        }     
     };
     //by Dist Between Points or by Dist between planeCentroid and cutterPlane
     //and you should cut off too far points from the list 
@@ -41,6 +55,9 @@ public:
         }
     };
 
+    bool operator<(const GKSplit& _gks) {
+        return state < _gks.state;
+    }
     
 
 private:

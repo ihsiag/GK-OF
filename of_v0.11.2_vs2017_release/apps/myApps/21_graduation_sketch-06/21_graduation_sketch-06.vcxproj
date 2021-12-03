@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="src\Class_Delaunay.h" />
     <ClInclude Include="src\Class_GKDelaunay.h" />
+    <ClInclude Include="src\Class_GKNetwork.h" />
     <ClInclude Include="src\Class_GKSplit.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKLineSimple.h" />

@@ -53,6 +53,7 @@ class ofApp : public ofBaseApp{
 			//	gkPlane.keyPressed(key);// used:key -> none
 			//}
 			switch (key) {
+				cout << key << endl;
 			case 'f':
 				ofToggleFullscreen();
 				break;
@@ -69,7 +70,7 @@ class ofApp : public ofBaseApp{
 				break;
 			case 't':
 				test();
-				break;
+				break;		
 			}
 		}
 		void keyReleased(int key) {}

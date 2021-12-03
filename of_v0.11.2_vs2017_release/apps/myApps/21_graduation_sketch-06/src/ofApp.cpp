@@ -445,12 +445,27 @@ void ofApp::setGKSplits() {
     gkDelaTriangles.erase(gkDelaTriangles.begin(), gkDelaTriangles.end());
     gkDelaTriangles = gkDela.getDelaunayTriangles(gkPlanes);
     ssGlobalLog << "GK-DELA-TRIANGLES NUM: " << gkDelaTriangles.size() << endl;
+
+    sort(gkPlanes.begin(), gkPlanes.end());
     for (auto& gpl : gkPlanes) {
         gkSplits.emplace_back(gpl);
     }
-    for (auto& gs : gkSplits) {
-
-        //gs.addCutter();
+    sort(gkSplits.begin(),gkSplits.end());
+    
+    for (auto& gsp : gkSplits) {
+        for (auto& gdt : gkDelaTriangles) {
+            bool bContain = false;
+            for (auto& v : gdt.vertices) {
+                if (gsp.state == v.state) {
+                    bContain = true;
+                }
+            }
+            if (bContain == true) {
+                for (auto& v : gdt.vertices) {
+                    gsp.addCutter(gkPlanes[v.state-1]);
+                }
+            }
+        }
     }
 }
 
@@ -479,11 +494,12 @@ void ofApp::drawDela() {
 }
 
 void ofApp::runGKSplits() {
-    /*
-    for (auto& gkSplit : gkSplits) {
-        gkSplit.splitExcute();
+    for (auto& gks : gkSplits) {
+        //gkSplit.splitExcute();
+        for (auto& cp : gks.cutterPlaneList) {
+            cout << "main-index: "<< gks.state << "cutter-index :" << cp.state << endl;
+        }
     }
-    */
 }
 
 

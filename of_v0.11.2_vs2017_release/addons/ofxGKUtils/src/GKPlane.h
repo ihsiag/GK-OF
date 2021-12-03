@@ -199,6 +199,10 @@ class GKPlane  {
 			//	break;
 			}
 		};
+
+		bool operator < (const GKPlane& _gpl) {
+			return state < _gpl.state;
+		}
 	
 	private:
 		ofMesh originalMesh;
