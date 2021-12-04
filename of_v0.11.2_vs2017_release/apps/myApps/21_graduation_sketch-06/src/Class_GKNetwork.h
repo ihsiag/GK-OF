@@ -9,7 +9,8 @@
 class GKNetwork{
 public:
 	int mainIndex;
-	vector<int> cutterIndices;
+	set<int> cutterIndices;
+
 	GKNetwork(){}
 	GKNetwork(const int& _mainIndex) {
 		mainIndex = _mainIndex;
@@ -18,8 +19,12 @@ public:
 
 	void addCutterIndex(const int& _cutterIndex) {
 		if (_cutterIndex != mainIndex) {
-			cutterIndices.push_back(_cutterIndex);
+			cutterIndices.insert(_cutterIndex);
 		}
+	}
+
+	bool operator < (const GKNetwork& _gkn) const {
+		return mainIndex < _gkn.mainIndex;
 	}
 };
 #endif

@@ -11,60 +11,78 @@
 class GKSplit {
 public:
 	GKPlane mainPlane;
-	vector<GKPlane> cutterPlaneList;
+	set<GKPlane> cutterPlanesSet;
+    vector<GKPlane> cutterPlanes;
     vector<GKLineSimple> intersectLines;
-    int state;
+
 	GKSplit(){}
     GKSplit(const GKPlane& _mainPlane) {
         mainPlane = _mainPlane;
-        state = _mainPlane.state;
+        scaleMainPlane();
     }
 	~GKSplit(){}
 
-    void set(const GKPlane& _mainPlane) {
-        mainPlane = _mainPlane;
-    };
-    void addCutter(const GKPlane& _cutterPlane) {
+    void addCutterPlane(const GKPlane& _cutterPlane) {
         if (_cutterPlane.state != mainPlane.state) {
-            if (cutterPlaneList.size()) {
-                for (auto& cp : cutterPlaneList) {
-                    if (_cutterPlane.state != cp.state) {
-                        cutterPlaneList.push_back(_cutterPlane);
-                    }
-                }
-            }
-            else {
-                cutterPlaneList.push_back(_cutterPlane);
-            }
-        }     
+            cutterPlanesSet.insert(_cutterPlane);
+        }
     };
-    //by Dist Between Points or by Dist between planeCentroid and cutterPlane
-    //and you should cut off too far points from the list 
-
-    void splitExcute() {
-        sortCutterList();
+    void splitExcute(vector<GKPlane>* _gkPlanesNew, vector<GKLineSimple>* _intersectLines) {
+        sortCutterPlanes();
         intersectLines.erase(intersectLines.begin(), intersectLines.end());
-        for (auto& cutterPlane : cutterPlaneList) {
+        for (auto& cutterPlane : cutterPlanes) {
             vector<glm::vec3> _intersectPoints = getPlaneIntersection(cutterPlane, mainPlane);
             if (_intersectPoints.size() == 2) {
                 GKLineSimple _intersectLine = GKLineSimple(_intersectPoints[0], _intersectPoints[1]);
                 intersectLines.push_back(_intersectLine);
                 GKPlane _gkPlaneNew = splitPlaneWithIntersectLine(mainPlane, _intersectLine);
                 mainPlane = _gkPlaneNew;
+                               
             }
         }
+        _gkPlanesNew->push_back(mainPlane);
+        for (auto& il : intersectLines) {
+            _intersectLines->push_back(il);
+        }
+
     };
 
-    bool operator<(const GKSplit& _gks) {
-        return state < _gks.state;
+    //-----------OPERATOR-----------//
+    bool operator == (const GKSplit& _gks) const {
+        return mainPlane.state == _gks.mainPlane.state;
     }
+    bool operator < (const GKSplit& _gks) const {
+        return mainPlane.state < _gks.mainPlane.state;
+    };
     
 
 private:
     ofxGKUtils gk;
 
-    void sortCutterList() {
+    void sortCutterPlanes() {
+        cutterPlanes.erase(cutterPlanes.begin(), cutterPlanes.end());
+        for (auto& cps : cutterPlanesSet) {
+            if (glm::distance(cps.centroid, mainPlane.centroid) < 40) {
+                cutterPlanes.push_back(cps);
+            }
+        }
+        for (int i = 0; i < cutterPlanes.size(); i++) {
+            for (int j = 0; j < cutterPlanes.size(); j++) {
+                    if (glm::angle(cutterPlanes[i].normal, mainPlane.normal) < glm::angle(cutterPlanes[i].normal, mainPlane.normal)) {
+                        swap(cutterPlanes[i], cutterPlanes[j]);
+                    }              
+            }
+        }
+    }
+    void scaleMainPlane() {
+        for (auto& e : mainPlane.edges) {
+            scalePlaneEdge(&e, mainPlane.centroid, 50);
+        }
+    }
 
+    void scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _scaleFactor) {
+        _edge->a = glm::normalize(_edge->a - _scaleCenter) * _scaleFactor + _scaleCenter;
+        _edge->b = glm::normalize(_edge->b - _scaleCenter) * _scaleFactor + _scaleCenter;
     }
     vector<glm::vec3> getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane) {
         int _lengthMax = 100;
@@ -125,6 +143,9 @@ private:
         }
         else if (_splittedFaceB.hasInside(_gkPlane.centroid)) {
             return _splittedFaceB;
+        }
+        else {
+            return GKPlane();
         }
     }
 };

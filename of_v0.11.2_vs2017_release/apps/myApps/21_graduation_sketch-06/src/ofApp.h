@@ -8,14 +8,13 @@
 #include "Class_Delaunay.h"
 #include "Class_GKDelaunay.h"
 #include "Class_GKSplit.h"
+#include "Class_GKNetwork.h"
 
 
 
 class ofApp : public ofBaseApp{
 
 	public:
-		vector<glm::vec3> special;
-		vector<glm::vec3> specialTwo;
 
 		//-----------DEFAULT-----------//
 		ofxGKUtils gk;		
@@ -31,14 +30,16 @@ class ofApp : public ofBaseApp{
 		bool bHideMainMesh;
 		bool bHideAddedMesh;
 		bool bHideGKPlane;
-		bool bHideGKPlaneScaled;
+		bool bHideNetwork;
 		bool bHideGKPlaneNew;
-		bool bHideGDL;
+		
 
 
 		ofMesh mainMesh;
 		ofNode modifyInfo;
 		glm::vec3 selectingVertexPos;
+
+		ofMesh meshToSave;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
@@ -53,10 +54,11 @@ class ofApp : public ofBaseApp{
 		vector<DelaTriangle> gkDelaTriangles;
 
 		
-		vector<GKLineSimple> intersectLines;
+		vector<GKLineSimple> gkIntersectLines;
 		vector<GKPlane> gkPlanes;
 		vector<GKPlane> gkPlanesNew;
 		vector<GKSplit> gkSplits;
+		vector<GKNetwork> gkNets;
 
 		//-----------THIS-TIME-UTILS-----------//
 		void resetCamera();
@@ -81,28 +83,16 @@ class ofApp : public ofBaseApp{
 		void draw3DAfterModified();
 		void drawMainMesh();
 		void drawGKPlanes();
-		void drawGKPlanesNew();
-
-		//loop-begin-îCà”ÇÃñ Ç™ê⁄ÇµÇƒÇ¢ÇÈñ Ç∑Ç◊Çƒ
-		void findPlaneIntersectionsBeta();
-		vector<glm::vec3> getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane); //return line (point&vector)
-		void scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scalCenter, const float& _scaleFactor);
-		GKPlane splitPlaneWithIntersectLine(const GKPlane& _gkPlane,const GKLineSimple& _gkLine);
-
-		void findLineIntersection(); //input intersection line & return point
-		//loop-end
-		void makeMyNewFace(const vector<glm::vec3>& _vertices);
-		void addMyNewFace();
-
-		void drawIntersections();
-		void drawLeftPieces();
-
-
-		void setDela();
-		void drawDela();
-
+	
 		void setGKSplits();
 		void runGKSplits();
+		
+		void drawNetwork();
+		void drawgkIntersectLines();
+		void drawGKPlanesNew();
+
+		ofMesh getMeshFromGKPlanes(vector<GKPlane>* _gkPlanes);
+
 		//-----------DEBUG-FUNC-----------//
 		void ofApp::debugDot();
 
@@ -135,22 +125,19 @@ class ofApp : public ofBaseApp{
 				bHideGKPlane = !bHideGKPlane;
 				break;
 			case '4':
-				bHideGKPlaneScaled = !bHideGKPlaneScaled;
+				bHideNetwork = !bHideNetwork;;
 				break;
 			case '5':
 				bHideGKPlaneNew = !bHideGKPlaneNew;
 				break;
 			case '6':
 				break;
-			case '7':
-				bHideGDL = !bHideGDL;
+			case '7':			
 				break;
 			case 'z':
 				if (gkPlanes.size())gkPlanes.pop_back();
 				if (gkPlanesNew.size())gkPlanesNew.pop_back();
-				if (intersectLines.size())intersectLines.pop_back();
-				if (special.size())special.pop_back();
-				if (specialTwo.size())specialTwo.pop_back();
+				if (gkIntersectLines.size())gkIntersectLines.pop_back();
 				break;
 
 			case 'l':
@@ -160,8 +147,8 @@ class ofApp : public ofBaseApp{
 				break;
 			case 'c':
 				gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());
-				intersectLines.erase(intersectLines.begin(), intersectLines.end());
-				gkPlanesNew.erase(gkPlanesNew.begin(), gkPlanes.end());
+				gkIntersectLines.erase(gkIntersectLines.begin(), gkIntersectLines.end());
+				gkPlanesNew.erase(gkPlanesNew.begin(), gkPlanesNew.end());
 				bModified = !bModified;
 				ssGlobalLog.str("");
 				ssGlobalLog.clear(std::stringstream::goodbit);
@@ -172,7 +159,8 @@ class ofApp : public ofBaseApp{
 				gk.saveImage();
 				break;
 			case 'm':
-				//gk.saveMesh(generatedMesh, 1);
+				meshToSave = getMeshFromGKPlanes(&gkPlanesNew);
+				gk.saveMesh(meshToSave, 1);
 				break;
 			case ' ':
 				//findPlaneIntersectionsBeta();

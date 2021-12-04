@@ -21,7 +21,9 @@ class GKPlane  {
 		ofNode modifyInfo;
 		float scaleFactor;
 
-		GKPlane() {}
+		GKPlane() {
+			state = 0;
+		}
 		~GKPlane() {}
 		
 		void setup(const ofMesh& _inputMesh,const int& _state) {
@@ -56,7 +58,7 @@ class GKPlane  {
 				//ofPopMatrix();
 				ofFill();
 				glBegin(GL_POLYGON);				
-				glColor4f(0.8, 0.2, 0.2, 0.8);
+				glColor4f(0.6, 0.0, 0.0, 0.8);
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
@@ -69,9 +71,9 @@ class GKPlane  {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
 				glEnd();
+				glPointSize(2);
 				glBegin(GL_POINTS);
-				glColor4f(1, 0.4, 0.4, 1);
-				glPointSize(4);
+				glColor4f(1, 0.4, 0.4, 1);			
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
@@ -130,6 +132,17 @@ class GKPlane  {
 			}
 			return _result;
 		}
+		ofMesh convertToMesh() {
+			ofMesh _meshContainer;
+			for (int i = 0; i < vertices.size();i++) {
+				ofMesh _fragment;
+				_fragment.addVertex(centroid);
+				_fragment.addVertex(vertices[i]);
+				_fragment.addVertex(vertices[(i + 1)%vertices.size()]);
+				_meshContainer.append(_fragment);
+			}
+			return _meshContainer;
+		}
 		//-----------THIS-TIME-UTILS-----------CUSTOM//
 		void drawGKPlane(const glm::vec4& _faceCol, const glm::vec4& _edgeCol, const float& _lineWidth) {
 			if (bMadeGKPlane) {
@@ -147,10 +160,10 @@ class GKPlane  {
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
-				glEnd();				
-				glBegin(GL_POINTS);
-				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);
+				glEnd();
 				glPointSize(_lineWidth * 2);
+				glBegin(GL_POINTS);
+				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);			
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
@@ -200,9 +213,14 @@ class GKPlane  {
 			}
 		};
 
-		bool operator < (const GKPlane& _gpl) {
+		bool operator == (const GKPlane& _gpl) const {
+			return state == _gpl.state;
+		}
+
+		bool operator < (const GKPlane& _gpl) const{
 			return state < _gpl.state;
 		}
+		
 	
 	private:
 		ofMesh originalMesh;
