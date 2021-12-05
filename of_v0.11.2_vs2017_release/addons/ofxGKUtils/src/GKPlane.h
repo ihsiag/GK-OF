@@ -274,12 +274,7 @@ class GKPlane  {
 			edges.reserve(vertices.size());				
 			for (int i = 0; i < vertices.size(); i++) {
 				GKLineSimple _edge;
-				if (i + 1 < vertices.size()) {
-					_edge.setup(vertices[i], vertices[i + 1]);
-				}
-				else {
-					_edge.setup(vertices[i], vertices[0]);
-				}
+				_edge.setup(vertices[i], vertices[(i + 1)%vertices.size()]);
 				edges.push_back(_edge);
 			}
 		}

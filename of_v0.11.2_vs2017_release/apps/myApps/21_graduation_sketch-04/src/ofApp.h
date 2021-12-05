@@ -63,13 +63,28 @@ public:
     
     ofParameter<int> slider_selectModelIndex;
 
+    ofParameter<float> slider_controller_angle;
+
 
     void setup();
     void update();    
     void draw();
 
-    //-----------FOR-BULLET-----------//
+    //-----------THIS-TIME-INITS-----------//
+    void initParam();
+    void initSet();
+    void initSliders();
+    void resetCamera();
+    void initListener();
 
+    //-----------THISTIME-UTILS-----------//
+    void loadFont();
+    void loadMesh();
+    void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
+    void drawMyGraph();
+
+    //-----------THISTIME-FUNCS-----------//
+    void setWorld();
     void addKinematicBody();
     void addBox();
     void addCylinder(const glm::vec2& _pos);
@@ -78,12 +93,8 @@ public:
     void drawModelPos();
     void drawBodies();
 
-    //-----------THISTIME-FUNCS-----------//
-    void resetCamera();
+    void controllerTest();
 
-    void createGUI();
-    void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
-    void drawMyGraph();
 
     //-----------EVENT-FUNCS-----------//
     void mousePickEvent(ofxBulletMousePickEvent& e);

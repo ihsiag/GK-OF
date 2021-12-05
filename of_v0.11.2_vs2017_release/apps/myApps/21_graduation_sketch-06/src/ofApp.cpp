@@ -4,7 +4,7 @@
 void ofApp::setup(){   
     initParam();
     initSet();
-    createGUI();
+    initSliders();
     resetCamera();
     importMesh();  
 }
@@ -53,7 +53,7 @@ void ofApp::draw(){
 //-----------FOR-LIB-----------//
 //addGKPlane();
 
-//-----------THIS-TIME-UTILS-----------//
+//-----------THIS-TIME-INITS-----------//
 void ofApp::initParam(){
     modifyInfo = ofNode();
     
@@ -65,6 +65,7 @@ void ofApp::initParam(){
     bHideGKPlane = true;// false;
     bHideNetwork = false;
     bHideGKPlaneNew = false;
+    bHideSelectedPoint = false;
 
     verticesPosHolder.reserve(3);
 }
@@ -75,21 +76,24 @@ void ofApp::initSet() {
     gk.setGUI(gui);
 }
 
+void ofApp::initSliders() {
+    gui.add(rotationSlider.set("ROTATION", glm::vec3(0), glm::vec3(-PI), glm::vec3(PI)));
+}
+
 void ofApp::resetCamera() {
     cam.setDistance(14);
     //cam.enableOrtho();
     cam.setPosition(glm::vec3(180, 180, 180));
     //cam.setVFlip(true);
-    cam.lookAt(ofVec3f(0, 0, 0),glm::vec3(0,1,0));
+    cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
 }
+
+
+//-----------THIS-TIME-UTILS-----------//
 
 void ofApp::drawCamPosition() {
-    gk.setGraphGUI(12, glm::vec2(ofGetHeight() * 0.25- 60), glm::vec2(10 * 50));
-    gk.drawEachDataOnGraphGUI(12, glm::vec2(ofGetHeight() * 0.25-60), glm::vec2(10 * 50 *2),cam.getPosition(),glm::vec3(0,1,0));
-}
-
-void ofApp::createGUI() {
-    gui.add(rotationSlider.set("ROTATION", glm::vec3(0), glm::vec3(-PI), glm::vec3(PI)));
+    gk.setGraphGUI(12, glm::vec2(ofGetHeight() * 0.25 - 60), glm::vec2(10 * 50));
+    gk.drawEachDataOnGraphGUI(12, glm::vec2(ofGetHeight() * 0.25 - 60), glm::vec2(10 * 50 * 2), cam.getPosition(), glm::vec3(0, 1, 0));
 }
 
 void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
@@ -106,7 +110,7 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssInstruct << "> HIDE ADDED-PLANE      - 3" << endl;
     _ssInstruct << "> HIDE NETWORK          - 4" << endl;
     _ssInstruct << "> HIDE GENERATED-SRF    - 5" << endl;
-    _ssInstruct << "> ---                   - 6" << endl;
+    _ssInstruct << "> HIDE SELECTED-POINT   - 6" << endl;
     _ssInstruct << "> ---                   - 7" << endl;
     _ssInstruct << "> BACK                  - Z" << endl;
     _ssInstruct << "> CLEAR GLOBAL LOG      - L" << endl;
@@ -114,6 +118,7 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssInstruct << "> SAVE IMG              - S" << endl;
     _ssInstruct << "> SAVE GENERATED-MESH   - M" << endl;
     _ssInstruct << "> TEST                  - SPACE-BAR" << endl;
+    _ssInstruct << "> TEST-2                - B" << endl;
     
 
     _ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
@@ -123,11 +128,16 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssProgramInfo << "CAMERA: " << cam.getPosition() << endl;
     _ssProgramInfo << "CAMERA LOOK DIR: " << cam.getLookAtDir() << endl;
     
-    _ssDebug << "DEBUG-STATE: " << bDebug << endl;
+    _ssDebug << "DEBUG STATE: " << bDebug << endl;
+    _ssDebug << "HIDE MAIN-MESH STATE: " << bHideMainMesh << endl;
+    _ssDebug << "HIDE ADDED-MESH STATE: " << bHideAddedMesh << endl;
+    _ssDebug << "HIDE ADDED-PLANE STATE: " << bHideGKPlane << endl;
+    _ssDebug << "HIDE NETWORK STATE: " << bHideNetwork << endl;
+    _ssDebug << "HIDE GENERATED-SRF STATE: " << bHideGKPlaneNew << endl;
+    _ssDebug << "HIDE HIDE SELECTED-POINT STATE: " << bHideSelectedPoint << endl;
     _ssDebug << "CURRENT MY-PLANE NUM: " << gkPlanes.size() << endl;
-    _ssDebug << "HIDE MAIN-MESH: " << bHideMainMesh << endl;
-    _ssDebug << "HIDE ADDED-MESH: " << bHideAddedMesh << endl;
-    _ssDebug << "HIDE FLAT-SRF: " << bHideGKPlane << endl;
+    _ssDebug << "CURRENT MY-PLANE-NEW NUM: " << gkPlanesNew.size() << endl;
+    
 }
 
 void ofApp::loadLatestMesh(const string& _dirName, ofMesh* _mesh) {
@@ -142,6 +152,13 @@ void ofApp::loadLatestMesh(const string& _dirName, ofMesh* _mesh) {
     ssGlobalLog << "IMPORTED MESH" << endl;
 }
 
+ofMesh ofApp::getMeshFromGKPlanes(vector<GKPlane>* _gkPlanes) {
+    ofMesh _meshContainer;
+    for (auto gp : *_gkPlanes) {
+        _meshContainer.append(gp.convertToMesh());
+    }
+    return _meshContainer;
+}
 
 //-----------THIS-TIME-FUNCS-----------//
 void ofApp::importMesh() {
@@ -274,7 +291,7 @@ void ofApp::drawGKPlanes() {
             gkPlane.drawGKPlaneNormal();
             gkPlane.drawGKPlaneCentroid();
         }
-        gkPlane.drawInputMeshVertices();
+        if(!bHideSelectedPoint)gkPlane.drawInputMeshVertices();
     }
 }
 
@@ -307,23 +324,59 @@ void ofApp::runGKSplits() {
     }
 }
 
+void ofApp::splitIntersectPlanes(GKPlane* _planeB, GKPlane* _planeA) {
+        vector<glm::vec3> _intersectPointsA = gkSplitUtil.getPlaneIntersection(*_planeB, *_planeA);
+        if (_intersectPointsA.size() == 2) {
+            vector<glm::vec3> _intersectPointsB = gkSplitUtil.getPlaneIntersection(*_planeA, *_planeB);
+            if (_intersectPointsB.size() == 2) {
+                
+                GKLineSimple _intersectLineA = GKLineSimple(_intersectPointsA[0], _intersectPointsA[1]);
+                gkIntersectLines.push_back(_intersectLineA); //gkIntersectLines
+                GKPlane _gkPlaneNewA = gkSplitUtil.splitPlaneWithIntersectLine(*_planeA, _intersectLineA);
+                
+                GKLineSimple _intersectLineB = GKLineSimple(_intersectPointsB[0], _intersectPointsB[1]);
+                gkIntersectLines.push_back(_intersectLineB); //gkIntersectLines
+                GKPlane _gkPlaneNewB = gkSplitUtil.splitPlaneWithIntersectLine(*_planeB, _intersectLineB);
+                
+                //mainPlane = _gkPlaneNew;
+                *_planeA = _gkPlaneNewA; //maybe you should store data tmpPlane and after every check then you should put your data into realPlane
+                *_planeB = _gkPlaneNewB;
+            }
+
+        }
+}
+
+void ofApp::runSplitIntersectPlanes() {
+    for (auto& combi : gk.getIndexList_nC2(gkPlanesNew.size())) {
+        splitIntersectPlanes(&gkPlanesNew[combi.x],&gkPlanesNew[combi.y]);
+    }
+}
+
 void ofApp::drawNetwork() {
     if (!bHideNetwork) {
         if (gkDelaTriangles.size()) {
+            int counter = 0;
             for (auto& gdt : gkDelaTriangles) {
                 glLineWidth(0.5);
-                glColor4f(0.2, 0.2, 0.9, 1.0);
+                ofFill();
+                glColor4f(0.2, 0.2, 0.9, 1);
                 glBegin(GL_LINE_LOOP);
                 for (auto& v : gdt.vertices) {
                     glVertex3f(v.pos.x,v.pos.y,v.pos.z);
                 }
                 glEnd();
+                cam.end();
+                ofDrawBitmapString(ofToString(counter), cam.worldToScreen(gdt.getCentroid().pos));
+                cam.begin();
+                counter++;
             }
+            /*
             for (auto& gks : gkSplits) {
                 cam.end();
                 ofDrawBitmapStringHighlight(ofToString(gks.mainPlane.state), cam.worldToScreen(gks.mainPlane.centroid));
                 cam.begin();
             }
+            */
         }
     }
 }
@@ -346,13 +399,7 @@ void ofApp::drawGKPlanesNew() {
 
 
 
-ofMesh ofApp::getMeshFromGKPlanes(vector<GKPlane>* _gkPlanes) {
-    ofMesh _meshContainer;
-    for (auto gp : *_gkPlanes) {
-        _meshContainer.append(gp.convertToMesh());
-    }
-    return _meshContainer;
-}
+
 
 //-----------DEBUG-----------//
 void ofApp::debugDot() {

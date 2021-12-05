@@ -160,6 +160,7 @@
                 //
                 //一時保持マップで重複チェックし、問題のないものだけ四面体セットに追加
                 {
+                    cout << "tetras-original :" << tmpTetras.size() << endl;
                     vector<bool> shouldDelete;
                     shouldDelete.reserve(tmpTetras.size());
                     for (int i = 0; i < tmpTetras.size(); i++) {
@@ -168,11 +169,11 @@
                     for (int i = 0; i < tmpTetras.size(); i++) {
                         for (int j = 0; j < tmpTetras.size(); j++) {
                             if (i != j) {
-                                if (tmpTetras[i].getCentroid().pos == tmpTetras[j].getCentroid().pos) {
-                                    if (abs(tmpTetras[i].getRadius(tmpTetras[i].getCentroid()) - tmpTetras[j].getRadius(tmpTetras[j].getCentroid())) < 0.01) {
+                                if (glm::distance(tmpTetras[i].getCentroid().pos,tmpTetras[j].getCentroid().pos)<0.1) {
+                                    //if (abs(tmpTetras[i].getRadius(tmpTetras[i].getCentroid()) - tmpTetras[j].getRadius(tmpTetras[j].getCentroid())) < 1) {
                                         shouldDelete[i] = true;
                                         break;
-                                    }
+                                    //}
                                 }
                             }
                         }
@@ -182,9 +183,9 @@
                             tetras.push_back(tmpTetras[i]);
                         }
                     }
+                    cout << "tetras-returned :" << tetras.size() << endl;
                 }
             }
-   
             // 最後に、外部三角形の頂点を削除       
             for (auto tetItr = tetras.begin(); tetItr != tetras.end(); ) {
                 if (hugeTetrahedron.hasCommonPoints(*tetItr)) {
@@ -227,7 +228,8 @@
             }
             
             vector<DelaTriangle> tris;
-            {
+            {   
+                cout << "tris-original: "<< tmpTris.size() << endl;
                 vector<bool> shouldDelete;
                 shouldDelete.reserve(tmpTris.size());
                 for (int i = 0; i < tmpTris.size(); i++) {
@@ -236,11 +238,11 @@
                 for (int i = 0; i < tmpTris.size(); i++) {
                     for (int j = 0; j < tmpTris.size(); j++) {
                         if (i != j) {
-                            if (tmpTris[i].getCentroid().pos == tmpTris[j].getCentroid().pos) {
-                                if (abs(tmpTris[i].getRadius(tmpTris[i].getCentroid()) - tmpTris[j].getRadius(tmpTris[j].getCentroid())) < 0.01) {
+                            if (glm::distance(tmpTris[i].getCentroid().pos,tmpTris[j].getCentroid().pos)<0.1) {
+                                //if (abs(tmpTris[i].getRadius(tmpTris[i].getCentroid()) - tmpTris[j].getRadius(tmpTris[j].getCentroid())) < 0.01) {
                                     shouldDelete[i] = true;
                                     break;
-                                }
+                                //}
                             }
                         }
                     }
@@ -250,6 +252,7 @@
                         tris.push_back(tmpTris[i]);
                     }
                 }
+                cout << "tris-returned: " << tris.size() << endl;
             }
             return tris;
         };

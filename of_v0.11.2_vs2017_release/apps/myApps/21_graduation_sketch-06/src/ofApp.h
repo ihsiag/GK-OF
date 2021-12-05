@@ -27,6 +27,7 @@ class ofApp : public ofBaseApp{
 		//-----------GLOBAL-----------//
 		bool bModified;
 		bool bDebug;
+		bool bHideSelectedPoint;
 		bool bHideMainMesh;
 		bool bHideAddedMesh;
 		bool bHideGKPlane;
@@ -53,6 +54,7 @@ class ofApp : public ofBaseApp{
 		GKDelaunay3d gkDela;
 		vector<DelaTriangle> gkDelaTriangles;
 
+		GKSplit gkSplitUtil;
 		
 		vector<GKLineSimple> gkIntersectLines;
 		vector<GKPlane> gkPlanes;
@@ -60,17 +62,21 @@ class ofApp : public ofBaseApp{
 		vector<GKSplit> gkSplits;
 		vector<GKNetwork> gkNets;
 
-		//-----------THIS-TIME-UTILS-----------//
+		//-----------THIS-TIME-INITS-----------//
+		void initParam();
+		void initSet();
+		void initSliders();
 		void resetCamera();
-		void drawCamPosition();
-		void createGUI();
+
+
+		//-----------THIS-TIME-UTILS-----------//
+		void drawCamPosition();		
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
 		void loadLatestMesh(const string& _dirName, ofMesh* _mesh);
+		ofMesh getMeshFromGKPlanes(vector<GKPlane>* _gkPlanes);
 
 
 		//-----------THIS-TIME-FUNCS-----------//
-		void initParam();
-		void initSet();
 		void importMesh();	
 		void modifyMesh();
 		void updateMesh();
@@ -87,11 +93,11 @@ class ofApp : public ofBaseApp{
 		void setGKSplits();
 		void runGKSplits();
 		
+		void splitIntersectPlanes(GKPlane* _planeB,GKPlane* _planeA);
+		void runSplitIntersectPlanes();
 		void drawNetwork();
 		void drawgkIntersectLines();
 		void drawGKPlanesNew();
-
-		ofMesh getMeshFromGKPlanes(vector<GKPlane>* _gkPlanes);
 
 		//-----------DEBUG-FUNC-----------//
 		void ofApp::debugDot();
@@ -131,6 +137,7 @@ class ofApp : public ofBaseApp{
 				bHideGKPlaneNew = !bHideGKPlaneNew;
 				break;
 			case '6':
+				bHideSelectedPoint = !bHideSelectedPoint;
 				break;
 			case '7':			
 				break;
@@ -166,6 +173,9 @@ class ofApp : public ofBaseApp{
 				//findPlaneIntersectionsBeta();
 				setGKSplits();
 				runGKSplits();
+				break;
+			case 'b':
+				runSplitIntersectPlanes();
 				break;
 			}
 		}

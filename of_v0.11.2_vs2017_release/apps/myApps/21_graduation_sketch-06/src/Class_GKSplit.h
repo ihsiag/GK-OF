@@ -18,7 +18,7 @@ public:
 	GKSplit(){}
     GKSplit(const GKPlane& _mainPlane) {
         mainPlane = _mainPlane;
-        scaleMainPlane();
+        scaleMainPlane(150);
     }
 	~GKSplit(){}
 
@@ -56,30 +56,7 @@ public:
     };
     
 
-private:
-    ofxGKUtils gk;
-
-    void sortCutterPlanes() {
-        cutterPlanes.erase(cutterPlanes.begin(), cutterPlanes.end());
-        for (auto& cps : cutterPlanesSet) {
-            if (glm::distance(cps.centroid, mainPlane.centroid) < 40) {
-                cutterPlanes.push_back(cps);
-            }
-        }
-        for (int i = 0; i < cutterPlanes.size(); i++) {
-            for (int j = 0; j < cutterPlanes.size(); j++) {
-                    if (glm::angle(cutterPlanes[i].normal, mainPlane.normal) < glm::angle(cutterPlanes[i].normal, mainPlane.normal)) {
-                        swap(cutterPlanes[i], cutterPlanes[j]);
-                    }              
-            }
-        }
-    }
-    void scaleMainPlane() {
-        for (auto& e : mainPlane.edges) {
-            scalePlaneEdge(&e, mainPlane.centroid, 50);
-        }
-    }
-
+    //-----------UTIL-----------
     void scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _scaleFactor) {
         _edge->a = glm::normalize(_edge->a - _scaleCenter) * _scaleFactor + _scaleCenter;
         _edge->b = glm::normalize(_edge->b - _scaleCenter) * _scaleFactor + _scaleCenter;
@@ -93,8 +70,8 @@ private:
             //scalePlaneEdge(&_edge, _gkPlaneActive.centroid, _lengthMax);
             float _innerA = glm::dot(_gkPlaneCutter.normal, _edge.a - _gkPlaneCutter.centroid);
             float _innerB = glm::dot(_gkPlaneCutter.normal, _edge.b - _gkPlaneCutter.centroid);
-            if (abs(_innerA) < 0.000001) { _innerA = 0.0; }
-            if (abs(_innerB) < 0.000001) { _innerB = 0.0; }
+            if (abs(_innerA) < 0.01) { _innerA = 0.0; } //however you like
+            if (abs(_innerB) < 0.01) { _innerB = 0.0; }
             if ((_innerA > 0 && _innerB < 0) || (_innerA < 0 && _innerB > 0)) {
                 // _bIntersect = true;
                 _intersectPoint = (_edge.b - _edge.a) * abs(_innerA) / (abs(_innerA) + abs(_innerB)) + _edge.a;
@@ -148,5 +125,30 @@ private:
             return GKPlane();
         }
     }
+
+private:
+    ofxGKUtils gk;
+
+    void sortCutterPlanes() {
+        cutterPlanes.erase(cutterPlanes.begin(), cutterPlanes.end());
+        for (auto& cps : cutterPlanesSet) {
+            if (glm::distance(cps.centroid, mainPlane.centroid) < 40) {
+                cutterPlanes.push_back(cps);
+            }
+        }
+        for (int i = 0; i < cutterPlanes.size(); i++) {
+            for (int j = 0; j < cutterPlanes.size(); j++) {
+                    if (glm::angle(cutterPlanes[i].normal, mainPlane.normal) < glm::angle(cutterPlanes[i].normal, mainPlane.normal)) {
+                        swap(cutterPlanes[i], cutterPlanes[j]);
+                    }              
+            }
+        }
+    }
+    void scaleMainPlane(const float& _size) {
+        for (auto& e : mainPlane.edges) {
+            scalePlaneEdge(&e, mainPlane.centroid, _size);
+        }
+    }
+
 };
 #endif
