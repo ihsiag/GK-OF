@@ -93,8 +93,6 @@ public:
     void drawModelPos();
     void drawBodies();
 
-    void controllerTest();
-
 
     //-----------EVENT-FUNCS-----------//
     void mousePickEvent(ofxBulletMousePickEvent& e);

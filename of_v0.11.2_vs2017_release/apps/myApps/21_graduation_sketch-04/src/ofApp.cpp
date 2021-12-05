@@ -346,10 +346,6 @@ void ofApp::drawBodies() {
     }
 }
 
-void ofApp::controllerTest() {
-    glm::vec3 _pos;
-
-}
 
 //-----------EVENT-FUNCS-----------//
 void ofApp::mousePickEvent(ofxBulletMousePickEvent& e) {
