@@ -18,7 +18,7 @@ public:
 	GKSplit(){}
     GKSplit(const GKPlane& _mainPlane) {
         mainPlane = _mainPlane;
-        scaleMainPlane(150);
+        scaleMainPlane(50);
     }
 	~GKSplit(){}
 

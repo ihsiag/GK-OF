@@ -30,9 +30,6 @@ void ofApp::setup() {
     setWorld();
     addKinematicBody();
     
-    light.setPosition(0, -200, 0);
-    light.setScale(glm::vec3(50));
-
     initListener();
     cam.enableMouseInput();  
 }
@@ -79,9 +76,12 @@ void ofApp::draw() {
     ofNoFill();
     ground->draw();
     drawBodies(); //rigid, ,kinematic, crashers, models
+    gkcAU.update(slider_controller_angle);
+    gkcAU.drawController();
+    //gkcAD.update(slider_controller_angle);
+    gkcAD.drawController();
     light.disable();
     ofDisableLighting();
-
     glDisable(GL_DEPTH_TEST);
     cam.end();
 
@@ -106,8 +106,14 @@ void ofApp::draw() {
 void ofApp::initParam() {
     bDrawDebug = false;
     currentFrame = 0;
-    fontSize = 10;
+    fontSize = 3;
     mousePickIndex = -1;
+
+    light.setPosition(0, -200, 0);
+    light.setScale(glm::vec3(50));
+
+    gkcAU.set(glm::vec3(0, -10, 0), 8, 0.5, glm::vec3(0, 1, 0), &font);
+    gkcAD.set(glm::vec3(0, 0, 0), 8, 0.5, glm::vec3(0, 1, 0), &font);
 }
 
 void ofApp::initSet() {
@@ -134,6 +140,7 @@ void ofApp::initSliders() {
     gui.add(slider_kSK_SPLT_CL.set("Soft vs rigid impulse split [0,1] (cluster only)", 0.5, 0., 1.));
     gui.add(slider_selectModelIndex.set("SELECT MODEL INDEX", 0, 0, 10));
     gui.add(slider_timestep.set("slider", 0.05, 0, 100));
+    gui.add(slider_controller_angle.set("controller_angle", 0, -180, 180));
 }
 
 void ofApp::initListener() {
@@ -220,8 +227,10 @@ void ofApp::addKinematicBody() {
     for (int i = 0; i < 5; i++) {
         shared_ptr< ofxBulletBox > kinematicBody(new ofxBulletBox());
         glm::vec3 kinematicBodyInfo = glm::vec3(2., 2., 2.);
-        kinematicBody->create(world.world, glm::vec3(ofRandom(-groundInfo.x / 2, groundInfo.x / 2), -groundInfo.y / 2, ofRandom(-groundInfo.z / 2, groundInfo.z / 2)), 1., kinematicBodyInfo.x, kinematicBodyInfo.y, kinematicBodyInfo.z);
+        kinematicBody->create(world.world, glm::vec3(ofRandom(-groundInfo.x / 2, groundInfo.x / 2), -groundInfo.y / 2, ofRandom(-groundInfo.z / 2, groundInfo.z / 2)), 0, kinematicBodyInfo.x, kinematicBodyInfo.y, kinematicBodyInfo.z);
         // ceiling->setProperties(.25, .95);
+        //kinematicBody->setCollisionFlags(kinematicBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+        kinematicBody->setActivationState(DISABLE_DEACTIVATION);
         kinematicBody->add();
         kinematicBodies.push_back(kinematicBody);
     }

@@ -28,9 +28,17 @@ void ofApp::draw(){
     cam.begin();  
     glEnable(GL_DEPTH_TEST);
     gk.draw3DAxis();
-    gk.draw3DPlaneGrid(10, 50, glm::vec3(0, 1, 0), 1, glm::vec4(glm::vec3(0.3), 1)); 
+    gk.draw3DPlaneGrid(10, 50, glm::vec3(0, 1, 0), 1, glm::vec4(glm::vec3(0.3), 1));
+    if (!bHideLight) {
+        ofEnableLighting();
+        light.enable();
+    }
     if (!bModified)draw3DBeforeModified();
     if (bModified)draw3DAfterModified();
+    if (!bHideLight) {
+        light.disable();
+        ofDisableLighting();
+    }
     glDisable(GL_DEPTH_TEST);
     cam.end();
     
@@ -66,8 +74,12 @@ void ofApp::initParam(){
     bHideNetwork = false;
     bHideGKPlaneNew = false;
     bHideSelectedPoint = false;
+    bHideLight = false;
 
     verticesPosHolder.reserve(3);
+
+    light.setPosition(80, 80, 80);
+    light.setScale(glm::vec3(50));
 }
 
 void ofApp::initSet() {
@@ -111,7 +123,7 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssInstruct << "> HIDE NETWORK          - 4" << endl;
     _ssInstruct << "> HIDE GENERATED-SRF    - 5" << endl;
     _ssInstruct << "> HIDE SELECTED-POINT   - 6" << endl;
-    _ssInstruct << "> ---                   - 7" << endl;
+    _ssInstruct << "> HIDE LIGHT            - 7" << endl;
     _ssInstruct << "> BACK                  - Z" << endl;
     _ssInstruct << "> CLEAR GLOBAL LOG      - L" << endl;
     _ssInstruct << "> CLEAR ALL             - C" << endl;
@@ -134,7 +146,8 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssDebug << "HIDE ADDED-PLANE STATE: " << bHideGKPlane << endl;
     _ssDebug << "HIDE NETWORK STATE: " << bHideNetwork << endl;
     _ssDebug << "HIDE GENERATED-SRF STATE: " << bHideGKPlaneNew << endl;
-    _ssDebug << "HIDE HIDE SELECTED-POINT STATE: " << bHideSelectedPoint << endl;
+    _ssDebug << "HIDE SELECTED-POINT STATE: " << bHideSelectedPoint << endl;
+    _ssDebug << "HIDE LIGHT STATE: " << bHideLight << endl;
     _ssDebug << "CURRENT MY-PLANE NUM: " << gkPlanes.size() << endl;
     _ssDebug << "CURRENT MY-PLANE-NEW NUM: " << gkPlanesNew.size() << endl;
     

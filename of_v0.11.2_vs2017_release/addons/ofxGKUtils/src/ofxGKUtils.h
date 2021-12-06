@@ -6,7 +6,6 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
-
 #include "GKPoint.h"
 #include "GKPlane.h"
 #include "GKLineSimple.h"
@@ -35,6 +34,7 @@ public:
 
 
 //-------------------------------------------------------HELPER_GUI-------------------------------------------------------//
+	
 	glm::vec3 myGUIPos(const int& _indexPos);
 	float myGUIWidth();
 	void setGUI(ofxGuiGroup& _gui);

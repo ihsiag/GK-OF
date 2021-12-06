@@ -6,12 +6,16 @@
 #include "ofxGui.h"
 #include "ofEvent.h"
 
+#include "GKControllerAngle.h"
+
 
 class ofApp : public ofBaseApp{
 
 public:
     //-----------BASIC-----------//
     ofxGKUtils gk;
+    GKControllerAngle gkcAU;
+    GKControllerAngle gkcAD;
     ofEasyCam cam;
     ofTrueTypeFont font;
     ofMesh mesh;

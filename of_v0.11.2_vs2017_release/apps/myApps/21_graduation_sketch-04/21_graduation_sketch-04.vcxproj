@@ -628,8 +628,8 @@
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKLineSimple.h" />
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPlane.h" />
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPoint.h" />
-    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\gui\GKPoint - Copy.h" />
-    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\gui\GKPoint.h" />
+    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\gui\GKController2DTo3D.h" />
+    <ClInclude Include="..\..\..\addons\ofxGKUtils\src\gui\GKControllerAngle.h" />
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\ofxGKUtils.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h" />

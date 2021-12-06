@@ -122,8 +122,7 @@ void ofxGKUtils::resizeGUI(ofxGuiGroup& _gui) {
 }
 
 void ofxGKUtils::setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize) {
-
-	glm::vec2 _pos = getPosLayout4x4(_indexPos);
+	glm::vec2 _pos = getPosLayout4x4(_indexPos);	
 	if (_indexPos < 4) {
 		_pos.x += 60;
 	}

@@ -33,9 +33,10 @@ class ofApp : public ofBaseApp{
 		bool bHideGKPlane;
 		bool bHideNetwork;
 		bool bHideGKPlaneNew;
+		bool bHideLight;
 		
 
-
+		ofLight light;
 		ofMesh mainMesh;
 		ofNode modifyInfo;
 		glm::vec3 selectingVertexPos;
@@ -139,7 +140,8 @@ class ofApp : public ofBaseApp{
 			case '6':
 				bHideSelectedPoint = !bHideSelectedPoint;
 				break;
-			case '7':			
+			case '7':
+				bHideLight = !bHideLight;
 				break;
 			case 'z':
 				if (gkPlanes.size())gkPlanes.pop_back();
