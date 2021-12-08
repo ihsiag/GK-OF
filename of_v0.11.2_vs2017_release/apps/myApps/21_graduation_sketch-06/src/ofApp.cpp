@@ -431,9 +431,14 @@ void ofApp::splitIntersectPlanes(GKPlane* _planeB, GKPlane* _planeA,vector<GKLin
 }
 
 void ofApp::runSplitByCombi() {
-    gkPlanesSplittedByDelaunay.erase(gkPlanesSplittedByDelaunay.begin(), gkPlanesSplittedByDelaunay.end());
+    gkSplits.erase(gkSplits.begin(), gkSplits.end());
     gkPlanesSplittedByCombi.erase(gkPlanesSplittedByCombi.begin(), gkPlanesSplittedByCombi.end());
     gkPlanesSplittedByCombi = gkPlanes;
+    for (auto& gkpsbc : gkPlanesSplittedByCombi) {
+        for (auto& edge : gkpsbc.edges) {
+            gkSplitUtil.scalePlaneEdge(&edge, gkpsbc.centroid, 2);
+        }
+    }
     //gkPlanesSplittedByCombi = gkPlanesSplittedByDelaunay;
     for (auto& combi : gk.getIndexList_nC2(gkPlanesSplittedByCombi.size())) {
         splitIntersectPlanes(&gkPlanesSplittedByCombi[combi.x], &gkPlanesSplittedByCombi[combi.y],&gkIntersectLines);

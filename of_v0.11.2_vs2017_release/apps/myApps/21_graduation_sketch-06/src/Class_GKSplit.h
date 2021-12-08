@@ -18,7 +18,8 @@ public:
 	GKSplit(){}
     GKSplit(const GKPlane& _mainPlane) {
         mainPlane = _mainPlane;
-        scaleMainPlane(50);
+        resizeMainPlane(50);
+        //scaleMainPlane(3);
     }
 	~GKSplit(){}
 
@@ -57,17 +58,23 @@ public:
     
 
     //-----------UTIL-----------
-    void scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _scaleFactor) {
-        _edge->a = glm::normalize(_edge->a - _scaleCenter) * _scaleFactor + _scaleCenter;
-        _edge->b = glm::normalize(_edge->b - _scaleCenter) * _scaleFactor + _scaleCenter;
+    void resizePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _resizeFactor) {
+        _edge->a = glm::normalize(_edge->a - _scaleCenter) * _resizeFactor + _scaleCenter;
+        _edge->b = glm::normalize(_edge->b - _scaleCenter) * _resizeFactor + _scaleCenter;
     }
+
+    void scalePlaneEdge(GKLineSimple* _edge, const glm::vec3& _scaleCenter, const float& _scaleFactor) {
+        _edge->a = (_edge->a - _scaleCenter) * _scaleFactor + _scaleCenter;
+        _edge->b = (_edge->b - _scaleCenter) * _scaleFactor + _scaleCenter;
+    }
+
     vector<glm::vec3> getPlaneIntersection(const GKPlane& _gkPlaneCutter, const GKPlane& _gkPlane) {
         int _lengthMax = 100;
         vector<glm::vec3>  _intersectPoints;
         vector<GKLineSimple> _edges = _gkPlane.edges;
         for (auto& _edge : _edges) {
             glm::vec3 _intersectPoint;
-            //scalePlaneEdge(&_edge, _gkPlaneActive.centroid, _lengthMax);
+            //resizePlaneEdge(&_edge, _gkPlaneActive.centroid, _lengthMax);
             float _innerA = glm::dot(_gkPlaneCutter.normal, _edge.a - _gkPlaneCutter.centroid);
             float _innerB = glm::dot(_gkPlaneCutter.normal, _edge.b - _gkPlaneCutter.centroid);
             if (abs(_innerA) < 0.01) { _innerA = 0.0; } //however you like
@@ -144,9 +151,15 @@ private:
             }
         }
     }
-    void scaleMainPlane(const float& _size) {
+    void scaleMainPlane(const float& _scaleFactor) {
         for (auto& e : mainPlane.edges) {
-            scalePlaneEdge(&e, mainPlane.centroid, _size);
+            scalePlaneEdge(&e, mainPlane.centroid, _scaleFactor);
+        }
+    }
+    
+    void resizeMainPlane(const float& _resizeFactor) {
+        for (auto& e : mainPlane.edges) {
+            resizePlaneEdge(&e, mainPlane.centroid, _resizeFactor);
         }
     }
 
