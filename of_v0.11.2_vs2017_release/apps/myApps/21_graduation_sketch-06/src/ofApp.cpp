@@ -43,7 +43,8 @@ void ofApp::draw(){
     cam.end();
     
     //-----------2D-LAYER-----------//
-    if (bModified)selectingVertexPos = getCurrentVertex(mainMesh, ssDebug);
+    if (bModified && !bManualMode)selectingVertexPos = getCurrentVertexMesh(mainMesh, ssDebug);
+    if (bManualMode) selectingVertexPos = getCurrentVertexGKPlane(gkPlanesSplittedByCombi);
 
     //-----------INFO-----------//
     createInfo(ssInstruct, ssProgramInfo, ssDebug);
@@ -54,7 +55,8 @@ void ofApp::draw(){
     gk.drawInfo(ssProgramInfo, 0);
     gk.drawInfo(ssDebug, 4);
     gk.drawInfo(ssGlobalLog, 5);
-    if(!bModified)gui.draw();
+    if (!bModified)guiOne.draw();
+    else guiTwo.draw();
     drawCamPosition();
 }
 
@@ -67,12 +69,15 @@ void ofApp::initParam(){
     
     modifyInfo.setPosition(0, 0, 0);
     bModified = false;
+    bManualMode = false;
     bDebug = false;
     bHideMainMesh = false;
     bHideAddedMesh = true;// false;
     bHideGKPlane = true;// false;
     bHideNetwork = false;
-    bHideGKPlaneNew = false;
+    bHideGKPlaneSplittedByDelaunay = false;
+    bHideGKPlaneSplittedByCombi = false;
+    bHideGKPlaneFinal = false;
     bHideSelectedPoint = false;
     bHideLight = false;
 
@@ -85,11 +90,15 @@ void ofApp::initParam(){
 void ofApp::initSet() {
     gk.setup(&ssGlobalLog);
     gk.setCam(&cam);
-    gk.setGUI(gui);
+    gk.setGUI(guiOne,13);
+    gk.setGUI(guiTwo,13);
 }
 
 void ofApp::initSliders() {
-    gui.add(rotationSlider.set("ROTATION", glm::vec3(0), glm::vec3(-PI), glm::vec3(PI)));
+    guiOne.add(rotationSlider.set("ROTATION", glm::vec3(0), glm::vec3(-PI), glm::vec3(PI)));
+    
+    guiTwo.add(mainMeshAlphaSlider.set("MAIN-MESH ALPHA", 0.6, 0, 1));
+    guiTwo.add(selectWhichiPlanesToDelete.set("SEL WHICH PLANES TO DEL", 0, 0, 4));
 }
 
 void ofApp::resetCamera() {
@@ -121,16 +130,19 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssInstruct << "> HIDE ADDED-MESH       - 2" << endl;
     _ssInstruct << "> HIDE ADDED-PLANE      - 3" << endl;
     _ssInstruct << "> HIDE NETWORK          - 4" << endl;
-    _ssInstruct << "> HIDE GENERATED-SRF    - 5" << endl;
-    _ssInstruct << "> HIDE SELECTED-POINT   - 6" << endl;
-    _ssInstruct << "> HIDE LIGHT            - 7" << endl;
+    _ssInstruct << "> HIDE SP-PLANE-BY-DELA - 5" << endl;
+    _ssInstruct << "> HIDE SP-PLANE-BY-COMBI- 6" << endl;
+    _ssInstruct << "> HIDE FINAL-PLANE      - 7" << endl;
+    _ssInstruct << "> HIDE SELECTED-POINT   - 8" << endl;
+    _ssInstruct << "> HIDE LIGHT            - 9" << endl;
     _ssInstruct << "> BACK                  - Z" << endl;
     _ssInstruct << "> CLEAR GLOBAL LOG      - L" << endl;
     _ssInstruct << "> CLEAR ALL             - C" << endl;
     _ssInstruct << "> SAVE IMG              - S" << endl;
     _ssInstruct << "> SAVE GENERATED-MESH   - M" << endl;
-    _ssInstruct << "> TEST                  - SPACE-BAR" << endl;
-    _ssInstruct << "> TEST-2                - B" << endl;
+    _ssInstruct << "> SPLIT BY DELA         - SPACE-BAR" << endl;
+    _ssInstruct << "> SPLIT BY COMBI        - B" << endl;
+    _ssInstruct << "> MANUAL-MODE           - Q" << endl;
     
 
     _ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
@@ -141,16 +153,31 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssProgramInfo << "CAMERA LOOK DIR: " << cam.getLookAtDir() << endl;
     
     _ssDebug << "DEBUG STATE: " << bDebug << endl;
+    _ssDebug << "MANUAL-MODE STATE: " << bManualMode << endl;
     _ssDebug << "HIDE MAIN-MESH STATE: " << bHideMainMesh << endl;
     _ssDebug << "HIDE ADDED-MESH STATE: " << bHideAddedMesh << endl;
     _ssDebug << "HIDE ADDED-PLANE STATE: " << bHideGKPlane << endl;
     _ssDebug << "HIDE NETWORK STATE: " << bHideNetwork << endl;
-    _ssDebug << "HIDE GENERATED-SRF STATE: " << bHideGKPlaneNew << endl;
+    _ssDebug << "HIDE SP-PLANE-BY-DELA STATE: " << bHideGKPlaneSplittedByDelaunay << endl;
+    _ssDebug << "HIDE SP-PLANE-BY-COMBI STATE: " << bHideGKPlaneSplittedByCombi << endl;
+    _ssDebug << "HIDE FINAL-PLANE STATE: " << bHideGKPlaneFinal << endl;
     _ssDebug << "HIDE SELECTED-POINT STATE: " << bHideSelectedPoint << endl;
     _ssDebug << "HIDE LIGHT STATE: " << bHideLight << endl;
     _ssDebug << "CURRENT MY-PLANE NUM: " << gkPlanes.size() << endl;
-    _ssDebug << "CURRENT MY-PLANE-NEW NUM: " << gkPlanesNew.size() << endl;
+    _ssDebug << "CURRENT MY-PLANE-NEW NUM: " << gkPlanesSplittedByDelaunay.size() << endl;
     
+    if (selectWhichiPlanesToDelete == 0) {
+        _ssDebug << "CURRENT PLANES TO DEL: " << "ADDED-PLANE" << endl;
+    }
+    if (selectWhichiPlanesToDelete == 1) {
+        _ssDebug << "CURRENT PLANES TO DEL: " << "SP-PLANE=BY-DELA" << endl;
+    }
+    if (selectWhichiPlanesToDelete == 2) {
+        _ssDebug << "CURRENT PLANES TO DEL: " << "SP-PLANE-BY-COMBI" << endl;
+    }
+    if (selectWhichiPlanesToDelete == 3) {
+        _ssDebug << "CURRENT PLANES TO DEL: " << "FINAL-PLANE" << endl;
+    }
 }
 
 void ofApp::loadLatestMesh(const string& _dirName, ofMesh* _mesh) {
@@ -193,14 +220,14 @@ void ofApp::updateMesh() {
     bModified = true;
 }
 
-glm::vec3 ofApp::getCurrentVertex(const ofMesh& _mesh, stringstream& _ssDebug) {
+glm::vec3 ofApp::getCurrentVertexMesh(const ofMesh& _mesh, stringstream& _ssDebug) {
     float nearestDistance = 0;
     glm::vec3 nearestVertex3D;
     glm::vec2 nearestVertex2D;
     int nearestIndex = 0;
     glm::vec3 mouse(ofGetMouseX(), ofGetMouseY(),0);
-    for (int i = 0; i < _mesh.getNumVertices(); i++) {
-        glm::vec3 _camPos = cam.getPosition();
+    glm::vec3 _camPos = cam.getPosition();
+    for (int i = 0; i < _mesh.getNumVertices(); i++) {       
         glm::vec3 _vertPos = _mesh.getVertex(i);
         glm::vec3 _vertNormal = _mesh.getNormal(i);
         //if(glm::dot(_camPos-_vertPos,_vertNormal)>0){
@@ -233,20 +260,56 @@ glm::vec3 ofApp::getCurrentVertex(const ofMesh& _mesh, stringstream& _ssDebug) {
     return nearestVertex3D;
 }
 
+glm::vec3 ofApp::getCurrentVertexGKPlane(const vector<GKPlane>& _gkPlanes) {
+    float nearestDistance;
+    glm::vec3 nearestVertex3D;
+    glm::vec2 nearestVertex2D;
+    int nearestIndex = 0;
+    glm::vec3 mouse(ofGetMouseX(), ofGetMouseY(), 0);
+    int indexCounter = 0;
+    for (auto& gp : _gkPlanes) {
+        for (auto& v : gp.vertices) {
+            glm::vec3 cur = cam.worldToScreen(v);
+            float distance = glm::distance(cur, mouse);
+            if (indexCounter == 0 || distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestVertex3D = v;
+                nearestVertex2D = cur;
+                nearestIndex = indexCounter;
+            }
+            indexCounter++;
+        }
+    }
+    ofNoFill();
+    ofSetColor(ofColor::yellow);
+    ofSetLineWidth(2);
+    ofDrawCircle(nearestVertex2D, 4);
+    ofSetLineWidth(1);
+
+    glm::vec2 offset(10, -10);
+    ofDrawBitmapStringHighlight(ofToString(nearestIndex), mouse + offset);
+    return nearestVertex3D;
+}
+
 void ofApp::checkVerticesHolder() {
     if (verticesPosHolder.size() > 2) {
         addGKPlane();
     }
 }
 
-void ofApp::addGKPlane() {
-    GKPlane _gkPlane;
-    ofMesh _mesh;
-    _mesh.addVertices(verticesPosHolder);
-    _gkPlane.setup(_mesh, gkPlanes.size()+1);
-    gkPlanes.push_back(_gkPlane);
+void ofApp::addGKPlane() { 
+    if (not bManualMode) {
+        ofMesh _mesh;
+        _mesh.addVertices(verticesPosHolder);
+        gkPlanes.emplace_back(_mesh, gkPlanes.size() + 1);
+        ssGlobalLog << "ADDED GKPLANE" << endl;
+    }
+    else {
+        gkPlanesFinal.emplace_back(verticesPosHolder, 0);
+        ssGlobalLog << "ADDED GKPLANE-FINAL" << endl;
+    }
     verticesPosHolder.erase(verticesPosHolder.begin(), verticesPosHolder.end());
-    ssGlobalLog << "ADDED GKPLANE" << endl;
+    
 }
 
 void ofApp::draw3DBeforeModified() {
@@ -262,7 +325,9 @@ void ofApp::draw3DBeforeModified() {
 void ofApp::draw3DAfterModified() {
     drawNetwork();
     drawGKPlanes();
-    if(!bHideGKPlaneNew)drawGKPlanesNew();
+    if(!bHideGKPlaneSplittedByDelaunay)drawGKPlanesSplittedByDelaunay();
+    if (!bHideGKPlaneSplittedByCombi)drawGKPlanesSplittedByCombi();
+    if (!bHideGKPlaneFinal)drawGKPlanesFinal();
     if (bDebug) {
         drawgkIntersectLines();
         //debugDot();
@@ -275,7 +340,7 @@ void ofApp::drawMainMesh() {
     glCullFace(GL_BACK);
     glLineWidth(1);
     glPointSize(3);
-    glColor4f(0.4, 0.5, 0.6, 0.5);
+    glColor4f(0.4, 0.5, 0.6, mainMeshAlphaSlider);
     if (!bModified)glColor3f(0.5, 0, 0);
     mainMesh.draw();
     glColor3f(0.7, 0.7, 0.8);
@@ -309,7 +374,7 @@ void ofApp::drawGKPlanes() {
 }
 
 void ofApp::setGKSplits() {
-    gkPlanesNew.erase(gkPlanesNew.begin(), gkPlanesNew.end());
+    gkPlanesSplittedByDelaunay.erase(gkPlanesSplittedByDelaunay.begin(), gkPlanesSplittedByDelaunay.end());
     sort(gkPlanes.begin(), gkPlanes.end());
     ssGlobalLog << "PLANES NUM: " << gkPlanes.size() << endl;
     gkDelaTriangles.erase(gkDelaTriangles.begin(), gkDelaTriangles.end());
@@ -333,22 +398,28 @@ void ofApp::setGKSplits() {
 void ofApp::runGKSplits() {
     gkIntersectLines.erase(gkIntersectLines.begin(), gkIntersectLines.end());
     for (auto& gks : gkSplits) {
-        gks.splitExcute(&gkPlanesNew,&gkIntersectLines);
+        gks.splitExcute(&gkPlanesSplittedByDelaunay,&gkIntersectLines);
     }
 }
 
-void ofApp::splitIntersectPlanes(GKPlane* _planeB, GKPlane* _planeA) {
+void ofApp::drawGKPlanesSplittedByDelaunay() {
+    for (auto& gpsd : gkPlanesSplittedByDelaunay) {
+        gpsd.drawGKPlane(glm::vec4(0.6, 0.0, 0.2, 0.9), glm::vec4(0.6, 0.8, 0.2, 1), 2);
+    }
+}
+
+void ofApp::splitIntersectPlanes(GKPlane* _planeB, GKPlane* _planeA,vector<GKLineSimple>* _intersectLines) {
         vector<glm::vec3> _intersectPointsA = gkSplitUtil.getPlaneIntersection(*_planeB, *_planeA);
         if (_intersectPointsA.size() == 2) {
             vector<glm::vec3> _intersectPointsB = gkSplitUtil.getPlaneIntersection(*_planeA, *_planeB);
             if (_intersectPointsB.size() == 2) {
                 
                 GKLineSimple _intersectLineA = GKLineSimple(_intersectPointsA[0], _intersectPointsA[1]);
-                gkIntersectLines.push_back(_intersectLineA); //gkIntersectLines
+                _intersectLines->push_back(_intersectLineA); //gkIntersectLines
                 GKPlane _gkPlaneNewA = gkSplitUtil.splitPlaneWithIntersectLine(*_planeA, _intersectLineA);
                 
                 GKLineSimple _intersectLineB = GKLineSimple(_intersectPointsB[0], _intersectPointsB[1]);
-                gkIntersectLines.push_back(_intersectLineB); //gkIntersectLines
+                _intersectLines->push_back(_intersectLineB); //gkIntersectLines
                 GKPlane _gkPlaneNewB = gkSplitUtil.splitPlaneWithIntersectLine(*_planeB, _intersectLineB);
                 
                 //mainPlane = _gkPlaneNew;
@@ -359,56 +430,30 @@ void ofApp::splitIntersectPlanes(GKPlane* _planeB, GKPlane* _planeA) {
         }
 }
 
-void ofApp::runSplitIntersectPlanes() {
-    for (auto& combi : gk.getIndexList_nC2(gkPlanesNew.size())) {
-        splitIntersectPlanes(&gkPlanesNew[combi.x],&gkPlanesNew[combi.y]);
+void ofApp::runSplitByCombi() {
+    gkPlanesSplittedByDelaunay.erase(gkPlanesSplittedByDelaunay.begin(), gkPlanesSplittedByDelaunay.end());
+    gkPlanesSplittedByCombi.erase(gkPlanesSplittedByCombi.begin(), gkPlanesSplittedByCombi.end());
+    gkPlanesSplittedByCombi = gkPlanes;
+    //gkPlanesSplittedByCombi = gkPlanesSplittedByDelaunay;
+    for (auto& combi : gk.getIndexList_nC2(gkPlanesSplittedByCombi.size())) {
+        splitIntersectPlanes(&gkPlanesSplittedByCombi[combi.x], &gkPlanesSplittedByCombi[combi.y],&gkIntersectLines);
     }
 }
 
-void ofApp::drawNetwork() {
-    if (!bHideNetwork) {
-        if (gkDelaTriangles.size()) {
-            int counter = 0;
-            for (auto& gdt : gkDelaTriangles) {
-                glLineWidth(0.5);
-                ofFill();
-                glColor4f(0.2, 0.2, 0.9, 1);
-                glBegin(GL_LINE_LOOP);
-                for (auto& v : gdt.vertices) {
-                    glVertex3f(v.pos.x,v.pos.y,v.pos.z);
-                }
-                glEnd();
-                cam.end();
-                ofDrawBitmapString(ofToString(counter), cam.worldToScreen(gdt.getCentroid().pos));
-                cam.begin();
-                counter++;
-            }
-            /*
-            for (auto& gks : gkSplits) {
-                cam.end();
-                ofDrawBitmapStringHighlight(ofToString(gks.mainPlane.state), cam.worldToScreen(gks.mainPlane.centroid));
-                cam.begin();
-            }
-            */
-        }
+void ofApp::drawGKPlanesSplittedByCombi() {
+    for (auto& gpc : gkPlanesSplittedByCombi) {
+        gpc.drawGKPlane();
     }
 }
 
-void ofApp::drawgkIntersectLines() {
-    for (auto& intersectLine : gkIntersectLines) {
-        glLineWidth(3);
-        glColor3f(0.4, 0.4, 0.9);
-        intersectLine.drawLine();
-        glPointSize(4);
-        intersectLine.drawVertices();
+void ofApp::drawGKPlanesFinal() {
+    for (auto& gpf : gkPlanesFinal) {
+        gpf.drawGKPlane();
     }
 }
 
-void ofApp::drawGKPlanesNew() {
-    for (auto& gkPlaneNew : gkPlanesNew) {
-        gkPlaneNew.drawGKPlane(glm::vec4(0.6,0.0,0.2,0.9),glm::vec4(0.6,0.8,0.2,1),2);
-    }
-}
+
+
 
 
 
@@ -435,6 +480,45 @@ void ofApp::debugDot() {
         glBegin(GL_POINTS);
         glVertex3f(_vertPos.x, _vertPos.y, _vertPos.z);
         glEnd();
+    }
+}
+
+void ofApp::drawNetwork() {
+    if (!bHideNetwork) {
+        if (gkDelaTriangles.size()) {
+            int counter = 0;
+            for (auto& gdt : gkDelaTriangles) {
+                glLineWidth(0.5);
+                ofFill();
+                glColor4f(0.2, 0.2, 0.9, 1);
+                glBegin(GL_LINE_LOOP);
+                for (auto& v : gdt.vertices) {
+                    glVertex3f(v.pos.x, v.pos.y, v.pos.z);
+                }
+                glEnd();
+                cam.end();
+                ofDrawBitmapString(ofToString(counter), cam.worldToScreen(gdt.getCentroid().pos));
+                cam.begin();
+                counter++;
+            }
+            /*
+            for (auto& gks : gkSplits) {
+                cam.end();
+                ofDrawBitmapStringHighlight(ofToString(gks.mainPlane.state), cam.worldToScreen(gks.mainPlane.centroid));
+                cam.begin();
+            }
+            */
+        }
+    }
+}
+
+void ofApp::drawgkIntersectLines() {
+    for (auto& intersectLine : gkIntersectLines) {
+        glLineWidth(3);
+        glColor3f(0.4, 0.4, 0.9);
+        intersectLine.drawLine();
+        glPointSize(4);
+        intersectLine.drawVertices();
     }
 }
 //--------------------------------------------------------------

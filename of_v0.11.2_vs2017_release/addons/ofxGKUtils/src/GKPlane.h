@@ -25,6 +25,30 @@ class GKPlane  {
 			state = 0;
 		}
 		~GKPlane() {}
+
+		GKPlane(const ofMesh& _inputMesh, const int& _state) {
+			originalMesh = _inputMesh;
+			state = _state;
+			//ID = _index;
+			centroid = originalMesh.getCentroid();
+			getNormalFromMesh();
+			modifyInfo.setGlobalPosition(0, 0, 0);
+			bMadeGKPlane = false;
+			makeGKPlaneFromMesh();
+			getGKPlaneEdges();
+		};
+
+		GKPlane(const vector<glm::vec3>& _sortedVertices, const int& _state) {
+			vertices = _sortedVertices;
+			state = _state;
+			//ID = _index;
+			centroid = getCentroidFromVertices();
+			getNormalFromVertices();
+			modifyInfo.setGlobalPosition(0, 0, 0);
+			bMadeGKPlane = false;
+			makeGKPlaneFromVertices();
+		}
+
 		
 		void setup(const ofMesh& _inputMesh,const int& _state) {
 			originalMesh = _inputMesh;

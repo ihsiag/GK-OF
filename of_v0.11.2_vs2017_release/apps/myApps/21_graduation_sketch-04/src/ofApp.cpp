@@ -119,7 +119,7 @@ void ofApp::initParam() {
 void ofApp::initSet() {
     gk.setup(&ssGlobalLog);
     gk.setCam(&cam);
-    gk.setGUI(gui);
+    gk.setGUI(gui,13);
 }
 
 void ofApp::resetCamera() {

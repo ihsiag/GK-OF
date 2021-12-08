@@ -26,13 +26,16 @@ class ofApp : public ofBaseApp{
 
 		//-----------GLOBAL-----------//
 		bool bModified;
+		bool bManualMode;
 		bool bDebug;
 		bool bHideSelectedPoint;
 		bool bHideMainMesh;
 		bool bHideAddedMesh;
 		bool bHideGKPlane;
 		bool bHideNetwork;
-		bool bHideGKPlaneNew;
+		bool bHideGKPlaneSplittedByDelaunay;
+		bool bHideGKPlaneSplittedByCombi;
+		bool bHideGKPlaneFinal;
 		bool bHideLight;
 		
 
@@ -44,8 +47,11 @@ class ofApp : public ofBaseApp{
 		ofMesh meshToSave;
 
 		//-----------SLIDER-----------//
-		ofxGuiGroup gui;
+		ofxGuiGroup guiOne;
 		ofParameter<glm::vec3> rotationSlider;
+		ofxGuiGroup guiTwo;
+		ofParameter<int> selectWhichiPlanesToDelete;
+		ofParameter<float> mainMeshAlphaSlider;
 		
 		void setup();
 		void update();
@@ -59,7 +65,10 @@ class ofApp : public ofBaseApp{
 		
 		vector<GKLineSimple> gkIntersectLines;
 		vector<GKPlane> gkPlanes;
-		vector<GKPlane> gkPlanesNew;
+		vector<GKPlane> gkPlanesSplittedByDelaunay;
+		vector<GKPlane> gkPlanesSplittedByCombi;
+		vector<GKPlane> gkPlanesFinal;
+
 		vector<GKSplit> gkSplits;
 		vector<GKNetwork> gkNets;
 
@@ -81,7 +90,8 @@ class ofApp : public ofBaseApp{
 		void importMesh();	
 		void modifyMesh();
 		void updateMesh();
-		glm::vec3 getCurrentVertex(const ofMesh& _mesh,stringstream& _ssDebug);
+		glm::vec3 getCurrentVertexMesh(const ofMesh& _mesh,stringstream& _ssDebug);
+		glm::vec3 getCurrentVertexGKPlane(const vector<GKPlane>& _gkPlanes);
 		vector < glm::vec3 > verticesPosHolder;
 		void checkVerticesHolder();
 		void addGKPlane();
@@ -92,16 +102,19 @@ class ofApp : public ofBaseApp{
 		void drawGKPlanes();
 	
 		void setGKSplits();
-		void runGKSplits();
+		void runGKSplits();		
+		void drawGKPlanesSplittedByDelaunay();
 		
-		void splitIntersectPlanes(GKPlane* _planeB,GKPlane* _planeA);
-		void runSplitIntersectPlanes();
-		void drawNetwork();
-		void drawgkIntersectLines();
-		void drawGKPlanesNew();
+		void splitIntersectPlanes(GKPlane* _planeB, GKPlane* _planeA, vector<GKLineSimple>* _intersectLines);
+		void runSplitByCombi();
+		void drawGKPlanesSplittedByCombi();
+
+		void drawGKPlanesFinal();
 
 		//-----------DEBUG-FUNC-----------//
-		void ofApp::debugDot();
+		void debugDot();
+		void drawNetwork();
+		void drawgkIntersectLines();
 
 
 		//-----------EVENT-----------//
@@ -135,18 +148,50 @@ class ofApp : public ofBaseApp{
 				bHideNetwork = !bHideNetwork;;
 				break;
 			case '5':
-				bHideGKPlaneNew = !bHideGKPlaneNew;
+				bHideGKPlaneSplittedByDelaunay = !bHideGKPlaneSplittedByDelaunay;
 				break;
 			case '6':
-				bHideSelectedPoint = !bHideSelectedPoint;
+				bHideGKPlaneSplittedByCombi = !bHideGKPlaneSplittedByCombi;
 				break;
 			case '7':
+				bHideGKPlaneFinal = !bHideGKPlaneFinal;
+				break;
+			case '8':
+				bHideSelectedPoint = !bHideSelectedPoint;
+				break;
+			case '9':
 				bHideLight = !bHideLight;
 				break;
 			case 'z':
-				if (gkPlanes.size())gkPlanes.pop_back();
-				if (gkPlanesNew.size())gkPlanesNew.pop_back();
-				if (gkIntersectLines.size())gkIntersectLines.pop_back();
+				if (selectWhichiPlanesToDelete == 0 && gkPlanes.size()) {
+					gkPlanes.pop_back();
+					ssGlobalLog << "ERASE GKPALNE" << endl;
+				}
+				if (selectWhichiPlanesToDelete == 1 && gkPlanesSplittedByDelaunay.size()) {
+					gkPlanes.pop_back();
+					gkPlanesSplittedByDelaunay.pop_back();
+					ssGlobalLog << "ERASE GKPALNE" << endl;
+					ssGlobalLog << "ERASE SP-PLANE-BY-DELA" << endl;
+				}
+				if (selectWhichiPlanesToDelete == 2 && gkPlanesSplittedByCombi.size()) {
+					gkPlanes.pop_back();
+					gkPlanesSplittedByCombi.pop_back();
+					ssGlobalLog << "ERASE GKPALNE" << endl;
+					ssGlobalLog << "CLEARED LOG" << endl;
+				}
+				if (selectWhichiPlanesToDelete == 3 && gkPlanesFinal.size()) {
+					gkPlanesFinal.pop_back();
+					ssGlobalLog << "ERASE GKPALNE" << endl;
+					ssGlobalLog << "ERASE SP-PLANE-BY-COMBI" << endl;
+				}
+				if (selectWhichiPlanesToDelete == 4 && gkPlanes.size()) {
+					gkPlanes.pop_back();
+					if(gkPlanesSplittedByDelaunay.size())gkPlanesSplittedByDelaunay.pop_back();
+					if(gkPlanesSplittedByCombi.size())gkPlanesSplittedByCombi.pop_back();
+					if(gkPlanesFinal.size())gkPlanesFinal.pop_back();
+					if(gkIntersectLines.size())gkIntersectLines.pop_back();
+					ssGlobalLog << "ERASE KINDS OF PLANES" << endl;
+				}
 				break;
 
 			case 'l':
@@ -156,8 +201,10 @@ class ofApp : public ofBaseApp{
 				break;
 			case 'c':
 				gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());
+				gkPlanesSplittedByDelaunay.erase(gkPlanesSplittedByDelaunay.begin(), gkPlanesSplittedByDelaunay.end());
+				gkPlanesSplittedByCombi.erase(gkPlanesSplittedByCombi.begin(), gkPlanesSplittedByCombi.end());
+				gkPlanesFinal.erase(gkPlanesFinal.begin(), gkPlanesFinal.end());
 				gkIntersectLines.erase(gkIntersectLines.begin(), gkIntersectLines.end());
-				gkPlanesNew.erase(gkPlanesNew.begin(), gkPlanesNew.end());
 				bModified = !bModified;
 				ssGlobalLog.str("");
 				ssGlobalLog.clear(std::stringstream::goodbit);
@@ -168,7 +215,9 @@ class ofApp : public ofBaseApp{
 				gk.saveImage();
 				break;
 			case 'm':
-				meshToSave = getMeshFromGKPlanes(&gkPlanesNew);
+				meshToSave = getMeshFromGKPlanes(&gkPlanesSplittedByCombi);
+				meshToSave.append(getMeshFromGKPlanes(&gkPlanesFinal));
+				meshToSave.append(getMeshFromGKPlanes(&gkPlanesSplittedByDelaunay));
 				gk.saveMesh(meshToSave, 1);
 				break;
 			case ' ':
@@ -177,7 +226,10 @@ class ofApp : public ofBaseApp{
 				runGKSplits();
 				break;
 			case 'b':
-				runSplitIntersectPlanes();
+				runSplitByCombi();
+				break;
+			case 'q':
+				bManualMode = !bManualMode;
 				break;
 			}
 		}
@@ -189,7 +241,8 @@ class ofApp : public ofBaseApp{
 			}
 		}
 		void windowResized(int w, int h) {
-			gk.resizeGUI(gui);
+			gk.resizeGUI(guiOne);
+			gk.resizeGUI(guiTwo);
 		}
 		
 		//-----------NO-InUSE-----------//

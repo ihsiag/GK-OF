@@ -5,7 +5,7 @@ void ofApp::setup(){
     //-----------DEFAULT-----------//
     gk.setup(&ssGlobalLog);
     gk.setCam(&cam);
-    gk.setGUI(gui);
+    gk.setGUI(gui,13);
     //glEnable(GL_DEPTH_TEST);
     resetCamera();
 

@@ -99,9 +99,9 @@ float ofxGKUtils::myGUIWidth() {
 	return _width;
 }
 
-void ofxGKUtils::setGUI(ofxGuiGroup& _gui) {
+void ofxGKUtils::setGUI(ofxGuiGroup& _gui,const int& _posIndex) {
 	_gui.setup();
-	_gui.setPosition(myGUIPos(13));
+	_gui.setPosition(myGUIPos(_posIndex));
 	_gui.setSize(myGUIWidth(), 0);
 	_gui.setWidthElements(myGUIWidth() * .98);
 
@@ -253,6 +253,12 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const glm::vec2& _xyPos) {
 
 	//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));
 	ofDrawBitmapString(_ss.str().c_str(), _pos);
+}
+
+void ofxGKUtils::manageInfoLimit(stringstream* _ss, const float& _height) {
+}
+
+void ofxGKUtils::manageInfoLimit(stringstream* _ss, const int& _numOfGrids) {
 }
 
 void ofxGKUtils::drawGrid() {

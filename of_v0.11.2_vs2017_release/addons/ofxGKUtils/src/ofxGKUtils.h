@@ -37,7 +37,7 @@ public:
 	
 	glm::vec3 myGUIPos(const int& _indexPos);
 	float myGUIWidth();
-	void setGUI(ofxGuiGroup& _gui);
+	void setGUI(ofxGuiGroup& _gui,const int& _posIndex);
 	void resizeGUI(ofxGuiGroup& _gui);
 	void setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize);
 	void drawMouseOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorldPlane);
@@ -48,6 +48,8 @@ public:
 	void drawInfo(const stringstream& _ss, const int& _indexPos, const ofTrueTypeFont& _font, const int& _fontSize);
 	void drawInfo(const stringstream& _ss, const int& _indexPos);
 	void drawInfo(const stringstream& _ss, const glm::vec2& _xyPos);
+	void manageInfoLimit(stringstream* _ss,const float& _height); // <- still blanc
+	void manageInfoLimit(stringstream* _ss, const int& _numOfGrids); // <-still blanc
 	void drawGrid();
 	void drawCross(const int& _x, const int& _y, const int& _size);
 
