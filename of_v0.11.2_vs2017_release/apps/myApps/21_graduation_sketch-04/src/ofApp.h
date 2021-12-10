@@ -161,7 +161,7 @@ public:
         mousePickIndex = -1;
     };
 	void windowResized(int w, int h) {
-        gk.resizeGUI(gui);
+        gk.resizeGUI(gui,13);
     }
 	void dragEvent(ofDragInfo dragInfo) {};
 	void gotMessage(ofMessage msg) {};

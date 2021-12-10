@@ -115,8 +115,8 @@ void ofxGKUtils::setGUI(ofxGuiGroup& _gui,const int& _posIndex) {
 	_gui.setFillColor(ofColor(60));
 }
 
-void ofxGKUtils::resizeGUI(ofxGuiGroup& _gui) {
-	_gui.setPosition(myGUIPos(13));
+void ofxGKUtils::resizeGUI(ofxGuiGroup& _gui, const int& _posIndex) {
+	_gui.setPosition(myGUIPos(_posIndex));
 	_gui.setSize(myGUIWidth(), 0);
 	_gui.setWidthElements(myGUIWidth() * .98);
 }

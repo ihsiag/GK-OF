@@ -38,7 +38,7 @@ public:
 	glm::vec3 myGUIPos(const int& _indexPos);
 	float myGUIWidth();
 	void setGUI(ofxGuiGroup& _gui,const int& _posIndex);
-	void resizeGUI(ofxGuiGroup& _gui);
+	void resizeGUI(ofxGuiGroup& _gui, const int& _posIndex);
 	void setGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize);
 	void drawMouseOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec2* _mouseOnWorldPlane);
 	void drawEachDataOnGraphGUI(const int& _indexPos, const glm::vec2& _size, const glm::vec2& _originalSize, glm::vec3& _data, const glm::vec3& _normalOfData);

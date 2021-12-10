@@ -63,7 +63,7 @@ class ofApp : public ofBaseApp{
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
 		void windowResized(int w, int h) {
-			gk.resizeGUI(gui);
+			gk.resizeGUI(gui,13);
 			for (int i = 0; i < smallScreens.size(); i++) {
 				resizeSmallScreen(i);
 			}

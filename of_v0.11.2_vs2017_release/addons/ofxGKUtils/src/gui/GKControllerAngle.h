@@ -32,12 +32,14 @@ public:
 		font = _font;
 	}
 
-	void update(const float& _sliderDeg) {
+	void update(const float& _sliderDeg,const float& _sliderHeight) {
+		pos.y = _sliderHeight;
 		modifyInfo.setGlobalPosition(glm::vec3(0));
 		modifyInfo.lookAt(normal);
 		modifyInfo.move(pos.x, pos.y, pos.z);
 		modifyInfo.rotateDeg(_sliderDeg, normal);
 	}
+
 
 	void drawController() {
 		ofPushMatrix();

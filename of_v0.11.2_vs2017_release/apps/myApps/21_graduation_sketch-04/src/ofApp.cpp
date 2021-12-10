@@ -227,9 +227,10 @@ void ofApp::addKinematicBody() {
     for (int i = 0; i < 5; i++) {
         shared_ptr< ofxBulletBox > kinematicBody(new ofxBulletBox());
         glm::vec3 kinematicBodyInfo = glm::vec3(2., 2., 2.);
-        kinematicBody->create(world.world, glm::vec3(ofRandom(-groundInfo.x / 2, groundInfo.x / 2), -groundInfo.y / 2, ofRandom(-groundInfo.z / 2, groundInfo.z / 2)), 0, kinematicBodyInfo.x, kinematicBodyInfo.y, kinematicBodyInfo.z);
+        kinematicBody->create(world.world, glm::vec3(ofRandom(-groundInfo.x / 2, groundInfo.x / 2), -groundInfo.y / 2, ofRandom(-groundInfo.z / 2, groundInfo.z / 2)), 1, kinematicBodyInfo.x, kinematicBodyInfo.y, kinematicBodyInfo.z);
         // ceiling->setProperties(.25, .95);
         //kinematicBody->setCollisionFlags(kinematicBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+        kinematicBody->getCollisionObject()->setCollisionFlags(kinematicBody->getCollisionObject()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
         kinematicBody->setActivationState(DISABLE_DEACTIVATION);
         kinematicBody->add();
         kinematicBodies.push_back(kinematicBody);
@@ -281,6 +282,7 @@ void ofApp::addModel(const glm::vec2& _pos) {
 
     model->getSoftBody()->m_cfg.collisions = btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_RS;
     model->getSoftBody()->generateClusters(6);
+    
     model->add();
 
     model->getSoftBody()->m_cfg.piterations = slider_piteration;//2; //Positions solver iterations

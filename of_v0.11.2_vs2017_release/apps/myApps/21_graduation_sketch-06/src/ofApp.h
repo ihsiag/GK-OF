@@ -241,8 +241,8 @@ class ofApp : public ofBaseApp{
 			}
 		}
 		void windowResized(int w, int h) {
-			gk.resizeGUI(guiOne);
-			gk.resizeGUI(guiTwo);
+			gk.resizeGUI(guiOne,13);
+			gk.resizeGUI(guiTwo,13);
 		}
 		
 		//-----------NO-InUSE-----------//
