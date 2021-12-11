@@ -41,10 +41,8 @@ public:
     vector< shared_ptr<ofxBulletRigidBody>> crashers;
     vector< shared_ptr<ofxBulletRigidBody>> kinematicBodies;
 
-    vector< shared_ptr<ofxBulletRigidBody>> controllerAxesDowner;
-    vector<ofxBulletRigidBody*> controllerHandsDowner;
-    vector< shared_ptr<ofxBulletRigidBody>> controllerAxesUpper;
-    vector<ofxBulletRigidBody*> controllerHandsUpper;
+    vector<ofxBulletRigidBody*> armsDowner;
+    vector<ofxBulletRigidBody*> armsUpper;
 
     int							mousePickIndex;
     ofVec3f						mousePickPos;
@@ -75,8 +73,8 @@ public:
     ofxGuiGroup guiTwo;
     ofParameter<float> slider_controller_angle;
     ofParameter<float> slider_controller_pressure;
-    ofParameter<float> slider_controllerHandsDowner_r;
-    ofParameter<float> slider_controllerHandsUpper_r;
+    ofParameter<float> slider_armsDowner_r;
+    ofParameter<float> slider_armsUpper_r;
     ofParameter<float> slider_power;
 
 
@@ -110,14 +108,22 @@ public:
 
     void makeControllerUI();
     void updateControllerUI();
-
-    void makeControllerSlider();
-    void makeControllerSliders();
-    void makeControllerHands();
-    void updateControllerHands();
-
     void drawControllerUI();
-    void drawControllerHands();
+
+    void makeArms();
+    void updateArms();
+    void drawArms();
+
+    void connectArmsToModel();
+
+    void makeHammer();
+    void updateHammer();
+    void drawHammer();
+
+    
+
+
+    
 
 
     //-----------EVENT-FUNCS-----------//
@@ -162,6 +168,7 @@ public:
             deleteModel();
             break;
         case ' ':
+            connectArmsToModel();
             break;
         case 'l':
             // バッファをクリアします。

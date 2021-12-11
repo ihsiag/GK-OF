@@ -29,8 +29,7 @@ void ofApp::setup() {
 
     setWorld();
     makeControllerUI();
-    makeControllerSlider();
-    //makeControllerHands();
+    makeArms();
     
     initListener();
     cam.enableMouseInput();  
@@ -43,7 +42,7 @@ void ofApp::update() {
     world.world->stepSimulation(1);
     world.update();
     updateControllerUI();
-    updateControllerHands();
+    updateArms();
 
     //-----------REMOVE-----------//
     ofRemove(rigidBodies, shouldRemoveRigidBody);
@@ -81,7 +80,7 @@ void ofApp::draw() {
     ofNoFill();
     ground->draw();
     drawBodies(); //rigid, ,kinematic, crashers, models
-    drawControllerHands();
+    drawArms();
     drawControllerUI();
 
     light.disable();
@@ -146,8 +145,8 @@ void ofApp::initSliders() {
     
     guiTwo.add(slider_controller_angle.set("controller_angle", 0, -180, 180));
     guiTwo.add(slider_controller_pressure.set("controller_pressure", -4, -20, 0));
-    guiTwo.add(slider_controllerHandsDowner_r.set("controller_hand_baseR", 15, 25, 0));
-    guiTwo.add(slider_controllerHandsUpper_r.set("conttoller_hand_rotaterR", 15, 25, 0));
+    guiTwo.add(slider_armsDowner_r.set("controller_hand_baseR", 15, 25, 0));
+    guiTwo.add(slider_armsUpper_r.set("conttoller_hand_rotaterR", 15, 25, 0));
     guiTwo.add(slider_power.set("power", 0, -200, 500));
 
 }
@@ -376,12 +375,19 @@ void ofApp::updateControllerUI() {
     gkcAU.update(slider_controller_angle,slider_controller_pressure);
 }
 
-void ofApp::makeControllerSlider() {
-    int _handNum = 10;
-    float _axisR = 25;
-    glm::vec3 _handInfo = glm::vec3(2, 2, 2);
-    glm::vec3 _axisSliderInfo = glm::vec3(_axisR, -_handInfo.y / 2, 0);
-    for (int i = 0; i < _handNum; i++) {
+void ofApp::drawControllerUI() {
+    gkcAU.drawController();
+    gkcAD.drawController();
+}
+
+void ofApp::makeArms() {
+    int _armsNum = 10;
+    float _axisR = 10;
+    glm::vec3 _armInfo = glm::vec3(2, 2, 2);
+
+    //------ARMS-DOWNER
+    glm::vec3 _axisSliderInfo = glm::vec3(_axisR, -_armInfo.y * 0.75, 0);
+    for (int i = 0; i < _armsNum; i++) {
         //A1
         btGhostObject* ghost = new btGhostObject();
         
@@ -389,12 +395,12 @@ void ofApp::makeControllerSlider() {
         ofxBulletBox* _bbA;
         btTransform frameInA;
         frameInA = btTransform::getIdentity();
-        btVector3 worldPosA(_axisSliderInfo.x * cos(-2 * PI / _handNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _handNum * i));
+        btVector3 worldPosA(_axisSliderInfo.x * cos(-2 * PI / _armsNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _armsNum * i));
         btTransform transA;
         transA.setIdentity();
         transA.setOrigin(worldPosA);
         btQuaternion _tquat;
-        _tquat.setRotation(btVector3(0, 1, 0), 2 * PI / _handNum * i);
+        _tquat.setRotation(btVector3(0, 1, 0), 2 * PI / _armsNum * i);
         transA.setRotation(_tquat);
         float massA = 0;
         _bbA = new ofxBulletBox();
@@ -409,7 +415,7 @@ void ofApp::makeControllerSlider() {
         ofxBulletBox* _bbB;
         btTransform frameInB;
         frameInB = btTransform::getIdentity();
-        btVector3 worldPosB(_axisSliderInfo.x * cos(-2 * PI / _handNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _handNum * i));
+        btVector3 worldPosB(_axisSliderInfo.x * cos(-2 * PI / _armsNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _armsNum * i));
         btTransform transB;
         transB.setIdentity();
         transB.setOrigin(worldPosB);
@@ -420,7 +426,7 @@ void ofApp::makeControllerSlider() {
         _bbB->add();
         pRbB1 = _bbB->getRigidBody();
         pRbB1->setActivationState(DISABLE_DEACTIVATION);
-        controllerHandsDowner.push_back(_bbB);
+        armsDowner.push_back(_bbB);
 
         btSliderConstraint* _axisSlider = new btSliderConstraint(*pRbA1, *pRbB1, frameInA, frameInB, true);
         //btSliderConstraint* _axisSlider = new btSliderConstraint( *pRbB1,  frameInB, true);
@@ -433,8 +439,9 @@ void ofApp::makeControllerSlider() {
         _axisSlider->setDbgDrawSize(btScalar(10.f));
     }
 
+    //-----ARMS-UPPER
     _axisSliderInfo = glm::vec3(_axisR, slider_controller_pressure, 0);
-    for (int i = 0; i < _handNum; i++) {
+    for (int i = 0; i < _armsNum; i++) {
         //A1
         btGhostObject* ghost = new btGhostObject;
 
@@ -442,12 +449,12 @@ void ofApp::makeControllerSlider() {
         ofxBulletBox* _bbA;
         btTransform frameInA;
         frameInA = btTransform::getIdentity();
-        btVector3 worldPosA(_axisSliderInfo.x * cos(-2 * PI / _handNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _handNum * i));
+        btVector3 worldPosA(_axisSliderInfo.x * cos(-2 * PI / _armsNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _armsNum * i));
         btTransform transA;
         transA.setIdentity();
         transA.setOrigin(worldPosA);
         btQuaternion _tquat;
-        _tquat.setRotation(btVector3(0, 1, 0), 2 * PI / _handNum * i);
+        _tquat.setRotation(btVector3(0, 1, 0), 2 * PI / _armsNum * i);
         transA.setRotation(_tquat);
         float massA = 0;
         _bbA = new ofxBulletBox();
@@ -462,7 +469,7 @@ void ofApp::makeControllerSlider() {
         ofxBulletBox* _bbB;
         btTransform frameInB;
         frameInB = btTransform::getIdentity();
-        btVector3 worldPosB(_axisSliderInfo.x * cos(-2 * PI / _handNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _handNum * i));
+        btVector3 worldPosB(_axisSliderInfo.x * cos(-2 * PI / _armsNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _armsNum * i));
         btTransform transB;
         transB.setIdentity();
         transB.setOrigin(worldPosB);
@@ -473,7 +480,7 @@ void ofApp::makeControllerSlider() {
         _bbB->add();
         pRbB1 = _bbB->getRigidBody();
         pRbB1->setActivationState(DISABLE_DEACTIVATION);
-        controllerHandsUpper.push_back(_bbB);
+        armsUpper.push_back(_bbB);
         
         btSliderConstraint* _axisSlider = new btSliderConstraint(*pRbA1, *pRbB1, frameInA, frameInB, true);
         //btSliderConstraint* _axisSlider = new btSliderConstraint(*pRbB1, frameInB, true);
@@ -487,50 +494,38 @@ void ofApp::makeControllerSlider() {
     }
 }
 
-void ofApp::makeControllerSliders() {
-    int _handNum = 6;
-    for (int i = 0; i < _handNum; i++) {
-        makeControllerSlider();
-    }
-}
-
-
-void ofApp::updateControllerHands() {
-    for (auto& chd : controllerHandsDowner) {
+void ofApp::updateArms() {
+    for (auto& chd : armsDowner) {
         glm::vec3 _dir =  glm::normalize(chd->getPosition())*-1;
         btVector3 _f = btVector3(_dir.x, 0, _dir.z);
         chd->applyCentralForce(_f * slider_power);        
     }
-    for (auto& chu : controllerHandsUpper) {
+    for (auto& chu : armsUpper) {
         glm::vec3 _dir = glm::normalize(chu->getPosition()) * -1;
         btVector3 _f = btVector3(_dir.x, _dir.y, _dir.z);
         chu->applyCentralForce(_f * slider_power);
     }
 }
 
-void ofApp::drawControllerHands() {
-    if (bDrawDebug) {
-        glColor3f(0.0, 0.6, 0.0);
-        for (auto& cad : controllerAxesDowner) {
-            cad->draw();
-        }
-        for (auto& cau : controllerAxesUpper) {
-            cau->draw();
-        }
-    }
-
+void ofApp::drawArms() {
     glColor3f(0.7, 0, 0);
-    for (auto& chd : controllerHandsDowner) {
+    for (auto& chd : armsDowner) {
         chd->draw();
     }
-    for (auto& chu : controllerHandsUpper) {
+    for (auto& chu : armsUpper) {
         chu->draw();
     }
 }
 
-void ofApp::drawControllerUI() {
-    gkcAU.drawController();
-    gkcAD.drawController();
+void ofApp::connectArmsToModel() {
+    if (models.size() > 0) {
+        for (auto& ad : armsDowner) {
+            models[0]->getSoftBody()->appendAnchor(tmp, ad);
+        }
+        for (auto& au : armsUpper) {
+            models[0]->getSoftBody()->appendAnchor(models[0]->getSoftBody, au);
+        }
+    }
 }
 
 
@@ -544,8 +539,8 @@ void ofApp::mousePickEvent(ofxBulletMousePickEvent& e) {
     //        break;
     //    }
     //}
-    for (int i = 0; i < controllerHandsUpper.size(); i++) {
-        if (*controllerHandsUpper[i] == e) {
+    for (int i = 0; i < armsUpper.size(); i++) {
+        if (*armsUpper[i] == e) {
             mousePickIndex = i;
             mousePickPos = e.pickPosWorld;
             break;
