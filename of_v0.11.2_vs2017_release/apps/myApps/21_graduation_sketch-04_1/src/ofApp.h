@@ -8,6 +8,8 @@
 
 #include "GKControllerAngle.h"
 
+#include "btGhostObject.h"
+
 
 class ofApp : public ofBaseApp {
 
@@ -40,9 +42,9 @@ public:
     vector< shared_ptr<ofxBulletRigidBody>> kinematicBodies;
 
     vector< shared_ptr<ofxBulletRigidBody>> controllerAxesDowner;
-    vector< shared_ptr<ofxBulletRigidBody>> controllerHandsDowner;
+    vector<ofxBulletRigidBody*> controllerHandsDowner;
     vector< shared_ptr<ofxBulletRigidBody>> controllerAxesUpper;
-    vector< shared_ptr<ofxBulletRigidBody>> controllerHandsUpper;
+    vector<ofxBulletRigidBody*> controllerHandsUpper;
 
     int							mousePickIndex;
     ofVec3f						mousePickPos;
@@ -109,6 +111,8 @@ public:
     void makeControllerUI();
     void updateControllerUI();
 
+    void makeControllerSlider();
+    void makeControllerSliders();
     void makeControllerHands();
     void updateControllerHands();
 

@@ -29,7 +29,8 @@ void ofApp::setup() {
 
     setWorld();
     makeControllerUI();
-    makeControllerHands();
+    makeControllerSlider();
+    //makeControllerHands();
     
     initListener();
     cam.enableMouseInput();  
@@ -69,6 +70,7 @@ void ofApp::draw() {
     if (bDrawDebug) { //debug
         world.drawDebug();
         gk.draw3DAxis();
+        gk.draw3DPlaneGrid(1, 50, glm::vec3(0, 1, 0), 0.8, glm::vec4(0.1, 0.2, 0.5, 1));
         drawModelPos();
         gk.drawFoundCenterTo3D(glm::vec3(mouseOnWorldPlane.x, 10, mouseOnWorldPlane.y), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
     }
@@ -143,10 +145,10 @@ void ofApp::initSliders() {
     guiOne.add(slider_selectModelIndex.set("SELECT MODEL INDEX", 0, 0, 10));
     
     guiTwo.add(slider_controller_angle.set("controller_angle", 0, -180, 180));
-    guiTwo.add(slider_controller_pressure.set("controller_pressure", -10, -20, 0));
+    guiTwo.add(slider_controller_pressure.set("controller_pressure", -4, -20, 0));
     guiTwo.add(slider_controllerHandsDowner_r.set("controller_hand_baseR", 15, 25, 0));
     guiTwo.add(slider_controllerHandsUpper_r.set("conttoller_hand_rotaterR", 15, 25, 0));
-    guiTwo.add(slider_power.set("power", 0, 0, 500));
+    guiTwo.add(slider_power.set("power", 0, -200, 500));
 
 }
 
@@ -260,7 +262,8 @@ void ofApp::addBox() {
 void ofApp::addCylinder(const glm::vec2& _pos) {
     shared_ptr< ofxBulletCylinder > cylinder(new ofxBulletCylinder());
     ofQuaternion tquat;
-    tquat.makeRotate(ofRandom(180), ofRandom(1), ofRandom(1), ofRandom(1));
+    //tquat.makeRotate(ofRandom(180), ofRandom(1), ofRandom(1), ofRandom(1));
+    tquat.makeRotate(0, 1, 0, 0);
     btTransform tt = ofGetBtTransform(glm::vec3(_pos.x, ofRandom(-10, -30), _pos.y), tquat);
     cylinder->create(world.world, tt, 4., 1., 5.);
     cylinder->add();
@@ -373,69 +376,129 @@ void ofApp::updateControllerUI() {
     gkcAU.update(slider_controller_angle,slider_controller_pressure);
 }
 
-void ofApp::makeControllerHands() {
-    //--------------------------------------------axisDowner
-    int _handNum = 6;
-    float _deg = 360. / _handNum;
-    float _axisR = 50;
-    glm::vec3 _axisInfo = glm::vec3(_axisR, 0.1, 0.1);
-    
+void ofApp::makeControllerSlider() {
+    int _handNum = 10;
+    float _axisR = 25;
+    glm::vec3 _handInfo = glm::vec3(2, 2, 2);
+    glm::vec3 _axisSliderInfo = glm::vec3(_axisR, -_handInfo.y / 2, 0);
     for (int i = 0; i < _handNum; i++) {
-        ofQuaternion _tquat;
-        _tquat.makeRotate(_deg*i, 0, 1, 0);
-        glm::vec3 _axisPos = glm::vec3(0,-_axisInfo.y/2,0);
-        btTransform _tt = ofGetBtTransform(_axisPos, _tquat);
-
-        shared_ptr<ofxBulletBox> _downerAxis(new ofxBulletBox);
-        _downerAxis->create(world.world, _tt, 0, _axisInfo.x, _axisInfo.y, _axisInfo.z);
-        _downerAxis->add();
-        controllerAxesDowner.push_back(_downerAxis);
-    }
-
-    //--------------------------------------------axisUpper
-
-
-
-    //--------------------------------------------handsDonwer
-    //_handNum = 6;
-    float _donwerR = slider_controllerHandsDowner_r;
-    glm::vec3 _downerHandInfo = glm::vec3(1.);
-    for (int i = 0; i < _handNum; i++) {
-        ofQuaternion _tquat;
-        _tquat.makeRotate(-360 / _handNum * i, 0, 1, 0);
-        glm::vec3 _baseHandPos = glm::vec3(_donwerR * cos(2 * PI / _handNum * i), -_downerHandInfo.y/2, _donwerR * sin(2 * PI / _handNum * i));
-        btTransform _tt = ofGetBtTransform(_baseHandPos, _tquat);
+        //A1
+        btGhostObject* ghost = new btGhostObject();
         
-        shared_ptr<ofxBulletBox> _downerHand(new ofxBulletBox());
-        _downerHand->create(world.world, _tt, 2, _downerHandInfo.x, _downerHandInfo.y, _downerHandInfo.z);
-        _downerHand->getCollisionObject()->setCollisionFlags(_downerHand->getCollisionObject()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-        _downerHand->setActivationState(DISABLE_DEACTIVATION);
-        _downerHand->add();
-        controllerHandsDowner.push_back(_downerHand);
-    }
-    //--------------------------------------------handsUpper
-    //_handNum = 6;
-    float _upperR = slider_controllerHandsUpper_r;
-    glm::vec3 _upperHandInfo = glm::vec3(1.);
-    for (int i = 0; i < _handNum; i++) {
-        ofQuaternion _tquat;
-        _tquat.makeRotate(-360 / _handNum * i, 0, 1, 0);
-        glm::vec3 _rotaterHandPos = glm::vec3(_upperR * cos(2 * PI / _handNum * i), slider_controller_pressure, _upperR * sin(2 * PI / _handNum * i));
-        btTransform _tt = ofGetBtTransform(_rotaterHandPos, _tquat);
+        btRigidBody* pRbA1;
+        ofxBulletBox* _bbA;
+        btTransform frameInA;
+        frameInA = btTransform::getIdentity();
+        btVector3 worldPosA(_axisSliderInfo.x * cos(-2 * PI / _handNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _handNum * i));
+        btTransform transA;
+        transA.setIdentity();
+        transA.setOrigin(worldPosA);
+        btQuaternion _tquat;
+        _tquat.setRotation(btVector3(0, 1, 0), 2 * PI / _handNum * i);
+        transA.setRotation(_tquat);
+        float massA = 0;
+        _bbA = new ofxBulletBox();
+        _bbA->create(world.world, transA, massA, 1, 1, 1);
+        _bbA->add();
+        pRbA1 = _bbA->getRigidBody();
+        pRbA1->setActivationState(DISABLE_DEACTIVATION);
 
-        shared_ptr<ofxBulletBox> _upperHand(new ofxBulletBox());
-        _upperHand->create(world.world, _tt, 2, _upperHandInfo.x, _upperHandInfo.y, _upperHandInfo.z);
-        //_upperHand->getCollisionObject()->setCollisionFlags(_upperHand->getCollisionObject()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-        //_upperHand->setActivationState(DISABLE_DEACTIVATION);
-        _upperHand->add();
-        controllerHandsUpper.push_back(_upperHand);
+       
+        //B1
+        btRigidBody* pRbB1;
+        ofxBulletBox* _bbB;
+        btTransform frameInB;
+        frameInB = btTransform::getIdentity();
+        btVector3 worldPosB(_axisSliderInfo.x * cos(-2 * PI / _handNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _handNum * i));
+        btTransform transB;
+        transB.setIdentity();
+        transB.setOrigin(worldPosB);
+        transB.setRotation(_tquat);
+        float massB = 1;
+        _bbB = new ofxBulletBox();
+        _bbB->create(world.world, transB, massB, 1, 1, 1);
+        _bbB->add();
+        pRbB1 = _bbB->getRigidBody();
+        pRbB1->setActivationState(DISABLE_DEACTIVATION);
+        controllerHandsDowner.push_back(_bbB);
+
+        btSliderConstraint* _axisSlider = new btSliderConstraint(*pRbA1, *pRbB1, frameInA, frameInB, true);
+        //btSliderConstraint* _axisSlider = new btSliderConstraint( *pRbB1,  frameInB, true);
+        _axisSlider->setLowerLinLimit(-25.0F);
+        _axisSlider->setUpperLinLimit(-1.0F);
+        _axisSlider->setLowerAngLimit(0);
+        _axisSlider->setUpperAngLimit(0);
+
+        world.world->addConstraint(_axisSlider, true);
+        _axisSlider->setDbgDrawSize(btScalar(10.f));
+    }
+
+    _axisSliderInfo = glm::vec3(_axisR, slider_controller_pressure, 0);
+    for (int i = 0; i < _handNum; i++) {
+        //A1
+        btGhostObject* ghost = new btGhostObject;
+
+        btRigidBody* pRbA1;
+        ofxBulletBox* _bbA;
+        btTransform frameInA;
+        frameInA = btTransform::getIdentity();
+        btVector3 worldPosA(_axisSliderInfo.x * cos(-2 * PI / _handNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _handNum * i));
+        btTransform transA;
+        transA.setIdentity();
+        transA.setOrigin(worldPosA);
+        btQuaternion _tquat;
+        _tquat.setRotation(btVector3(0, 1, 0), 2 * PI / _handNum * i);
+        transA.setRotation(_tquat);
+        float massA = 0;
+        _bbA = new ofxBulletBox();
+        _bbA->create(world.world, transA, massA, 1, 1, 1);
+        _bbA->add();
+        pRbA1 = _bbA->getRigidBody();
+        pRbA1->setActivationState(DISABLE_DEACTIVATION);
+
+
+        //B1
+        btRigidBody* pRbB1;
+        ofxBulletBox* _bbB;
+        btTransform frameInB;
+        frameInB = btTransform::getIdentity();
+        btVector3 worldPosB(_axisSliderInfo.x * cos(-2 * PI / _handNum * i), _axisSliderInfo.y, _axisSliderInfo.x * sin(-2 * PI / _handNum * i));
+        btTransform transB;
+        transB.setIdentity();
+        transB.setOrigin(worldPosB);
+        transB.setRotation(_tquat);
+        float massB = 1;
+        _bbB = new ofxBulletBox();
+        _bbB->create(world.world, transB, massB, 1, 1, 1);
+        _bbB->add();
+        pRbB1 = _bbB->getRigidBody();
+        pRbB1->setActivationState(DISABLE_DEACTIVATION);
+        controllerHandsUpper.push_back(_bbB);
+        
+        btSliderConstraint* _axisSlider = new btSliderConstraint(*pRbA1, *pRbB1, frameInA, frameInB, true);
+        //btSliderConstraint* _axisSlider = new btSliderConstraint(*pRbB1, frameInB, true);
+        _axisSlider->setLowerLinLimit(-25.0F);
+        _axisSlider->setUpperLinLimit(-1.0F);
+        _axisSlider->setLowerAngLimit(0);
+        _axisSlider->setUpperAngLimit(0);
+
+        world.world->addConstraint(_axisSlider, true);
+        _axisSlider->setDbgDrawSize(btScalar(10.f));
     }
 }
+
+void ofApp::makeControllerSliders() {
+    int _handNum = 6;
+    for (int i = 0; i < _handNum; i++) {
+        makeControllerSlider();
+    }
+}
+
 
 void ofApp::updateControllerHands() {
     for (auto& chd : controllerHandsDowner) {
         glm::vec3 _dir =  glm::normalize(chd->getPosition())*-1;
-        btVector3 _f = btVector3(_dir.x, _dir.y, _dir.z);
+        btVector3 _f = btVector3(_dir.x, 0, _dir.z);
         chd->applyCentralForce(_f * slider_power);        
     }
     for (auto& chu : controllerHandsUpper) {
@@ -446,8 +509,8 @@ void ofApp::updateControllerHands() {
 }
 
 void ofApp::drawControllerHands() {
-    if (!bDrawDebug) {
-        glColor3f(0.7, 0, 0.8);
+    if (bDrawDebug) {
+        glColor3f(0.0, 0.6, 0.0);
         for (auto& cad : controllerAxesDowner) {
             cad->draw();
         }
@@ -485,7 +548,6 @@ void ofApp::mousePickEvent(ofxBulletMousePickEvent& e) {
         if (*controllerHandsUpper[i] == e) {
             mousePickIndex = i;
             mousePickPos = e.pickPosWorld;
-            ssGlobalLog << mousePickIndex << endl;
             break;
         }
     }
