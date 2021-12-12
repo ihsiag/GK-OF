@@ -519,12 +519,47 @@ void ofApp::drawArms() {
 
 void ofApp::connectArmsToModel() {
     if (models.size() > 0) {
-        for (auto& ad : armsDowner) {
-            models[0]->getSoftBody()->appendAnchor(tmp, ad);
+        for (auto& ad : armsDowner) {          
+            float nearestDistance = 0;
+            glm::vec3 nearestVertex3D;
+            glm::vec2 nearestVertex2D;
+            int nearestIndex = 0;
+            glm::vec3 mouse(ofGetMouseX(), ofGetMouseY(), 0);
+            glm::vec3 _camPos = cam.getPosition();
+            for (int i = 0; i < models[0]->getMesh().getNumVertices(); i++) {
+                glm::vec3 _vertPos = models[0]->getMesh().getVertex(i);
+                glm::vec3 cur = ad->getPosition();
+                float distance = glm::distance(cur, _vertPos);
+                if (i == 0 || distance < nearestDistance) {
+                    nearestDistance = distance;
+                    nearestVertex3D = _vertPos;
+                    nearestVertex2D = cur;
+                    nearestIndex = i;
+                }
+            }
+            models[0]->getSoftBody()->appendAnchor(nearestIndex, ad->getRigidBody());
         }
+        
         for (auto& au : armsUpper) {
-            models[0]->getSoftBody()->appendAnchor(models[0]->getSoftBody, au);
-        }
+            float nearestDistance = 0;
+            glm::vec3 nearestVertex3D;
+            glm::vec2 nearestVertex2D;
+            int nearestIndex = 0;
+            glm::vec3 mouse(ofGetMouseX(), ofGetMouseY(), 0);
+            glm::vec3 _camPos = cam.getPosition();
+            for (int i = 0; i < models[0]->getMesh().getNumVertices(); i++) {
+                glm::vec3 _vertPos = models[0]->getMesh().getVertex(i);
+                glm::vec3 cur = au->getPosition();
+                float distance = glm::distance(cur, _vertPos);
+                if (i == 0 || distance < nearestDistance) {
+                    nearestDistance = distance;
+                    nearestVertex3D = _vertPos;
+                    nearestVertex2D = cur;
+                    nearestIndex = i;
+                }
+            }
+            models[0]->getSoftBody()->appendAnchor(nearestIndex, au->getRigidBody());
+        }      
     }
 }
 
