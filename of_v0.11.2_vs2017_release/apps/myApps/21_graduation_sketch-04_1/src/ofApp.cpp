@@ -105,7 +105,6 @@ void ofApp::draw() {
    
 }
 
-
 //-----------THIS-TIME-INITS-----------//
 void ofApp::initParam() {
     bDrawDebug = false;
@@ -135,6 +134,7 @@ void ofApp::resetCamera() {
 void ofApp::initSliders() {
     /*  guiOne.add(slider.setup("sliderName", initial, min, max); */
     guiOne.add(stiffness.set("stiffness", glm::vec3(0.8), glm::vec3(0.01), glm::vec3(1.))); // this will create a slider group for your vec3 in the guiOne.
+    guiOne.add(slider_kVC.set("kVC", 0.001, 0, 1.0000));
     guiOne.add(slider_piteration.set("Positions solver iterations", 2, 0, 4));
     guiOne.add(slider_kDF.set("Dynamic friction coefficient [0,1]", 0.5, 0, 1));
     guiOne.add(slider_kSSHR_CL.set("Soft vs soft hardness[0, 1](cluster only)", 0.5, 0, 1));
@@ -147,7 +147,7 @@ void ofApp::initSliders() {
     guiTwo.add(slider_controller_pressure.set("controller_pressure", -4, -20, 0));
     guiTwo.add(slider_armsDowner_r.set("controller_hand_baseR", 15, 25, 0));
     guiTwo.add(slider_armsUpper_r.set("conttoller_hand_rotaterR", 15, 25, 0));
-    guiTwo.add(slider_power.set("power", 0, -200, 500));
+    guiTwo.add(slider_power.set("power", -10, -200, 500));
 
 }
 
@@ -161,7 +161,8 @@ void ofApp::loadFont() {
 }
 
 void ofApp::loadMesh() {
-    mesh.load("./3d/test-normal-reduced.ply");
+    mesh.load("./3d/test_cuboid.ply");
+    //mesh.load("./3d/test-normal-reduced.ply");
     mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     meshScaleFactor = 0.05;
     for (int i = 0; i < mesh.getNumVertices(); i++) {
@@ -293,6 +294,7 @@ void ofApp::addModel(const glm::vec2& _pos) {
     
     model->add();
 
+    model->getSoftBody()->m_cfg.kMT = slider_kVC;// 0~ non limi taiseki hozon
     model->getSoftBody()->m_cfg.piterations = slider_piteration;//2; //Positions solver iterations
     model->getSoftBody()->m_cfg.kDF = slider_kDF;//1; //Dynamic friction coefficient [0,1]
     model->getSoftBody()->m_cfg.kSSHR_CL = slider_kSSHR_CL;// 1 // Soft vs soft hardness [0,1] (cluster only)

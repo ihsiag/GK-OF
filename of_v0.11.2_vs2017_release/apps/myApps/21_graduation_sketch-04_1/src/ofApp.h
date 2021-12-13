@@ -62,6 +62,7 @@ public:
     //ofxPanel gui;
     ofxGuiGroup guiOne;
     ofParameter<glm::vec3> stiffness;
+    ofParameter<float> slider_kVC;
     ofParameter<int>  slider_piteration;
     ofParameter<float> slider_kDF;
     ofParameter<float> slider_kSSHR_CL;
