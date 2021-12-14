@@ -19,20 +19,16 @@ bool shouldRemoveKinematicBody(const shared_ptr<ofxBulletRigidBody>& ab) {
 
 void ofApp::setup() {
     initParam();
-    initSet();
-    resetCamera();
-    cam.disableMouseInput();
+    initGKSet();
     initSliders();
-
-    loadFont();
-    loadMesh();
-
-    setWorld();
-    makeControllerUI();
-    makeArms();
     
+    resetCamera();
+    loadFont();
+    
+    loadMesh();
+    setWorld();
+     
     initListener();
-    cam.enableMouseInput();  
 }
 
 
@@ -41,8 +37,7 @@ void ofApp::update() {
     gk.defaultUpdate(&cam,&currentFrame, &time);
     world.world->stepSimulation(1);
     world.update();
-    updateControllerUI();
-    updateArms();
+    updateMachines();
 
     //-----------REMOVE-----------//
     ofRemove(rigidBodies, shouldRemoveRigidBody);
@@ -74,17 +69,13 @@ void ofApp::draw() {
         gk.drawFoundCenterTo3D(glm::vec3(mouseOnWorldPlane.x, 10, mouseOnWorldPlane.y), glm::vec2(groundInfo.x, groundInfo.z), glm::vec3(0, 1, 0));
     }
     //-----------yes-light-----------//
-    ofEnableLighting();
-    light.enable();
-    ofSetColor(240);
-    ofNoFill();
-    ground->draw();
+    
+    drawStage();
+    turnOnLights();
     drawBodies(); //rigid, ,kinematic, crashers, models
-    drawArms();
-    drawControllerUI();
+    drawMachines();
+    turnOffLights();
 
-    light.disable();
-    ofDisableLighting();
     glDisable(GL_DEPTH_TEST);
     cam.end();
 
@@ -111,12 +102,9 @@ void ofApp::initParam() {
     currentFrame = 0;
     fontSize = 3;
     mousePickIndex = -1;
-
-    light.setPosition(0, -200, 0);
-    light.setScale(glm::vec3(50));
 }
 
-void ofApp::initSet() {
+void ofApp::initGKSet() {
     gk.setup(&ssGlobalLog);
     gk.setCam(&cam);
 
@@ -148,7 +136,6 @@ void ofApp::initSliders() {
     guiTwo.add(slider_armsDowner_r.set("controller_hand_baseR", 15, 25, 0));
     guiTwo.add(slider_armsUpper_r.set("conttoller_hand_rotaterR", 15, 25, 0));
     guiTwo.add(slider_power.set("power", -10, -200, 500));
-
 }
 
 void ofApp::initListener() {
@@ -223,12 +210,98 @@ void ofApp::setWorld(){
     world.setCamera(&cam);
     world.enableGrabbing();
 
-    //-----------ONCE-----------//
+    setStage();
+    setMachines();
+}
+
+void ofApp::setStage() {
     ground = new ofxBulletBox();
     groundInfo = glm::vec3(50.f, 1.f, 50.f);
     ground->create(world.world, glm::vec3(0., groundInfo.y / 2, 0.), 0., groundInfo.x, groundInfo.y, groundInfo.z);
     ground->setProperties(.25, .95);
     ground->add();
+
+    int lightBodiesXNum = 5;
+    int lightBodiesYNum = 5;
+    int lightHeight = 35;
+    float _lightBodiesMargin = 0.2;
+    lightBodyInfo = glm::vec3(groundInfo.x / lightBodiesXNum - _lightBodiesMargin, 0.01 , groundInfo.z / lightBodiesYNum - _lightBodiesMargin);
+    for (int i = 0; i < lightBodiesXNum; i++) {
+        for (int j = 0; j < lightBodiesYNum; j++) {
+            ofBoxPrimitive _lightBody = ofBoxPrimitive(lightBodyInfo.x, lightBodyInfo.y, lightBodyInfo.z);
+            _lightBody.setGlobalPosition(-groundInfo.x / 2 + groundInfo.x / lightBodiesXNum * i + lightBodyInfo.x / 2, -lightHeight, -groundInfo.z / 2 + groundInfo.z / lightBodiesYNum * j + lightBodyInfo.z / 2);
+            _lightBody.setPosition(-groundInfo.x/2 + groundInfo.x/lightBodiesXNum*i + lightBodyInfo.x/2, -lightHeight, -groundInfo.z / 2 + groundInfo.z / lightBodiesYNum * j+lightBodyInfo.z/2);
+            lightBodies.push_back(_lightBody);
+        }
+    }
+    ofLight _light;
+    _light.lookAt(glm::vec3(0, 1, 0));
+    _light.setAreaLight(lightBodyInfo.x, lightBodyInfo.z);
+    _light.setPosition(0, -lightHeight*2, 0);
+    lights.push_back(_light);
+    
+    ofLight _lightTwo;
+    _lightTwo.setAreaLight(lightBodyInfo.x, lightBodyInfo.z);
+    _lightTwo.setPosition(groundInfo.x / 2, -lightHeight*3, groundInfo.z / 2);
+    _lightTwo.lookAt(glm::vec3(0));
+    lights.push_back(_lightTwo); 
+
+    ofLight _lightThree;
+    _lightThree.setAreaLight(lightBodyInfo.x, lightBodyInfo.z);
+    _lightThree.setPosition(-groundInfo.x / 2, -lightHeight*3, groundInfo.z / 2);
+    _lightThree.lookAt(glm::vec3(0));
+    lights.push_back(_lightThree);
+}
+
+void ofApp::drawStage() {
+    ofSetColor(80);
+    ofNoFill();
+    ground->draw();
+  
+    ofMaterial lightBodyMat;
+    lightBodyMat.setEmissiveColor(ofFloatColor(0.9,0.9,0.96));
+    turnOnLights();
+    lightBodyMat.begin();
+    ofFill();
+    for (auto& lb : lightBodies) {
+        lb.draw();
+    }
+    lightBodyMat.end();
+    turnOffLights();
+    
+    if (bDrawDebug)for (auto& l : lights) { l.draw(); }
+    
+}
+
+void ofApp::turnOnLights() {
+    ofEnableLighting();
+    for (auto& l : lights) {
+        l.enable();
+    }
+}
+
+void ofApp::turnOffLights() {
+    ofDisableLighting();
+    for (auto& l : lights) {
+        l.disable();
+    }
+}
+
+void ofApp::setMachines() {
+    makeArms();
+    makeControllerUI();
+}
+
+void ofApp::updateMachines() {
+    updateArms();
+    updateControllerUI();
+}
+
+void ofApp::drawMachines() {
+    drawArms();
+    turnOffLights();
+    drawControllerUI();
+    turnOnLights();
 }
 
 void ofApp::addKinematicBody() {
@@ -385,14 +458,13 @@ void ofApp::drawControllerUI() {
 void ofApp::makeArms() {
     int _armsNum = 10;
     float _axisR = 10;
-    glm::vec3 _armInfo = glm::vec3(2, 2, 2);
+    glm::vec3 _armInfo = glm::vec3(0.5,0.5,0.5);
 
     //------ARMS-DOWNER
-    glm::vec3 _axisSliderInfo = glm::vec3(_axisR, -_armInfo.y * 0.75, 0);
+    glm::vec3 _axisSliderInfo = glm::vec3(_axisR, -_armInfo.y, 0);
     for (int i = 0; i < _armsNum; i++) {
         //A1
-        btGhostObject* ghost = new btGhostObject();
-        
+       
         btRigidBody* pRbA1;
         ofxBulletBox* _bbA;
         btTransform frameInA;
@@ -510,7 +582,7 @@ void ofApp::updateArms() {
 }
 
 void ofApp::drawArms() {
-    glColor3f(0.7, 0, 0);
+    glColor3f(0.6, 0, 0);
     for (auto& chd : armsDowner) {
         chd->draw();
     }

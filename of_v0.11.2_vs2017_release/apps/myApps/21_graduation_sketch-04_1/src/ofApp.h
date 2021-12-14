@@ -23,7 +23,7 @@ public:
     ofMesh mesh;
     float meshScaleFactor;
     float meshBB[6];
-    ofLight light;
+    
 
     stringstream ssGlobalLog;
 
@@ -35,6 +35,12 @@ public:
 
     ofxBulletBox* ground;
     glm::vec3 groundInfo;
+
+    vector<ofLight> lights;
+    vector<ofBoxPrimitive> lightBodies;
+    glm::vec3 lightBodyInfo;
+
+    ofMaterial defaultBodyMat;
 
     vector< shared_ptr<ofxBulletSoftTriMesh> > models;
     vector< shared_ptr<ofxBulletRigidBody> > rigidBodies;
@@ -80,13 +86,14 @@ public:
 
 
 
+
     void setup();
     void update();
     void draw();
 
     //-----------THIS-TIME-INITS-----------//
     void initParam();
-    void initSet();
+    void initGKSet();
     void initSliders();
     void resetCamera();
     void initListener();
@@ -99,6 +106,16 @@ public:
 
     //-----------THISTIME-FUNCS-----------//
     void setWorld();
+    void setStage();
+    void setMachines();
+
+    void turnOnLights();
+    void drawStage();
+    void turnOffLights();
+   
+    void updateMachines();
+    void drawMachines();
+
     void addKinematicBody();
     void addBox();
     void addCylinder(const glm::vec2& _pos);

@@ -31,6 +31,7 @@ public:
 	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time);
 	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time, const glm::vec4& _col);
 	glm::vec2 getPosLayout4x4(const int& _index);
+	glm::vec2 getPosLayout4x4Inverse(const int& _index);
 
 
 //-------------------------------------------------------HELPER_GUI-------------------------------------------------------//

@@ -16,6 +16,8 @@ class ofApp : public ofBaseApp{
 		float time;
 		stringstream ssGlobalLog;
 
+		bool scrollUp, scrollDown;
+
 		//-----------LIB-----------//
 		vector<Class_SmallScreen> smallScreens;
 
@@ -33,15 +35,23 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		//-----------FOR-LIB-----------//
-		void setupSmallScreen(const int& _index);
-		void resizeSmallScreen(const int& _index);
-
-
-		//-----------THIS-TIME-FUNCS-----------//
+		void initParam();
+		void initGKSet();
 		void resetCamera();
+		void scrollCamera(const int& _scrollY);
+
+		
 		void loadMeshes();
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
 
+
+		void setupSmallScreen(const int& _index);
+		void resizeSmallScreen(const int& _index);
+		void drawSmallScreens();
+
+
+		//-----------THIS-TIME-FUNCS-----------//
+		
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
 			switch (key) {
@@ -62,6 +72,9 @@ class ofApp : public ofBaseApp{
 		void mouseReleased(int x, int y, int button) {}
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
+		void mouseScrolled(int x, int y, float scrollX, float scrollY) {
+			scrollCamera(scrollY);
+		}
 		void windowResized(int w, int h) {
 			gk.resizeGUI(gui,13);
 			for (int i = 0; i < smallScreens.size(); i++) {

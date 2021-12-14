@@ -60,6 +60,9 @@
 		<Filter Include="addons\ofxGKUtils\src">
 			<UniqueIdentifier>{2D05EAB6-6705-1220-C579-3E7E}</UniqueIdentifier>
 		</Filter>
+		<Filter Include="addons\ofxGKUtils\src\gui">
+			<UniqueIdentifier>{32359672-A33F-DABA-4AD2-FBE2}</UniqueIdentifier>
+		</Filter>
 		<Filter Include="addons\ofxGui">
 			<UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
 		</Filter>
@@ -76,6 +79,21 @@
 		</ClInclude>
 		<ClInclude Include="src\ofApp.h">
 			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKLineSimple.h">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPlane.h">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPoint.h">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\gui\GKController2DTo3D.h">
+			<Filter>addons\ofxGKUtils\src\gui</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\gui\GKControllerAngle.h">
+			<Filter>addons\ofxGKUtils\src\gui</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\ofxGKUtils.h">
 			<Filter>addons\ofxGKUtils\src</Filter>

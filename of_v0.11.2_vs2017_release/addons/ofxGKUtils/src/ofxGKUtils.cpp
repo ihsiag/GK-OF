@@ -34,6 +34,7 @@ void ofxGKUtils::setCam(ofEasyCam* _cam) {
 	_cam->addInteraction(ofEasyCam::TRANSFORM_ROTATE, OF_MOUSE_BUTTON_RIGHT);
 }
 
+
 void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time) {
 	*_currentFrame += 1;
 	*_time = ofGetElapsedTimef();
@@ -85,6 +86,13 @@ glm::vec2 ofxGKUtils::getPosLayout4x4(const int& _index) {
 	if (_index == 13) return glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.25);
 	if (_index == 14) return glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.50);
 	if (_index == 15) return glm::vec2(ofGetWidth() * 0.75, ofGetHeight() * 0.75);
+}
+
+glm::vec2 ofxGKUtils::getPosLayout4x4Inverse(const int& _index) {
+	glm::vec2 _pos;
+	_pos.x = _index % 4 * ofGetWidth() * 0.25;
+	_pos.y = floor(_index / 4) * ofGetHeight() * 0.25;
+	return _pos;
 }
 
 //-------------------------------------------------------HELPER_GUI-------------------------------------------------------//

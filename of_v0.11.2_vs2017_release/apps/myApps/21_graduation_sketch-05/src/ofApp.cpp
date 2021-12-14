@@ -3,18 +3,24 @@
 
 void ofApp::setup(){
     //-----------DEFAULT-----------//
-    gk.setup(&ssGlobalLog);
-    gk.setCam(&cam);
-    gk.setGUI(gui,13);
-    //glEnable(GL_DEPTH_TEST);
+    initParam();
+    initGKSet();
     resetCamera();
 
     //-----------LOADING-----------//
     loadMeshes();
-    numSmallScreens = 16;
-    for (int i = 0; i < numSmallScreens; i++) {
-        setupSmallScreen(i);
+    
+    if (meshes.size() < 16) {
+        for (int i = 0; i < 16; i++) {
+            setupSmallScreen(i);
+        }
     }
+    else {
+        for (int i = 0; i < meshes.size(); i++) {
+            setupSmallScreen(i);
+        }
+    }
+
 }
 
 
@@ -28,9 +34,7 @@ void ofApp::draw(){
     //-----------MAIN-LAYER-----------//
     ofPushMatrix();
     ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2);
-    for (auto& smallScreen : smallScreens) {
-        smallScreen.run();
-    }   
+    drawSmallScreens();
     ofPopMatrix();
     cam.end();
     //-----------INFO-----------//
@@ -46,53 +50,52 @@ void ofApp::draw(){
     gk.drawInfo(ssProgramInfo, 2);
     gk.drawInfo(ssDebug, 5);
     gk.drawInfo(ssGlobalLog, 6);
-
-    //gui.draw();
 }
 
 
 //-----------FOR-LIB-----------//
 
-void ofApp::setupSmallScreen(const int& _index) {
-    Class_SmallScreen _smallScreen;
-    glm::vec2 _pos = gk.getPosLayout4x4(_index);
-    glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
-    if(_index<meshes.size()){ 
-        _smallScreen.setup(_pos, _size, &meshes[_index],&meshNames[_index]);
-    }
-    else {
-        _smallScreen.setup(_pos, _size);
-    }
-    smallScreens.push_back(_smallScreen);
+void ofApp::initParam(){
+    scrollUp = false;
+    scrollDown = false;
 }
 
-void ofApp::resizeSmallScreen(const int& _index) {
-    glm::vec2 _pos = gk.getPosLayout4x4(_index);
-    glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
-    smallScreens[_index].onWindowResized(_pos,_size);
+void ofApp::initGKSet() {
+    gk.setup(&ssGlobalLog);
+    gk.setCam(&cam);
+    gk.setGUI(gui, 13);
 }
 
-//-----------THIS-TIME-FUNCS-----------//
 void ofApp::resetCamera() {
     cam.enableOrtho();
-    cam.setPosition(glm::vec3(0,0,500));
+    cam.setPosition(glm::vec3(0, 0, 500));
     cam.setVFlip(true);
-    cam.lookAt(ofVec3f(0,0,0),glm::vec3(0,-1,0));
+    cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
     cam.disableMouseInput();
 }
 
+void ofApp::scrollCamera(const int& _scrollY) {
+    int scrollScale = 30;
+    if (cam.getPosition().y > -1) {
+        cam.move(0, -1 * _scrollY * scrollScale, 0);
+    }
+    if (cam.getPosition().y < 0) {
+        cam.setPosition(cam.getPosition().x, 0, cam.getPosition().z);
+    }
+}
+
 void ofApp::loadMeshes() {
-	string _dirName = "./meshExport/";
-	ofDirectory _dir(_dirName);
-	_dir.allowExt("ply");//only show {}file ex)png,mp3,css
-	_dir.sort();
-	_dir.listDir();
-	for (int i = 0; i < _dir.size(); i++) {
-		ofMesh _mesh;
-		_mesh.load(_dir.getPath(i));
-		meshes.push_back(_mesh);
+    string _dirName = "./meshExport/";
+    ofDirectory _dir(_dirName);
+    _dir.allowExt("ply");//only show {}file ex)png,mp3,css
+    _dir.sort();
+    _dir.listDir();
+    for (int i = 0; i < _dir.size(); i++) {
+        ofMesh _mesh;
+        _mesh.load(_dir.getPath(i));
+        meshes.push_back(_mesh);
         meshNames.push_back(_dir.getPath(i));
-	}
+    }
     cout << meshes.size() << endl;
 }
 
@@ -115,15 +118,41 @@ void ofApp::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, 
     _ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
     _ssProgramInfo << "CAMERA: " << cam.getPosition() << endl;
 
-    /*
-    _ssDebug << "AMOUT-CAN: " << ofToString(models.size(), 0) << endl;
-    _ssDebug << "AMOUT-CRASHER: " << ofToString(rigidBodies.size(), 0) << endl;
-    for (int i = 0; i < models.size(); i++) {
-        _ssDebug << "MODEL ID: " << ofToString(i, 3) << " -> POSITION: " << models[i]->getPosition() << endl;
-    }
-    _ssDebug << "MOUSE WORLD POS: " << mouseOnWorldPlane << endl;
-    _ssDebug << "MOUSE PICK POS: " << mousePickPos << endl;
-    */
+
+    _ssDebug << "MOUSE POS" << ofGetMouseX() << ", " << ofGetMouseY() << endl;
+
 }
+
+void ofApp::setupSmallScreen(const int& _index) {
+    Class_SmallScreen _smallScreen;
+    glm::vec2 _pos = gk.getPosLayout4x4Inverse(_index);
+    glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
+    if(_index<meshes.size()){ 
+        _smallScreen.setup(&cam,_pos, _size, &meshes[_index],&meshNames[_index]);
+    }
+    else {
+        _smallScreen.setup(&cam,_pos, _size);
+    }
+    smallScreens.push_back(_smallScreen);
+}
+
+void ofApp::resizeSmallScreen(const int& _index) {
+    glm::vec2 _pos = gk.getPosLayout4x4Inverse(_index);
+    glm::vec2 _size = glm::vec2(ofGetWidth() * 0.25, ofGetHeight() * 0.25);
+    smallScreens[_index].onWindowResized(_pos,_size);
+}
+
+void ofApp::drawSmallScreens() {
+    for (auto& smallScreen : smallScreens) {
+        if (smallScreen.pos.y > cam.getPosition().y - smallScreen.size.y && smallScreen.pos.y < cam.getPosition().y + ofGetHeight()) {
+            smallScreen.run();
+        }
+    }
+}
+
+//-----------THIS-TIME-FUNCS-----------//
+
+
+
 
 //-----------EVENT-----------//
