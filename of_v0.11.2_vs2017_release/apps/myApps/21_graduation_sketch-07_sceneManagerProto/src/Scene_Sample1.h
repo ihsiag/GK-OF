@@ -16,7 +16,7 @@ public:
 		x = currentFrame % ofGetWidth();
 	};
 
-	void draw() const override {
+	void draw() {
 		glClearColor(0, 0, 1, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -26,5 +26,9 @@ public:
 		glVertex2f(x, 0);
 		glVertex2f(x, ofGetHeight());
 		glEnd();
+	};
+
+	void keyPressed(int key) {
+		x = key;
 	};
 };

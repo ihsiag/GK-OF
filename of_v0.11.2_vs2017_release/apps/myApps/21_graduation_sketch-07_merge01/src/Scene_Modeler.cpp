@@ -14,7 +14,7 @@ void Scene_Modeler::update(){
     glClear(GL_DEPTH_BUFFER_BIT);
 }
 
-void Scene_Modeler::renderer(){
+void Scene_Modeler::draw(){
     //-----------INIT-----------//
     stringstream ssInstruct;
     stringstream ssProgramInfo;
@@ -202,7 +202,7 @@ ofMesh Scene_Modeler::getMeshFromGKPlanes(vector<GKPlane>* _gkPlanes) {
 
 //-----------THIS-TIME-FUNCS-----------//
 void Scene_Modeler::importMesh() {
-    loadLatestMesh("./selectedMesh/", &mainMesh);
+    loadLatestMesh("./meshExportedFromViewerToModeler/", &mainMesh);
 }
 
 void Scene_Modeler::modifyMesh() {
@@ -459,11 +459,6 @@ void Scene_Modeler::drawGKPlanesFinal() {
 
 
 
-
-
-
-
-
 //-----------DEBUG-----------//
 void Scene_Modeler::debugDot() {
     for (int i = 0; i < mainMesh.getNumVertices(); i++) {
@@ -527,6 +522,14 @@ void Scene_Modeler::drawgkIntersectLines() {
     }
 }
 //--------------------------------------------------------------
+
+//-----------THISTIME-SCENE-BEIDGE-----------//
+void Scene_Modeler::exportDataForNextScene() {
+    meshToSave = getMeshFromGKPlanes(&gkPlanesSplittedByCombi);
+    meshToSave.append(getMeshFromGKPlanes(&gkPlanesFinal));
+    meshToSave.append(getMeshFromGKPlanes(&gkPlanesSplittedByDelaunay));
+    gk.saveMesh(meshToSave, 1, "./meshExportedFromModeler/");
+};
 
 
 //-----------EVENT-----------//

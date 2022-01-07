@@ -1,17 +1,19 @@
 #pragma once
 
 #include "ofMain.h"
+#include "GKScene.h"
 #include "ofxGKUtils.h"
 #include "ofxBullet.h"
 #include "ofxGui.h"
 #include "ofEvent.h"
+
 
 #include "GKControllerAngle.h"
 
 #include "btGhostObject.h"
 
 
-class Scene_Room : public myRenderer{ //ofBaseApp {
+class Scene_Room : public GKScene{ //ofBaseApp {
 
 public:
     //-----------BASIC-----------//
@@ -90,7 +92,6 @@ public:
     void setup();
     void update();
     void draw();
-    void renderer();
 
     //-----------THIS-TIME-INITS-----------//
     void initParam();
@@ -139,6 +140,9 @@ public:
     void updateHammer();
     void drawHammer();
 
+    //-----------THISTIME-SCENE-BEIDGE-----------//
+    void exportDataForNextScene();
+
     
 
 
@@ -147,17 +151,8 @@ public:
 
     //-----------EVENT-FUNCS-----------//
     void mousePickEvent(ofxBulletMousePickEvent& e);
-    void sceneStarted() {
-        std::cout << "sceneStarted " << getName() << std::endl;
-
-    }
-    void sceneEnded() {
-        std::cout << "sceneEnded " << getName() << std::endl;
-    }
-
     //-----------EVENT-----------//
     void keyPressed(int key) {
-
         switch (key) {
         case 'r':
             resetCamera();
@@ -169,7 +164,7 @@ public:
             gk.saveImage();
             break;
         case 'm':            
-            if (models.size() > 0)gk.saveMesh(models[slider_selectModelIndex % models.size()]->getMesh(),1/meshScaleFactor);
+            exportDataForNextScene();
             break;
         case 'h':
             bDrawDebug = !bDrawDebug;
@@ -204,7 +199,6 @@ public:
             break;
         }
     }
-	
     void keyReleased(int key) {
     };
 	void mouseMoved(int x, int y ) {};
@@ -214,6 +208,9 @@ public:
 	void mouseReleased(int x, int y, int button) {
         mousePickIndex = -1;
     };
+    void mouseEntered(int x, int y) {};
+    void mouseExited(int x, int y) {};
+    void mouseScrolled(int x, int y, float scrollX, float scrollY) {};
 	void windowResized(int w, int h) {
         gk.resizeGUI(guiOne,12);
         gk.resizeGUI(guiTwo,13);

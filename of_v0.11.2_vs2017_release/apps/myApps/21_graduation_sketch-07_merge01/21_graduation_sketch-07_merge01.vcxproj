@@ -189,7 +189,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Manager.cpp" />
+    <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\Scene_Modeler.cpp" />
     <ClCompile Include="src\Scene_Room.cpp" />
     <ClCompile Include="src\Scene_Viewer.cpp" />
@@ -371,7 +371,8 @@
     <ClInclude Include="src\Class_GKNetwork.h" />
     <ClInclude Include="src\Class_GKSplit.h" />
     <ClInclude Include="src\Class_SmallScreen.h" />
-    <ClInclude Include="src\Manager.h" />
+    <ClInclude Include="src\GKScene.h" />
+    <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Scene_Modeler.h" />
     <ClInclude Include="src\Scene_Room.h" />
     <ClInclude Include="src\Scene_Viewer.h" />

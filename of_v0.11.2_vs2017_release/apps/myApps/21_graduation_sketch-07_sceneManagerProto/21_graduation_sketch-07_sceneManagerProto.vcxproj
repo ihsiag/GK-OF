@@ -191,6 +191,7 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\Scene_Sample1.h" />
+    <ClInclude Include="src\Scene_Sample2.h" />
     <ClInclude Include="src\Titleh.h" />
   </ItemGroup>
   <ItemGroup>

@@ -48,7 +48,7 @@ void Scene_Room::update() {
 };
 
 
-void Scene_Room::renderer() {
+void Scene_Room::draw() {
     //-----------INIT-----------//
     stringstream ssInstruct;
     stringstream ssProgramInfo;
@@ -148,7 +148,7 @@ void Scene_Room::loadFont() {
 }
 
 void Scene_Room::loadMesh() {
-    mesh.load("./3d/test_cuboid.ply");
+    mesh.load("./meshToImport/test_cuboid.ply");
     //mesh.load("./3d/test-normal-reduced.ply");
     mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     meshScaleFactor = 0.05;
@@ -637,6 +637,11 @@ void Scene_Room::connectArmsToModel() {
     }
 }
 
+
+//-----------THISTIME-SCENE-BEIDGE-----------//
+void Scene_Room:: exportDataForNextScene() {
+    if (models.size() > 0)gk.saveMesh(models[slider_selectModelIndex % models.size()]->getMesh(), 1 / meshScaleFactor, "./meshExportedFromRoomToViewer/");
+};
 
 //-----------EVENT-FUNCS-----------//
 void Scene_Room::mousePickEvent(ofxBulletMousePickEvent& e) {

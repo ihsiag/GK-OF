@@ -691,6 +691,14 @@ void ofxGKUtils::saveImage() {
 	*ssLog << "EXPORTED SCREEN : " + _fileName << std::endl;
 }
 
+void ofxGKUtils::saveImage(const string& _url) {
+	string _fileName = makeFileName(_url, ".png").str().c_str();
+	ofImage _imgToSave;
+	_imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+	_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
+	*ssLog << "EXPORTED SCREEN : " + _fileName << std::endl;
+}
+
 void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo) {
 	string _fileName = makeFileName("./fboShot/", ".png").str().c_str();
 	ofPixels _pixels;
@@ -701,8 +709,31 @@ void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo) {
 	*ssLog << "EXPORTED FBO : " + _fileName << std::endl;
 }
 
+void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo, const string& _url) {
+	string _fileName = makeFileName(_url, ".png").str().c_str();
+	ofPixels _pixels;
+	_fbo->readToPixels(_pixels);
+	ofImage _imgToSave;
+	_imgToSave.setFromPixels(_pixels);
+	_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
+	*ssLog << "EXPORTED FBO : " + _fileName << std::endl;
+}
+
 void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor) {
 	string _fileName = makeFileName("./meshExport/", ".ply").str().c_str();
+	ofMesh _meshToSave = _mesh;
+	glm::vec3 _centroid = _mesh.getCentroid();
+	*ssLog << _centroid << endl;
+	for (int i = 0; i < _mesh.getNumVertices(); i++) {
+		_meshToSave.getVertices()[i] = (_mesh.getVertex(i) - _centroid) * _scaleFactor;;
+	}
+	_meshToSave.save(_fileName);
+	*ssLog << "EXPORTED MESH : " + _fileName << endl;
+	//free(&_meshToSave);
+}
+
+void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor, const string& _url) {
+	string _fileName = makeFileName(_url, ".ply").str().c_str();
 	ofMesh _meshToSave = _mesh;
 	glm::vec3 _centroid = _mesh.getCentroid();
 	*ssLog << _centroid << endl;

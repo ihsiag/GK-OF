@@ -29,7 +29,7 @@ void Scene_Viewer::update(){
 }
 
 
-void Scene_Viewer::renderer(){
+void Scene_Viewer::draw(){
     cam.begin();
     //-----------MAIN-LAYER-----------//
     ofPushMatrix();
@@ -85,7 +85,7 @@ void Scene_Viewer::scrollCamera(const int& _scrollY) {
 }
 
 void Scene_Viewer::loadMeshes() {
-    string _dirName = "./meshExport/";
+    string _dirName = "./meshExportedFromRoomToViewer/";
     ofDirectory _dir(_dirName);
     _dir.allowExt("ply");//only show {}file ex)png,mp3,css
     _dir.sort();
@@ -152,7 +152,14 @@ void Scene_Viewer::drawSmallScreens() {
 
 //-----------THIS-TIME-FUNCS-----------//
 
-
+//-----------THISTIME-SCENE-BEIDGE-----------//
+void Scene_Viewer::exportDataForNextScene() {
+    for (auto& ss : smallScreens) {
+        if (ss.IsMouseOn()) {
+            if(ss.mesh->hasVertices())gk.saveMesh(*ss.mesh, 1, "./meshExportedFromViewerToModeler/");
+        }      
+    }
+};
 
 
 //-----------EVENT-----------//

@@ -1,5 +1,13 @@
 #include "ofApp.h"
 
+std::shared_ptr<ofApp> ofApp::instance;
+
+
+void ofApp::addGKScene(GKScene* _gkScene) {
+		gkScenes.push_back(_gkScene);
+}
+
+
 //--------------------------------------------------------------
 void ofApp::setup(){
 	currentSceneIndex = 0;
@@ -27,9 +35,9 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-
-}
+//void ofApp::keyPressed(int key){
+//
+//}
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){

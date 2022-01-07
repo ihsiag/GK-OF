@@ -1,7 +1,7 @@
 #include "ofMain.h"
 #include "ofGLProgrammableRenderer.h"
 
-#include "Manager.h"
+#include "ofApp.h"
 #include "Scene_Room.h"
 #include "Scene_Viewer.h"
 #include "Scene_Modeler.h"
@@ -9,10 +9,10 @@
 //========================================================================
 int main() {
 
-	auto mainApp = myManager::getInstance();
-	mainApp->addRenderer(new Scene_Room());
-	mainApp->addRenderer(new Scene_Viewer());
-	mainApp->addRenderer(new Scene_Modeler());
+	auto mainApp = ofApp::getInstance();
+	mainApp->addGKScene(new Scene_Room());
+	mainApp->addGKScene(new Scene_Viewer());
+	mainApp->addGKScene(new Scene_Modeler());
 	ofGLWindowSettings settings;
 
 	settings.setGLVersion(2, 1);

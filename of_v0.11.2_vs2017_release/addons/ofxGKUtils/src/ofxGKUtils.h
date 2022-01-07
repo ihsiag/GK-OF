@@ -82,7 +82,10 @@ public:
 	
 	stringstream makeFileName(const string& _folderName, const string& _fileType);
 	void saveImage();
+	void saveImage(const string& _url);
 	void saveFBOtoImage(ofFbo* _fbo);
+	void saveFBOtoImage(ofFbo* _fbo, const string& _url);
 	void saveMesh(ofMesh& _mesh, const float& _scaleFactor);
+	void saveMesh(ofMesh& _mesh, const float& _scalefactor, const string& _url);
 };
 #endif

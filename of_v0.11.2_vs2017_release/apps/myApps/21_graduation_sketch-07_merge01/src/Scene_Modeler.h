@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GKScene.h"
 #include "ofMain.h"
 #include "ofxGKUtils.h"
 #include "ofxGui.h"
@@ -12,7 +13,7 @@
 
 
 
-class Scene_Modeler : public ofBaseApp{
+class Scene_Modeler : public GKScene{
 
 	public:
 
@@ -56,7 +57,6 @@ class Scene_Modeler : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-		void renderer();
 
 		//-----------FOR-LIB-----------//		
 		GKDelaunay3d gkDela;
@@ -216,10 +216,7 @@ class Scene_Modeler : public ofBaseApp{
 				gk.saveImage();
 				break;
 			case 'm':
-				meshToSave = getMeshFromGKPlanes(&gkPlanesSplittedByCombi);
-				meshToSave.append(getMeshFromGKPlanes(&gkPlanesFinal));
-				meshToSave.append(getMeshFromGKPlanes(&gkPlanesSplittedByDelaunay));
-				gk.saveMesh(meshToSave, 1);
+				exportDataForNextScene();
 				break;
 			case ' ':
 				//findPlaneIntersectionsBeta();
@@ -241,18 +238,23 @@ class Scene_Modeler : public ofBaseApp{
 				}
 			}
 		}
+		void mousePressed(int x, int y, int button) {};
 		void windowResized(int w, int h) {
 			gk.resizeGUI(guiOne,13);
 			gk.resizeGUI(guiTwo,13);
 		}
+
+		//-----------THISTIME-SCENE-BEIDGE-----------//
+		void exportDataForNextScene();
 		
 		//-----------NO-InUSE-----------//
-		void keyReleased(int key) {}
-		void mouseMoved(int x, int y) {}
-		void mouseDragged(int x, int y, int button) {}
-		void mouseReleased(int x, int y, int button) {}
-		void mouseEntered(int x, int y) {}
-		void mouseExited(int x, int y) {}		
-		void dragEvent(ofDragInfo dragInfo) {}
-		void gotMessage(ofMessage msg) {}	
+		void keyReleased(int key) {};
+		void mouseMoved(int x, int y) {};
+		void mouseDragged(int x, int y, int button) {};
+		void mouseReleased(int x, int y, int button) {};
+		void mouseEntered(int x, int y) {};
+		void mouseExited(int x, int y) {};
+		void mouseScrolled(int x, int y, float scrollX, float scrollY) {};
+		void dragEvent(ofDragInfo dragInfo) {};
+		void gotMessage(ofMessage msg) {};
 };

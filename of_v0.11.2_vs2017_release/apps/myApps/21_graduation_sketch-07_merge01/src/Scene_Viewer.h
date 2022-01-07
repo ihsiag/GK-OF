@@ -1,12 +1,13 @@
 #pragma once
 
 #include "ofMain.h"
+#include "GKScene.h"
 #include "ofxGKUtils.h"
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 #include "Class_SmallScreen.h"
 
-class Scene_Viewer : public ofBaseApp{
+class Scene_Viewer : public GKScene{
 
 	public:
 		//-----------DEFAULT-----------//
@@ -33,7 +34,6 @@ class Scene_Viewer : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-		void renderer();
 
 		//-----------FOR-LIB-----------//
 		void initParam();
@@ -52,6 +52,9 @@ class Scene_Viewer : public ofBaseApp{
 
 
 		//-----------THIS-TIME-FUNCS-----------//
+
+		//-----------THISTIME-SCENE-BEIDGE-----------//
+		void exportDataForNextScene();
 		
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
@@ -69,7 +72,9 @@ class Scene_Viewer : public ofBaseApp{
 		void keyReleased(int key) {}
 		void mouseMoved(int x, int y) {}
 		void mouseDragged(int x, int y, int button) {}
-		void mousePressed(int x, int y, int button) {}
+		void mousePressed(int x, int y, int button) {
+			exportDataForNextScene();
+		}
 		void mouseReleased(int x, int y, int button) {}
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
