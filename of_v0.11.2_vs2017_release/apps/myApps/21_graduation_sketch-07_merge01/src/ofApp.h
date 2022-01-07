@@ -40,7 +40,6 @@ public:
 			//gkScenes[currentSceneIndex]->sceneEnded();
 			currentSceneIndex++;
 			currentSceneIndex %= gkScenes.size();
-			gkScenes[currentSceneIndex]->setup();
 			//gkScenes[currentSceneIndex]->sceneStarted();
 			sceneStartSec = ofGetElapsedTimef();
 			break;
