@@ -9,6 +9,25 @@ void Scene_Modeler::setup(){
     importMesh();  
 }
 
+void Scene_Modeler::resetScene() {
+    initParam();
+    resetCamera();
+
+    gkPlanes.erase(gkPlanes.begin(), gkPlanes.end());
+    gkPlanesSplittedByDelaunay.erase(gkPlanesSplittedByDelaunay.begin(), gkPlanesSplittedByDelaunay.end());
+    gkPlanesSplittedByCombi.erase(gkPlanesSplittedByCombi.begin(), gkPlanesSplittedByCombi.end());
+    gkPlanesFinal.erase(gkPlanesFinal.begin(), gkPlanesFinal.end());
+    gkIntersectLines.erase(gkIntersectLines.begin(), gkIntersectLines.end());
+    bModified = !bModified;
+    ssGlobalLog.str("");
+    ssGlobalLog.clear(std::stringstream::goodbit);
+    ssGlobalLog << "CLEARED LOG" << endl;
+    ssGlobalLog << "CLEARED-ARRAYS" << endl;
+
+    mainMesh.clear();
+    importMesh();
+}
+
 void Scene_Modeler::update(){
     gk.defaultUpdate(&cam, &currentFrame, &time);
     glClear(GL_DEPTH_BUFFER_BIT);

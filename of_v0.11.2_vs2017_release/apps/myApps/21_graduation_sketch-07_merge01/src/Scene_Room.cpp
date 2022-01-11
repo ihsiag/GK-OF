@@ -31,6 +31,14 @@ void Scene_Room::setup() {
     initListener();
 }
 
+void Scene_Room::resetScene() {
+    initParam();
+    resetCamera();
+    deleteModel();
+
+    slider_power.set("power", -10, -200, 500);
+
+}
 
 void Scene_Room::update() {
     //-----------UPDATE-----------//

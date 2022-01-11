@@ -32,6 +32,7 @@ class Scene_Viewer : public GKScene{
 
 		
 		void setup();
+		void resetScene();
 		void update();
 		void draw();
 

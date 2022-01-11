@@ -23,6 +23,27 @@ void Scene_Viewer::setup(){
 
 }
 
+void Scene_Viewer::resetScene() {
+    initParam();
+    resetCamera();
+    meshes.erase(meshes.begin(), meshes.end());
+    meshNames.erase(meshNames.begin(), meshNames.end());
+    smallScreens.erase(smallScreens.begin(), smallScreens.end());
+
+    loadMeshes();
+
+    if (meshes.size() < 16) {
+        for (int i = 0; i < 16; i++) {
+            setupSmallScreen(i);
+        }
+    }
+    else {
+        for (int i = 0; i < meshes.size(); i++) {
+            setupSmallScreen(i);
+        }
+    }
+}
+
 
 void Scene_Viewer::update(){
     gk.defaultUpdate(&cam, &currentFrame, &time);
@@ -156,7 +177,8 @@ void Scene_Viewer::drawSmallScreens() {
 void Scene_Viewer::exportDataForNextScene() {
     for (auto& ss : smallScreens) {
         if (ss.IsMouseOn()) {
-            if(ss.mesh->hasVertices())gk.saveMesh(*ss.mesh, 1, "./meshExportedFromViewerToModeler/");
+            if(ss.mesh)gk.saveMesh(*ss.mesh, 1, "./meshExportedFromViewerToModeler/");
+            ssGlobalLog << "MESH WAS SELECTED" << endl;
         }      
     }
 };

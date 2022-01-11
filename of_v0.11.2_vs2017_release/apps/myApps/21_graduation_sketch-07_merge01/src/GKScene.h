@@ -6,9 +6,11 @@ public:
 	virtual ~GKScene() {}
 
 	virtual void setup() = 0;
+	virtual void resetScene() = 0;
 	virtual void update() = 0;
 	virtual void draw() = 0;
 	
+
 	virtual void keyPressed(int key) = 0;
 	virtual void keyReleased(int key) = 0;
 	virtual void mouseMoved(int x, int y) = 0;

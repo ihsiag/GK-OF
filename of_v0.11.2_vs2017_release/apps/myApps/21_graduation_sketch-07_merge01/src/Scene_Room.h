@@ -90,6 +90,7 @@ public:
 
 
     void setup();
+    void resetScene();
     void update();
     void draw();
 

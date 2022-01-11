@@ -10,6 +10,7 @@ void ofApp::addGKScene(GKScene* _gkScene) {
 //--------------------------------------------------------------
 void ofApp::setup(){
 	currentSceneIndex = 0;
+	
 	for (GKScene* gs : gkScenes) {
 		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -19,16 +20,16 @@ void ofApp::setup(){
 		glPopAttrib();
 		glPopClientAttrib();
 	}
+	
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	GKScene* gs = gkScenes[currentSceneIndex];
-	gs->update();
+	gkScenes[currentSceneIndex]->update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	GKScene* gs = gkScenes[currentSceneIndex];
-	gs->draw();
+	gkScenes[currentSceneIndex]->draw();
 }
