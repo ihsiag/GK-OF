@@ -133,7 +133,7 @@ void Scene_Viewer::createInfo(stringstream& _ssInstruct, stringstream& _ssProgra
     _ssInstruct << "> CLEAR GLOBAL LOG   - L" << endl;
 
 
-    _ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
+    _ssProgramInfo << "PROGRAM: " << "SIMULATED EXPERIENCE OR DREAM" << endl;
     _ssProgramInfo << "DEVELOPER: " << "GAISHI KUDO" << endl;
     _ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
     _ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;

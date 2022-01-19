@@ -73,8 +73,14 @@ class Scene_Viewer : public GKScene{
 		void keyReleased(int key) {}
 		void mouseMoved(int x, int y) {}
 		void mouseDragged(int x, int y, int button) {}
+		void mousePressed(ofMouseEventArgs& args) {
+			if (args.button == OF_MOUSE_BUTTON_LEFT) {
+				exportDataForNextScene();
+			}
+		}
+
 		void mousePressed(int x, int y, int button) {
-			exportDataForNextScene();
+			
 		}
 		void mouseReleased(int x, int y, int button) {}
 		void mouseEntered(int x, int y) {}

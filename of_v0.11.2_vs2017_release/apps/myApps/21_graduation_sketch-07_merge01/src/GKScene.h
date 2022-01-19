@@ -15,6 +15,7 @@ public:
 	virtual void keyReleased(int key) = 0;
 	virtual void mouseMoved(int x, int y) = 0;
 	virtual void mouseDragged(int x, int y, int button) = 0;
+	virtual void mousePressed(ofMouseEventArgs& args) {};
 	virtual void mousePressed(int x, int y, int button) = 0;
 	virtual void mouseReleased(int x, int y, int button) = 0;
 	virtual void mouseEntered(int x, int y) = 0;

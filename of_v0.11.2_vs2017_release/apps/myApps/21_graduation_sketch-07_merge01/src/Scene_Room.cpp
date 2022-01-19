@@ -156,8 +156,8 @@ void Scene_Room::loadFont() {
 }
 
 void Scene_Room::loadMesh() {
-    mesh.load("./meshToImport/test_cuboid.ply");
-    //mesh.load("./3d/test-normal-reduced.ply");
+    //mesh.load("./meshToImport/test_cuboid.ply");
+    mesh.load("./3d/test-normal-reduced.ply");
     mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     meshScaleFactor = 0.05;
     for (int i = 0; i < mesh.getNumVertices(); i++) {
@@ -187,7 +187,7 @@ void Scene_Room::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramI
     _ssInstruct << "> CLEAR GLOBAL LOG   - L" << endl;
 
 
-    _ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
+    _ssProgramInfo << "PROGRAM: " << "SIMULATED EXPERIENCE OR DREAM" << endl;
     _ssProgramInfo << "DEVELOPER: " << "GAISHI KUDO" << endl;
     _ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
     _ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;

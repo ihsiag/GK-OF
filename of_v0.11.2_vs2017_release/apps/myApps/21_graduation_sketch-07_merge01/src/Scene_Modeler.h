@@ -57,7 +57,7 @@ class Scene_Modeler : public GKScene{
 		void setup();
 		void resetScene();
 		void update();
-		void draw();	
+		void draw();
 
 		//-----------FOR-LIB-----------//		
 		GKDelaunay3d gkDela;

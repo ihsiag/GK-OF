@@ -39,6 +39,7 @@ public:
 		case OF_KEY_RIGHT:
 			currentSceneIndex++;
 			currentSceneIndex %= gkScenes.size();
+			cout << "Scene changed" << endl;
 			gkScenes[currentSceneIndex]->resetScene();
 			sceneStartSec = ofGetElapsedTimef();
 			break;
@@ -46,6 +47,7 @@ public:
 		case OF_KEY_LEFT:
 			currentSceneIndex--;
 			if (currentSceneIndex < 0) currentSceneIndex += gkScenes.size();
+			cout << "Scene changed" << endl;
 			gkScenes[currentSceneIndex]->resetScene();
 			sceneStartSec = ofGetElapsedTimef();
 			break;
@@ -60,6 +62,9 @@ public:
 	void mouseDragged(int x, int y, int button) {
 		gkScenes[currentSceneIndex]->mouseDragged(x, y,button);
 	};
+	void mousePressed(ofMouseEventArgs& args) {
+		gkScenes[currentSceneIndex]->mousePressed(args);
+	}
 	void mousePressed(int x, int y, int button) {
 		gkScenes[currentSceneIndex]->mousePressed(x, y, button);
 	};

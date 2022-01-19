@@ -18,7 +18,7 @@ void Scene_Modeler::resetScene() {
     gkPlanesSplittedByCombi.erase(gkPlanesSplittedByCombi.begin(), gkPlanesSplittedByCombi.end());
     gkPlanesFinal.erase(gkPlanesFinal.begin(), gkPlanesFinal.end());
     gkIntersectLines.erase(gkIntersectLines.begin(), gkIntersectLines.end());
-    bModified = !bModified;
+    bModified = false;
     ssGlobalLog.str("");
     ssGlobalLog.clear(std::stringstream::goodbit);
     ssGlobalLog << "CLEARED LOG" << endl;
@@ -164,7 +164,7 @@ void Scene_Modeler::createInfo(stringstream& _ssInstruct, stringstream& _ssProgr
     _ssInstruct << "> MANUAL-MODE           - Q" << endl;
     
 
-    _ssProgramInfo << "PROGRAM: " << "EPHEMERAL-TMP" << endl;
+    _ssProgramInfo << "PROGRAM: " << "SIMULATED EXPERIENCE OR DREAM" << endl;
     _ssProgramInfo << "DEVELOPER: " << "GAISHI KUDO" << endl;
     _ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
     _ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
