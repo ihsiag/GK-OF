@@ -72,6 +72,18 @@ class GKPlane  {
 			makeGKPlaneFromVertices();
 			getGKPlaneEdges();
 		}
+
+		void setup(const vector<glm::vec3>& _sortedVertices, const glm::vec3& _centroidToInherite, const int& _state) {
+			vertices = _sortedVertices;
+			state = _state;
+			//ID = _index;
+			centroid = _centroidToInherite;
+			getNormalFromVertices();
+			modifyInfo.setGlobalPosition(0, 0, 0);
+			bMadeGKPlane = false;
+			makeGKPlaneFromVertices();
+			getGKPlaneEdges();
+		}
 				
 		//-----------THIS-TIME-UTILS-----------AUTO//
 		void drawGKPlane() {
@@ -142,13 +154,13 @@ class GKPlane  {
 		bool hasInside(const glm::vec3& _vertex) {
 			bool _result = true;
 			glm::vec3 _mainDir;
-			for (int i = 0; i < vertices.size() - 1; i++) {
-				glm::vec3 _dir = glm::normalize(glm::cross(vertices[i + 1] - vertices[i], _vertex - vertices[i + 1]));
+			for (int i = 0; i < vertices.size(); i++) {
+				glm::vec3 _dir = glm::normalize(glm::cross(vertices[(i + 1)%vertices.size()] - vertices[i], vertices[(i + 1)%vertices.size()]-_vertex));
 				if (i == 0) {
 					_mainDir = _dir;
 				}
 				else {
-					if (glm::angle(_dir, _mainDir) > PI / 4) {
+					if( abs(glm::angle(_dir, _mainDir)) > PI / 4) {
 						_result = false;
 						break;
 					}

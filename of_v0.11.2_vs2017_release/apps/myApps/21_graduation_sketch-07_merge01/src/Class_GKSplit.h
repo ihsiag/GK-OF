@@ -120,8 +120,8 @@ public:
         GKPlane _splittedFaceA, _splittedFaceB;
         _verticesForA = gk.getModifiedVertices(_verticesForA, _gkPlane.modifyInfo);
         _verticesForB = gk.getModifiedVertices(_verticesForB, _gkPlane.modifyInfo);
-        _splittedFaceA.setup(_verticesForA, 1);
-        _splittedFaceB.setup(_verticesForB, 1);
+        _splittedFaceA.setup(_verticesForA,_gkPlane.centroid, 1);
+        _splittedFaceB.setup(_verticesForB,_gkPlane.centroid, 1);
         if (_splittedFaceA.hasInside(_gkPlane.centroid)) {
             return _splittedFaceA;
         }
