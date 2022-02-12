@@ -145,6 +145,8 @@ void Scene_Modeler::createInfo(stringstream& _ssInstruct, stringstream& _ssProgr
     _ssInstruct << "> MOVE CAMERA           - SHIFT + RIGHT-BUTTON" << endl;
     _ssInstruct << "> RESET CAMERA          - R" << endl;
     _ssInstruct << "> UPDATE MESH           - U" << endl;
+    _ssInstruct << "> EXPORT GKPLANES-MODEL - E" << endl;
+    _ssInstruct << "> IMPORT GKPLANES-MODEL - I" << endl;
     _ssInstruct << "> HIDE MAIN-MESH        - 1" << endl;
     _ssInstruct << "> HIDE ADDED-MESH       - 2" << endl;
     _ssInstruct << "> HIDE ADDED-PLANE      - 3" << endl;
@@ -477,7 +479,6 @@ void Scene_Modeler::drawGKPlanesFinal() {
 }
 
 
-
 //-----------DEBUG-----------//
 void Scene_Modeler::debugDot() {
     for (int i = 0; i < mainMesh.getNumVertices(); i++) {
@@ -549,6 +550,26 @@ void Scene_Modeler::exportDataForNextScene() {
     meshToSave.append(getMeshFromGKPlanes(&gkPlanesSplittedByDelaunay));
     gk.saveMesh(meshToSave, 1, "./meshExportedFromModeler/");
 };
+
+void Scene_Modeler::exportGKModel() {
+    vector<GKPlane> gkPlanesToExport;
+    //gkplanes + gkPlanesFinal
+    //copy(gkPlanes.begin(), gkPlanes.end(), gkPlanesToExport);
+    //gkPlanesToExport.insert(gkPlanesToExport.end(), gkPlanesFinal.begin(), gkPlanesFinal.end());
+    gk.saveGKPlanes(gkPlanes, gkPlanesFinal, "./gk3dExported/");
+}
+
+void Scene_Modeler::importGKModel() {
+    ofDirectory _dir("./gk3dExported/");
+
+    _dir.allowExt("gk3d");//only show {}file ex)png,mp3,css
+    _dir.sort();
+    _dir.listDir();
+    if (_dir.size() > 0) {
+        gk.importGKPlanes((_dir.getPath(_dir.size() - 1)));
+    }
+    
+}
 
 
 //-----------EVENT-----------//

@@ -118,7 +118,6 @@ class Scene_Modeler : public GKScene{
 		void drawNetwork();
 		void drawgkIntersectLines();
 
-
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
 			//for (auto& gkPlane : gkPlanes) {
@@ -136,6 +135,12 @@ class Scene_Modeler : public GKScene{
 				break;
 			case 'u':
 				updateMesh();
+				break;
+			case 'e':
+				exportGKModel();
+				break;
+			case 'i':
+				importGKModel();
 				break;
 			case '1':
 				bHideMainMesh = !bHideMainMesh;
@@ -247,7 +252,9 @@ class Scene_Modeler : public GKScene{
 
 		//-----------THISTIME-SCENE-BEIDGE-----------//
 		void exportDataForNextScene();
-		
+		void exportGKModel();
+		void importGKModel();
+
 		//-----------NO-InUSE-----------//
 		void keyReleased(int key) {};
 		void mouseMoved(int x, int y) {};

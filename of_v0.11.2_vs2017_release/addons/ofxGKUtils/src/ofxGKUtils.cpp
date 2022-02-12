@@ -660,6 +660,54 @@ vector<glm::vec2> ofxGKUtils:: getIndexList_nC2(int _n) {
 }
 
 
+#pragma mark - importGK
+//-------------------------------------------------------HELPER_SAVE-------------------------------------------------------//
+void ofxGKUtils::importGKPlanes(const string& _url) {
+	string _fileName;
+	ifstream file_in;
+	string lineInput;
+	string wordInput;
+	vector<float>valuesToCreateMesh;
+	vector<float>valuesToCreateGKPlane;
+	int type = 0;
+
+	_fileName = "./data/" + _url;
+	file_in.open(_fileName, std::ios::in);
+	if (!file_in.is_open()) {
+		cout << "failed to open " << _fileName << '\n';
+	}else {
+		while (std::getline(file_in,lineInput)){
+			if ((lineInput[0] == '/' && lineInput[1] == '/') || lineInput.empty()) {
+				continue;
+			}
+			else {
+				if (lineInput == "GKPlane Created From Mesh") {
+					type = 1;
+				}else 
+				if (lineInput == "GKPlane Created Manually") {
+					type = 2;
+				}
+				else {
+					std::istringstream lineInputStream(lineInput);
+					while (std::getline(lineInputStream, wordInput, ',')) {
+						float _tmp = std::stof(wordInput);
+						if (type == 1)valuesToCreateMesh.push_back(_tmp);
+						if (type == 2)valuesToCreateGKPlane.push_back(_tmp);
+					}
+				}			
+			}
+		}
+	}
+	*ssLog << "IMPORTED GK3D : " + _fileName << endl;
+	cout << "valuesToCreateMesh : " << valuesToCreateMesh.size() << endl;
+	cout << "valuesToCreateGKPlnae : " << valuesToCreateGKPlane.size() << endl;
+}
+
+void splitGotLine() {
+
+}
+
+
 #pragma mark -save
 //-------------------------------------------------------HELPER_SAVE-------------------------------------------------------//
 
@@ -743,4 +791,43 @@ void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor, const string
 	_meshToSave.save(_fileName);
 	*ssLog << "EXPORTED MESH : " + _fileName << endl;
 	//free(&_meshToSave);
+}
+
+
+void ofxGKUtils::saveGKPlanes(vector<GKPlane>& _gkPlanesCreatedFromMesh,vector<GKPlane>& _gkPlanesCreatedManually, const string& _url) {
+	string _fileName = makeFileName(_url, ".gk3d").str().c_str();
+	_fileName = "./data/" + _fileName;
+	ofstream file_out;
+	file_out.open(_fileName, std::ios::out);
+	if (!file_out.is_open()) {
+		cout << "failed to open " << _fileName << '\n';
+	}
+	else {
+		file_out << "// =   THIS FILE WAS CREATED IN GK3D.                                      = //" << endl;
+		file_out << "// =   IF YOU USE THIS FILE, DONWLOAD GK3D FROM GITHUB REPOSITORY [GK3D].  = //" << endl;
+		file_out << "// =   SOFTWARE DEVELOPED & MANAGED BY GAISHI KUDO.                        = //" << endl;
+		file_out << "// = - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - = //"<< endl;
+		file_out << "// = - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - = //" << endl;
+		file_out << "// = - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - = //" << endl;
+
+		file_out << "GKPlane Created From Mesh" << endl;
+		for (auto& gkp : _gkPlanesCreatedFromMesh) {
+			ofMesh& _tmpMesh = gkp.originalMesh;
+			file_out << gkp.originalMesh.getVertex(0) << "," << gkp.originalMesh.getVertex(1) << "," << gkp.originalMesh.getVertex(2) << endl;
+		}
+		file_out << "GKPlane Created Manually" << endl;
+		for (auto& gkp : _gkPlanesCreatedManually) {
+			string _tmpVerticesLog;
+			for (auto itr = gkp.vertices.begin(); itr != gkp.vertices.end(); ++itr) {
+				if (itr != gkp.vertices.end() - 1) {
+					_tmpVerticesLog += ofToString(*itr) + ",";
+				}
+				else {
+					_tmpVerticesLog += ofToString(*itr);
+				}
+			}
+			file_out << _tmpVerticesLog << endl;
+		}
+		*ssLog << "EXPORTED GK3D : " + _fileName << endl;
+	}
 }

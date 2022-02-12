@@ -77,6 +77,10 @@ public:
 	int totalNumCombination(int _n, int _r);
 	vector<glm::vec2> getIndexList_nC2(int _n);
 
+//-------------------------------------------------------HELPER_IMPOR-------------------------------------------------------//
+	void importGKPlanes(const string& _url);
+
+
 //-------------------------------------------------------HELPER_SAVE-------------------------------------------------------//
 	void saveVideo(const float& _currentFrame);
 	
@@ -87,5 +91,6 @@ public:
 	void saveFBOtoImage(ofFbo* _fbo, const string& _url);
 	void saveMesh(ofMesh& _mesh, const float& _scaleFactor);
 	void saveMesh(ofMesh& _mesh, const float& _scalefactor, const string& _url);
+	void saveGKPlanes(vector<GKPlane>& _gkPlanesCreatedFromMesh, vector<GKPlane>& _gkPlanesCreatedManually, const string& _url);
 };
 #endif

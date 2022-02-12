@@ -20,6 +20,7 @@ class GKPlane  {
 		vector<GKLineSimple> edges;
 		ofNode modifyInfo;
 		float scaleFactor;
+		ofMesh originalMesh;
 
 		GKPlane() {
 			state = 0;
@@ -259,7 +260,6 @@ class GKPlane  {
 		
 	
 	private:
-		ofMesh originalMesh;
 		bool bMadeGKPlane;
 
 		//-----------THIS-TIME-UTILS-----------//
