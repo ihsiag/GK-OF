@@ -662,11 +662,25 @@ vector<glm::vec2> ofxGKUtils:: getIndexList_nC2(int _n) {
 
 #pragma mark - importGK
 //-------------------------------------------------------HELPER_SAVE-------------------------------------------------------//
+void ofxGKUtils::removeTmpFile() {
+	if (ofFile::doesFileExist("./tmpMesh.ply")) {
+		cout << " tmpMesh.ply exists" << endl;
+		ofFile::removeFile("./tmpMesh.ply", true);
+	}
+}
+
 void ofxGKUtils::importGKPlanes(const string& _url) {
+	if (ofFile::doesFileExist("./tmpMesh.ply")) {
+		cout << " tmpMesh.ply exists" << endl;
+		ofFile::removeFile("./tmpMesh.ply", true);
+	}
 	string _fileName;
 	ifstream file_in;
+	bool bMeshIsLoaded = false;
+	ofstream meshFile_out;
 	string lineInput;
 	string wordInput;
+	ofMesh originalMesh;
 	vector<float>valuesToCreateMesh;
 	vector<float>valuesToCreateGKPlane;
 	int type = 0;
@@ -674,33 +688,52 @@ void ofxGKUtils::importGKPlanes(const string& _url) {
 	_fileName = "./data/" + _url;
 	file_in.open(_fileName, std::ios::in);
 	if (!file_in.is_open()) {
-		cout << "failed to open " << _fileName << '\n';
+		std::cout << "failed to open " << _fileName << '\n';
 	}else {
 		while (std::getline(file_in,lineInput)){
 			if ((lineInput[0] == '/' && lineInput[1] == '/') || lineInput.empty()) {
 				continue;
 			}
 			else {
-				if (lineInput == "GKPlane Created From Mesh") {
+				if (lineInput == "Original Mesh") {
 					type = 1;
+					meshFile_out.open("./data/tmpMesh.ply",std::ios::out);
+				}else
+				if (lineInput == "GKPlane Created From Mesh") {
+					type = 2;
 				}else 
 				if (lineInput == "GKPlane Created Manually") {
-					type = 2;
+					type = 3;
 				}
 				else {
-					std::istringstream lineInputStream(lineInput);
-					while (std::getline(lineInputStream, wordInput, ',')) {
-						float _tmp = std::stof(wordInput);
-						if (type == 1)valuesToCreateMesh.push_back(_tmp);
-						if (type == 2)valuesToCreateGKPlane.push_back(_tmp);
+					if (type == 1) {
+						meshFile_out << lineInput << endl;
+					}
+					else {
+						if (!bMeshIsLoaded) {
+							originalMesh.load("./tmpMesh.ply");
+							if (originalMesh.hasVertices()) {
+								cout << "tmpMesh.ply is loaded" << endl;					
+								bMeshIsLoaded = true;
+							}
+							else {
+								cout << "tmpMesh.ply is not loaded. fail." << endl;
+							}						
+						}
+						std::istringstream lineInputStream(lineInput);
+						while (std::getline(lineInputStream, wordInput, ',')) {
+							float _tmp = std::stof(wordInput);
+							if (type == 2)valuesToCreateMesh.push_back(_tmp);
+							if (type == 3)valuesToCreateGKPlane.push_back(_tmp);
+						}
 					}
 				}			
 			}
 		}
 	}
 	*ssLog << "IMPORTED GK3D : " + _fileName << endl;
-	cout << "valuesToCreateMesh : " << valuesToCreateMesh.size() << endl;
-	cout << "valuesToCreateGKPlnae : " << valuesToCreateGKPlane.size() << endl;
+	std::cout << "valuesToCreateMesh : " << valuesToCreateMesh.size() << endl;
+	std::cout << "valuesToCreateGKPlnae : " << valuesToCreateGKPlane.size() << endl;
 }
 
 void splitGotLine() {
@@ -794,13 +827,13 @@ void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor, const string
 }
 
 
-void ofxGKUtils::saveGKPlanes(vector<GKPlane>& _gkPlanesCreatedFromMesh,vector<GKPlane>& _gkPlanesCreatedManually, const string& _url) {
+void ofxGKUtils::saveGKPlanes(ofMesh& _originalMesh,vector<GKPlane>& _gkPlanesCreatedFromMesh,vector<GKPlane>& _gkPlanesCreatedManually, const string& _url) {
 	string _fileName = makeFileName(_url, ".gk3d").str().c_str();
 	_fileName = "./data/" + _fileName;
 	ofstream file_out;
 	file_out.open(_fileName, std::ios::out);
 	if (!file_out.is_open()) {
-		cout << "failed to open " << _fileName << '\n';
+		std::cout << "failed to open " << _fileName << '\n';
 	}
 	else {
 		file_out << "// =   THIS FILE WAS CREATED IN GK3D.                                      = //" << endl;
@@ -810,11 +843,93 @@ void ofxGKUtils::saveGKPlanes(vector<GKPlane>& _gkPlanesCreatedFromMesh,vector<G
 		file_out << "// = - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - = //" << endl;
 		file_out << "// = - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - = //" << endl;
 
+		//----------- MESH PLY -----------//
+		file_out << "Original Mesh" << endl;
+		file_out << "ply" << std::endl;
+		file_out << "format ascii 1.0" << endl;
+		if (_originalMesh.getNumVertices()) {
+			file_out << "element vertex " << _originalMesh.getNumVertices() << std::endl;
+			file_out << "property float x" << std::endl;
+			file_out << "property float y" << std::endl;
+			file_out << "property float z" << std::endl;
+			if (_originalMesh.getNumColors()) {
+				file_out << "property uchar red" << std::endl;
+				file_out << "property uchar green" << std::endl;
+				file_out << "property uchar blue" << std::endl;
+				file_out << "property uchar alpha" << std::endl;
+			}
+			if (_originalMesh.getNumTexCoords()) {
+				file_out << "property float u" << std::endl;
+				file_out << "property float v" << std::endl;
+			}
+			if (_originalMesh.getNumNormals()) {
+				file_out << "property float nx" << std::endl;
+				file_out << "property float ny" << std::endl;
+				file_out << "property float nz" << std::endl;
+			}
+		}
+
+		uint8_t faceSize = 3;
+		if (_originalMesh.getNumIndices()) {
+			file_out << "element face " << _originalMesh.getNumIndices() / faceSize << std::endl;
+			file_out << "property list uchar int vertex_indices" << std::endl;
+		}
+		else if (_originalMesh.getMode() == OF_PRIMITIVE_TRIANGLES) {
+			file_out << "element face " << _originalMesh.getNumVertices() / faceSize << std::endl;
+			file_out << "property list uchar int vertex_indices" << std::endl;
+		}
+		else if (_originalMesh.getMode() == OF_PRIMITIVE_TRIANGLE_STRIP && _originalMesh.getNumVertices() >= 4) {
+			file_out << "element face " << _originalMesh.getNumVertices() - 2 << std::endl;
+			file_out << "property list uchar int vertex_indices" << std::endl;
+		}
+
+		file_out << "end_header" << std::endl;
+
+		for (std::size_t i = 0; i < _originalMesh.getNumVertices(); i++) {
+			file_out << _originalMesh.getVertex(i).x << " " << _originalMesh.getVertex(i).y << " " << _originalMesh.getVertex(i).z;
+			
+			if (_originalMesh.getNumColors()) {
+				// VCG lib / MeshLab don't support float colors, so we have to cast
+				ofColor cur = _originalMesh.getColors()[i];
+				file_out << " " << (int)cur.r << " " << (int)cur.g << " " << (int)cur.b << " " << (int)cur.a;
+			}
+			if (_originalMesh.getNumTexCoords()) {
+				file_out << " " << _originalMesh.getTexCoord(i).x << " " << _originalMesh.getTexCoord(i).y;
+			}
+			if (_originalMesh.getNumNormals()) {
+				file_out << " " << _originalMesh.getNormal(i).x << " " << _originalMesh.getNormal(i).y << " " << _originalMesh.getNormal(i).z;
+			}
+			file_out << std::endl;
+		}
+
+		if (_originalMesh.getNumIndices()) {
+			for (uint32_t i = 0; i < _originalMesh.getNumIndices(); i += faceSize) {
+				file_out << (std::size_t)faceSize << " " << _originalMesh.getIndex(i) << " " << _originalMesh.getIndex(i + 1) << " " << _originalMesh.getIndex(i + 2) << std::endl;
+			}
+		}
+		else if (_originalMesh.getMode() == OF_PRIMITIVE_TRIANGLES) {
+			for (uint32_t i = 0; i < _originalMesh.getNumVertices(); i += faceSize) {
+				uint32_t indices[] = { i, i + 1, i + 2 };
+				file_out << (std::size_t)faceSize << " " << indices[0] << " " << indices[1] << " " << indices[2] << std::endl;
+			}
+		}
+		else if (_originalMesh.getMode() == OF_PRIMITIVE_TRIANGLE_STRIP && _originalMesh.getNumVertices() >= 4) {
+			for (uint32_t i = 0; i < _originalMesh.getNumVertices() - 2; i += 2) {
+				uint32_t indices1[] = { i, i + 1, i + 2 };
+				uint32_t indices2[] = { i + 1, i + 3, i + 2 };
+				file_out << (std::size_t)faceSize << " " << indices1[0] << " " << indices1[1] << " " << indices1[2] << std::endl;
+				file_out << (std::size_t)faceSize << " " << indices2[0] << " " << indices2[1] << " " << indices2[2] << std::endl;
+			}
+		}
+
+		//----------- GKPlane Created From Mesh -----------//
 		file_out << "GKPlane Created From Mesh" << endl;
 		for (auto& gkp : _gkPlanesCreatedFromMesh) {
 			ofMesh& _tmpMesh = gkp.originalMesh;
 			file_out << gkp.originalMesh.getVertex(0) << "," << gkp.originalMesh.getVertex(1) << "," << gkp.originalMesh.getVertex(2) << endl;
 		}
+
+		//----------- GKPlane Created Manually -----------//
 		file_out << "GKPlane Created Manually" << endl;
 		for (auto& gkp : _gkPlanesCreatedManually) {
 			string _tmpVerticesLog;

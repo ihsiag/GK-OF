@@ -1505,6 +1505,9 @@
     <ClInclude Include="src\GKScene.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene_Animation.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
