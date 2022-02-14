@@ -43,6 +43,16 @@ public:
 
 	void toggleAnimation();
 	void animate();
+	void rotateCamera();
+	void animateGKPCFM();
+	void animateGKPCM();
+	void animateVertex();
+	void animateEdge();
+	void animateFace();
+	void animateIntersection();
+	void animateGeneration();
+	void animateFilling();
+	void animateEffect();
 
 
 
