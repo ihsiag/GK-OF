@@ -551,25 +551,12 @@ void Scene_Modeler::exportDataForNextScene() {
     gk.saveMesh(meshToSave, 1, "./meshExportedFromModeler/");
 };
 
-void Scene_Modeler::exportGKModel() {
+void Scene_Modeler::saveGK3D() {
     vector<GKPlane> gkPlanesToExport;
     //gkplanes + gkPlanesFinal
     //copy(gkPlanes.begin(), gkPlanes.end(), gkPlanesToExport);
     //gkPlanesToExport.insert(gkPlanesToExport.end(), gkPlanesFinal.begin(), gkPlanesFinal.end());
-    gk.saveGKPlanes(mainMesh, gkPlanes, gkPlanesFinal, "./gk3dExported/");
+    gk.saveGK3D("./gk3dExported/",mainMesh, gkPlanes, gkPlanesFinal);
 }
-
-void Scene_Modeler::importGKModel() {
-    ofDirectory _dir("./gk3dExported/");
-
-    _dir.allowExt("gk3d");//only show {}file ex)png,mp3,css
-    _dir.sort();
-    _dir.listDir();
-    if (_dir.size() > 0) {
-        gk.importGKPlanes((_dir.getPath(_dir.size() - 1)));
-    }
-    
-}
-
 
 //-----------EVENT-----------//

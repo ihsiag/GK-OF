@@ -12,16 +12,43 @@ class Scene_Animation : public GKScene {
 public:
 	Scene_Animation() {}
 
+	ofxGKUtils gk;
+	stringstream ssGlobalLog;
+	ofEasyCam cam;
+	unsigned long int currentFrame;
+	float time;
+
+
+	ofMesh meshToAnimate;
+	vector<GKPlane> gkPlanesCreatedFromMeshToAnimate;
+	vector<GKPlane> gkPlanesCreatedManuallyToAnimate;
+
 	void setup();
 	void resetScene();
 	void update();
 	void draw();
+
+
+	void initParam();
+	void initSet();
+	void initSliders();
+	void resetCamera();
+
+	//-----------NO-InUSE-----------//
+
 
 	void keyPressed(int key) {
 		switch (key) {
 		case ' ':
 			break;
 		}
+	}
+	void mousePressed(ofMouseEventArgs& args) {
+	}
+	void mousePressed(int x, int y, int button) {};
+	void windowResized(int w, int h) {
+		//gk.resizeGUI(guiOne, 13);
+		//gk.resizeGUI(guiTwo, 13);
 	}
 
 	//-----------NO-InUSE-----------//

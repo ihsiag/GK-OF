@@ -5,6 +5,7 @@
 #include "Scene_Room.h"
 #include "Scene_Viewer.h"
 #include "Scene_Modeler.h"
+#include "Scene_Animation.h"
 
 //========================================================================
 int main() {
@@ -13,6 +14,7 @@ int main() {
 	mainApp->addGKScene(new Scene_Room());
 	mainApp->addGKScene(new Scene_Viewer());
 	mainApp->addGKScene(new Scene_Modeler());
+	mainApp->addGKScene(new Scene_Animation());
 	ofGLWindowSettings settings;
 
 	settings.setGLVersion(2, 1);

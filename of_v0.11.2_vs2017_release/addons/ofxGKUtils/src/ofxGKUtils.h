@@ -78,8 +78,8 @@ public:
 	vector<glm::vec2> getIndexList_nC2(int _n);
 
 //-------------------------------------------------------HELPER_IMPORT-------------------------------------------------------//
-	void importGKPlanes(const string& _url);
-	void removeTmpFile();
+	string findLatestFilePath(const string& _dirPath, const string& _fileType);
+	void importGK3D(const string& _url, ofMesh& _meshToPass, vector<GKPlane>& _gkPlanesCreatedFromMeshToPass, vector<GKPlane>& _gkPlanesCreatedManuallyToPass);
 
 
 //-------------------------------------------------------HELPER_SAVE-------------------------------------------------------//
@@ -92,6 +92,6 @@ public:
 	void saveFBOtoImage(ofFbo* _fbo, const string& _url);
 	void saveMesh(ofMesh& _mesh, const float& _scaleFactor);
 	void saveMesh(ofMesh& _mesh, const float& _scalefactor, const string& _url);
-	void saveGKPlanes(ofMesh& _originalMesh,vector<GKPlane>& _gkPlanesCreatedFromMesh, vector<GKPlane>& _gkPlanesCreatedManually, const string& _url);
+	void saveGK3D(const string& _url, ofMesh& _originalMesh,vector<GKPlane> &_gkPlanesCreatedFromMesh, vector<GKPlane>& _gkPlanesCreatedManually);
 };
 #endif

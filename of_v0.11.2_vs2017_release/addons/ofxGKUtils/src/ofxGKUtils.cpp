@@ -661,83 +661,117 @@ vector<glm::vec2> ofxGKUtils:: getIndexList_nC2(int _n) {
 
 
 #pragma mark - importGK
-//-------------------------------------------------------HELPER_SAVE-------------------------------------------------------//
-void ofxGKUtils::removeTmpFile() {
-	if (ofFile::doesFileExist("./tmpMesh.ply")) {
-		cout << " tmpMesh.ply exists" << endl;
-		ofFile::removeFile("./tmpMesh.ply", true);
+//-------------------------------------------------------HELPER_IMPORT-------------------------------------------------------//
+string ofxGKUtils::findLatestFilePath(const string& _dirPath,const string& _fileType) {
+	ofDirectory _dir(_dirPath);
+	_dir.allowExt(_fileType);//only show {}file ex)png,mp3,css
+	_dir.sort();
+	_dir.listDir();
+	if (_dir.size() > 0) {
+		return _dir.getPath(_dir.size() - 1);
 	}
 }
 
-void ofxGKUtils::importGKPlanes(const string& _url) {
-	if (ofFile::doesFileExist("./tmpMesh.ply")) {
-		cout << " tmpMesh.ply exists" << endl;
-		ofFile::removeFile("./tmpMesh.ply", true);
-	}
-	string _fileName;
-	ifstream file_in;
-	bool bMeshIsLoaded = false;
-	ofstream meshFile_out;
+void ofxGKUtils::importGK3D(const string& _url,ofMesh& _meshToPass, vector<GKPlane>& _gkPlanesCreatedFromMeshToPass,vector<GKPlane>& _gkPlanesCreatedManuallyToPass) {
+	ifstream file_in_asGk3d;	
+	ofstream file_out_asTmpMeshPly;
+	bool bMeshToPassIsLoaded = false;
 	string lineInput;
 	string wordInput;
-	ofMesh originalMesh;
-	vector<float>valuesToCreateMesh;
-	vector<float>valuesToCreateGKPlane;
+	float valueInput;
+	vector<float> vertexInfo;
+	vector<glm::vec3> verticesInfo;
 	int type = 0;
 
-	_fileName = "./data/" + _url;
-	file_in.open(_fileName, std::ios::in);
-	if (!file_in.is_open()) {
-		std::cout << "failed to open " << _fileName << '\n';
+	file_in_asGk3d.open("./data/" + _url, std::ios::in);
+	if (!file_in_asGk3d.is_open()) {
+		std::cout << "failed to open " << "./data/" + _url << '\n';
 	}else {
-		while (std::getline(file_in,lineInput)){
+		while (std::getline(file_in_asGk3d,lineInput)){
 			if ((lineInput[0] == '/' && lineInput[1] == '/') || lineInput.empty()) {
 				continue;
 			}
 			else {
 				if (lineInput == "Original Mesh") {
 					type = 1;
-					meshFile_out.open("./data/tmpMesh.ply",std::ios::out);
-				}else
+					file_out_asTmpMeshPly.open("./data/tmpMesh.ply", std::ios::out);
+				}
+				else
 				if (lineInput == "GKPlane Created From Mesh") {
 					type = 2;
-				}else 
+					vertexInfo.erase(vertexInfo.begin(), vertexInfo.end());
+					verticesInfo.erase(verticesInfo.begin(), verticesInfo.end());
+				}
+				else
 				if (lineInput == "GKPlane Created Manually") {
 					type = 3;
+					vertexInfo.erase(vertexInfo.begin(), vertexInfo.end());
+					verticesInfo.erase(verticesInfo.begin(), verticesInfo.end());
 				}
 				else {
 					if (type == 1) {
-						meshFile_out << lineInput << endl;
+						file_out_asTmpMeshPly << lineInput << endl;
 					}
-					else {
-						if (!bMeshIsLoaded) {
-							originalMesh.load("./tmpMesh.ply");
-							if (originalMesh.hasVertices()) {
-								cout << "tmpMesh.ply is loaded" << endl;					
-								bMeshIsLoaded = true;
+					else
+					if (type == 2) {
+						cout << "type2" << endl;
+						if (!bMeshToPassIsLoaded) {
+							_meshToPass.load("./tmpMesh.ply");
+							if (_meshToPass.hasVertices()) {
+								cout << "tmpMesh.ply is loaded" << endl;
+								bMeshToPassIsLoaded = true;
 							}
 							else {
 								cout << "tmpMesh.ply is not loaded. fail." << endl;
-							}						
+							}
 						}
 						std::istringstream lineInputStream(lineInput);
 						while (std::getline(lineInputStream, wordInput, ',')) {
-							float _tmp = std::stof(wordInput);
-							if (type == 2)valuesToCreateMesh.push_back(_tmp);
-							if (type == 3)valuesToCreateGKPlane.push_back(_tmp);
+							cout << "begin" << endl;
+							valueInput = std::stof(wordInput);
+							vertexInfo.push_back(valueInput);
+							if (vertexInfo.size() == 3) {
+								verticesInfo.push_back(glm::vec3(vertexInfo[0], vertexInfo[1], vertexInfo[2]));
+								cout << "vertex made" << endl;
+								vertexInfo.erase(vertexInfo.begin(), vertexInfo.end());
+								cout << "vertex released" << endl;
+							}
 						}
+						ofMesh _meshToCreate;
+						_meshToCreate.addVertices(verticesInfo);
+						cout << "mesh created" << endl;
+						_gkPlanesCreatedFromMeshToPass.push_back(GKPlane(_meshToCreate, 0));
+						verticesInfo.erase(verticesInfo.begin(), verticesInfo.end());
 					}
-				}			
+					else
+					if (type == 3) {
+						cout << "type3" << endl;
+						std::istringstream lineInputStream(lineInput);
+						while (std::getline(lineInputStream, wordInput, ',')) {
+							valueInput = std::stof(wordInput);
+							vertexInfo.push_back(valueInput);
+							if (vertexInfo.size() == 3) {
+								verticesInfo.push_back(glm::vec3(vertexInfo[0], vertexInfo[1], vertexInfo[2]));
+								cout << "vertex made" << endl;
+								vertexInfo.erase(vertexInfo.begin(), vertexInfo.end());
+								cout << "vertex released" << endl;
+							}
+						}
+						_gkPlanesCreatedManuallyToPass.push_back(GKPlane(verticesInfo, 0));
+						cout << "manual plane created" << endl;
+						verticesInfo.erase(verticesInfo.begin(), verticesInfo.end());
+					}
+				}
 			}
 		}
 	}
-	*ssLog << "IMPORTED GK3D : " + _fileName << endl;
-	std::cout << "valuesToCreateMesh : " << valuesToCreateMesh.size() << endl;
-	std::cout << "valuesToCreateGKPlnae : " << valuesToCreateGKPlane.size() << endl;
-}
-
-void splitGotLine() {
-
+	if (ofFile::doesFileExist("./tmpMesh.ply")) {
+		cout << "tmpMesh.ply exists" << endl;
+		//ofFile::removeFile("./tmpMesh.ply", true);
+	}
+	*ssLog << "IMPORTED GK3D : " + _url << endl;
+	std::cout << "valuesToCreateMesh : " << _gkPlanesCreatedFromMeshToPass.size() << endl;
+	std::cout << "valuesToCreateGKPlnae : " << _gkPlanesCreatedManuallyToPass.size() << endl;
 }
 
 
@@ -760,12 +794,12 @@ stringstream ofxGKUtils::makeFileName(const string& _folderName, const string& _
 	_ss << setfill('0') << setw(2) << ofGetHours();
 	_ss << setfill('0') << setw(2) << ofGetMinutes();
 	_ss << setfill('0') << setw(2) << ofGetSeconds();
-	_ss << _fileType;
+	_ss << "." <<_fileType;
 	return _ss;
 }
 
 void ofxGKUtils::saveImage() {
-	string _fileName = makeFileName("./screenShot/", ".png").str().c_str();
+	string _fileName = makeFileName("./screenShot/", "png").str().c_str();
 	ofImage _imgToSave;
 	_imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
 	_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
@@ -773,7 +807,7 @@ void ofxGKUtils::saveImage() {
 }
 
 void ofxGKUtils::saveImage(const string& _url) {
-	string _fileName = makeFileName(_url, ".png").str().c_str();
+	string _fileName = makeFileName(_url, "png").str().c_str();
 	ofImage _imgToSave;
 	_imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
 	_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
@@ -781,7 +815,7 @@ void ofxGKUtils::saveImage(const string& _url) {
 }
 
 void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo) {
-	string _fileName = makeFileName("./fboShot/", ".png").str().c_str();
+	string _fileName = makeFileName("./fboShot/", "png").str().c_str();
 	ofPixels _pixels;
 	_fbo->readToPixels(_pixels);
 	ofImage _imgToSave;
@@ -791,7 +825,7 @@ void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo) {
 }
 
 void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo, const string& _url) {
-	string _fileName = makeFileName(_url, ".png").str().c_str();
+	string _fileName = makeFileName(_url, "png").str().c_str();
 	ofPixels _pixels;
 	_fbo->readToPixels(_pixels);
 	ofImage _imgToSave;
@@ -801,7 +835,7 @@ void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo, const string& _url) {
 }
 
 void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor) {
-	string _fileName = makeFileName("./meshExport/", ".ply").str().c_str();
+	string _fileName = makeFileName("./meshExport/", "ply").str().c_str();
 	ofMesh _meshToSave = _mesh;
 	glm::vec3 _centroid = _mesh.getCentroid();
 	*ssLog << _centroid << endl;
@@ -814,7 +848,7 @@ void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor) {
 }
 
 void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor, const string& _url) {
-	string _fileName = makeFileName(_url, ".ply").str().c_str();
+	string _fileName = makeFileName(_url, "ply").str().c_str();
 	ofMesh _meshToSave = _mesh;
 	glm::vec3 _centroid = _mesh.getCentroid();
 	*ssLog << _centroid << endl;
@@ -826,9 +860,8 @@ void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor, const string
 	//free(&_meshToSave);
 }
 
-
-void ofxGKUtils::saveGKPlanes(ofMesh& _originalMesh,vector<GKPlane>& _gkPlanesCreatedFromMesh,vector<GKPlane>& _gkPlanesCreatedManually, const string& _url) {
-	string _fileName = makeFileName(_url, ".gk3d").str().c_str();
+void ofxGKUtils::saveGK3D(const string& _url, ofMesh& _originalMesh,vector<GKPlane>& _gkPlanesCreatedFromMesh,vector<GKPlane>& _gkPlanesCreatedManually) {
+	string _fileName = makeFileName(_url, "gk3d").str().c_str();
 	_fileName = "./data/" + _fileName;
 	ofstream file_out;
 	file_out.open(_fileName, std::ios::out);

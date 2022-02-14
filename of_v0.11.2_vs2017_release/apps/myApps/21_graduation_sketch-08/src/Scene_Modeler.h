@@ -137,10 +137,9 @@ class Scene_Modeler : public GKScene{
 				updateMesh();
 				break;
 			case 'e':
-				exportGKModel();
+				saveGK3D();
 				break;
 			case 'i':
-				importGKModel();
 				break;
 			case '1':
 				bHideMainMesh = !bHideMainMesh;
@@ -252,8 +251,7 @@ class Scene_Modeler : public GKScene{
 
 		//-----------THISTIME-SCENE-BEIDGE-----------//
 		void exportDataForNextScene();
-		void exportGKModel();
-		void importGKModel();
+		void saveGK3D();
 
 		//-----------NO-InUSE-----------//
 		void keyReleased(int key) {};
