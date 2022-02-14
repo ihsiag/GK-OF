@@ -23,6 +23,9 @@ public:
 	vector<GKPlane> gkPlanesCreatedFromMeshToAnimate;
 	vector<GKPlane> gkPlanesCreatedManuallyToAnimate;
 
+	bool bPlayAnimation;
+	unsigned long int animationFrame;
+
 	void setup();
 	void resetScene();
 	void update();
@@ -34,12 +37,23 @@ public:
 	void initSliders();
 	void resetCamera();
 
+	void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
+
+	void drawMainMesh();
+
+	void toggleAnimation();
+	void animate();
+
+
+
 	//-----------NO-InUSE-----------//
 
 
 	void keyPressed(int key) {
 		switch (key) {
-		case ' ':
+		case 's':
+			toggleAnimation();
+			ssGlobalLog << "PLAY" << endl;
 			break;
 		}
 	}
