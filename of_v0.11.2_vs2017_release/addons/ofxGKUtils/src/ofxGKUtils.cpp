@@ -6,7 +6,7 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog) {
 	ofSetVerticalSync(true);
 	ofSetFrameRate(40);
 	ofNoFill();
-	glClearColor(0, 0, 0, 0);
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0, 0, 0);
 	glLineWidth(1);
@@ -297,7 +297,7 @@ void ofxGKUtils::drawGrid() {
 }
 
 void ofxGKUtils::drawCross(const int& _x, const int& _y, const int& _size) {
-	glLineWidth(1);
+	//glLineWidth(1);
 	ofPushMatrix();
 	ofTranslate(_x, _y);
 	glBegin(GL_LINES);
@@ -388,6 +388,43 @@ void ofxGKUtils::draw3DPlaneGrid(const float& _sizeUnit, const int& _numUnit, co
 			glEnd();
 		}
 	}
+}
+
+void ofxGKUtils::draw3DBox(const glm::vec3& _center, const float& _sizeW, const float& _sizeH, const float& _sizeD, const float& _lineWidth, const glm::vec4& _lineColor) {
+	ofPushMatrix();
+	ofTranslate(_center);
+	glLineWidth(_lineWidth);
+	glColor4f(_lineColor.r, _lineColor.b, _lineColor.g, _lineColor.a);
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(_sizeW / 2, _sizeD / 2, _sizeH / 2);
+	glVertex3f(-_sizeW / 2, _sizeD / 2, _sizeH / 2);
+	glVertex3f(-_sizeW / 2, -_sizeD / 2, _sizeH / 2);
+	glVertex3f(+_sizeW / 2, -_sizeD / 2, _sizeH / 2);
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(_sizeW / 2, _sizeD / 2, -_sizeH / 2);
+	glVertex3f(-_sizeW / 2, _sizeD / 2, -_sizeH / 2);
+	glVertex3f(-_sizeW / 2, -_sizeD / 2, -_sizeH / 2);
+	glVertex3f(+_sizeW / 2, -_sizeD / 2, -_sizeH / 2);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex3f(_sizeW / 2, _sizeD / 2, _sizeH / 2);
+	glVertex3f(_sizeW / 2, _sizeD / 2, -_sizeH / 2);
+	glEnd();
+	
+	glBegin(GL_LINES);
+	glVertex3f(-_sizeW / 2, _sizeD / 2, _sizeH / 2);
+	glVertex3f(-_sizeW / 2, _sizeD / 2, -_sizeH / 2);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex3f(-_sizeW / 2, -_sizeD / 2, _sizeH / 2);
+	glVertex3f(-_sizeW / 2, -_sizeD / 2, -_sizeH / 2);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex3f(+_sizeW / 2, -_sizeD / 2, _sizeH / 2);
+	glVertex3f(+_sizeW / 2, -_sizeD / 2, -_sizeH / 2);
+	glEnd();
+	ofPopMatrix();
 }
 
 float* ofxGKUtils::getBoundingBox(const ofMesh& _mesh) {

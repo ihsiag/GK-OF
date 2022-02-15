@@ -10,6 +10,7 @@ void Scene_Animation::setup() {
 	
     gk.setup(&ssGlobalLog);
 	gk.setCam(&cam);
+	setLight();
 }
 
 void Scene_Animation::resetScene() {
@@ -47,12 +48,14 @@ void Scene_Animation::draw() {
 
 	cam.begin();
 	glEnable(GL_DEPTH_TEST);
-	gk.draw3DPlaneGrid(10,50,glm::vec3(0,1,0),1,glm::vec4(0.6));
+	ofEnableLighting();
+	for(auto&l:lights)l.enable();
+	//gk.draw3DPlaneGrid(10,50,glm::vec3(0,1,0),1,glm::vec4(0.6));
+	gk.draw3DBox(glm::vec3(0), 100, 100, 160, 1, glm::vec4(1, 1, 1, 0.5));
 	if (bPlayAnimation)animate();
-
-	for (auto& ac : animationClasses) { ac->draw(); }
-	drawMainMesh();
-	
+	render();
+	for (auto& l : lights)l.disable();
+	ofDisableLighting();
 	glDisable(GL_DEPTH_TEST);
 	cam.end();
 
@@ -73,9 +76,12 @@ void Scene_Animation::initParam() {
 	bPlayAnimation = false;
 	animationFrame = 0;
 	animationIndex = 0;
+	bHideMesh = false;
 }
 
 void Scene_Animation::initSet() {
+	gk.setup(&ssGlobalLog);
+	gk.setCam(&cam);
 }
 
 void Scene_Animation::initSliders() {
@@ -126,10 +132,16 @@ void Scene_Animation::initAnimationClasses() {
 	animationClasses.push_back(&ame);
 	animationClasses.push_back(&amf);
 	animationClasses.push_back(&apf);
+	animationClasses.push_back(&afc);
+
 	amv.setGPL(&gkPlanesCreatedFromMeshToAnimate);
 	ame.setGPL(&gkPlanesCreatedFromMeshToAnimate);
 	amf.setGPL(&gkPlanesCreatedFromMeshToAnimate);
 	apf.setGPL(&gkPlanesCreatedFromMeshToAnimate);
+	afc.setGPL(&gkPlanesCreatedFromMeshToAnimate);
+	afc.setCam(&cam);
+	afc.setHideMesh(&bHideMesh);
+	
 	for (auto& ac : animationClasses) {
 		ac->setup();
 	}
@@ -145,17 +157,36 @@ void Scene_Animation::resetAnimationClasses() {
 void Scene_Animation::animate() {
 	if (animationClasses[animationIndex]->getNextAnimationTriggerState())animationIndex++; //&& animationIndex < animationClasses.size() - 1
 	if (animationIndex == animationClasses.size())resetAnimationClasses();
-	for (int i = 0; i < animationIndex; i++) {
+	for (int i = 0; i < animationIndex+1; i++) {
 		animationClasses[i]->update();
 	}
-	animationClasses[animationIndex]->update();
 	rotateCamera();
 	animationFrame++;
+}
+void Scene_Animation::render() {
+	if (animationIndex > 3) {
+		for (int i = 3; i < animationIndex+1; i++) {
+			animationClasses[i]->draw();
+		}
+	}
+	else {
+		for (auto& ac : animationClasses) { ac->draw(); }
+	}
+	
+	if(!bHideMesh)drawMainMesh();
 }
 
 void Scene_Animation::rotateCamera() {
 	float rotateR = sqrt(pow(140,2)*2);
-	float rotationSpeed = animationFrame * 0.005;
-	cam.setPosition(glm::vec3(rotateR * cos(PI/4+rotationSpeed), cam.getPosition().y, rotateR * sin(PI/4+rotationSpeed)));
+	float rotationSpeed = animationFrame * 0.002;
+	cam.setPosition(glm::vec3(rotateR * cos(PI/4+rotationSpeed), 100, rotateR * sin(PI/4+rotationSpeed)));
 	cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
+}
+
+void Scene_Animation::setLight() {
+	lights.emplace_back(ofLight());
+	lights.emplace_back(ofLight());
+	float rotateR = sqrt(pow(140, 2) * 2);
+	lights[0].setPosition(rotateR * cos(PI / 4), cam.getPosition().y, rotateR * sin(PI / 4));
+	lights[1].setPosition(rotateR * cos(PI / 2), cam.getPosition().y, rotateR * sin(PI / 4));	
 }

@@ -59,6 +59,7 @@ public:
 	void draw3DAxis();
 	void draw3DAxis(const float& _size,const float& _lineWidth,const float& _alpha);
 	void draw3DPlaneGrid(const float& _sizeUnit, const int& _numUnit, const glm::vec3& _normalPlaneToDraw, const float& _lineWidth, const glm::vec4& _col);
+	void draw3DBox(const glm::vec3& _center, const float& _sizeW, const float& _sizeH, const float& _sizeD, const float& _lineWidth, const glm::vec4& _lineColor);
 	float* getBoundingBox(const ofMesh& _mesh);
 	float* getBoundingBox(const ofMesh& _mesh,const glm::vec3& _planeNormal); //not work need help
 	void drawFoundCenterTo3D(const glm::vec3& _pos, glm::vec2 _size, const glm::vec3& _normalPlaneToDraw);

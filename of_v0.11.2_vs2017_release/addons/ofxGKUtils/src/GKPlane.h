@@ -184,29 +184,50 @@ class GKPlane  {
 		void drawGKPlane(const glm::vec4& _faceCol, const glm::vec4& _edgeCol, const float& _lineWidth) {
 			if (bMadeGKPlane) {
 				ofFill();
-				glBegin(GL_POLYGON);
 				glColor4f(_faceCol.r, _faceCol.g, _faceCol.b, _faceCol.a);
+				glBegin(GL_POLYGON);
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
 				glEnd();
-				ofNoFill();						
-				glBegin(GL_LINE_LOOP);
+				ofNoFill();	
 				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);
 				glLineWidth(_lineWidth);
+				glBegin(GL_LINE_LOOP);			
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
 				glEnd();
 				glPointSize(_lineWidth * 2);
-				glBegin(GL_POINTS);
-				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);			
+				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);
+				glBegin(GL_POINTS);					
 				for (auto& vertex : vertices) {
 					glVertex3f(vertex.x, vertex.y, vertex.z);
 				}
 				glEnd();
 			}
 		}
+
+		void drawGKPlane(const glm::vec4& _edgeCol, const float& _lineWidth) {
+			if (bMadeGKPlane) {
+				ofNoFill();
+				glLineWidth(_lineWidth);
+				glBegin(GL_LINE_LOOP);
+				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);		
+				for (auto& vertex : vertices) {
+					glVertex3f(vertex.x, vertex.y, vertex.z);
+				}
+				glEnd();
+				glPointSize(_lineWidth * 2);
+				glBegin(GL_POINTS);
+				glColor4f(_edgeCol.r, _edgeCol.g, _edgeCol.b, _edgeCol.a);
+				for (auto& vertex : vertices) {
+					glVertex3f(vertex.x, vertex.y, vertex.z);
+				}
+				glEnd();
+			}
+		}
+
 		void drawGKPlaneNormal(const glm::vec4& _debugCol, const float& _size,const float& _lineWidth) {
 			if (bMadeGKPlane) {
 				glBegin(GL_LINES);
@@ -222,6 +243,7 @@ class GKPlane  {
 				ofPushMatrix();
 				ofMultMatrix(modifyInfo.getGlobalTransformMatrix());
 				glColor4f(_debugCol.r, _debugCol.g, _debugCol.b, _debugCol.a);
+				glLineWidth(_lineWidth);
 				gkDrawCross(0, 0, _size); //clonedFrom ofxGKUtils
 				ofPopMatrix();
 			}
@@ -318,7 +340,7 @@ class GKPlane  {
 
 		//cloneed from ofxGKUtils
 		void gkDrawCross(const int& _x, const int& _y, const int& _size) { //clonedFrom ofxGKUtils
-			glLineWidth(1);
+			//glLineWidth(1);
 			ofPushMatrix();
 			ofTranslate(_x, _y);
 			glBegin(GL_LINES);
