@@ -367,6 +367,7 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Class_Animation.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Class_Delaunay.h" />
     <ClInclude Include="src\Class_GKDelaunay.h" />

@@ -13,562 +13,393 @@
 #include "Class_GKSplit.h"
 #include "Class_GKNetwork.h"
 
-class AnimationClass {
+#include "Class_Animation.h"
+
+
+class DocumentationPart{
 public:
-	virtual void setup() = 0;
-	virtual void resetAnimation() =0;
-	virtual void update()=0;
-	virtual void draw()=0;
-	virtual bool getThisAnimationEndState()=0;
-	virtual bool getNextAnimationTriggerState() = 0;
-};
 
-class AnimationClassMeshVertex : public AnimationClass {
-public:
-	int animationFrame;
-	int planesNumToShow;
-	int dotsNumToShow;
-	bool bDrawAll;
-	bool bNextAnimationTrigger;
-	float alpha;
-	vector<GKPlane>* gpl;
-
-	AnimationClassMeshVertex(){}
-	
-
-	void setup() {
-		initParam();
-	}
-
-	void setGPL(vector<GKPlane>* _gpl) {
-		gpl = _gpl;
-	}
-
-	void initParam() {
-		animationFrame = 0;
-		planesNumToShow = 0;
-		dotsNumToShow = 0;
-		alpha = 1;
-		bDrawAll = false;
-		bNextAnimationTrigger = false;
-	}
-
-	void update() {
-		animationFrame++;
-		dotsNumToShow++;
-		if (dotsNumToShow > 2) {
-			dotsNumToShow = 0;
-			planesNumToShow++;
-		}
-		if (planesNumToShow > gpl->size() / 5)bNextAnimationTrigger = true;
-		if (planesNumToShow > gpl->size()) {
-			planesNumToShow = gpl->size();
-			dotsNumToShow = 3;
-			bDrawAll = true;
-		}
-	}
-
-	void draw() {
-		glPointSize(10);
-		glColor4f(1, 0, 0, 1);
-		glBegin(GL_POINTS);
-		for (int i = 0; i < planesNumToShow; i++) {
-			if (i < planesNumToShow - 1) {
-				for (int j = 0; j < 3; j++) {
-					glm::vec3 _p = gpl->at(i).originalMesh.getVertex(j);
-					glVertex3f(_p.x, _p.y, _p.z);
-				}
-			}
-			else {
-				for (int j = 0; j < dotsNumToShow; j++) {
-					glm::vec3 _p = gpl->at(i).originalMesh.getVertex(j);
-					glVertex3f(_p.x, _p.y, _p.z);
-				}
-			}
-		}
-		glEnd();
-	}
-
-	bool getThisAnimationEndState() {
-		return bDrawAll;
-	}
-
-	bool getNextAnimationTriggerState() {
-		return bNextAnimationTrigger;
-	}
-
-	void resetAnimation() {
-		initParam();
-	}
-};
-
-class AnimationClassMeshEdge : public AnimationClass {
-public:
-	int animationFrame;
-	int planesNumToShow;
-	int dotsNumToShow;
-	bool bDrawAll;
-	bool bNextAnimationTrigger;
-	float alpha;
-	vector<GKPlane>* gpl;
-	
-	AnimationClassMeshEdge(){}
-
-	void setup() {
-		initParam();
-	}
-
-	void setGPL(vector<GKPlane>* _gpl) {
-		gpl = _gpl;
-	}
-
-	void initParam() {
-		animationFrame = 0;
-		planesNumToShow = 0;
-		dotsNumToShow = 0;
-		alpha = 1.0;
-		bDrawAll = false;
-		bNextAnimationTrigger = false;
-	}
-
-	void update() {
-		animationFrame++;
-		dotsNumToShow++;
-		//if(animationFrame&2 == 0)dotsNumToShow++;
-		if (dotsNumToShow > 4) {
-			dotsNumToShow = 0;
-			planesNumToShow++;
-		}
-		if (planesNumToShow > gpl->size() / 1.5) bNextAnimationTrigger = true;
-		if (planesNumToShow > gpl->size()) {
-			planesNumToShow = gpl->size();
-			dotsNumToShow = 4;
-			bDrawAll = true;
-		}
-	}
-
-	void draw() {
-		glLineWidth(2);
-		glColor4f(1, 0, 0, 1);
-		for (int i = 0; i < planesNumToShow; i++) {
-			glBegin(GL_LINE_STRIP);
-			if (i < planesNumToShow - 1) {
-				for (int j = 0; j < 4; j++) {
-					glm::vec3 _p = gpl->at(i).originalMesh.getVertex(j%3);
-					glVertex3f(_p.x, _p.y, _p.z);
-				}
-			}
-			else {
-				for (int j = 0; j < dotsNumToShow; j++) {
-					glm::vec3 _p = gpl->at(i).originalMesh.getVertex(j%3);
-					glVertex3f(_p.x, _p.y, _p.z);
-				}
-			}
-			glEnd();
-		}
-	}
-
-	bool getNextAnimationTriggerState() {
-		return bNextAnimationTrigger;
-	}
-
-	bool getThisAnimationEndState() {
-		return bDrawAll;
-	}
-
-	void resetAnimation() {
-		initParam();
-	}
-
-};
-
-class AnimationClassMeshFace : public AnimationClass {
-public:
-	int animationFrame;
-	int planesNumToShow;
-	bool bDrawAll;
-	bool bNextAnimationTrigger;
-	vector<GKPlane>* gpl;
-
-	AnimationClassMeshFace() {}
-
-	void setup() {
-		initParam();
-	}
-
-	void setGPL(vector<GKPlane>* _gpl) {
-		gpl = _gpl;
-	}
-
-	void initParam() {
-		animationFrame = 0;
-		planesNumToShow = 0;
-		bDrawAll = false;
-		bNextAnimationTrigger = false;
-	}
-
-	void update() {
-		animationFrame++;
-		planesNumToShow++;
-		if (planesNumToShow > gpl->size())bNextAnimationTrigger = true;
-		if (planesNumToShow > gpl->size()) {
-			planesNumToShow = gpl->size();
-			bDrawAll = true;
-		}
-	}
-
-	void draw() {
-		glLineWidth(2);
-		glColor3f(1, 0, 0);
-		for (int i = 0; i < planesNumToShow; i++) {
-			gpl->at(i).drawInputMesh();
-		}	
-	}
-
-	bool getNextAnimationTriggerState() {
-		return bNextAnimationTrigger;
-	}
-
-	bool getThisAnimationEndState() {
-		return bDrawAll;
-	}
-
-	void resetAnimation() {
-		initParam();
-	}
-
-};
-
-class AnimationClassPlaneFace : public AnimationClass {
-public:
-	int animationFrame;
-	int planesNumToShow;
-	bool bDrawAll;
-	bool bNextAnimationTrigger;
-	vector<GKPlane>* gpl;
-
-	AnimationClassPlaneFace() {}
-
-	void setup() {
-		initParam();
-	}
-
-	void setGPL(vector<GKPlane>* _gpl) {
-		gpl = _gpl;
-	}
-
-	void initParam() {
-		animationFrame = 0;
-		planesNumToShow = 0;
-		bDrawAll = false;
-		bNextAnimationTrigger = false;
-	}
-
-	void update() {
-		animationFrame++;
-		planesNumToShow++;
-		if (planesNumToShow > gpl->size())bNextAnimationTrigger = true;
-		if (planesNumToShow > gpl->size()) {
-			planesNumToShow = gpl->size();
-			bDrawAll = true;
-		}
-	}
-
-	void draw() {
-		glLineWidth(2);
-		glColor3f(1, 0, 0);
-		for (int i = 0; i < planesNumToShow; i++) {
-			gpl->at(i).drawGKPlane(glm::vec4(0.1,0.1,0.1,0.1),glm::vec4(0.8,0.8,1,0.8),1);
-		}
-	}
-
-	bool getNextAnimationTriggerState() {
-		return bNextAnimationTrigger;
-	}
-
-	bool getThisAnimationEndState() {
-		return bDrawAll;
-	}
-
-	void resetAnimation() {
-		initParam();
-	}
-
-};
-
-class AnimationClassFindCombi :public AnimationClass {
-public:
-	int animationFrame;
-	int planesNumToShow;
-	int dotsNumToShow;
-	bool bDrawAll;
-	bool bNextAnimationTrigger;
-	vector<GKPlane>* gpl;
-
-	bool* bHideMainMesh;
-	bool bDrawBegin;
-	ofEasyCam* cam;
-	GKDelaunay3d gkDela;
-	vector<DelaTriangle> gkDelaTriangles;
-
-	AnimationClassFindCombi() {}
-
-	void setup(){
-		initParam();
-		makeDela();
-	}
-
-	void setGPL(vector<GKPlane>* _gpl) {
-		gpl = _gpl;
-	}
-
-	void setCam(ofEasyCam* _cam) {
-		cam = _cam;
-	}
-
-	void setHideMesh(bool* _bHideMesh) {
-		bHideMainMesh = _bHideMesh;
-	}
-
-	void initParam() {
-		animationFrame = 0;
-		planesNumToShow = 0;
-		bDrawAll = false;
-		bNextAnimationTrigger = false;
-		*bHideMainMesh = false;
-		bDrawBegin = false;
-		gkDelaTriangles.erase(gkDelaTriangles.begin(), gkDelaTriangles.end());
-	}
-
-	void makeDela() {
-		gkDelaTriangles.erase(gkDelaTriangles.begin(), gkDelaTriangles.end());
-		gkDelaTriangles = gkDela.getDelaunayTriangles(*gpl);
-	}
-
-	void update() {
-		*bHideMainMesh = true;
-		bDrawBegin = true;
-	}
-	
-	void draw() {
-		if (bDrawBegin) {
-			for (auto& g : *gpl) {
-				g.drawGKPlaneCentroid(glm::vec4(1, 0, 1, 1), 10, 5);
-			}
-			if (gkDelaTriangles.size()) {
-				int counter = 0;
-				for (auto& gdt : gkDelaTriangles) {
-					glLineWidth(1);
-					ofFill();
-					glColor4f(0, 1, 0, 1);
-					glBegin(GL_LINE_LOOP);
-					for (auto& v : gdt.vertices) {
-						glVertex3f(v.pos.x, v.pos.y, v.pos.z);
-					}
-					glEnd();
-					counter++;
-				}
-				/*
-				for (auto& gks : gkSplits) {
-					cam.end();
-					ofDrawBitmapStringHighlight(ofToString(gks.mainPlane.state), cam.worldToScreen(gks.mainPlane.centroid));
-					cam.begin();
-				}
-				*/
-			}
-		}
-	}
-
-	bool getNextAnimationTriggerState() {
-		return bNextAnimationTrigger;
-	}
-
-	bool getThisAnimationEndState() {
-		return bDrawAll;
-	}
-
-	void resetAnimation() {
-		initParam();
-		makeDela();
-	}
-};
-
-class AnimationClassFindIntersection :public AnimationClass{
-public:
-};
-
-class AnimationClassSplit : public AnimationClass {
-	int animationFrame;
-	int planesNumToShow;
-	int dotsNumToShow;
-	bool bDrawAll;
-	bool bNextAnimationTrigger;
-	vector<GKPlane>* gpl;
-
+	ofFbo* thisFbo;
 	ofxGKUtils gk;
-	GKSplit gkSplitUtil;
-	vector<GKSplit> gkSplits;
-	vector<GKPlane> gkPlanesSplittedByCombi;
-	vector<GKLineSimple> gkIntersectLines;
-
-
-
-	AnimationClassSplit() {}
-	void setup() {
-		initParam();
-	}
-	void setGPL(vector<GKPlane>* _gpl) {
-		gpl = _gpl;
-	}
-	void initParam() {
-		animationFrame = 0;
-		planesNumToShow = 0;
-		bDrawAll = false;
-		bNextAnimationTrigger = false;
-	}
-	void update() {
-		runSplitByCombi();
-	}
-	void draw() {
-		for (auto& gpsbc : gkPlanesSplittedByCombi) {
-			gpsbc.drawGKPlane();
-		}
-	}
-	bool getNextAnimationTriggerState() {
-		return bNextAnimationTrigger;
-	}
-
-	bool getThisAnimationEndState() {
-		return bDrawAll;
-	}
-
-	void resetAnimation() {
-		initParam();
-	}
-
-	void runSplitByCombi() {
-		gkSplits.erase(gkSplits.begin(), gkSplits.end());
-		gkPlanesSplittedByCombi.erase(gkPlanesSplittedByCombi.begin(), gkPlanesSplittedByCombi.end());
-		gkPlanesSplittedByCombi = *gpl;
-		for (auto& gkpsbc : gkPlanesSplittedByCombi) {
-			for (auto& edge : gkpsbc.edges) {
-				gkSplitUtil.scalePlaneEdge(&edge, gkpsbc.centroid, 2);
-			}
-		}
-		//gkPlanesSplittedByCombi = gkPlanesSplittedByDelaunay;
-		for (auto& combi : gk.getIndexList_nC2(gkPlanesSplittedByCombi.size())) {
-			splitIntersectPlanes(&gkPlanesSplittedByCombi[combi.x], &gkPlanesSplittedByCombi[combi.y], &gkIntersectLines);
-		}
-	}
-
-	void splitIntersectPlanes(GKPlane* _planeB, GKPlane* _planeA, vector<GKLineSimple>* _intersectLines) {
-		vector<glm::vec3> _intersectPointsA = gkSplitUtil.getPlaneIntersection(*_planeB, *_planeA);
-		if (_intersectPointsA.size() == 2) {
-			vector<glm::vec3> _intersectPointsB = gkSplitUtil.getPlaneIntersection(*_planeA, *_planeB);
-			if (_intersectPointsB.size() == 2) {
-
-				GKLineSimple _intersectLineA = GKLineSimple(_intersectPointsA[0], _intersectPointsA[1]);
-				_intersectLines->push_back(_intersectLineA); //gkIntersectLines
-				GKPlane _gkPlaneNewA = gkSplitUtil.splitPlaneWithIntersectLine(*_planeA, _intersectLineA);
-
-				GKLineSimple _intersectLineB = GKLineSimple(_intersectPointsB[0], _intersectPointsB[1]);
-				_intersectLines->push_back(_intersectLineB); //gkIntersectLines
-				GKPlane _gkPlaneNewB = gkSplitUtil.splitPlaneWithIntersectLine(*_planeB, _intersectLineB);
-
-				//mainPlane = _gkPlaneNew;
-				*_planeA = _gkPlaneNewA; //maybe you should store data tmpPlane and after every check then you should put your data into realPlane
-				*_planeB = _gkPlaneNewB;
-			}
-
-		}
-	}
-
-};
-
-class Scene_Animation : public GKScene {
-public:
-	Scene_Animation(){}
-
-	ofxGKUtils gk;
-	stringstream ssGlobalLog;
 	ofEasyCam cam;
-	unsigned long int currentFrame;
-	float time;
+	stringstream* ssGlobalLog;
+	bool bIsMouseOn;
+	bool bScrollAuto;
+	ofImage img;
+
+	DocumentationPart(stringstream* _ssGlobalLog,ofFbo* _fbo) {
+		ssGlobalLog = _ssGlobalLog;
+		thisFbo = _fbo;
+	}
+	DocumentationPart(){}
+
+	void setup(stringstream* _ssGlobalLog, ofFbo* _fbo){
+		ssGlobalLog = _ssGlobalLog;
+		thisFbo = _fbo;
+		initParam();
+		initSet();
+		resetCamera();
+		resetPart();
+	}
+	void resetPart() {
+		initParam();
+		resetCamera();
+	}
+	void update() {
+		if(bScrollAuto)scrollCameraAuto();
+	}
+	void draw() {
+		cam.begin();
+		//glEnable(GL_DEPTH_TEST);
+		ofPushMatrix();
+		ofTranslate(-thisFbo->getWidth()/ 2, -thisFbo->getHeight()/ 2);
+
+		ofFill();
+		glColor3f(0.6, 0.6, 0.6);
+		ofDrawRectangle(0, cam.getPosition().y, thisFbo->getWidth(),thisFbo->getHeight());
+		ofNoFill();
+		float imgRatio = img.getHeight() / img.getWidth();
+		img.draw(0, 0, 0, thisFbo->getWidth(), thisFbo->getWidth()* imgRatio);
+
+		ofPopMatrix();
+		//glDisable(GL_DEPTH_TEST);
+		cam.end();
+	}
+	void run() {
+		update();
+		draw();
+	}
+
+	void initParam() {
+		bIsMouseOn = false;
+		bScrollAuto = true;
+		img.load("./description/sample.png");
+	}
+	void initSet() {
+		gk.setup(ssGlobalLog);
+	}
+	void resetCamera() {
+		cam.enableOrtho();
+		cam.setPosition(glm::vec3(0, 0, 500));
+		cam.setVFlip(true);
+		cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
+		cam.disableMouseInput();
+	}
+	bool getMouseState() { return bIsMouseOn; }
+	void mousePressed(ofMouseEventArgs& args) {
+		bScrollAuto = !bScrollAuto;
+	}
+	void mouseScrolled(int x, int y, float scrollX, float scrollY) {
+		scrollCamera(scrollY);
+	}
+	void scrollCamera(const int& _scrollY) {
+		if (_scrollY < 0)bScrollAuto = true;
+		else bScrollAuto = false;
+		int scrollScale = 30;
+		if (cam.getPosition().y > -1) {
+			cam.move(0, -1 * _scrollY * scrollScale, 0);
+		}
+		if (cam.getPosition().y < 0) {
+			cam.setPosition(cam.getPosition().x, 0, cam.getPosition().z);
+		}
+	}
+	void scrollCameraAuto() {
+		float _scrollSpeed = 1;
+		cam.move(0,  _scrollSpeed, 0);
+		if (cam.getPosition().y > thisFbo->getHeight())cam.setPosition(0,0,500);
+	}
+};
+
+class AnimationPart {
+public:
+
+	ofFbo* thisFbo;
+	ofxGKUtils gk;
+	ofEasyCam cam;
+	stringstream* ssGlobalLog;
+	bool bIsMouseOn;
 
 	vector<ofLight> lights;
 	ofMesh meshToAnimate;
 	vector<GKPlane> gkPlanesCreatedFromMeshToAnimate;
 	vector<GKPlane> gkPlanesCreatedManuallyToAnimate;
 
-	bool bPlayAnimation;
-	unsigned long int animationFrame;
-
-	bool bHideMesh;
-
 	AnimationClassMeshVertex amv;
 	AnimationClassMeshEdge ame;
 	AnimationClassMeshFace amf;
 	AnimationClassPlaneFace apf;
 	AnimationClassFindCombi afc;
+	
 	vector<AnimationClass*> animationClasses;
+	unsigned long int animationFrame;
 	int animationIndex;
+	bool bPlayAnimation;
+	bool bHideMesh;
 
-	void setup();
-	void resetScene();
-	void update();
-	void draw();
+	AnimationPart(stringstream* _ssGlobalLog,ofFbo* _fbo) {
+		ssGlobalLog = _ssGlobalLog;
+		thisFbo = _fbo;
+	}
+
+	AnimationPart() {}
+
+	void setup(stringstream* _ssGlobalLog, ofFbo* _fbo) {
+		ssGlobalLog = _ssGlobalLog;
+		thisFbo = _fbo;
+		initParam();
+		initSet();
+		resetCamera();
+		resetPart();
+
+		setLights();
+	};
+	void resetPart() {
+		gkPlanesCreatedFromMeshToAnimate.erase(gkPlanesCreatedFromMeshToAnimate.begin(), gkPlanesCreatedFromMeshToAnimate.end());
+		gkPlanesCreatedManuallyToAnimate.erase(gkPlanesCreatedManuallyToAnimate.begin(), gkPlanesCreatedManuallyToAnimate.end());
+		gk.importGK3D(gk.findLatestFilePath("./gk3dForDemo/", "gk3d"), meshToAnimate, gkPlanesCreatedFromMeshToAnimate, gkPlanesCreatedManuallyToAnimate);
+		initAnimationClasses();
+	}
+	void update() {
+		if (animationClasses[animationIndex]->getNextAnimationTriggerState())animationIndex++; //&& animationIndex < animationClasses.size() - 1
+		if (animationIndex == animationClasses.size())resetAnimationClasses();
+		for (int i = 0; i < animationIndex + 1; i++) {
+			animationClasses[i]->update();
+		}
+		rotateCamera();
+		animationFrame++;
+	}
+	void draw() {
+		if (animationIndex > 3) {
+			for (int i = 3; i < animationIndex + 1; i++) {
+				animationClasses[i]->draw();
+			}
+		}
+		else {
+			for (auto& ac : animationClasses) { ac->draw(); }
+		}
+
+		if (!bHideMesh)drawMainMesh();
+	}
+
+	void run() {
+		cam.begin();
+		glEnable(GL_DEPTH_TEST);
+		ofEnableLighting();
+		for (auto& l : lights)l.enable();
+		//gk.draw3DPlaneGrid(10,50,glm::vec3(0,1,0),1,glm::vec4(0.6));
+		gk.draw3DBox(glm::vec3(0), 100, 100, 160, 1, glm::vec4(1, 1, 1, 0.5));
+		if (bPlayAnimation)update();
+		draw();
+		for (auto& l : lights)l.disable();
+		ofDisableLighting();
+		glDisable(GL_DEPTH_TEST);
+		cam.end();
+	}
+
+	void initParam() {
+		bIsMouseOn = false;
+		bPlayAnimation = true;
+		animationFrame = 0;
+		animationIndex = 0;
+		bHideMesh = false;
+		
+	};
+	void initSet() {
+		gk.setup(ssGlobalLog);
+		gk.setCam(&cam);
+	}
+	void resetCamera() {
+		//cam.setDistance(14);
+		//cam.enableOrtho();
+		cam.setPosition(glm::vec3(180, 180, 180));
+		//cam.setVFlip(true);
+		cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
+	}
+	bool getMouseState() { return bIsMouseOn; }
+
+	void initAnimationClasses() {
+		animationClasses.push_back(&amv);
+		animationClasses.push_back(&ame);
+		animationClasses.push_back(&amf);
+		animationClasses.push_back(&apf);
+		animationClasses.push_back(&afc);
+
+		amv.setGPL(&gkPlanesCreatedFromMeshToAnimate);
+		ame.setGPL(&gkPlanesCreatedFromMeshToAnimate);
+		amf.setGPL(&gkPlanesCreatedFromMeshToAnimate);
+		apf.setGPL(&gkPlanesCreatedFromMeshToAnimate);
+		afc.setGPL(&gkPlanesCreatedFromMeshToAnimate);
+		afc.setCam(&cam);
+		afc.setHideMesh(&bHideMesh);
+
+		for (auto& ac : animationClasses) {
+			ac->setup();
+		}
+	}
+	void resetAnimationClasses() {
+		animationIndex = 0;
+		for (auto& ac : animationClasses) {
+			ac->resetAnimation();
+		}
+	}
+	void toggleAnimate() {
+		bPlayAnimation = !bPlayAnimation;
+	}
+
+	void setLights() {
+		lights.emplace_back(ofLight());
+		lights.emplace_back(ofLight());
+		float rotateR = sqrt(pow(140, 2) * 2);
+		lights[0].setPosition(rotateR * cos(PI / 4), cam.getPosition().y, rotateR * sin(PI / 4));
+		lights[1].setPosition(rotateR * cos(PI / 2), cam.getPosition().y, rotateR * sin(PI / 4));
+	}
+
+	void rotateCamera() {
+		float rotateR = sqrt(pow(140, 2) * 2);
+		float rotationSpeed = animationFrame * 0.002;
+		cam.setPosition(glm::vec3(rotateR * cos(PI / 4 + rotationSpeed), 100, rotateR * sin(PI / 4 + rotationSpeed)));
+		cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
+	}
+	
+	void drawMainMesh() {
+		glColor4f(0, 0, 1, 0.4);
+		meshToAnimate.drawFaces();
+		glLineWidth(1);
+		glColor4f(0, 1, 0, 0.4);
+		meshToAnimate.drawWireframe();
+	}
+};
 
 
-	void initParam();
-	void initSet();
-	void initSliders();
-	void resetCamera();
-	void initAnimationClasses();
-	void resetAnimationClasses();
+class Scene_Animation : public GKScene {
+public:
+	ofxGKUtils gk;
+	stringstream ssGlobalLogAnimation;
+	stringstream ssGlobalLogDocumentation;
+	unsigned long int currentFrame;
+	float time;
 
-	void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
+	ofFbo animationScreen;
+	ofFbo documentationScreen;
 
-	void drawMainMesh();
+	AnimationPart animationPart;
+	DocumentationPart documentationPart;
+	
+	ofEasyCam camForAnimation;
+	ofEasyCam camForDocumentation;
 
-	void toggleAnimation();
-	void animate();
-	void render();
-	void rotateCamera();
-	void setLight();
+	void setup() {
+		initSet();
+		resizeFBO();
+		animationPart.setup(&ssGlobalLogAnimation, &animationScreen);
+		documentationPart.setup(&ssGlobalLogDocumentation, &documentationScreen);
+	}
+		
+	void resetScene() {
+		initParam();
+		resetCamera();
+		resizeFBO();
+		animationPart.setup(&ssGlobalLogAnimation, &animationScreen);
+		documentationPart.setup(&ssGlobalLogDocumentation, &documentationScreen);
+		ssGlobalLogAnimation.str("");
+		ssGlobalLogAnimation.clear(std::stringstream::goodbit);
+		ssGlobalLogAnimation << "CLEARED LOG" << endl;
+		ssGlobalLogAnimation << "CLEARED-ARRAYS" << endl;
+		ssGlobalLogDocumentation.str("");
+		ssGlobalLogDocumentation.clear(std::stringstream::goodbit);
+		ssGlobalLogDocumentation << "CLEARED LOG" << endl;
+		ssGlobalLogDocumentation << "CLEARED-ARRAYS" << endl;
+	}
+	void update() {
+		gk.defaultUpdate(&currentFrame, &time);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		animationScreen.begin();
+		ofClear(0);
+		//glClearColor(0, 0, 0, 0);
+		//glClear(GL_COLOR_BUFFER_BIT);
+		//glColor3f(0, 0, 0);
+		animationPart.run();
+		animationScreen.end();
+		documentationScreen.begin();
+		ofClear(0);
+		documentationPart.run();
+		documentationScreen.end();
+	}
+	void draw() {
+		//-----------INIT-----------//
+		stringstream ssInstruct;
+		stringstream ssProgramInfo;
+		stringstream ssDebug;
+		//-----------PROCESS-----------//
+		//-----------3D-LAYER-----------//
+		//-----------2D-LAYER-----------//
+		animationScreen.draw(0, 0, animationScreen.getWidth(), animationScreen.getHeight());
+		documentationScreen.draw(animationScreen.getWidth(), 0, documentationScreen.getWidth(),documentationScreen.getHeight());
+		gk.drawGrid();
+		//-----------INFO-----------//
+		createInfo(ssInstruct, ssProgramInfo, ssDebug);
 
-	void animateGKPCFM();
-	void animateGKPCM();
-	void animateMeshVertex(const float& _animationSpeed, vector<GKPlane>& _gpl);
-	void animateMeshEdge(const float& _animationSpeed, vector<GKPlane>& _gpl);
-	void animateMeshFace(const float& _animationSpeed, vector<GKPlane>& _gpl);
-	void animateIntersection();
-	void animateGeneration();
-	void animateFilling();
-	void animateEffect();
+		//-----------FRONT-LAYER-----------//
+		gk.drawInfo(ssInstruct, 1);
+		gk.drawInfo(ssProgramInfo, 0);
+		gk.drawInfo(ssDebug, 4);
+		//gk.drawInfo(ssGlobalLog, 5);
+	}
 
+	
+	void initParam() {
+		
+	}
+	void initSet() {
+		//gk.setup(&ssGlobalLog);
+	}
+	void initSliders() {};
+	void resetCamera() {};
+	void resizeFBO() {
+		animationScreen.allocate(ofGetWidth() / 2, ofGetHeight(), GL_RGB, 4);
+		documentationScreen.allocate(ofGetWidth() / 2, ofGetHeight(), GL_RGB, 4);
+	}
+	void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
+		//-----------INFO-----------//--later put into update func.
+		_ssInstruct << "INSTRUCTIONS: " << endl;
 
+		_ssProgramInfo << "PROGRAM: " << "SIMULATED EXPERIENCE OR DREAM" << endl;
+		_ssProgramInfo << "DEVELOPER: " << "GAISHI KUDO" << endl;
+		_ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
+		_ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
+		_ssProgramInfo << "CAMERA: " << "--" << endl; // cam.getPosition() 
+		_ssProgramInfo << "CAMERA LOOK DIR: " << "--" << endl; //cam.getLookAtDir()
+	}
 
 	//-----------NO-InUSE-----------//
 
 
 	void keyPressed(int key) {
 		switch (key) {
+		case 'f':
+			ofToggleFullscreen();
+			break;
 		case 's':
-			toggleAnimation();
-			ssGlobalLog << "PLAY" << endl;
+			animationPart.toggleAnimate();
 			break;
 		case 'r':
-			resetAnimationClasses();
-			ssGlobalLog << "RESET" << endl;
+			animationPart.resetAnimationClasses();
+			documentationPart.resetPart();
 			break;
 		}
 	}
-	void mousePressed(ofMouseEventArgs& args) {
+	void mousePressed(ofMouseEventArgs& args) { 
+		documentationPart.mousePressed(args);
 	}
-	void mousePressed(int x, int y, int button) {};
+	void mousePressed(int x, int y, int button) {
+	};
+	void mouseScrolled(int x, int y, float scrollX, float scrollY) {
+		documentationPart.mouseScrolled(x, y, scrollX, scrollY);
+	};
 	void windowResized(int w, int h) {
 		//gk.resizeGUI(guiOne, 13);
 		//gk.resizeGUI(guiTwo, 13);
+		resizeFBO();
 	}
 
 	//-----------NO-InUSE-----------//
@@ -578,7 +409,7 @@ public:
 	void mouseReleased(int x, int y, int button) {};
 	void mouseEntered(int x, int y) {};
 	void mouseExited(int x, int y) {};
-	void mouseScrolled(int x, int y, float scrollX, float scrollY) {};
+	
 	void dragEvent(ofDragInfo dragInfo) {};
 	void gotMessage(ofMessage msg) {};
 

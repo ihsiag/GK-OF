@@ -34,6 +34,20 @@ void ofxGKUtils::setCam(ofEasyCam* _cam) {
 	_cam->addInteraction(ofEasyCam::TRANSFORM_ROTATE, OF_MOUSE_BUTTON_RIGHT);
 }
 
+void ofxGKUtils::defaultUpdate(unsigned long int* _currentFrame, float* _time) {
+	*_currentFrame += 1;
+	*_time = ofGetElapsedTimef();
+
+	ofBackground(10);
+	ofNoFill();
+	//fbo.begin();
+	glClearColor(0, 0, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0, 0, 0);
+	glLineWidth(1);
+	glPointSize(1);
+	//fbo.end();
+}
 
 void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time) {
 	*_currentFrame += 1;
