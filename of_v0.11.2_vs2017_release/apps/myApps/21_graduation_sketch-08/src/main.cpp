@@ -11,10 +11,10 @@
 int main() {
 
 	auto mainApp = ofApp::getInstance();
+	mainApp->addGKScene(new Scene_Animation());
 	mainApp->addGKScene(new Scene_Room());
 	mainApp->addGKScene(new Scene_Viewer());
 	mainApp->addGKScene(new Scene_Modeler());
-	mainApp->addGKScene(new Scene_Animation());
 	ofGLWindowSettings settings;
 
 	settings.setGLVersion(2, 1);

@@ -52,6 +52,7 @@ void Scene_Viewer::update(){
 
 void Scene_Viewer::draw(){
     cam.begin();
+    if (bPlayOpeningScene)openingScene();
     //-----------MAIN-LAYER-----------//
     ofPushMatrix();
     ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2);
@@ -79,6 +80,8 @@ void Scene_Viewer::draw(){
 void Scene_Viewer::initParam(){
     scrollUp = false;
     scrollDown = false;
+    openingPeriod = 120;
+    bPlayOpeningScene = true;
 }
 
 void Scene_Viewer::initGKSet() {
@@ -182,6 +185,14 @@ void Scene_Viewer::exportDataForNextScene() {
         }      
     }
 };
+
+void Scene_Viewer::openingScene() {
+    int _index = 0;
+    for (auto& ss : smallScreens) {
+        ss.openingScene(currentFrame,openingPeriod,_index);
+        _index++;
+    }
+}
 
 
 //-----------EVENT-----------//

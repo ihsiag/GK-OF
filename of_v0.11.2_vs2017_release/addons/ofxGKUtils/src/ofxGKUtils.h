@@ -49,6 +49,7 @@ public:
 //-------------------------------------------------------HELPER_2D-------------------------------------------------------//
 	void drawInfo(const stringstream& _ss, const int& _indexPos, const ofTrueTypeFont& _font, const int& _fontSize);
 	void drawInfo(const stringstream& _ss, const int& _indexPos);
+	void drawInfo(const stringstream& _ss, const int& _indexPos, const bool& _bSetMargin, const glm::vec2& _margin);
 	void drawInfo(const stringstream& _ss, const glm::vec2& _xyPos);
 	void manageInfoLimit(stringstream* _ss,const float& _height); // <- still blanc
 	void manageInfoLimit(stringstream* _ss, const int& _numOfGrids); // <-still blanc

@@ -250,7 +250,6 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos, const o
 void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos) {
 	//Bitmap
 	//Width : 8pt , Height : 11pt
-	glColor3f(1, 1, 1);
 	glm::vec2 _pos = getPosLayout4x4(_indexPos);
 	if (_indexPos < 4) {
 		_pos.x += 60;
@@ -263,6 +262,13 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos) {
 	_pos.y += 11;
 
 	//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));
+	ofDrawBitmapString(_ss.str().c_str(), _pos);
+}
+
+void ofxGKUtils::drawInfo(const stringstream& _ss, const int& _indexPos, const bool& _bSetMargin, const glm::vec2& _margin) {
+	glm::vec2 _pos = getPosLayout4x4(_indexPos);
+	if (_bSetMargin)_pos += _margin;
+	_pos.y += 11;
 	ofDrawBitmapString(_ss.str().c_str(), _pos);
 }
 

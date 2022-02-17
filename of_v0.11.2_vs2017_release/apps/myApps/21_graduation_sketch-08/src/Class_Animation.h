@@ -44,8 +44,6 @@ public:
 	 void draw() {}
 	 bool getThisAnimationEndState() {}
 	 bool getNextAnimationTriggerState() {}
-
-
 };
 
 class AnimationClassMeshVertex : public AnimationClass {
@@ -371,8 +369,13 @@ public:
 	}
 
 	void update() {
+		animationFrame++;
 		*bHideMainMesh = true;
 		bDrawBegin = true;
+		if (animationFrame > 60 * 4) {
+			bDrawAll = true;
+			bNextAnimationTrigger = true;
+		}
 	}
 
 	void draw() {

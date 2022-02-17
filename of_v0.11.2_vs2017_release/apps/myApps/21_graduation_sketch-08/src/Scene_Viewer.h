@@ -17,6 +17,9 @@ class Scene_Viewer : public GKScene{
 		float time;
 		stringstream ssGlobalLog;
 
+		int openingPeriod;
+		bool bPlayOpeningScene;
+
 		bool scrollUp, scrollDown;
 
 		//-----------LIB-----------//
@@ -56,6 +59,7 @@ class Scene_Viewer : public GKScene{
 
 		//-----------THISTIME-SCENE-BEIDGE-----------//
 		void exportDataForNextScene();
+		void openingScene();
 		
 		//-----------EVENT-----------//
 		void keyPressed(int key) {

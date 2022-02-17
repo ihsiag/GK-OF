@@ -25,7 +25,8 @@ public:
 	stringstream* ssGlobalLog;
 	bool bIsMouseOn;
 	bool bScrollAuto;
-	ofImage img;
+	vector<ofImage> imgs;
+	int totalImgsHeight;
 
 	DocumentationPart(stringstream* _ssGlobalLog,ofFbo* _fbo) {
 		ssGlobalLog = _ssGlobalLog;
@@ -55,11 +56,10 @@ public:
 		ofTranslate(-thisFbo->getWidth()/ 2, -thisFbo->getHeight()/ 2);
 
 		ofFill();
-		glColor3f(0.6, 0.6, 0.6);
+		glColor3f(0.8, 0.8, 0.85);
 		ofDrawRectangle(0, cam.getPosition().y, thisFbo->getWidth(),thisFbo->getHeight());
 		ofNoFill();
-		float imgRatio = img.getHeight() / img.getWidth();
-		img.draw(0, 0, 0, thisFbo->getWidth(), thisFbo->getWidth()* imgRatio);
+		placeImgs();
 
 		ofPopMatrix();
 		//glDisable(GL_DEPTH_TEST);
@@ -73,7 +73,7 @@ public:
 	void initParam() {
 		bIsMouseOn = false;
 		bScrollAuto = true;
-		img.load("./description/sample.png");
+		loadImgs("./description/");
 	}
 	void initSet() {
 		gk.setup(ssGlobalLog);
@@ -85,6 +85,32 @@ public:
 		cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
 		cam.disableMouseInput();
 	}
+
+	void loadImgs(const string& _dirPath) {
+		imgs.erase(imgs.begin(), imgs.end());
+		totalImgsHeight = 0;
+		ofDirectory _dir(_dirPath);
+		_dir.allowExt("png");//only show {}file ex)png,mp3,css
+		_dir.sort();
+		_dir.listDir();
+		for (int i = 0; i < _dir.size(); i++) {
+			ofImage _img;
+			_img.load(_dir.getPath(i));
+			float imgRatio = _img.getHeight() / _img.getWidth();
+			totalImgsHeight += thisFbo->getWidth()*imgRatio;
+			imgs.push_back(_img);
+		}
+	}
+
+	void placeImgs() {
+		int _counter = 0;
+		for (auto& img : imgs) {
+			float imgRatio = img.getHeight() / img.getWidth();
+			img.draw(0, _counter*thisFbo->getWidth()*imgRatio, thisFbo->getWidth(), thisFbo->getWidth() * imgRatio);
+			_counter++;
+		}
+	}
+
 	bool getMouseState() { return bIsMouseOn; }
 	void mousePressed(ofMouseEventArgs& args) {
 		bScrollAuto = !bScrollAuto;
@@ -104,9 +130,9 @@ public:
 		}
 	}
 	void scrollCameraAuto() {
-		float _scrollSpeed = 1;
+		float _scrollSpeed = 2;
 		cam.move(0,  _scrollSpeed, 0);
-		if (cam.getPosition().y > thisFbo->getHeight())cam.setPosition(0,0,500);
+		if (cam.getPosition().y > totalImgsHeight)cam.setPosition(0,0,500);
 	}
 };
 
@@ -169,6 +195,11 @@ public:
 		animationFrame++;
 	}
 	void draw() {
+		/*
+		if (animationIndex > animationClasses.size()) {
+			resetAnimationClasses();
+			animationIndex = 0;
+		}
 		if (animationIndex > 3) {
 			for (int i = 3; i < animationIndex + 1; i++) {
 				animationClasses[i]->draw();
@@ -176,7 +207,9 @@ public:
 		}
 		else {
 			for (auto& ac : animationClasses) { ac->draw(); }
-		}
+		}*/
+
+		for (auto& ac : animationClasses) { ac->draw(); }
 
 		if (!bHideMesh)drawMainMesh();
 	}
@@ -279,14 +312,14 @@ public:
 	unsigned long int currentFrame;
 	float time;
 
+
 	ofFbo animationScreen;
 	ofFbo documentationScreen;
 
 	AnimationPart animationPart;
 	DocumentationPart documentationPart;
 	
-	ofEasyCam camForAnimation;
-	ofEasyCam camForDocumentation;
+	float infoBarAlpha;
 
 	void setup() {
 		initSet();
@@ -327,9 +360,9 @@ public:
 	}
 	void draw() {
 		//-----------INIT-----------//
-		stringstream ssInstruct;
-		stringstream ssProgramInfo;
-		stringstream ssDebug;
+		stringstream ssInstructDocumentation, ssInstructAnimation;
+		stringstream ssProgramInfoDocumentation, ssProgramInfoAnimation;
+		stringstream ssDebugDocumentation, ssDebugAnimation;
 		//-----------PROCESS-----------//
 		//-----------3D-LAYER-----------//
 		//-----------2D-LAYER-----------//
@@ -337,18 +370,26 @@ public:
 		documentationScreen.draw(animationScreen.getWidth(), 0, documentationScreen.getWidth(),documentationScreen.getHeight());
 		gk.drawGrid();
 		//-----------INFO-----------//
-		createInfo(ssInstruct, ssProgramInfo, ssDebug);
+		createInfoDocumentation(ssInstructDocumentation, ssProgramInfoDocumentation, ssDebugDocumentation);
+		createInfoAnimation(ssInstructAnimation, ssProgramInfoAnimation, ssDebugAnimation);
+		infoBarAlpha = 0.4 *cos(-PI/2 + currentFrame*0.02) + 0.4;
+		createInfoBar();
 
 		//-----------FRONT-LAYER-----------//
-		gk.drawInfo(ssInstruct, 1);
-		gk.drawInfo(ssProgramInfo, 0);
-		gk.drawInfo(ssDebug, 4);
+		glColor3f(0, 0, 0);
+		gk.drawInfo(ssInstructDocumentation, 9, true, glm::vec2(60, 0));
+		gk.drawInfo(ssProgramInfoDocumentation, 8, true, glm::vec2(60, 60));
+		gk.drawInfo(ssDebugDocumentation, 12, true, glm::vec2(60,0));
+		glColor3f(1, 1, 1);
+		gk.drawInfo(ssInstructAnimation, 1);
+		gk.drawInfo(ssProgramInfoAnimation, 0);
+		gk.drawInfo(ssDebugAnimation, 4);
 		//gk.drawInfo(ssGlobalLog, 5);
 	}
 
 	
 	void initParam() {
-		
+		infoBarAlpha = 0;
 	}
 	void initSet() {
 		//gk.setup(&ssGlobalLog);
@@ -357,18 +398,66 @@ public:
 	void resetCamera() {};
 	void resizeFBO() {
 		animationScreen.allocate(ofGetWidth() / 2, ofGetHeight(), GL_RGB, 4);
-		documentationScreen.allocate(ofGetWidth() / 2, ofGetHeight(), GL_RGB, 4);
+		documentationScreen.allocate(ofGetWidth() / 2, ofGetHeight(), GL_RGB, 8);
 	}
-	void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
+	void createInfoAnimation(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
 		//-----------INFO-----------//--later put into update func.
 		_ssInstruct << "INSTRUCTIONS: " << endl;
+		_ssInstruct << ">RESET: R" << endl;
 
-		_ssProgramInfo << "PROGRAM: " << "SIMULATED EXPERIENCE OR DREAM" << endl;
+		_ssProgramInfo << "PROGRAM: " << "DEMO" << endl;
 		_ssProgramInfo << "DEVELOPER: " << "GAISHI KUDO" << endl;
 		_ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
-		_ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
-		_ssProgramInfo << "CAMERA: " << "--" << endl; // cam.getPosition() 
-		_ssProgramInfo << "CAMERA LOOK DIR: " << "--" << endl; //cam.getLookAtDir()
+	}
+
+	void createInfoDocumentation(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
+		//-----------INFO-----------//--later put into update func.
+		_ssInstruct << "INSTRUCTIONS: " << endl;
+		_ssInstruct << ">SCROLL               - MOUSE MIDDLE " << endl;
+		_ssInstruct << ">STOP / START TO READ - MOUSE LEFT " << endl;
+
+		_ssProgramInfo << "PROGRAM: " << "DOCUMENTATION" << endl;
+		_ssProgramInfo << "AUTHOR: " << "GAISHI KUDO" << endl;
+		_ssProgramInfo << "TIME: " << ofToString(time, 0) << endl;
+	}
+
+
+	void createInfoBar() {
+		
+		
+		string infoToShow = "PRESS KEY < -/ ->TO CHANGE SCENES";
+		ofRectangle bb = getBitmapStringBoundingBox(infoToShow);
+
+		ofFill();
+		glColor4f(0, 0, 0,infoBarAlpha);
+		ofDrawRectangle(0, ofGetHeight() / 2, ofGetWidth(), bb.height);
+		glColor4f(0.9, 0.9, 0.95,infoBarAlpha);
+		ofDrawBitmapString( infoToShow, ofGetWidth()/2-bb.width/2, ofGetHeight()/2  + 11);
+	}
+	ofRectangle getBitmapStringBoundingBox(string text) {
+		vector<string> lines = ofSplitString(text, "\n");
+		int maxLineLength = 0;
+		for (int i = 0; i < (int)lines.size(); i++) {
+			// tabs are not rendered
+			const string& line(lines[i]);
+			int currentLineLength = 0;
+			for (int j = 0; j < (int)line.size(); j++) {
+				if (line[j] == '\t') {
+					currentLineLength += 8 - (currentLineLength % 8);
+				}
+				else {
+					currentLineLength++;
+				}
+			}
+			maxLineLength = MAX(maxLineLength, currentLineLength);
+		}
+
+		int padding = 4;
+		int fontSize = 8;
+		float leading = 1.7;
+		int height = lines.size() * fontSize * leading - 1;
+		int width = maxLineLength * fontSize;
+		return ofRectangle(0, 0, width, height);
 	}
 
 	//-----------NO-InUSE-----------//

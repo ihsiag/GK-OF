@@ -18,6 +18,8 @@ public:
 	glm::vec2 mouseOnScreenPlane;
 	glm::vec2 rotationAngle;
 
+	bool bPlayOpeningScene;
+
 	void setup(ofEasyCam* _cam, const glm::vec2& _pos, const glm::vec2& _size, ofMesh* _mesh, string* _meshName) {
 		cam = _cam;
 		pos = _pos;
@@ -82,6 +84,10 @@ public:
 		gk.drawInfo(_ss, glm::vec2(size.x/2,size.y-25));
 		ofPopMatrix();
 		
+	}
+
+	void openingScene(const int&_currentFrame,const int& _openingPeriod, const int& _index) {
+
 	}
 
 	bool IsMouseOn() {

@@ -6,6 +6,7 @@
 #include "ofxBullet.h"
 #include "ofxGui.h"
 #include "ofEvent.h"
+#include "Easing.h"
 
 
 #include "GKControllerAngle.h"
@@ -25,6 +26,7 @@ public:
     ofMesh mesh;
     float meshScaleFactor;
     float meshBB[6];
+
     
 
     stringstream ssGlobalLog;
@@ -87,6 +89,9 @@ public:
     ofParameter<float> slider_power;
 
 
+    bool bPlayOpeningScene;
+    int openingPeriod;
+
 
 
     void setup();
@@ -143,6 +148,8 @@ public:
 
     //-----------THISTIME-SCENE-BEIDGE-----------//
     void exportDataForNextScene();
+
+    void openingScene();
 
     
 

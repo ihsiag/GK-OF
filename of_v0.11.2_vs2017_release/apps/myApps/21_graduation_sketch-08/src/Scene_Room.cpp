@@ -1,4 +1,5 @@
 #include "Scene_Room.h"
+#include "Easing.h"
 
 bool shouldRemoveRigidBody(const shared_ptr<ofxBulletRigidBody>& ab) {
     return ab->getPosition().y > 15;
@@ -67,6 +68,9 @@ void Scene_Room::draw() {
     //-----------3D-LAYER-----------//
     cam.begin();
     glEnable(GL_DEPTH_TEST);
+
+    if (currentFrame > openingPeriod)bPlayOpeningScene = false;
+    if (bPlayOpeningScene)openingScene();
     
     //-----------no-light-----------//
     if (bDrawDebug) { //debug
@@ -110,6 +114,10 @@ void Scene_Room::initParam() {
     currentFrame = 0;
     fontSize = 3;
     mousePickIndex = -1;
+
+    bPlayOpeningScene = true;
+    openingPeriod = 120;
+
 }
 
 void Scene_Room::initGKSet() {
@@ -648,8 +656,22 @@ void Scene_Room::connectArmsToModel() {
 
 //-----------THISTIME-SCENE-BEIDGE-----------//
 void Scene_Room:: exportDataForNextScene() {
-    if (models.size() > 0)gk.saveMesh(models[slider_selectModelIndex % models.size()]->getMesh(), 1 / meshScaleFactor, "./meshExportedFromRoomToViewer/");
+    if (models.size() > 0) gk.saveMesh(models[slider_selectModelIndex % models.size()]->getMesh(), 1 / meshScaleFactor, "./meshExportedFromRoomToViewer/");
 };
+
+void Scene_Room::openingScene() {
+   // currentFrame
+    glm::vec3 initPos = glm::vec3(0, -35, 35);
+    glm::vec3 nextPos = glm::vec3(40, -20, 40);
+    glm::vec3 currentPos = cam.getPosition();
+    glm::vec3 dir = nextPos - initPos;
+    cam.setPosition(initPos + dir * Easing::easeOutCirc( float(currentFrame) / openingPeriod));
+    cam.lookAt(glm::vec3(0, -5, 0),glm::vec3(0,1,0));
+   
+    if(currentFrame > float(openingPeriod*0.7)) bDrawDebug = true;
+
+    if (currentFrame == openingPeriod - 1)addModel(glm::vec2(0,0));
+}
 
 //-----------EVENT-FUNCS-----------//
 void Scene_Room::mousePickEvent(ofxBulletMousePickEvent& e) {
