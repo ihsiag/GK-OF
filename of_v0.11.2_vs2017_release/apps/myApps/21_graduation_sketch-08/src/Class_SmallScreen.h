@@ -18,7 +18,8 @@ public:
 	glm::vec2 mouseOnScreenPlane;
 	glm::vec2 rotationAngle;
 
-	bool bPlayOpeningScene;
+	bool bSetBGCol;
+	glm::vec4 bgCol;
 
 	void setup(ofEasyCam* _cam, const glm::vec2& _pos, const glm::vec2& _size, ofMesh* _mesh, string* _meshName) {
 		cam = _cam;
@@ -26,6 +27,8 @@ public:
 		size = _size;
 		mesh = _mesh;
 		meshName = _meshName;
+		bSetBGCol = false;
+		bgCol = glm::vec4(10 / 255, 10 / 255, 10 / 255, 1);
 	}
 
 	void setup(ofEasyCam* _cam, const glm::vec2& _pos, const glm::vec2& _size) {
@@ -34,6 +37,8 @@ public:
 		size = _size;
 		mesh = NULL;
 		meshName = NULL;
+		bSetBGCol = false;
+		bgCol = glm:: vec4(10/255, 10 / 255, 10 / 255,1);
 	}
 	
 	void run() {
@@ -50,9 +55,10 @@ public:
 		if (IsMouseOn()) {
 			glColor4f(0.95,0.95,0.96,1);
 		}
-		else {		
-			ofSetColor(10);
-		}
+		//else {		
+		//	ofSetColor(10);
+		//}
+		glColor4f(bgCol.r,bgCol.g,bgCol.b,bgCol.a);
 		ofFill();
 		ofPushMatrix();
 		ofTranslate(pos);
@@ -86,9 +92,10 @@ public:
 		
 	}
 
-	void openingScene(const int&_currentFrame,const int& _openingPeriod, const int& _index) {
-
+	void setBGCol(const glm::vec4& _col) {
+		bgCol = _col;
 	}
+
 
 	bool IsMouseOn() {
 		bool _b = false;

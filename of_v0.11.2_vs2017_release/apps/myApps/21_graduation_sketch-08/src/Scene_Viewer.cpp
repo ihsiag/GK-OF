@@ -6,6 +6,7 @@ void Scene_Viewer::setup(){
     initParam();
     initGKSet();
     resetCamera();
+    ofSetVerticalSync(true);
 
     //-----------LOADING-----------//
     loadMeshes();
@@ -47,6 +48,7 @@ void Scene_Viewer::resetScene() {
 
 void Scene_Viewer::update(){
     gk.defaultUpdate(&cam, &currentFrame, &time);
+    if (currentFrame > 120) bPlayOpeningScene = false;
 }
 
 
@@ -82,6 +84,7 @@ void Scene_Viewer::initParam(){
     scrollDown = false;
     openingPeriod = 120;
     bPlayOpeningScene = true;
+    currentFrame = 0;
 }
 
 void Scene_Viewer::initGKSet() {
@@ -187,12 +190,16 @@ void Scene_Viewer::exportDataForNextScene() {
 };
 
 void Scene_Viewer::openingScene() {
-    int _index = 0;
+    glm::vec4 _col = glm::vec4(10 / 255, 10 / 255, 10 / 255, 1);
     for (auto& ss : smallScreens) {
-        ss.openingScene(currentFrame,openingPeriod,_index);
-        _index++;
+        ss.setBGCol(_col);
+    }
+    int _size = ((currentFrame-1) / 2) % smallScreens.size();
+    for (int i = 0; i < _size+1; i++) {
+        float _tmp = ofMap(float(i),0, _size, 10/255, 0.2);
+        _col = glm::vec4(glm::vec3(_tmp), 1);
+        smallScreens[i].setBGCol(_col);
     }
 }
-
 
 //-----------EVENT-----------//
