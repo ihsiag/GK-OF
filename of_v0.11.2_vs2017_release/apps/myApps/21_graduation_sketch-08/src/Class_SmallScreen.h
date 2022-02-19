@@ -19,6 +19,7 @@ public:
 	glm::vec2 rotationAngle;
 
 	bool bSetBGCol;
+	glm::vec4 defaultBgCol;
 	glm::vec4 bgCol;
 
 	void setup(ofEasyCam* _cam, const glm::vec2& _pos, const glm::vec2& _size, ofMesh* _mesh, string* _meshName) {
@@ -28,7 +29,8 @@ public:
 		mesh = _mesh;
 		meshName = _meshName;
 		bSetBGCol = false;
-		bgCol = glm::vec4(10 / 255, 10 / 255, 10 / 255, 1);
+		defaultBgCol =  glm::vec4(10 / 255, 10 / 255, 10 / 255, 1);
+		bgCol = defaultBgCol;
 	}
 
 	void setup(ofEasyCam* _cam, const glm::vec2& _pos, const glm::vec2& _size) {
@@ -38,7 +40,8 @@ public:
 		mesh = NULL;
 		meshName = NULL;
 		bSetBGCol = false;
-		bgCol = glm:: vec4(10/255, 10 / 255, 10 / 255,1);
+		defaultBgCol = glm::vec4(10 / 255, 10 / 255, 10 / 255, 1);
+		bgCol = defaultBgCol;
 	}
 	
 	void run() {
@@ -49,16 +52,17 @@ public:
 	void update() {
 		mouseOnScreenPlane = getMouseOnScreenPlane();
 		rotationAngle = getRotationAngleFromMouseOnScreenPlane();
+		changeBgColToDefault();
 	}
 	
 	void display() {
+		glColor4f(bgCol.r, bgCol.g, bgCol.b, bgCol.a);
 		if (IsMouseOn()) {
 			glColor4f(0.95,0.95,0.96,1);
 		}
 		//else {		
 		//	ofSetColor(10);
 		//}
-		glColor4f(bgCol.r,bgCol.g,bgCol.b,bgCol.a);
 		ofFill();
 		ofPushMatrix();
 		ofTranslate(pos);
@@ -90,6 +94,18 @@ public:
 		gk.drawInfo(_ss, glm::vec2(size.x/2,size.y-25));
 		ofPopMatrix();
 		
+	}
+
+	void changeBgColToDefault() {
+		float _speed = 0.0025;
+		if (bgCol != defaultBgCol) {
+			if (bgCol.r > defaultBgCol.r)bgCol.r -= _speed;
+			else bgCol.r = defaultBgCol.r;
+			if (bgCol.g > defaultBgCol.g)bgCol.g -= _speed;
+			else bgCol.g = defaultBgCol.g;
+			if (bgCol.b > defaultBgCol.b)bgCol.b -= _speed;
+			else bgCol.b = defaultBgCol.b;
+		}
 	}
 
 	void setBGCol(const glm::vec4& _col) {

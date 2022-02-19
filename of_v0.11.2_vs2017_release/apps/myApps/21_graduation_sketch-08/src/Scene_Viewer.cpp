@@ -48,7 +48,7 @@ void Scene_Viewer::resetScene() {
 
 void Scene_Viewer::update(){
     gk.defaultUpdate(&cam, &currentFrame, &time);
-    if (currentFrame > 120) bPlayOpeningScene = false;
+    if (currentFrame > 16 * 2) bPlayOpeningScene = false;
 }
 
 
@@ -190,7 +190,7 @@ void Scene_Viewer::exportDataForNextScene() {
 };
 
 void Scene_Viewer::openingScene() {
-    glm::vec4 _col = glm::vec4(10 / 255, 10 / 255, 10 / 255, 1);
+    /*glm::vec4 _col = glm::vec4(10 / 255, 10 / 255, 10 / 255, 1);
     for (auto& ss : smallScreens) {
         ss.setBGCol(_col);
     }
@@ -199,6 +199,10 @@ void Scene_Viewer::openingScene() {
         float _tmp = ofMap(float(i),0, _size, 10/255, 0.2);
         _col = glm::vec4(glm::vec3(_tmp), 1);
         smallScreens[i].setBGCol(_col);
+    }*/
+    if (smallScreens.size() > currentFrame / 2) {
+        glm::vec4 _col = glm::vec4(0.1,0.1,0.1, 1);
+        smallScreens[currentFrame / 2].setBGCol(_col);
     }
 }
 

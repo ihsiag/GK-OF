@@ -373,7 +373,7 @@ public:
 		createInfoDocumentation(ssInstructDocumentation, ssProgramInfoDocumentation, ssDebugDocumentation);
 		createInfoAnimation(ssInstructAnimation, ssProgramInfoAnimation, ssDebugAnimation);
 		infoBarAlpha = 0.4 *cos(-PI/2 + currentFrame*0.02) + 0.4;
-		createInfoBar();
+		//createInfoBar();
 
 		//-----------FRONT-LAYER-----------//
 		glColor3f(0, 0, 0);
