@@ -1,70 +1,94 @@
 #pragma once
 
 #include "ofMain.h"
+#include "GKScene.h"
 #include "ofxGKUtils.h"
-#include "ofxGui.h"
-#include "ofEasyCam.h"
 
 class ofApp : public ofBaseApp{
-
-	public:
-		//-----------DEFAULT-----------//
-		ofxGKUtils gk;
-		ofEasyCam cam;
-		unsigned long int currentFrame;
-		float time;
-		stringstream ssGlobalLog;
-		glm::vec2 mouseOnWorldPlane;
-		
-		//-----------GLOBAL-----------//
-
-
-		//-----------SLIDER-----------//
-		ofxGuiGroup gui;
-
-		
-		void setup();
-		void update();
-		void draw();
-
-		//-----------FOR-LIB-----------//
-
-
-		//-----------THIS-TIME-UTILS-----------//
-		void resetCamera();
-		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
-		
-		//-----------THIS-TIME-FUNCS-----------//
-		
-		//-----------DEBUG-FUNC-----------//
-
-		//-----------EVENT-----------//
-		void keyPressed(int key) {
-			//for (auto& gkPlane : gkPlanes) {
-			//	gkPlane.keyPressed(key);// used:key -> none
-			//}
-			switch (key) {
-			case 'f':
-				ofToggleFullscreen();
-				break;
-			case 'r':
-				resetCamera();
-				break;
-			}
+	//*work as scene manager *//
+private:
+	ofApp() {}
+	~ofApp() {
+		for (GKScene* gs : gkScenes) {
+			delete gs;
 		}
-		void keyReleased(int key) {}
-		void mouseMoved(int x, int y) {}
-		void mouseDragged(int x, int y, int button) {}
-		void mousePressed(int x, int y, int button) {}
-		void mouseReleased(int x, int y, int button) {}
-		void mouseEntered(int x, int y) {}
-		void mouseExited(int x, int y) {}
-		void windowResized(int w, int h) {
-			gk.resizeGUI(gui);
-		}
-		void dragEvent(ofDragInfo dragInfo) {}
-		void gotMessage(ofMessage msg) {}
+	}
+	static std::shared_ptr<ofApp> instance;
+public:
+	static std::shared_ptr<ofApp> getInstance() {
+		if (instance.get() == 0) instance.reset(new ofApp(), [](ofApp* p) { delete p; });
+		return instance;
+	}
+	vector<GKScene*> gkScenes;
+	void addGKScene(GKScene* _gkScene);
 
-		//-----------NO-InUSE-----------//
-		
+	int currentSceneIndex;
+	float currentSceneSec;
+	float currentSceneFloatFrame;
+	int currentSceneFrame;
+	float sceneStartSec;
+	float lastSec;
+	
+
+	void setup();
+	void update();
+	void draw();
+
+	void keyPressed(int key) {
+		gkScenes[currentSceneIndex]->keyPressed(key);
+		switch (key) {
+		case OF_KEY_RIGHT:
+			currentSceneIndex++;
+			currentSceneIndex %= gkScenes.size();
+			cout << "Scene changed" << endl;
+			gkScenes[currentSceneIndex]->resetScene();
+			sceneStartSec = ofGetElapsedTimef();
+			break;
+
+		case OF_KEY_LEFT:
+			currentSceneIndex--;
+			if (currentSceneIndex < 0) currentSceneIndex += gkScenes.size();
+			cout << "Scene changed" << endl;
+			gkScenes[currentSceneIndex]->resetScene();
+			sceneStartSec = ofGetElapsedTimef();
+			break;
+		}
+	};
+	void keyReleased(int key) {
+		gkScenes[currentSceneIndex]->keyReleased(key);
+	};
+	void mouseMoved(int x, int y) {
+		gkScenes[currentSceneIndex]->mouseMoved(x, y);
+	};
+	void mouseDragged(int x, int y, int button) {
+		gkScenes[currentSceneIndex]->mouseDragged(x, y,button);
+	};
+	void mousePressed(ofMouseEventArgs& args) {
+		gkScenes[currentSceneIndex]->mousePressed(args);
+	}
+	void mousePressed(int x, int y, int button) {
+		gkScenes[currentSceneIndex]->mousePressed(x, y, button);
+	};
+	void mouseReleased(int x, int y, int button) {
+		gkScenes[currentSceneIndex]->mouseReleased(x, y, button);
+	};
+	void mouseEntered(int x, int y) {
+		gkScenes[currentSceneIndex]->mouseEntered(x, y);
+	};
+	void mouseExited(int x, int y) {
+		gkScenes[currentSceneIndex]->mouseExited(x, y);
+	};
+	void mouseScrolled(int x, int y, float scrollX, float scrollY) {
+		gkScenes[currentSceneIndex]->mouseScrolled(x, y, scrollX, scrollY);
+	};
+
+	void windowResized(int w, int h) {
+		gkScenes[currentSceneIndex]->windowResized(w, h);
+	};
+	void dragEvent(ofDragInfo dragInfo) {
+		gkScenes[currentSceneIndex]->dragEvent(dragInfo);
+	};
+	void gotMessage(ofMessage msg) {
+		gkScenes[currentSceneIndex]->gotMessage(msg);
+	};
 };

@@ -19,6 +19,23 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog) {
 	margin = 8;
 }
 
+void ofxGKUtils::setup(stringstream* _ssGlobalLog ,const int& _frameRate) {
+	ofSetVerticalSync(true);
+	ofSetFrameRate(_frameRate);
+	ofNoFill();
+	glClearColor(0, 0, 0, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0, 0, 0);
+	glLineWidth(1);
+	glPointSize(1);
+	ofEnableAlphaBlending();
+	//glEnable(GL_BLEND);
+	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE);
+	ssLog = _ssGlobalLog;
+
+	margin = 8;
+}
+
 void ofxGKUtils::setCam(ofEasyCam* _cam) {
 	_cam->removeAllInteractions();
 	//_ezCam->setPosition(0, 0, 0);
@@ -319,6 +336,22 @@ void ofxGKUtils::drawGrid() {
 void ofxGKUtils::drawCross(const int& _x, const int& _y, const int& _size) {
 	//glLineWidth(1);
 	ofPushMatrix();
+	ofTranslate(_x, _y);
+	glBegin(GL_LINES);
+	glVertex2f(-_size / 2, 0);
+	glVertex2f(_size / 2, 0);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex2f(0, -_size / 2);
+	glVertex2f(0, _size / 2);
+	glEnd();
+	ofPopMatrix();
+}
+
+void ofxGKUtils::drawCross(const glm::vec3& _normalPlaneToDraw,const int& _x, const int& _y, const int& _size) {
+	//glLineWidth(1);
+	ofPushMatrix();
+	if (_normalPlaneToDraw.y > 0)ofRotateXRad(PI / 2);
 	ofTranslate(_x, _y);
 	glBegin(GL_LINES);
 	glVertex2f(-_size / 2, 0);

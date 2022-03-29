@@ -27,6 +27,7 @@ public:
 
 //-------------------------------------------------------HELPER_DEFAULT-------------------------------------------------------//
 	void setup(stringstream* _ssGlobalLog);
+	void setup(stringstream* _ssGlobalLog, const int& _frameRate);
 	void setCam(ofEasyCam* _cam);
 	void defaultUpdate(unsigned long int* _currentFrame, float* _time);
 	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time);
@@ -55,6 +56,7 @@ public:
 	void manageInfoLimit(stringstream* _ss, const int& _numOfGrids); // <-still blanc
 	void drawGrid();
 	void drawCross(const int& _x, const int& _y, const int& _size);
+	void drawCross(const glm::vec3& _normalPlaneToDraw, const int& _x, const int& _y, const int& _size);
 
 
 //-------------------------------------------------------HELPER_3D-------------------------------------------------------//
