@@ -1,10 +1,14 @@
 #pragma once
+#ifndef SCENE_ONE_H  
+#define SCENE_ONE_H 
 
 #include "ofMain.h"
 #include "GKScene.h"
 #include "ofxGKUtils.h"
 #include "ofxGui.h"
 #include "ofEasyCam.h"
+
+#include "Class_Animation.h"
 
 class Scene_One : public GKScene{
 
@@ -17,9 +21,17 @@ class Scene_One : public GKScene{
 		stringstream ssGlobalLog;
 
 		//-----------LIB-----------//
+		vector<AnimationClass*> animationClasses;
+		unsigned int animationFrame;
+		int animationIndex;
+		bool bPlayAnimation;
+
+		AnimationClassOverlay ao;
 
 		//-----------GLOBAL-----------//
+		
 		bool bDebug;
+		ofImage img;
 		vector<ofMesh> meshes;
 
 		//-----------SLIDER-----------//
@@ -35,22 +47,31 @@ class Scene_One : public GKScene{
 		void initParam();
 		void initGKSet();
 		void resetCamera();
+		void initAnimationClasses();
+		void resetAnimationClasses();
+		void manageAnimationClasses();
+		void toggleAnimate();
 
 		
 		void loadMeshes();
 		void rescaleMesh(ofMesh* _mesh,const glm::vec3& _sclC, const float& _sclF);
+		void loadImage();
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
 
 
 		//-----------THIS-TIME-FUNCS-----------//
 		void drawGridOnPlane();
-		void run
+		void runScan();
+		void drawOverlay();
 
 		//-----------THISTIME-SCENE-BRIDGE-----------//
 		
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
 			switch (key) {
+			case ' ':
+				toggleAnimate();
+				break;
 			case 'f':
 				ofToggleFullscreen();
 				break;
@@ -58,7 +79,7 @@ class Scene_One : public GKScene{
 				bDebug = !bDebug;
 				break;
 			case 'r':
-				resetCamera();
+				resetAnimationClasses();
 				break;
 			case 's':
 				gk.saveImage();
@@ -86,3 +107,5 @@ class Scene_One : public GKScene{
 		void gotMessage(ofMessage msg) {}
 		
 };
+
+#endif

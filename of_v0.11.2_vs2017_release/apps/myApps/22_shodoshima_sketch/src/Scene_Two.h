@@ -1,4 +1,6 @@
 #pragma once
+#ifndef SCENE_TWO_H  
+#define SCENE_TWO_H 
 
 #include "ofMain.h"
 #include "GKScene.h"
@@ -84,3 +86,4 @@ class Scene_Two : public GKScene{
 		void gotMessage(ofMessage msg) {}
 		
 };
+#endif

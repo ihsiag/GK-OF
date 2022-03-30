@@ -29,6 +29,7 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog ,const int& _frameRate) {
 	glLineWidth(1);
 	glPointSize(1);
 	ofEnableAlphaBlending();
+	ofSetCircleResolution(60);
 	//glEnable(GL_BLEND);
 	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE);
 	ssLog = _ssGlobalLog;

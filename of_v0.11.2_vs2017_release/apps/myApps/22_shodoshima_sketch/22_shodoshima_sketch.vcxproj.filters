@@ -80,6 +80,9 @@
 		<ClInclude Include="src\ofApp.h">
 			<Filter>src</Filter>
 		</ClInclude>
+		<ClInclude Include="src\Class_Animation.h">
+			<Filter>src</Filter>
+		</ClInclude>
 		<ClInclude Include="src\GKScene.h">
 			<Filter>src</Filter>
 		</ClInclude>
