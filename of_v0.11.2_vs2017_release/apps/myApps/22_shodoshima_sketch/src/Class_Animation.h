@@ -49,6 +49,7 @@ public:
 
 	void update() {
 		animationFrame++;
+		if (animationFrame < camPeriod)cameraWork();
 		//bDrawAll = true;
 	}
 
@@ -58,7 +59,7 @@ public:
 		test();
 		cam->begin();
 		glEnable(GL_DEPTH_TEST);
-		if (animationFrame < camPeriod)cameraWork();
+		
 		if (animationFrame > ofGetWidth() / 2)gk.draw3DPlaneGrid(2, 100, glm::vec3(0, 1, 0), 1, glm::vec4(0.7, 0.7, 0.7, 0.3));
 	}
 
