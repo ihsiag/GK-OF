@@ -199,6 +199,7 @@
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Class_Animation.h" />
+    <ClInclude Include="src\Class_MySphere.h" />
     <ClInclude Include="src\GKScene.h" />
     <ClInclude Include="src\Scene_One.h" />
     <ClInclude Include="src\Scene_Two.h" />

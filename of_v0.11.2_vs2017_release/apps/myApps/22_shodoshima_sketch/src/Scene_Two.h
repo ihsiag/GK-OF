@@ -8,6 +8,8 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
+
+#include "Class_MySphere.h"
 class Scene_Two : public GKScene{
 
 	public:
@@ -22,7 +24,13 @@ class Scene_Two : public GKScene{
 
 		//-----------GLOBAL-----------//
 		bool bDebug;
-		vector<ofMesh> meshes;
+		vector<MySphere> spheres;
+		vector<MySphere*> spheresStored;
+		vector<MySphere*> sphereStaged;
+		vector<MySphere*> sphereGone;
+
+		int gridUnit = 100;
+		int counter = 0;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
@@ -38,13 +46,16 @@ class Scene_Two : public GKScene{
 		void initGKSet();
 		void resetCamera();
 
-		
-		void loadMeshes();
-		void rescaleMesh(ofMesh* _mesh,const glm::vec3& _sclC, const float& _sclF);
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
 
 
 		//-----------THIS-TIME-FUNCS-----------//
+		void createSpheres();
+		void initSpheresPos();
+		void manageSpheres();
+		void letSphereStaged();
+		void letSphereGone();
+		void letSphereStored();
 
 		//-----------THISTIME-SCENE-BRIDGE-----------//
 		
