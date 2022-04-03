@@ -10,6 +10,10 @@
 
 
 #include "Class_Sphere.h"
+#include "Class_Staging.h"
+#include "Class_Leaving.h"
+#include "Class_Stored.h"
+
 class Scene_Three : public GKScene{
 
 	public:
@@ -25,11 +29,13 @@ class Scene_Three : public GKScene{
 		//-----------GLOBAL-----------//
 		bool bDebug;
 		vector<Sphere> spheres;
-		vector<Sphere*> spheresStored;
-		vector<Sphere*> sphereStaged;
-		vector<Sphere*> sphereGone;
+		vector<Staging> sphereStaging;
+		vector<Leaving> sphereLeaving;
+		vector<Stored> sphereStored;
 
 		int gridUnit = 100;
+		int displayTime = 120;
+		int animationTime = 120;
 		int counter = 0;
 
 		//-----------SLIDER-----------//
@@ -51,8 +57,12 @@ class Scene_Three : public GKScene{
 
 		//-----------THIS-TIME-FUNCS-----------//
 		void createSpheres();
+		void prepairSpheres();
+		void pushToStaging();
+		void pushToLeaving();
+		void pushToStored();
+		void managePush();
 		void animateSpheres();
-		void drawSpheres();
 
 
 		//-----------THISTIME-SCENE-BRIDGE-----------//
@@ -67,7 +77,7 @@ class Scene_Three : public GKScene{
 				bDebug = !bDebug;
 				break;
 			case 'r':
-				resetCamera();
+				resetScene();
 				break;
 			case 's':
 				gk.saveImage();

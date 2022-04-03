@@ -12,48 +12,36 @@
 
 
 class Sphere {
+protected:
+	float displayTime;
+	float animationTime;
 public:
 	int gridUnit;
 	ofSpherePrimitive sphere;
 	int r;
+	glm::vec3 initialPos;
 	glm::vec3 pos;
 	glm::vec4 col;
 
 	float animationT;
 	float animationPeriod;
 
-	Sphere(const int& _r, const glm::vec4& _col, const int& _gridUnit) {
+	bool bStaged, bGone, bStored;
+
+	Sphere(const int& _r, const glm::vec4& _col, const int& _gridUnit,const float& _displayTime,const float& _animationTime) {
 		gridUnit = _gridUnit;
 		r = _r;
 		col = _col;
-		pos = glm::vec3(-gridUnit, 0, 0);
+		initialPos = glm::vec3(-gridUnit, 0, 0);
+		pos = initialPos;
 		sphere = ofSpherePrimitive(r, 30);
 		animationT = 0;
+		displayTime = _displayTime;
+		animationTime = _animationTime;
 		animationPeriod = 120;
 	}
 
-	void update() {
-		animationT++;
-		sphere.setGlobalPosition(pos);
-	}
-
-	void draw() {
-		glColor4f(col.r, col.g, col.b, col.a);
-		sphere.drawFaces();
-		glColor4f(col.r * 0.75, col.g * 0.75, col.b * 0.75, col.a);
-		sphere.drawWireframe();
-	}
-
-
-	void slide() {
-		glm::vec3 animationDir = glm::vec3(1, 0, 0);
-		float animationDist = gridUnit;
-		pos = pos + animationDir * animationDist * Easing::easeInOutQuart(animationT / animationPeriod);
-	}
-
-	void readyToSlide() {
-		if (animationT > animationPeriod)animationT = 0;
-	}
+	Sphere() {}
 };
 
 #endif
