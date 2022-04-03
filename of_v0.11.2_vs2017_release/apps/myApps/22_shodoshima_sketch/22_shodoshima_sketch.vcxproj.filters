@@ -16,6 +16,9 @@
 		<ClCompile Include="src\Scene_One.cpp">
 			<Filter>src</Filter>
 		</ClCompile>
+		<ClCompile Include="src\Scene_Three.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
 		<ClCompile Include="src\Scene_Two.cpp">
 			<Filter>src</Filter>
 		</ClCompile>
@@ -83,7 +86,16 @@
 		<ClInclude Include="src\Class_Animation.h">
 			<Filter>src</Filter>
 		</ClInclude>
-		<ClInclude Include="src\Class_MySphere.h">
+		<ClInclude Include="src\Class_Sphere.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_SphereGone.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_SphereStaged.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_SphereStored.h">
 			<Filter>src</Filter>
 		</ClInclude>
 		<ClInclude Include="src\GKScene.h">
@@ -93,6 +105,9 @@
 			<Filter>src</Filter>
 		</ClInclude>
 		<ClInclude Include="src\Scene_One.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Scene_Three.h">
 			<Filter>src</Filter>
 		</ClInclude>
 		<ClInclude Include="src\Scene_Two.h">

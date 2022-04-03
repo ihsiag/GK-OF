@@ -9,7 +9,7 @@
 #include "ofEasyCam.h"
 
 
-#include "Class_MySphere.h"
+#include "Class_Sphere.h"
 class Scene_Two : public GKScene{
 
 	public:
@@ -24,10 +24,10 @@ class Scene_Two : public GKScene{
 
 		//-----------GLOBAL-----------//
 		bool bDebug;
-		vector<MySphere> spheres;
-		vector<MySphere*> spheresStored;
-		vector<MySphere*> sphereStaged;
-		vector<MySphere*> sphereGone;
+		vector<Sphere> spheres;
+		vector<Sphere*> spheresStored;
+		vector<Sphere*> sphereStaged;
+		vector<Sphere*> sphereGone;
 
 		int gridUnit = 100;
 		int counter = 0;

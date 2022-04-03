@@ -4,6 +4,7 @@
 #include "ofApp.h"
 #include "Scene_One.h"
 #include "Scene_Two.h"
+#include "Scene_Three.h"
 
 
 //========================================================================
@@ -12,6 +13,7 @@ int main() {
 	auto mainApp = ofApp::getInstance();
 	mainApp->addGKScene(new Scene_One());
 	mainApp->addGKScene(new Scene_Two());
+	mainApp->addGKScene(new Scene_Three());
 
 	ofGLWindowSettings settings;
 
