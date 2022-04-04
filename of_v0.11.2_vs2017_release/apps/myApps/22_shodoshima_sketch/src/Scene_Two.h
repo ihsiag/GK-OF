@@ -79,7 +79,8 @@ class Scene_Two : public GKScene{
 				bDebug = !bDebug;
 				break;
 			case 'r':
-				resetScene();
+				//resetScene();
+				resetCamera();
 				break;
 			case 's':
 				gk.saveImage();

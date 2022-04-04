@@ -18,7 +18,7 @@ int main() {
 	ofGLWindowSettings settings;
 
 	settings.setGLVersion(2, 1);
-	settings.setSize(1200, 600);
+	settings.setSize(1000, 1000);
 	//settings.windowMode = OF_FULLSCREEN;
 	settings.windowMode = OF_WINDOW;
 	settings.setPosition(glm::vec2(1920 + 80, 80));
