@@ -12,10 +12,10 @@
 
 
 class Sphere {
-protected:
-	float displayTime;
-	float animationTime;
+
 public:
+	ofEasyCam* cam;
+	int id;
 	int gridUnit;
 	ofSpherePrimitive sphere;
 	int r;
@@ -25,10 +25,13 @@ public:
 
 	float animationT;
 	float animationPeriod;
+	float displayPeriod;
 
 	bool bStaged, bGone, bStored;
 
-	Sphere(const int& _r, const glm::vec4& _col, const int& _gridUnit,const float& _displayTime,const float& _animationTime) {
+	Sphere(ofEasyCam* _cam,const int& _id, const int& _r, const glm::vec4& _col, const int& _gridUnit,const float& _displayPeriod,const float& _animationPeriod) {
+		cam = _cam;
+		id = _id;
 		gridUnit = _gridUnit;
 		r = _r;
 		col = _col;
@@ -36,12 +39,23 @@ public:
 		pos = initialPos;
 		sphere = ofSpherePrimitive(r, 30);
 		animationT = 0;
-		displayTime = _displayTime;
-		animationTime = _animationTime;
-		animationPeriod = 120;
+		displayPeriod = _displayPeriod;
+		animationPeriod = _animationPeriod;
 	}
 
 	Sphere() {}
+
+	void drawSphere() {
+		glColor4f(col.r, col.g, col.b, col.a);
+		sphere.drawFaces();
+		glColor4f(col.r * 0.75, col.g * 0.75, col.b * 0.75, col.a);
+		sphere.drawWireframe();
+		cam->end();
+		glDisable(GL_DEPTH_TEST);
+		ofDrawBitmapStringHighlight(ofToString(id), cam->worldToScreen(sphere.getPosition()));
+		cam->begin();
+		glEnable(GL_DEPTH_TEST);
+	}
 };
 
 #endif

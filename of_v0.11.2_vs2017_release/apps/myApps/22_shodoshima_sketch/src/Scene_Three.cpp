@@ -37,8 +37,6 @@ void Scene_Three::draw(){
         gk.draw3DPlaneGrid(2, 100, glm::vec3(0, 1, 0), 1, glm::vec4(0, 0, 1, 0.3));
     }
     animateSpheres();
-    glColor3f(1, 0, 0);
-    ofDrawCircle(0, 0, 50);
     glDisable(GL_DEPTH_TEST);
     cam.end();
     //-----------INFO-----------//
@@ -90,6 +88,7 @@ void Scene_Three::createInfo(stringstream& _ssInstruct, stringstream& _ssProgram
     _ssInstruct << "INSTRUCTIONS: " << endl;
     _ssInstruct << "> RESET SCENE        - R" << endl;
     _ssInstruct << "> SAVE IMG           - S" << endl;
+    _ssInstruct << "> SET CAMERA         - C" << endl;
 
 
     _ssProgramInfo << "PROGRAM: " << "SHODOSHIMA_MOVEMENT-STUDIES" << endl;
@@ -98,10 +97,11 @@ void Scene_Three::createInfo(stringstream& _ssInstruct, stringstream& _ssProgram
     _ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
     _ssProgramInfo << "CAMERA: " << cam.getPosition() << endl;
     
-    for (int i = 0; i < spheres.size();i++) {
-        _ssDebug << "SPHERE - ID: " << i << " / TIME: " << spheres[i].animationT << endl;
-    }
-    _ssDebug << "MOUSE POS" << ofGetMouseX() << ", " << ofGetMouseY() << endl;
+    _ssDebug << "COUNTER: " << counter << endl;
+    _ssDebug << "STAGING-ANIMATION-TIME: " << sphereStaging[0].animationT << endl;
+    _ssDebug << "LEAVING-ANIMATION-TIME: " << sphereLeaving[0].animationT << endl;
+    _ssDebug << "STORED-ANIMATION-TIME: " << sphereStored[0].animationT << endl;
+        _ssDebug << "MOUSE POS" << ofGetMouseX() << ", " << ofGetMouseY() << endl;
 }
 
 
@@ -113,33 +113,35 @@ void Scene_Three::createSpheres() {
     int _sphereR = 20;
     for (int i = 0; i < _spheresNum; i++) {
         glm::vec4 _col = glm::vec4(ofRandom(0.6,1), ofRandom(0.6,1), ofRandom(0.6,1), 1);
-        spheres.emplace_back(_sphereR,_col,gridUnit,float(displayTime),float(animationTime));
+        spheres.emplace_back(&cam,i,_sphereR,_col,gridUnit,float(displayTime),float(animationTime));
     }
 }
 
 void Scene_Three::prepairSpheres() {
+    sphereStaging.erase(sphereStaging.begin(), sphereStaging.end());
+    sphereLeaving.erase(sphereLeaving.begin(), sphereLeaving.end());
     sphereStored.erase(sphereStored.begin(), sphereStored.end());
     for (auto& s : spheres) {
-        sphereStored.push_back(&s);
+        sphereStored.emplace_back(&s);
     }
-    sphereLeaving.push_back(&sphereStored[0]);
+    sphereLeaving.emplace_back(sphereStored[0].sphere);
     sphereStored.erase(sphereStored.begin());
-    sphereStaging.push_back(&sphereStored[0]);
+    sphereStaging.emplace_back(sphereStored[0].sphere);
     sphereStored.erase(sphereStored.begin());
 }
 
 void Scene_Three::pushToStored() {
-    sphereStored.push_back(&sphereLeaving[0]);
+    sphereStored.emplace_back(sphereLeaving[0].sphere);
     sphereLeaving.erase(sphereLeaving.begin());
 }
 
 void Scene_Three::pushToLeaving() {
-    sphereLeaving.push_back(&sphereStored[0]);
-    sphereStored.erase(sphereStored.begin());
+    sphereLeaving.emplace_back(sphereStaging[0].sphere);
+    sphereStaging.erase(sphereStaging.begin());
 }
 
 void Scene_Three::pushToStaging() {
-    sphereStaging.push_back(&sphereStored[0]);
+    sphereStaging.emplace_back(sphereStored[0].sphere);
     sphereStored.erase(sphereStored.begin());
 }
 
@@ -153,13 +155,19 @@ void Scene_Three::animateSpheres() {
     for (auto& ss : sphereStaging) {
         ss.run();
    }
-
     for (auto& sl : sphereLeaving) {
         sl.run();
     }
     for (auto& ss : sphereStored) {
         ss.run();
     }
+    glColor3f(1, 0, 0);
+    ofDrawCircle(0, 0, 50);
+}
+
+void Scene_Three::setCameraPos() {
+    cam.setPosition(glm::vec3(0, 80, 100));
+    cam.lookAt(glm::vec3(0), glm::vec3(0, 1, 0));
 }
 
 

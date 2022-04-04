@@ -12,30 +12,42 @@
 
 #include "Class_Sphere.h"
 
-class Leaving :public Sphere {
+class Leaving {
 public:
-	int gridUnit;
 	Sphere* sphere;
-	int r;
 	glm::vec3 initialPos;
 	glm::vec3 pos;
 	glm::vec4 col;
 
+	int gridUnit;
+
+	float displayT;
 	float animationT;
+	float componentT;
+	float displayPeriod;
 	float animationPeriod;
+	float componentPeriod;
 
-	bool bStaged, bGone, bStored;
-
+	bool bDisplayEnd;
 	bool bAnimationEnd;
+	bool bComponentEnd;
 
 	Leaving(Sphere* _sphere) {
 		sphere = _sphere;
-		gridUnit = sphere->gridUnit;
 		initialPos = glm::vec3(0, 0, 0);
 		pos = initialPos;
+
+		gridUnit = sphere->gridUnit;
+
+		displayT = 0;
 		animationT = 0;
-		animationPeriod = 120;
+		componentT = 0;
+		animationPeriod = sphere->animationPeriod;
+		displayPeriod = sphere->displayPeriod;
+		componentPeriod = displayPeriod + animationPeriod;
+		bDisplayEnd = false;
 		bAnimationEnd = false;
+		bComponentEnd = false;
 	}
 
 	void run() {
@@ -44,15 +56,12 @@ public:
 	}
 
 	void update() {
-		manageAnimationTime();
+		manageComponentTimeLine();
 		sphere->sphere.setGlobalPosition(pos);
 	}
 
 	void draw() {
-		glColor4f(col.r, col.g, col.b, col.a);
-		sphere->sphere.drawFaces();
-		glColor4f(col.r * 0.75, col.g * 0.75, col.b * 0.75, col.a);
-		sphere->sphere.drawWireframe();
+		sphere->drawSphere();
 	}
 
 
@@ -62,12 +71,19 @@ public:
 		pos = initialPos + animationDir * animationDist * Easing::easeInOutQuart(animationT / animationPeriod);
 	}
 
-	void manageAnimationTime() {
-		animationT++;
-		if (animationT > animationPeriod) {
-			animationT = 0;
-			bAnimationEnd = true;
+	void manageComponentTimeLine() {
+		componentT++;
+		if (componentT < displayPeriod) {
+			displayT++;
 		}
+		else if (componentT < displayPeriod + animationPeriod) {
+			animationT++;
+			bDisplayEnd = true;
+		}
+		else {
+			bComponentEnd = true;
+		}
+		if (bDisplayEnd)slide();
 	}
 };
 

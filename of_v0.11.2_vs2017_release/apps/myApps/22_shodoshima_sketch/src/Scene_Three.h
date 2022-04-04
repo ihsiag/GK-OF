@@ -34,7 +34,7 @@ class Scene_Three : public GKScene{
 		vector<Stored> sphereStored;
 
 		int gridUnit = 100;
-		int displayTime = 120;
+		int displayTime = 0;
 		int animationTime = 120;
 		int counter = 0;
 
@@ -64,6 +64,8 @@ class Scene_Three : public GKScene{
 		void managePush();
 		void animateSpheres();
 
+		void setCameraPos();
+
 
 		//-----------THISTIME-SCENE-BRIDGE-----------//
 		
@@ -81,6 +83,9 @@ class Scene_Three : public GKScene{
 				break;
 			case 's':
 				gk.saveImage();
+				break;
+			case 'c':
+				setCameraPos();
 				break;
 			}
 		}

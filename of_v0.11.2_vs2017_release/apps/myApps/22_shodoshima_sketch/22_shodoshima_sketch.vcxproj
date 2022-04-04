@@ -184,6 +184,7 @@
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\Scene_One.cpp" />
     <ClCompile Include="src\Scene_Three.cpp" />
+    <ClCompile Include="src\Scene_Two.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGKUtils\src\ofxGKUtils.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp" />
@@ -199,13 +200,14 @@
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Class_Animation.h" />
-    <ClInclude Include="src\Class_Sphere.h" />
     <ClInclude Include="src\Class_Leaving.h" />
+    <ClInclude Include="src\Class_Sphere.h" />
     <ClInclude Include="src\Class_Staging.h" />
     <ClInclude Include="src\Class_Stored.h" />
     <ClInclude Include="src\GKScene.h" />
     <ClInclude Include="src\Scene_One.h" />
     <ClInclude Include="src\Scene_Three.h" />
+    <ClInclude Include="src\Scene_Two.h" />
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\Easing.h" />
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKLineSimple.h" />
     <ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPlane.h" />
