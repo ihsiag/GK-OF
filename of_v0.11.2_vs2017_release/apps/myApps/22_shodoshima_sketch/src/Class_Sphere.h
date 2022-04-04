@@ -18,7 +18,6 @@ public:
 	int id;
 	int gridUnit;
 	ofSpherePrimitive sphere;
-	int r;
 	glm::vec3 initialPos;
 	glm::vec3 pos;
 	glm::vec4 col;
@@ -33,12 +32,8 @@ public:
 		cam = _cam;
 		id = _id;
 		gridUnit = _gridUnit;
-		r = _r;
 		col = _col;
-		initialPos = glm::vec3(-gridUnit, 0, 0);
-		pos = initialPos;
-		sphere = ofSpherePrimitive(r, 30);
-		animationT = 0;
+		sphere = ofSpherePrimitive(_r, 30);
 		displayPeriod = _displayPeriod;
 		animationPeriod = _animationPeriod;
 	}
