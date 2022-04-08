@@ -29,6 +29,7 @@ public:
 	void setup(stringstream* _ssGlobalLog);
 	void setup(stringstream* _ssGlobalLog, const int& _frameRate);
 	void setCam(ofEasyCam* _cam);
+	void scrollCamera(ofEasyCam *_cam,const int& _scrollY);
 	void defaultUpdate(unsigned long int* _currentFrame, float* _time);
 	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time);
 	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time, const glm::vec4& _col);
@@ -84,6 +85,7 @@ public:
 
 //-------------------------------------------------------HELPER_IMPORT-------------------------------------------------------//
 	string findLatestFilePath(const string& _dirPath, const string& _fileType);
+	void loadImgsInDir(vector<ofImage>* _imgs, const string& _dirPath);
 	void importGK3D(const string& _url, ofMesh& _meshToPass, vector<GKPlane>& _gkPlanesCreatedFromMeshToPass, vector<GKPlane>& _gkPlanesCreatedManuallyToPass);
 
 

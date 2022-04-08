@@ -52,6 +52,16 @@ void ofxGKUtils::setCam(ofEasyCam* _cam) {
 	_cam->addInteraction(ofEasyCam::TRANSFORM_ROTATE, OF_MOUSE_BUTTON_RIGHT);
 }
 
+void ofxGKUtils::scrollCamera(ofEasyCam* _cam,const int& _scrollY) {
+	int scrollScale = 30;
+	if (_cam->getPosition().y > -1) {
+		_cam->move(0, -1 * _scrollY * scrollScale, 0);
+	}
+	if (_cam->getPosition().y < 0) {
+		_cam->setPosition(_cam->getPosition().x, 0, _cam->getPosition().z);
+	}
+}
+
 void ofxGKUtils::defaultUpdate(unsigned long int* _currentFrame, float* _time) {
 	*_currentFrame += 1;
 	*_time = ofGetElapsedTimef();
@@ -760,6 +770,21 @@ string ofxGKUtils::findLatestFilePath(const string& _dirPath,const string& _file
 	_dir.listDir();
 	if (_dir.size() > 0) {
 		return _dir.getPath(_dir.size() - 1);
+	}
+}
+
+void ofxGKUtils::loadImgsInDir(vector<ofImage>* _imgs, const string& _dirPath) {
+	ofDirectory _dir(_dirPath);
+	_dir.allowExt("png");
+	_dir.allowExt("jpg");
+	_dir.allowExt("jpeg");
+	_dir.allowExt("JPEG");
+	_dir.sort();
+	_dir.listDir();
+	for (int i = 0; i < _dir.size(); i++) {
+		ofImage _img;
+		_img.loadImage(_dir.getPath(i));
+		_imgs->push_back(_img);
 	}
 }
 
