@@ -48,6 +48,9 @@ public:
 		glColor4f(1, 1, 1, 1);
 		ofNoFill();
 		(* selectedImg)->draw(pos, size.x, size.y);
+		ofPopMatrix();
+		ofPushMatrix();
+		ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2);
 		drawCircle();
 		ofPopMatrix();
 		
