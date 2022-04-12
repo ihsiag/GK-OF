@@ -1,3 +1,4 @@
+
 #include "Scene_One.h"
 #include "Easing.h"
 
@@ -6,41 +7,49 @@ void Scene_One::setup(){
     //-----------DEFAULT-----------//
     initParam();
     initGKSet();
-    resetCamera();
     ofSetVerticalSync(true);
 
-    //-----------LOADING-----------//
-    loadImgs();
-    setImgPanels();
-    initEditPanel();
+    //-----------RESET-----------//
+    resetScene();
+}
+
+//-----------FOR-DEFAULT-----------//
+
+void Scene_One::initParam() {
+    currentFrame = 0;
+    bDebug = true;
+    currentPanelIndex = 0;
+}
+
+void Scene_One::initGKSet() {
+    gk.setup(&ssGlobalLog, 40);
+    gk.setGUI(gui, 13);
 }
 
 void Scene_One::resetScene() {
     initParam();
-    resetCamera();
+    loadImgs();
+    inheriteCsv();
+    initPanels();
 }
 
 
 void Scene_One::update(){
-    if(bDebug)gk.defaultUpdate(&cam, &currentFrame, &time, glm::vec4(glm::vec3(0), 1));
-    else gk.defaultUpdate(&cam, &currentFrame, &time,glm::vec4(glm::vec3(0.95),1));
+    if(bDebug)gk.defaultUpdate(&currentFrame, &time, glm::vec4(glm::vec3(0), 1));
+    else gk.defaultUpdate(&currentFrame, &time,glm::vec4(glm::vec3(0.95),1));
+    managePanels();
+    panels[currentPanelIndex]->update();
 }
 
 
 void Scene_One::draw(){
-
-    cam.begin();
     //-----------MAIN-LAYER-----------//
-    if (bDebug) {
-        gk.draw3DAxis();
-        //gk.draw3DPlaneGrid(2, 100, glm::vec3(0, 1, 0), 1, glm::vec4(0, 0, 1, 0.3));
-    }
-    //BEGIN - ANIMATIONCLASSES
+
+    //BEGIN - PANELS 
     glColor4f(1, 1, 1, 1);
-    drawImgPanels();
-    drawEditPanel();
-    //END - ANIMATIONCLASSES
-    cam.end();
+
+    panels[currentPanelIndex]->draw();
+
     //-----------INFO-----------//
     stringstream ssInstruct;
     stringstream ssProgramInfo;
@@ -57,25 +66,6 @@ void Scene_One::draw(){
         gk.drawInfo(ssDebug, 5);
         gk.drawInfo(ssGlobalLog, 6);
     }
-}
-
-
-//-----------FOR-LIB-----------//
-
-void Scene_One::initParam(){
-    currentFrame = 0;
-    bDebug = true;
-    
-    bPlayAnimation = false;
-    animationFrame = 0;
-    animationIndex = 0;
-    //initAnimationClasses();
-}
-
-void Scene_One::initGKSet() {
-    gk.setup(&ssGlobalLog,60);
-    gk.setCam(&cam);
-    gk.setGUI(gui, 13);
 }
 
 //void Scene_One::initAnimationClasses() {
@@ -102,22 +92,48 @@ void Scene_One::initGKSet() {
 //    }
 //}
 
-void Scene_One::toggleAnimate() {
-    bPlayAnimation = !bPlayAnimation;
+//-----------FOR-LIB-----------//
+void Scene_One::loadImgs() {
+    string _dirPath = "./" + companyID + "/" + materialID + "/projects/" + projectID;
+    cout << "IMG-FOLDER : " << _dirPath << endl;
+    imgs.erase(imgs.begin(), imgs.end());
+    gk.loadImgsInDir(&imgs, &imgNames,_dirPath);
+    cout << "IMG-NUM : " << imgs.size() << endl;
+    cout << "IMG-FILE-NAMES : " << endl;
+    for (auto& in : imgNames)cout << in << endl;
+}
+
+void Scene_One::inheriteCsv() {
+
 }
 
 
 
-void Scene_One::resetCamera() {
-    //cam.setPosition(glm::vec3(180, 180, 180));
-    ////cam.setVFlip(true);
-    //cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
-    cam.enableOrtho();
-    cam.setPosition(glm::vec3(0, 0, 100));
-    cam.setVFlip(true);
-    cam.lookAt(ofVec3f(0, 0, 0), glm::vec3(0, 1, 0));
-    cam.disableMouseInput();
+
+void Scene_One::initPanels() {
+    imgButtonsPanel = Class_ImgButtonsPanel(&selectedImg,&imgs,companyID,materialID,projectID);
+    //selectedImg.loadImage("./companyA/materialA/projects/projectA/projectA_1.jpg");
+    editPanel = Class_EditPanel(&selectedImg,&selectedImgID,companyID, materialID, projectID);
+    
+    panels.push_back(&imgButtonsPanel);
+    panels.push_back(&editPanel);
+    
+    for(auto& pnl:panels)pnl->setup();
 }
+
+void Scene_One::managePanels() {
+    if (panels[currentPanelIndex]->goNext()) {
+        panels[currentPanelIndex]->reset();
+        currentPanelIndex = (currentPanelIndex + 1) % panels.size();
+    }
+    if (panels[currentPanelIndex]->goBack()) {
+        panels[currentPanelIndex]->reset();
+        if (currentPanelIndex >= 1)currentPanelIndex = currentPanelIndex - 1;
+        else currentPanelIndex = panels.size()-1;
+    }
+    
+}
+
 
 void Scene_One::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug) {
     //-----------INFO-----------//--later put into update func.
@@ -134,67 +150,13 @@ void Scene_One::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramIn
     _ssProgramInfo << "FRAMERATE: " << ofToString(ofGetFrameRate(), 0) << endl;
     
 
-    _ssDebug << "ANIMATION-STATE: " << bPlayAnimation << endl;
     _ssDebug << "MOUSE-POS: " << ofGetMouseX() << ", " << ofGetMouseY() << endl;
-    _ssDebug << "CAMERA: " << cam.getPosition() << endl;
+    _ssDebug << "IMGPANELS-PANEL MOUSE-POS: " << imgButtonsPanel.mousePosOnPanel<< endl;
 
 }
 
 
 //-----------THIS-TIME-FUNCS-----------//
-void Scene_One::loadImgs() {
-    string companyID = "companyA";
-    string materialID = "materialA";
-    string projectID = "projectA";
-    string _dirPath = "./" + companyID + "/" + materialID + "/projects/" + projectID;
-    cout << _dirPath << endl;
-    imgs.erase(imgs.begin(), imgs.end());
-    gk.loadImgsInDir(&imgs,_dirPath);
-    cout << imgs.size() << endl;
-}
-
-void Scene_One::resizeImgs(){}
-
-void Scene_One::setImgPanels() {
-    imgPanels.erase(imgPanels.begin(), imgPanels.end());
-    for (auto& img : imgs) {
-        Class_ImgPanel _imgPanel(&img, &selectedImg, & cam, glm::vec2(0), glm::vec2(0));
-        imgPanels.push_back(_imgPanel);
-    }
-    resizeImgPanels();
-}
-
-void Scene_One::resizeImgPanels() {
-    int columns = 4;
-    glm::vec2 _sizeToDisplay = glm::vec2(ofGetWidth() /columns, ofGetHeight() /columns);
-    for (int i = 0; i<imgPanels.size(); i++) {
-        glm::vec2 _pos = glm::vec2(i % columns, i / columns) * _sizeToDisplay;
-        imgPanels[i].onWindowResized(_pos,_sizeToDisplay);
-    }
-}
-
-void Scene_One::drawImgPanels() {
-    for (auto& ip : imgPanels) {
-        ip.draw();
-    }
-}
-
-void Scene_One::initEditPanel() {
-    selectedImg = &imgs[0];
-    editPanel = Class_EditPanel(&selectedImg, &cam);
-}
-
-
-void Scene_One::resizeEditPanel() {
-    glm::vec2 _pos = glm::vec2(0);
-    glm::vec2 _size = glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2);
-    editPanel.onWindowResized(_pos,_size);
-}
-
-void Scene_One::drawEditPanel() {
-    if(editPanel.bSetImg)editPanel.draw();
-}
-
 
 
 //-----------THISTIME-SCENE-BEIDGE-----------//

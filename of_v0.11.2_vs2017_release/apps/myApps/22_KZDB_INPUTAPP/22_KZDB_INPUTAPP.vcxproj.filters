@@ -16,6 +16,12 @@
 		<ClCompile Include="src\Scene_One.cpp">
 			<Filter>src</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxCsv-master\src\ofxCsv.cpp">
+			<Filter>addons\ofxCsv-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxCsv-master\src\ofxCsvRow.cpp">
+			<Filter>addons\ofxCsv-master\src</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\..\addons\ofxGKUtils\src\ofxGKUtils.cpp">
 			<Filter>addons\ofxGKUtils\src</Filter>
 		</ClCompile>
@@ -57,6 +63,12 @@
 		<Filter Include="addons">
 			<UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
 		</Filter>
+		<Filter Include="addons\ofxCsv-master">
+			<UniqueIdentifier>{C431DF2C-33B1-21EE-3CD2-DC9B}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxCsv-master\src">
+			<UniqueIdentifier>{35597847-B952-D830-6991-CCC0}</UniqueIdentifier>
+		</Filter>
 		<Filter Include="addons\ofxGKUtils">
 			<UniqueIdentifier>{C1B368EE-FBF2-7113-D368-2AD3}</UniqueIdentifier>
 		</Filter>
@@ -80,7 +92,22 @@
 		<ClInclude Include="src\Class_EditPanel.h">
 			<Filter>src</Filter>
 		</ClInclude>
-		<ClInclude Include="src\Class_ImgPanel.h">
+		<ClInclude Include="src\Class_EscButton.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_ImgButton.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_ImgButtonsPanel.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_NextButton.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_Panel.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\Class_PrevButton.h">
 			<Filter>src</Filter>
 		</ClInclude>
 		<ClInclude Include="src\GKScene.h">
@@ -91,6 +118,12 @@
 		</ClInclude>
 		<ClInclude Include="src\Scene_One.h">
 			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxCsv-master\src\ofxCsv.h">
+			<Filter>addons\ofxCsv-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxCsv-master\src\ofxCsvRow.h">
+			<Filter>addons\ofxCsv-master\src</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\Easing.h">
 			<Filter>addons\ofxGKUtils\src</Filter>

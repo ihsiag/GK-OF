@@ -31,6 +31,7 @@ public:
 	void setCam(ofEasyCam* _cam);
 	void scrollCamera(ofEasyCam *_cam,const int& _scrollY);
 	void defaultUpdate(unsigned long int* _currentFrame, float* _time);
+	void defaultUpdate(unsigned long int* _currentFrame, float* _time, const glm::vec4& _col);
 	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time);
 	void defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time, const glm::vec4& _col);
 	glm::vec2 getPosLayout4x4(const int& _index);
@@ -86,6 +87,7 @@ public:
 //-------------------------------------------------------HELPER_IMPORT-------------------------------------------------------//
 	string findLatestFilePath(const string& _dirPath, const string& _fileType);
 	void loadImgsInDir(vector<ofImage>* _imgs, const string& _dirPath);
+	void loadImgsInDir(vector<ofImage>* _imgs,vector<string>* _names, const string& _dirPath);
 	void importGK3D(const string& _url, ofMesh& _meshToPass, vector<GKPlane>& _gkPlanesCreatedFromMeshToPass, vector<GKPlane>& _gkPlanesCreatedManuallyToPass);
 
 

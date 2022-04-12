@@ -77,6 +77,21 @@ void ofxGKUtils::defaultUpdate(unsigned long int* _currentFrame, float* _time) {
 	//fbo.end();
 }
 
+void ofxGKUtils::defaultUpdate(unsigned long int* _currentFrame, float* _time, const glm::vec4& _col) {
+	*_currentFrame += 1;
+	*_time = ofGetElapsedTimef();
+
+	ofBackground(_col.r * 255, _col.g * 255, _col.b * 255);
+	ofNoFill();
+	//fbo.begin();
+	glClearColor(0, 0, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0, 0, 0);
+	glLineWidth(1);
+	glPointSize(1);
+	//fbo.end();
+}
+
 void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame, float* _time) {
 	*_currentFrame += 1;
 	*_time = ofGetElapsedTimef();
@@ -785,6 +800,24 @@ void ofxGKUtils::loadImgsInDir(vector<ofImage>* _imgs, const string& _dirPath) {
 		ofImage _img;
 		_img.loadImage(_dir.getPath(i));
 		_imgs->push_back(_img);
+	}
+}
+
+void ofxGKUtils::loadImgsInDir(vector<ofImage>* _imgs,vector<string>* _names, const string& _dirPath) {
+	ofDirectory _dir(_dirPath);
+	_dir.allowExt("png");
+	_dir.allowExt("jpg");
+	_dir.allowExt("jpeg");
+	_dir.allowExt("JPEG");
+	_dir.sort();
+	_dir.listDir();
+	for (int i = 0; i < _dir.size(); i++) {
+		ofImage _img;
+		_img.loadImage(_dir.getPath(i));
+		_imgs->push_back(_img);
+		string _name;
+		_name = _dir.getName(i);
+		_names->push_back(_name);
 	}
 }
 

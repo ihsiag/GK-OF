@@ -8,27 +8,27 @@
 #include "ofxGui.h"
 #include "ofEasyCam.h"
 
-#include "Class_ImgPanel.h"
+#include "Class_ImgButtonsPanel.h"
 #include "Class_EditPanel.h"
+
+struct DataSet {
+	string companyID;
+	string materialID;
+	string projectID;
+	string imgID;
+	ofImage img;
+};
 
 class Scene_One : public GKScene{
 
 	public:
 		//-----------DEFAULT-----------//
 		ofxGKUtils gk;		
-		ofEasyCam cam;
 		unsigned long int currentFrame;
 		float time;
 		stringstream ssGlobalLog;
 
-		//-----------LIB-----------//
-		unsigned int animationFrame;
-		int animationIndex;
-		bool bPlayAnimation;
-
-
-		//-----------GLOBAL-----------//
-		
+		//-----------GLOBAL-----------//	
 		bool bDebug;
 
 		//-----------SLIDER-----------//
@@ -40,42 +40,43 @@ class Scene_One : public GKScene{
 		void update();
 		void draw();
 
-		//-----------FOR-LIB-----------//
+		//-----------FOR-DEFAULT-----------//
 		void initParam();
 		void initGKSet();
-		void resetCamera();
-		/*void initAnimationClasses();
-		void resetAnimationClasses();
-		void manageAnimationClasses();*/
-		void toggleAnimate();
-
-	
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
+
+		//-----------LIB-----------//
+		string companyID = "companyA";
+		string materialID = "materialA";
+		string projectID = "projectA";
+		
+		vector<ofImage> imgs;
+		vector<string> imgNames;
+		ofImage* selectedImg;
+		string* selectedImgID;
+
+		vector<Class_Panel*> panels;		
+		Class_ImgButtonsPanel imgButtonsPanel;
+		Class_EditPanel editPanel;
+		int currentPanelIndex;
+
+		//-----------FOR-LIB-----------//
+		void loadImgs();
+		void inheriteCsv(); //here created this time
+		void initPanels();
+		void resetPanels();
+		void managePanels();
+
 
 
 		//-----------THIS-TIME-FUNCS-----------//
 		
-		vector<ofImage> imgs;
-		ofImage* selectedImg;
-		vector<Class_ImgPanel> imgPanels;
-		Class_EditPanel editPanel;
-
-		void loadImgs();
-		void resizeImgs();
-		
-		void setImgPanels();
-		void resizeImgPanels();
-		void drawImgPanels();
-
-		void initEditPanel();
-		void resizeEditPanel();
-		void drawEditPanel();
-
 
 		//-----------THISTIME-SCENE-BRIDGE-----------//
 		
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
+			panels[currentPanelIndex]->keyPressed(key);
 			switch (key) {
 			case ' ':
 				//toggleAnimate();
@@ -101,8 +102,7 @@ class Scene_One : public GKScene{
 			if (args.button == OF_MOUSE_BUTTON_LEFT) {
 				cout << "=========================================" << endl;
 				cout << "Scene_One : clicked" << endl;
-				for (auto& ip : imgPanels)ip.onMouseClicked();
-				editPanel.onMouseClicked();
+				panels[currentPanelIndex]->onMouseClicked();
 			}
 		}
 
@@ -111,12 +111,11 @@ class Scene_One : public GKScene{
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
 		void mouseScrolled(int x, int y, float scrollX, float scrollY) {
-			gk.scrollCamera(&cam,scrollY);
+			panels[currentPanelIndex]->mouseScrolled(scrollY);
 		}
 		void windowResized(int w, int h) {
 			gk.resizeGUI(gui,13);
-			resizeImgPanels();
-			resizeEditPanel();
+			panels[currentPanelIndex]->onWindowResized(w,h);
 		}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}

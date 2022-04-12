@@ -1,13 +1,13 @@
 #pragma once
 
-#ifndef CLASS_IMG_PANEL_H  
-#define CLASS_IMG_PANEL_H
+#ifndef CLASS_ESC_BUTTON_H  
+#define CLASS_ESC_BUTTON_H
 
 #include "ofApp.h"
 #include "ofxGKUtils.h"
 #include "ofEasyCam.h"
 
-class Class_ImgPanel {
+class Class_EscButton {
 public:
 	ofEasyCam* cam;
 	ofxGKUtils gk;
@@ -18,9 +18,9 @@ public:
 	bool bMouseClicked;
 	bool bMouseDisabled;
 
-	Class_ImgPanel() {}
+	Class_EscButton() {}
 
-	Class_ImgPanel(ofImage* _img, ofImage** _selectedImg, ofEasyCam* _cam, const glm::vec2& _pos,const glm::vec2& _size) {
+	Class_EscButton(ofImage* _img, ofImage** _selectedImg, ofEasyCam* _cam, const glm::vec2& _pos,const glm::vec2& _size) {
 		originalImg = _img;
 		selectedImg = _selectedImg;
 		cam = _cam;
@@ -29,7 +29,7 @@ public:
 		bMouseClicked = false;
 		bMouseDisabled = false;
 	}
-	~Class_ImgPanel() {}
+	~Class_EscButton() {}
 	
 	void setup() {
 	
