@@ -111,7 +111,7 @@ void Scene_One::inheriteCsv() {
 
 
 void Scene_One::initPanels() {
-    imgButtonsPanel = Class_ImgButtonsPanel(&selectedImg,&imgs,companyID,materialID,projectID);
+    imgButtonsPanel = Class_ImgButtonsPanel(&selectedImg, &selectedImgID, &imgs, &imgNames, companyID, materialID, projectID);
     //selectedImg.loadImage("./companyA/materialA/projects/projectA/projectA_1.jpg");
     editPanel = Class_EditPanel(&selectedImg,&selectedImgID,companyID, materialID, projectID);
     

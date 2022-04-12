@@ -58,7 +58,7 @@ public:
 		bGoBack = false;
 		setImgButtons();
 		(* selectedImg) = &imgs->at(0);
-		(*selectedImg) = &imgNames->at(0);
+		(*selectedImgID) = &imgNames->at(0);
 	};
 
 	void reset() {
@@ -106,8 +106,8 @@ public:
 	
 	void setImgButtons() {
 		imgButtons.erase(imgButtons.begin(), imgButtons.end());
-		for (auto& img : *imgs) {
-			imgButtons.emplace_back(selectedImg,&img,&mousePosOnPanel,&bSelectImg);
+		for (int i = 0; i < imgs->size(); i++) {
+			imgButtons.emplace_back(selectedImg,selectedImgID, &imgs->at(i), &imgNames->at(i), &mousePosOnPanel, &bSelectImg);
 		}
 		resizeImgButtons();
 	}

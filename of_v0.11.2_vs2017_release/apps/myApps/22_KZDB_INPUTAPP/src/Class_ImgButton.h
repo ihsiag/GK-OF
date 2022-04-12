@@ -10,7 +10,9 @@
 class Class_ImgButton {
 public:	
 	ofImage** selectedImg;
+	string** selectedImgID;
 	ofImage* originalImg;
+	string* originalImgName;
 	glm::vec2 pos;
 	glm::vec2 size;
 
@@ -20,9 +22,11 @@ public:
 	Class_ImgButton() {
 	}
 
-	Class_ImgButton(ofImage** _selectedImg, ofImage* _img,glm::vec2* _mousePosOnPanel, bool* _bSelected) {
+	Class_ImgButton(ofImage** _selectedImg,string** _selectedImgID, ofImage* _img,string* _imgName,glm::vec2* _mousePosOnPanel, bool* _bSelected) {
 		selectedImg = _selectedImg;
+		selectedImgID = _selectedImgID;
 		originalImg = _img;
+		originalImgName = _imgName;
 		pos = glm::vec2(0);
 		size = glm::vec2(0);
 		mousePosOnPanel = _mousePosOnPanel;
@@ -70,7 +74,8 @@ public:
 	void onMouseClicked() {			
 		if (IsMouseOn()) {
 			*bSelected = true;
-			(* selectedImg) = originalImg;
+			(*selectedImg) = originalImg;
+			(*selectedImgID) = originalImgName;
 			cout << "imgButton Clicked : " << originalImg<< endl;
 		}
 	};
