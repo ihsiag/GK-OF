@@ -5,7 +5,6 @@
 
 #include "ofApp.h"
 #include "ofxGKUtils.h"
-#include "ofEasyCam.h"
 
 class Class_ImgButton {
 public:	

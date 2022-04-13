@@ -1,7 +1,12 @@
 #pragma once
 #include "ofMain.h"
+#include "ofxGKUtils.h"
+#include "ofxGui.h"
+#include "ofEasyCam.h"
 
 class GKScene {
+protected:
+	ofxGKUtils gk;
 public:
 	virtual ~GKScene() {}
 

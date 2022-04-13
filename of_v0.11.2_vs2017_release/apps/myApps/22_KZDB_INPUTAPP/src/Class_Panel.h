@@ -3,9 +3,8 @@
 #ifndef CLASS_PANEL_H  
 #define CLASS_PANEL_H
 
-#include "ofApp.h"
+#include "ofMain.h"
 #include "ofxGKUtils.h"
-#include "ofEasyCam.h"
 
 class Class_Panel {
 protected:

@@ -3,7 +3,7 @@
 
 #include "ofApp.h"
 #include "Scene_One.h"
-//#include "Scene_Two.h"
+#include "Scene_Two.h"
 //#include "Scene_Three.h"
 
 
@@ -12,11 +12,15 @@ int main() {
 
 	auto mainApp = ofApp::getInstance();
 	mainApp->addGKScene(new Scene_One());
-	/*mainApp->addGKScene(new Scene_Two());*/
+	mainApp->addGKScene(new Scene_Two());
 	//mainApp->addGKScene(new Scene_Three());
 
-	ofGLWindowSettings settings;
+	//ofAppGLFWWindow window;
+	//window.setNumSamples(4);
 
+
+	ofGLWindowSettings settings;
+	
 	settings.setGLVersion(2, 1);
 	settings.setSize(1300, 800);
 	//settings.windowMode = OF_FULLSCREEN;

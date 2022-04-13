@@ -12,6 +12,8 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog) {
 	glLineWidth(1);
 	glPointSize(1);
 	ofEnableAlphaBlending();
+	ofEnableSmoothing();
+	ofEnableAntiAliasing();
 	//glEnable(GL_BLEND);
 	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE);
 	ssLog = _ssGlobalLog;
@@ -29,6 +31,8 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog ,const int& _frameRate) {
 	glLineWidth(1);
 	glPointSize(1);
 	ofEnableAlphaBlending();
+	ofEnableSmoothing();
+	ofEnableAntiAliasing();
 	ofSetCircleResolution(60);
 	//glEnable(GL_BLEND);
 	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE);
@@ -324,6 +328,14 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const glm::vec2& _xyPos) {
 
 	//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));
 	ofDrawBitmapString(_ss.str().c_str(), _pos);
+}
+
+void ofxGKUtils::drawInfo(const stringstream& _ss, const glm::vec2& _xyPos, const ofTrueTypeFont& _font, const int& _fontSize) {
+	//TrueTypeFont
+	glm::vec2 _pos = _xyPos;
+	_pos.y += _fontSize;
+	glColor3f(1, 1, 1);
+	_font.drawString(_ss.str().c_str(), _pos.x, _pos.y);
 }
 
 void ofxGKUtils::manageInfoLimit(stringstream* _ss, const float& _height) {

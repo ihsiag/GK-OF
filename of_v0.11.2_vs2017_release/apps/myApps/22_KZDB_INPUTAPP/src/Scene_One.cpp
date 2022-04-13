@@ -17,8 +17,7 @@ void Scene_One::setup(){
 
 void Scene_One::initParam() {
     currentFrame = 0;
-    bDebug = true;
-    currentPanelIndex = 0;
+    bDebug = false;
 }
 
 void Scene_One::initGKSet() {
@@ -28,17 +27,18 @@ void Scene_One::initGKSet() {
 
 void Scene_One::resetScene() {
     initParam();
-    loadImgs();
-    inheriteCsv();
+    loadMatImg();
+    loadFont();
+    loadProjectList();
     initPanels();
 }
 
 
 void Scene_One::update(){
-    if(bDebug)gk.defaultUpdate(&currentFrame, &time, glm::vec4(glm::vec3(0), 1));
-    else gk.defaultUpdate(&currentFrame, &time,glm::vec4(glm::vec3(0.95),1));
+    /*if(bDebug)gk.defaultUpdate(&currentFrame, &time, glm::vec4(glm::vec3(0), 1));
+    else gk.defaultUpdate(&currentFrame, &time,glm::vec4(glm::vec3(0.95),1));*/
+    gk.defaultUpdate(&currentFrame, &time, glm::vec4(glm::vec3(0), 1));
     managePanels();
-    panels[currentPanelIndex]->update();
 }
 
 
@@ -47,8 +47,8 @@ void Scene_One::draw(){
 
     //BEGIN - PANELS 
     glColor4f(1, 1, 1, 1);
+    runPanel();
 
-    panels[currentPanelIndex]->draw();
 
     //-----------INFO-----------//
     stringstream ssInstruct;
@@ -59,8 +59,8 @@ void Scene_One::draw(){
 
     //-----------FRONT-LAYER-----------//
     glColor4f(1,1,1,1);
+    gk.drawGrid();
     if (bDebug) {
-        gk.drawGrid();
         gk.drawInfo(ssInstruct, 1);
         gk.drawInfo(ssProgramInfo, 2);
         gk.drawInfo(ssDebug, 5);
@@ -68,70 +68,69 @@ void Scene_One::draw(){
     }
 }
 
-//void Scene_One::initAnimationClasses() {
-//    animationClasses.erase(animationClasses.begin(), animationClasses.end());
-//    animationClasses.push_back(&ao);
-//    ao.setCam(&cam);
-//    for (auto& ac : animationClasses) {
-//        ac->setup();
-//    }
-//}
-//
-//void Scene_One::resetAnimationClasses() {
-//    animationIndex = 0;
-//    for (auto& ac : animationClasses) {
-//        ac->resetAnimation();
-//    }
-//}
-//
-//void Scene_One::manageAnimationClasses() {
-//    if (animationClasses[animationIndex]->getNextAnimationTriggerState())animationIndex++; //&& animationIndex < animationClasses.size() - 1
-//    if (animationIndex == animationClasses.size())resetAnimationClasses();
-//    for (int i = 0; i < animationIndex + 1; i++) {
-//        animationClasses[i]->update();
-//    }
-//}
 
 //-----------FOR-LIB-----------//
-void Scene_One::loadImgs() {
-    string _dirPath = "./" + companyID + "/" + materialID + "/projects/" + projectID;
-    cout << "IMG-FOLDER : " << _dirPath << endl;
-    imgs.erase(imgs.begin(), imgs.end());
-    gk.loadImgsInDir(&imgs, &imgNames,_dirPath);
-    cout << "IMG-NUM : " << imgs.size() << endl;
-    cout << "IMG-FILE-NAMES : " << endl;
-    for (auto& in : imgNames)cout << in << endl;
+void Scene_One::loadFont() {
+    string _filePath = "./font/NotoSansJP-Regular.otf";
+    fontMSize = 12;
+    fontLSize = 16;
+    fontMHeight = 18;
+    fontLHeight = 24;
+    ofTrueTypeFont::setGlobalDpi(72);//72
+    ofTrueTypeFontSettings settings(_filePath, fontMSize);
+    settings.antialiased = true;
+    settings.contours = false;
+    settings.simplifyAmt = 0.0;
+    settings.addRanges(ofAlphabet::Japanese);
+    settings.addRange(ofUnicode::Latin);
+    settings.addRange(ofUnicode::Latin1Supplement);
+    //    settings.addRange(ofUnicode::NumberForms);
+    //    settings.addRange(ofUnicode::MathOperators);
+
+    fontM.load(settings);
+
+    settings.fontSize = fontLSize;
+    fontL.load(settings);
 }
 
-void Scene_One::inheriteCsv() {
-
+void Scene_One::loadMatImg() {
+    string _filePath = "./" + companyID + "/INPUT/" + materialID +"/" + materialID + ".jpg";
+    cout << "IMG-FILE : " << _filePath << endl;
+    matImg.loadImage(_filePath);
 }
 
-
-
-
-void Scene_One::initPanels() {
-    imgButtonsPanel = Class_ImgButtonsPanel(&selectedImg, &selectedImgID, &imgs, &imgNames, companyID, materialID, projectID);
-    //selectedImg.loadImage("./companyA/materialA/projects/projectA/projectA_1.jpg");
-    editPanel = Class_EditPanel(&selectedImg,&selectedImgID,companyID, materialID, projectID);
-    
-    panels.push_back(&imgButtonsPanel);
-    panels.push_back(&editPanel);
-    
-    for(auto& pnl:panels)pnl->setup();
-}
-
-void Scene_One::managePanels() {
-    if (panels[currentPanelIndex]->goNext()) {
-        panels[currentPanelIndex]->reset();
-        currentPanelIndex = (currentPanelIndex + 1) % panels.size();
+void Scene_One::loadProjectList() {
+    string _filePath = companyID + "./INPUT/projectList.csv";
+    projectIDs.erase(projectIDs.begin(), projectIDs.end());
+    if (csv.load(_filePath)) {
+        cout << "CSV-FILE" << _filePath << endl;
+        cout << "PROJECT-IDs : " << endl;
+        for (auto& row : csv) {
+            cout << row.getString(0) << endl;
+            projectIDs.push_back(row.getString(0));
+        }
     }
-    if (panels[currentPanelIndex]->goBack()) {
-        panels[currentPanelIndex]->reset();
-        if (currentPanelIndex >= 1)currentPanelIndex = currentPanelIndex - 1;
-        else currentPanelIndex = panels.size()-1;
-    }
+}
+
+void Scene_One::initPanels(){
     
+    matImgPanel = Class_MatImgPanel(&matImg,&companyID,&materialID,&fontL,&fontLSize,&fontLHeight);
+    projectListPanel = Class_ProjectListPanel(&projectIDs,&fontM,&fontMSize,&fontMHeight);
+    
+    panels.erase(panels.begin(), panels.end());
+    panels.push_back(&matImgPanel);
+    panels.push_back(&projectListPanel);
+
+    for (auto& pnl : panels)pnl->setup();
+
+}
+
+void Scene_One::resetPanels() {}
+
+void Scene_One::managePanels() {}
+
+void Scene_One::runPanel() {
+    for (auto& pnl : panels)pnl->draw();
 }
 
 
@@ -151,8 +150,6 @@ void Scene_One::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramIn
     
 
     _ssDebug << "MOUSE-POS: " << ofGetMouseX() << ", " << ofGetMouseY() << endl;
-    _ssDebug << "IMGPANELS-PANEL MOUSE-POS: " << imgButtonsPanel.mousePosOnPanel<< endl;
-
 }
 
 

@@ -3,10 +3,6 @@
 #ifndef CLASS_IMG_PANELS_PANEL_H
 #define CLASS_IMG_PANELS_PANEL_H
 
-#include "ofApp.h"
-#include "ofxGKUtils.h"
-#include "ofEasyCam.h"
-
 #include "Class_Panel.h"
 #include "Class_ImgButton.h"
 

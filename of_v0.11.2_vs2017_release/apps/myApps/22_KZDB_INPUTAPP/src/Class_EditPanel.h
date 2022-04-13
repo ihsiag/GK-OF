@@ -3,12 +3,8 @@
 #ifndef CLASS_EDIT_PANEL_H  
 #define CLASS_EDIT_PANEL_H
 
-#include "ofApp.h"
-#include "ofxGKUtils.h"
-#include "ofEasyCam.h"
-
+#include "Class_Panel.h"
 #include "ofxCsv.h"
-#include "Class_EscButton.h"
 
 class Class_EditPanel:public Class_Panel {
 public:
@@ -30,8 +26,6 @@ public:
 	bool bGoBack;
 
 	bool bMouseDisabled;
-
-	Class_EscButton escButton;
 
 	glm::vec2 customFormatAreaPos;
 	vector<glm::vec2> selectedAreas;
@@ -153,7 +147,7 @@ public:
 
 
 	void writeCsv() {
-		csvToExport.createFile("output.csv");
+		csvToExport.createFile("./" + companyID + "/OUTPUT/B.csv");
 		for (auto& sa : selectedAreas) {
 			ofxCsvRow row;
 			row.setString(0, materialID);
@@ -163,7 +157,7 @@ public:
 			row.setFloat(4, sa.y);
 			csvToExport.addRow(row);
 		}
-		csvToExport.save("output.csv");
+		csvToExport.save("./OUTPUT/B.csv");
 		selectedAreas.erase(selectedAreas.begin(), selectedAreas.end());
 	}
 
