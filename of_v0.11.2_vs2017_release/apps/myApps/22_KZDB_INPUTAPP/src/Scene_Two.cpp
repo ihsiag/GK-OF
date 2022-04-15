@@ -10,7 +10,7 @@ void Scene_Two::setup(){
     ofSetVerticalSync(true);
 
     //-----------RESET-----------//
-    //resetScene();
+    resetScene();
 }
 
 //-----------FOR-DEFAULT-----------//
@@ -18,7 +18,6 @@ void Scene_Two::setup(){
 void Scene_Two::initParam() {
     currentFrame = 0;
     bDebug = false;
-    currentPanelIndex = 0;
 }
 
 void Scene_Two::initGKSet() {
@@ -28,8 +27,9 @@ void Scene_Two::initGKSet() {
 
 void Scene_Two::resetScene() {
     initParam();
-    loadImgs();
-    inheriteCsv();
+    loadMatImg();
+    loadFont();
+    loadProjectList();
     initPanels();
 }
 
@@ -39,7 +39,6 @@ void Scene_Two::update(){
     else gk.defaultUpdate(&currentFrame, &time,glm::vec4(glm::vec3(0.95),1));*/
     gk.defaultUpdate(&currentFrame, &time, glm::vec4(glm::vec3(0), 1));
     managePanels();
-    panels[currentPanelIndex]->update();
 }
 
 
@@ -48,8 +47,8 @@ void Scene_Two::draw(){
 
     //BEGIN - PANELS 
     glColor4f(1, 1, 1, 1);
-
     runPanel();
+
 
     //-----------INFO-----------//
     stringstream ssInstruct;
@@ -69,75 +68,73 @@ void Scene_Two::draw(){
     }
 }
 
-//void Scene_Two::initAnimationClasses() {
-//    animationClasses.erase(animationClasses.begin(), animationClasses.end());
-//    animationClasses.push_back(&ao);
-//    ao.setCam(&cam);
-//    for (auto& ac : animationClasses) {
-//        ac->setup();
-//    }
-//}
-//
-//void Scene_Two::resetAnimationClasses() {
-//    animationIndex = 0;
-//    for (auto& ac : animationClasses) {
-//        ac->resetAnimation();
-//    }
-//}
-//
-//void Scene_Two::manageAnimationClasses() {
-//    if (animationClasses[animationIndex]->getNextAnimationTriggerState())animationIndex++; //&& animationIndex < animationClasses.size() - 1
-//    if (animationIndex == animationClasses.size())resetAnimationClasses();
-//    for (int i = 0; i < animationIndex + 1; i++) {
-//        animationClasses[i]->update();
-//    }
-//}
 
 //-----------FOR-LIB-----------//
-void Scene_Two::loadImgs() {
-    string _dirPath = "./" + companyID + "/INPUT/" + materialID + "/projects/" + projectID;
-    cout << "IMG-FOLDER : " << _dirPath << endl;
-    imgs.erase(imgs.begin(), imgs.end());
-    imgNames.erase(imgNames.begin(), imgNames.end());
-    gk.loadImgsInDir(&imgs, &imgNames,_dirPath);
-    cout << "IMG-NUM : " << imgs.size() << endl;
-    cout << "IMG-FILE-NAMES : " << endl;
-    for (auto& in : imgNames)cout << in << endl;
+void Scene_Two::setDataSet(DataSet* _dataSet) {
+    dataSet = _dataSet;
 }
 
-void Scene_Two::inheriteCsv() {
+void Scene_Two::loadFont() {
+    string _filePath = "./font/NotoSansJP-Regular.otf";
+    fontMSize = 14;
+    fontLSize = 20;
+    ofTrueTypeFont::setGlobalDpi(72);//72
+    ofTrueTypeFontSettings settings(_filePath, fontMSize);
+    settings.antialiased = true;
+    settings.contours = true;
+    settings.simplifyAmt = 0.5;
+    settings.addRanges(ofAlphabet::Japanese);
+    settings.addRange(ofUnicode::Latin);
+    settings.addRange(ofUnicode::Latin1Supplement);
+    //    settings.addRange(ofUnicode::NumberForms);
+    //    settings.addRange(ofUnicode::MathOperators);
 
+    fontM.load(settings);
+
+    settings.fontSize = fontLSize;
+    fontL.load(settings);
 }
 
+void Scene_Two::loadMatImg() {
+    string _filePath = "./" + (* dataSet).companyID + "/INPUT/materials/" + (*dataSet).materialID + "/" + (*dataSet).materialID + ".jpg";
+    cout << "IMG-FILE : " << _filePath << endl;
+    matImg.loadImage(_filePath);
+}
 
+void Scene_Two::loadProjectList() {
+    string _filePath = (*dataSet).companyID + "./INPUT/projectList.csv";
+    projectIDs.erase(projectIDs.begin(), projectIDs.end());
+    if (csv.load(_filePath)) {
+        cout << "CSV-FILE" << _filePath << endl;
+        cout << "PROJECT-IDs : " << endl;
+        for (auto& row : csv) {
+            cout << row.getString(0) << endl;
+            projectIDs.push_back(row.getString(0));
+        }
+    }
+}
 
-
-void Scene_Two::initPanels() {
-    imgButtonsPanel = Class_ImgButtonsPanel(&selectedImg, &selectedImgID, &imgs, &imgNames, companyID, materialID, projectID);
-    //selectedImg.loadImage("./companyA/materialA/projects/projectA/projectA_1.jpg");
-    editPanel = Class_EditPanel(&selectedImg,&selectedImgID,companyID, materialID, projectID);
+void Scene_Two::initPanels(){
+    
+    matImgPanel = Class_MatImgPanel(&matImg,&(*dataSet).companyID,&(*dataSet).materialID,&fontL);
+    projectListPanel = Class_ProjectButtonsPanel(&dataSet,&projectIDs,&fontL);
     
     panels.erase(panels.begin(), panels.end());
-    panels.push_back(&imgButtonsPanel);
-    panels.push_back(&editPanel);
-    
-    for(auto& pnl:panels)pnl->setup();
+    panels.push_back(&matImgPanel);
+    panels.push_back(&projectListPanel);
+
+    for (auto& pnl : panels)pnl->setup();
+
 }
 
+void Scene_Two::resetPanels() {}
+
 void Scene_Two::managePanels() {
-    if (panels[currentPanelIndex]->goNext()) {
-        panels[currentPanelIndex]->reset();
-        currentPanelIndex = (currentPanelIndex + 1) % panels.size();
-    }
-    if (panels[currentPanelIndex]->goBack()) {
-        panels[currentPanelIndex]->reset();
-        if (currentPanelIndex >= 1)currentPanelIndex = currentPanelIndex - 1;
-        else currentPanelIndex = panels.size()-1;
-    }   
+    //for (auto& pnl : panels)pnl->update();
 }
 
 void Scene_Two::runPanel() {
-    panels[currentPanelIndex]->draw();
+    for (auto& pnl : panels)pnl->draw();
 }
 
 
@@ -157,8 +154,6 @@ void Scene_Two::createInfo(stringstream& _ssInstruct, stringstream& _ssProgramIn
     
 
     _ssDebug << "MOUSE-POS: " << ofGetMouseX() << ", " << ofGetMouseY() << endl;
-    _ssDebug << "IMGPANELS-PANEL MOUSE-POS: " << imgButtonsPanel.mousePosOnPanel<< endl;
-
 }
 
 

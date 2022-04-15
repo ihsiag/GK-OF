@@ -183,6 +183,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\Scene_One.cpp" />
+    <ClCompile Include="src\Scene_Three.cpp" />
     <ClCompile Include="src\Scene_Two.cpp" />
     <ClCompile Include="..\..\..\addons\ofxCsv-master\src\ofxCsv.cpp" />
     <ClCompile Include="..\..\..\addons\ofxCsv-master\src\ofxCsvRow.cpp" />
@@ -199,7 +200,7 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Class_TxtButton.h" />
+    <ClInclude Include="src\DataSet.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Class_EditPanel.h" />
     <ClInclude Include="src\Class_EscButton.h" />
@@ -209,9 +210,11 @@
     <ClInclude Include="src\Class_NextButton.h" />
     <ClInclude Include="src\Class_Panel.h" />
     <ClInclude Include="src\Class_PrevButton.h" />
-    <ClInclude Include="src\Class_ProjectListPanel.h" />
+    <ClInclude Include="src\Class_ProjectButtonsPanel.h" />
+    <ClInclude Include="src\Class_ProjectButton.h" />
     <ClInclude Include="src\GKScene.h" />
     <ClInclude Include="src\Scene_One.h" />
+    <ClInclude Include="src\Scene_Three.h" />
     <ClInclude Include="src\Scene_Two.h" />
     <ClInclude Include="..\..\..\addons\ofxCsv-master\src\ofxCsv.h" />
     <ClInclude Include="..\..\..\addons\ofxCsv-master\src\ofxCsvRow.h" />

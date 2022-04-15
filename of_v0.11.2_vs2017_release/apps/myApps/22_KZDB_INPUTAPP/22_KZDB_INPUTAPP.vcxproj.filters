@@ -16,6 +16,9 @@
     <ClCompile Include="src\Scene_One.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene_Three.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scene_Two.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -116,16 +119,19 @@
     <ClInclude Include="src\Class_PrevButton.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Class_ProjectListPanel.h">
+    <ClInclude Include="src\Class_ProjectButtonsPanel.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\GKScene.h">
+    <ClInclude Include="src\Class_ProjectButton.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene_One.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene_Three.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene_Two.h">
@@ -194,7 +200,10 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
       <Filter>addons\ofxGui\src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Class_TxtButton.h">
+    <ClInclude Include="src\GKScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DataSet.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,28 +3,24 @@
 #define SCENE_TWO_H 
 
 #include "GKScene.h"
+#include "ofxCsv.h"
 
-#include "Class_ImgButtonsPanel.h"
-#include "Class_EditPanel.h"
+#include "Class_MatImgPanel.h"
+#include "Class_ProjectButtonsPanel.h"
 
-struct DataSet {
-	string companyID;
-	string materialID;
-	string projectID;
-	string imgID;
-	ofImage img;
-};
 
 class Scene_Two : public GKScene{
 
 	public:
-		//-----------DEFAULT-----------//
+		//-----------DEFAULT-----------//	
 		unsigned long int currentFrame;
 		float time;
 		stringstream ssGlobalLog;
 
 		//-----------GLOBAL-----------//	
 		bool bDebug;
+		ofTrueTypeFont fontM,fontL;
+		int fontMSize, fontLSize;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
@@ -41,29 +37,29 @@ class Scene_Two : public GKScene{
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
 
 		//-----------LIB-----------//
-		string companyID = "companyA";
-		string materialID = "materialA";
-		string projectID = "projectA";
-		
-		vector<ofImage> imgs;
-		vector<string> imgNames;
-		ofImage* selectedImg;
-		string* selectedImgID;
-
-		vector<Class_Panel*> panels;		
-		Class_ImgButtonsPanel imgButtonsPanel;
-		Class_EditPanel editPanel;
-		int currentPanelIndex;
 
 		//-----------FOR-LIB-----------//
-		void loadImgs();
-		void inheriteCsv(); //here created this time
+		DataSet* dataSet;
+
+		Class_MatImgPanel matImgPanel;
+		Class_ProjectButtonsPanel projectListPanel;
+
+		vector<Class_Panel*> panels;
+
+		ofImage matImg;
+		ofxCsv csv;
+		vector<string> projectIDs;
+		
+		void setDataSet(DataSet* _dataSet);
+
+		void loadFont();
+		void loadMatImg();
+		void loadProjectList();
+		
 		void initPanels();
 		void resetPanels();
 		void managePanels();
 		void runPanel();
-
-
 
 		//-----------THIS-TIME-FUNCS-----------//
 		
@@ -72,7 +68,6 @@ class Scene_Two : public GKScene{
 		
 		//-----------EVENT-----------//
 		void keyPressed(int key) {
-			panels[currentPanelIndex]->keyPressed(key);
 			switch (key) {
 			case ' ':
 				//toggleAnimate();
@@ -98,7 +93,7 @@ class Scene_Two : public GKScene{
 			if (args.button == OF_MOUSE_BUTTON_LEFT) {
 				cout << "=========================================" << endl;
 				cout << "Scene_Two : clicked" << endl;
-				panels[currentPanelIndex]->onMouseClicked();
+				for (auto& pnl : panels)pnl->onMouseClicked();
 			}
 		}
 
@@ -107,11 +102,11 @@ class Scene_Two : public GKScene{
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
 		void mouseScrolled(int x, int y, float scrollX, float scrollY) {
-			panels[currentPanelIndex]->mouseScrolled(scrollY);
+			projectListPanel.mouseScrolled(scrollY);
 		}
 		void windowResized(int w, int h) {
 			gk.resizeGUI(gui,13);
-			panels[currentPanelIndex]->onWindowResized(w,h);
+			for (auto& pnl : panels)pnl->onWindowResized(w, h);
 		}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}

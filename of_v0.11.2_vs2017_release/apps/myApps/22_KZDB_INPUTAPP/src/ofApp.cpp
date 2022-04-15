@@ -16,6 +16,7 @@ void ofApp::setup(){
 		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 		//ofPushStyle();
+		gs->setDataSet(&dataSet);
 		gs->setup();
 		//ofPopStyle();
 		glPopAttrib();

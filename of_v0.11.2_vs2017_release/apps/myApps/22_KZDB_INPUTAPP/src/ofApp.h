@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "GKScene.h"
 #include "ofxGKUtils.h"
+#include "DataSet.h"
+
 
 class ofApp : public ofBaseApp{
 	//*work as scene manager *//
@@ -21,6 +23,7 @@ public:
 	}
 	vector<GKScene*> gkScenes;
 	void addGKScene(GKScene* _gkScene);
+	DataSet dataSet;
 
 	int currentSceneIndex;
 	float currentSceneSec;
@@ -28,7 +31,6 @@ public:
 	int currentSceneFrame;
 	float sceneStartSec;
 	float lastSec;
-	
 
 	void setup();
 	void update();

@@ -8,6 +8,8 @@
 
 class Class_ImgButtonsPanel :public Class_Panel {
 public:
+	ofTrueTypeFont* font;
+
 	vector<ofImage>* imgs;
 	vector<string>* imgNames;
 	vector<Class_ImgButton> imgButtons;
@@ -18,9 +20,10 @@ public:
 	bool bSelectImg;
 	bool bGoBack;
 
-	glm::vec2 pos;
-	glm::vec2 size;
+	glm::vec2 panelPos;
+	glm::vec2 panelSize;
 	
+	int margin;
 
 	glm::vec2 mousePosOnPanel;
 
@@ -33,7 +36,8 @@ public:
 	Class_ImgButtonsPanel() {
 	}
 
-	Class_ImgButtonsPanel(ofImage** _selectedImg,string** _selectedImgID,vector<ofImage>* _imgs,vector<string>* _imgNames,const string& _companyID,const string& _materialID,const string& _projectID) {
+	Class_ImgButtonsPanel(ofTrueTypeFont* _font,ofImage** _selectedImg,string** _selectedImgID,vector<ofImage>* _imgs,vector<string>* _imgNames,const string& _companyID,const string& _materialID,const string& _projectID) {
+		font = _font;
 		selectedImg = _selectedImg;
 		selectedImgID = _selectedImgID;
 		imgs = _imgs;
@@ -47,9 +51,11 @@ public:
 	//================
 
 	void setup() {
-		pos = glm::vec2(0,0);
-		size = glm::vec2(ofGetWidth(), ofGetHeight());
+		margin = 10;
+		panelSize = glm::vec2(ofGetWidth()*3/4, 0);
+		panelPos = glm::vec2((ofGetWidth()-panelSize.x)/2, ofGetHeight() / 8);
 		mousePosOnPanel = glm::vec2(0);
+		
 		bSelectImg = false;
 		bGoBack = false;
 		setImgButtons();
@@ -58,64 +64,70 @@ public:
 	};
 
 	void reset() {
-		pos = glm::vec2(0, 0);
-		size = glm::vec2(ofGetWidth(), ofGetHeight());
+		panelSize = glm::vec2(ofGetWidth() * 3 / 4, 0);
+		panelPos = glm::vec2((ofGetWidth() - panelSize.x) / 2, ofGetHeight() / 4);
 		mousePosOnPanel = glm::vec2(0);
 		bSelectImg = false;
 		bGoBack = false;
 	}
 
 	void update() {
-		mousePosOnPanel = glm::vec2(ofGetMouseX(), ofGetMouseY())-pos;
+		mousePosOnPanel = glm::vec2(ofGetMouseX(), ofGetMouseY())-panelPos;
 	};
 
 	void draw() {
 		update();
 		ofPushMatrix();
-		ofTranslate(pos);
+		ofTranslate(panelPos);
+		drawTitle(glm::vec2(0, -margin - font->getSize()));
 		for (auto& ib : imgButtons) {
 			ib.draw();
 		}
-		ofDrawCircle(mousePosOnPanel, 10);
 		ofPopMatrix();
 	};
 
-	bool IsMouseOn() { return false; };
+	void drawTitle(const glm::vec2& _pos) {
+		font->drawString("SELECTED-MATERIAL", _pos.x, _pos.y + font->getSize());
+	}
+
+
+	bool IsMouseOn() { 
+		bool _b = false;
+		int _mx = ofGetMouseX();
+		int _my = ofGetMouseY();
+		if (panelPos.x < _mx && _mx < panelPos.x + panelSize.x && panelPos.y < _my && _my < panelPos.y + panelSize.y)_b = true;
+		return _b;
+	};
 
 	void mouseScrolled(const float& _scrollY) {
-		float _scrollScale = 30;
-		pos.y -= -_scrollScale * _scrollY;
-		if (pos.y > 0)pos.y = 0;
+		if (IsMouseOn()) {
+			for (auto& btn : imgButtons)btn.mouseScrolled(_scrollY);
+		}
 	};
 
 	void onMouseClicked() {
-		for (auto& ib : imgButtons)ib.onMouseClicked();
+		for (auto& btn : imgButtons)btn.onMouseClicked();
 	}
 
 	void onWindowResized(const int& _w,const int& _h) {
-		//pos;
-		size = glm::vec2(_w,_h);
-		resizeImgButtons();
+		setup();
 	}
 	
 	//================
 	
 	void setImgButtons() {
 		imgButtons.erase(imgButtons.begin(), imgButtons.end());
+		int _columns = 4;
 		for (int i = 0; i < imgs->size(); i++) {
-			imgButtons.emplace_back(selectedImg,selectedImgID, &imgs->at(i), &imgNames->at(i), &mousePosOnPanel, &bSelectImg);
+			float _x = panelSize.x / _columns;
+			glm::vec2 _buttonSize = glm::vec2(_x,_x*2/3);
+			glm::vec2 _buttonPos = glm::vec2(_x*(i%_columns),_x*2/3*(i/_columns));
+			imgButtons.emplace_back(selectedImg,selectedImgID, &imgs->at(i), &imgNames->at(i), &bSelectImg,_buttonPos,_buttonSize, panelPos, panelSize);
 		}
-		resizeImgButtons();
+		panelSize.y = (imgs->size() - 1) / _columns * (panelSize.x / _columns);
+		for (auto& bttn : imgButtons)bttn.setup();
 	}
 
-	void resizeImgButtons() {
-		int columns = 4;
-		glm::vec2 _sizeToDisplay = glm::vec2(ofGetWidth() / columns, ofGetHeight() / columns);
-		for (int i = 0; i < imgButtons.size(); i++) {
-			glm::vec2 _pos = glm::vec2(i % columns, i / columns) * _sizeToDisplay;
-			imgButtons[i].onWindowResized(_pos, _sizeToDisplay);
-		}
-	}
 
 	bool goNext() {
 		return bSelectImg;

@@ -5,10 +5,6 @@
 #include "GKScene.h"
 #include "ofxCsv.h"
 
-#include "Class_MatImgPanel.h"
-#include "Class_ProjectListPanel.h"
-
-
 class Scene_One : public GKScene{
 
 	public:
@@ -38,27 +34,17 @@ class Scene_One : public GKScene{
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
 
 		//-----------LIB-----------//
-		string companyID = "companyA";
-		string materialID = "materialA";
+	
 
 		//-----------FOR-LIB-----------//
-		Class_MatImgPanel matImgPanel;
-		Class_ProjectListPanel projectListPanel;
+		DataSet* dataSet;
+		void setDataSet(DataSet* _dataSet);
+		void updateDataSet() {
+			(* dataSet).companyID = "company-A";
+			(* dataSet).materialID = "material-001";
+		}
 
-		vector<Class_Panel*> panels;
 
-		ofImage matImg;
-		ofxCsv csv;
-		vector<string> projectIDs;
-
-		void loadFont();
-		void loadMatImg();
-		void loadProjectList();
-		
-		void initPanels();
-		void resetPanels();
-		void managePanels();
-		void runPanel();
 
 		//-----------THIS-TIME-FUNCS-----------//
 		
@@ -100,11 +86,9 @@ class Scene_One : public GKScene{
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
 		void mouseScrolled(int x, int y, float scrollX, float scrollY) {
-			projectListPanel.mouseScrolled(scrollY);
 		}
 		void windowResized(int w, int h) {
 			gk.resizeGUI(gui,13);
-			for (auto& pnl : panels)pnl->onWindowResized(w, h);
 		}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}

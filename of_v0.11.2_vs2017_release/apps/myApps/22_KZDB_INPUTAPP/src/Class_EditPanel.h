@@ -16,11 +16,16 @@ public:
 	ofImage** selectedImg;
 	string** selectedImgID;
 	
+	glm::vec2 panelPos;
+	glm::vec2 panelSize;
+
+	/*glm::vec2 imgPos;
+	glm::vec2 imgSize;*/
+
 	glm::vec2 selectedImgPos;
 	glm::vec2 selectedImgSize;
 	
-	glm::vec2 panelPos;
-	glm::vec2 panelSize;
+
 
 	bool bGoNext;
 	bool bGoBack;
@@ -157,7 +162,7 @@ public:
 			row.setFloat(4, sa.y);
 			csvToExport.addRow(row);
 		}
-		csvToExport.save("./OUTPUT/B.csv");
+		csvToExport.save("./" + companyID + "/OUTPUT/B.csv");
 		selectedAreas.erase(selectedAreas.begin(), selectedAreas.end());
 	}
 
