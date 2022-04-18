@@ -20,7 +20,6 @@ class Scene_Two : public GKScene{
 		//-----------GLOBAL-----------//	
 		bool bDebug;
 		ofTrueTypeFont fontM,fontL;
-		int fontMSize, fontLSize;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;

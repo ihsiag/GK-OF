@@ -8,6 +8,7 @@ void Scene_One::setup(){
     initParam();
     initGKSet();
     ofSetVerticalSync(true);
+    loadFont();
 
     //-----------RESET-----------//
     resetScene();
@@ -27,7 +28,10 @@ void Scene_One::initGKSet() {
 
 void Scene_One::resetScene() {
     initParam();
-    updateDataSet();
+    
+    loadImgs();
+    inheriteCsv();
+    initPanels();
 }
 
 
@@ -35,6 +39,7 @@ void Scene_One::update(){
     /*if(bDebug)gk.defaultUpdate(&currentFrame, &time, glm::vec4(glm::vec3(0), 1));
     else gk.defaultUpdate(&currentFrame, &time,glm::vec4(glm::vec3(0.95),1));*/
     gk.defaultUpdate(&currentFrame, &time, glm::vec4(glm::vec3(0), 1));
+    matButtonsPanel.update();
 }
 
 
@@ -44,6 +49,7 @@ void Scene_One::draw(){
     //BEGIN - PANELS 
     glColor4f(1, 1, 1, 1);
 
+    runPanel ();
 
     //-----------INFO-----------//
     stringstream ssInstruct;
@@ -67,6 +73,58 @@ void Scene_One::draw(){
 //-----------FOR-LIB-----------//
 void Scene_One::setDataSet(DataSet* _dataSet) {
     dataSet = _dataSet;
+    //
+    dataSet->companyID = "company-A";
+    dataSet->materialID = "material-001";
+}
+
+void Scene_One::loadFont() {
+    string _filePath = "./font/NotoSansJP-Regular.otf";
+    ofTrueTypeFont::setGlobalDpi(72);//72
+    ofTrueTypeFontSettings settings(_filePath,14);
+    settings.antialiased = true;
+    settings.contours = true;
+    settings.simplifyAmt = 0.5;
+    settings.addRanges(ofAlphabet::Japanese);
+    settings.addRange(ofUnicode::Latin);
+    settings.addRange(ofUnicode::Latin1Supplement);
+    //    settings.addRange(ofUnicode::NumberForms);
+    //    settings.addRange(ofUnicode::MathOperators);
+
+    fontM.load(settings);
+
+    settings.fontSize = 20;
+    fontL.load(settings);
+}
+
+
+void Scene_One::loadImgs() {
+    string _dirPath = "./" + dataSet->companyID + "/INPUT/materials";
+    cout << "IMG-FOLDER : " << _dirPath << endl;
+    matImgs.erase(matImgs.begin(), matImgs.end());
+    matImgNames.erase(matImgNames.begin(), matImgNames.end());
+    gk.loadImgsInDir(&matImgs, &matImgNames, _dirPath);
+    cout << "IMG-NUM : " << matImgs.size() << endl;
+    cout << "IMG-FILE-NAMES : " << endl;
+    for (auto& in : matImgNames)cout << in << endl;
+}
+
+void Scene_One::inheriteCsv() {
+
+}
+
+void Scene_One::initPanels() {
+    loadFont();
+    matButtonsPanel = Class_MatButtonsPanel(&fontL, &matImgs, &matImgNames, &dataSet);
+    matButtonsPanel.setup();
+}
+
+void Scene_One::managePanels() {
+
+}
+
+void Scene_One::runPanel() {
+    matButtonsPanel.draw();
 }
 
 

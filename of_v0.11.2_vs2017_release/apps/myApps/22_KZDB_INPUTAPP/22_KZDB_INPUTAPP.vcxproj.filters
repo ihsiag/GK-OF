@@ -206,6 +206,12 @@
     <ClInclude Include="src\DataSet.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Class_MatButtonsPanel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Class_MatButton.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

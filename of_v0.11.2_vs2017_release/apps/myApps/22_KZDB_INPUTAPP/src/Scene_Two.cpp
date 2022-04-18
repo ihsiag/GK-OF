@@ -10,6 +10,7 @@ void Scene_Two::setup(){
     ofSetVerticalSync(true);
 
     //-----------RESET-----------//
+    loadFont();
     resetScene();
 }
 
@@ -28,7 +29,6 @@ void Scene_Two::initGKSet() {
 void Scene_Two::resetScene() {
     initParam();
     loadMatImg();
-    loadFont();
     loadProjectList();
     initPanels();
 }
@@ -76,10 +76,8 @@ void Scene_Two::setDataSet(DataSet* _dataSet) {
 
 void Scene_Two::loadFont() {
     string _filePath = "./font/NotoSansJP-Regular.otf";
-    fontMSize = 14;
-    fontLSize = 20;
     ofTrueTypeFont::setGlobalDpi(72);//72
-    ofTrueTypeFontSettings settings(_filePath, fontMSize);
+    ofTrueTypeFontSettings settings(_filePath, 14);
     settings.antialiased = true;
     settings.contours = true;
     settings.simplifyAmt = 0.5;
@@ -91,12 +89,12 @@ void Scene_Two::loadFont() {
 
     fontM.load(settings);
 
-    settings.fontSize = fontLSize;
+    settings.fontSize = 20;
     fontL.load(settings);
 }
 
 void Scene_Two::loadMatImg() {
-    string _filePath = "./" + (* dataSet).companyID + "/INPUT/materials/" + (*dataSet).materialID + "/" + (*dataSet).materialID + ".jpg";
+    string _filePath = "./" + (* dataSet).companyID + "/INPUT/materials/" + (*dataSet).materialID + ".jpg";
     cout << "IMG-FILE : " << _filePath << endl;
     matImg.loadImage(_filePath);
 }

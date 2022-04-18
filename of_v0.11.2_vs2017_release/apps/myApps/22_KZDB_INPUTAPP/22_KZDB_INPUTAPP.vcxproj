@@ -200,6 +200,8 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Class_MatButton.h" />
+    <ClInclude Include="src\Class_MatButtonsPanel.h" />
     <ClInclude Include="src\DataSet.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Class_EditPanel.h" />

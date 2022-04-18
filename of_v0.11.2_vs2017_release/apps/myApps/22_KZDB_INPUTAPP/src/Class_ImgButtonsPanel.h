@@ -25,8 +25,6 @@ public:
 	
 	int margin;
 
-	glm::vec2 mousePosOnPanel;
-
 	string companyID;
 	string materialID;
 	string projectID;
@@ -52,9 +50,8 @@ public:
 
 	void setup() {
 		margin = 10;
-		panelSize = glm::vec2(ofGetWidth()*3/4, 0);
+		panelSize = glm::vec2(ofGetWidth()*3/4, ofGetHeight()*3/4);
 		panelPos = glm::vec2((ofGetWidth()-panelSize.x)/2, ofGetHeight() / 8);
-		mousePosOnPanel = glm::vec2(0);
 		
 		bSelectImg = false;
 		bGoBack = false;
@@ -64,15 +61,14 @@ public:
 	};
 
 	void reset() {
-		panelSize = glm::vec2(ofGetWidth() * 3 / 4, 0);
-		panelPos = glm::vec2((ofGetWidth() - panelSize.x) / 2, ofGetHeight() / 4);
-		mousePosOnPanel = glm::vec2(0);
+		panelSize = glm::vec2(ofGetWidth() * 3 / 4, ofGetHeight()*3/4);
+		panelPos = glm::vec2((ofGetWidth() - panelSize.x) / 2, ofGetHeight() / 8);
+		
 		bSelectImg = false;
 		bGoBack = false;
 	}
 
 	void update() {
-		mousePosOnPanel = glm::vec2(ofGetMouseX(), ofGetMouseY())-panelPos;
 	};
 
 	void draw() {
@@ -119,12 +115,13 @@ public:
 		imgButtons.erase(imgButtons.begin(), imgButtons.end());
 		int _columns = 4;
 		for (int i = 0; i < imgs->size(); i++) {
-			float _x = panelSize.x / _columns;
-			glm::vec2 _buttonSize = glm::vec2(_x,_x*2/3);
-			glm::vec2 _buttonPos = glm::vec2(_x*(i%_columns),_x*2/3*(i/_columns));
+			float _w = panelSize.x / _columns;
+			float _h = _w * 2 / 3;
+			glm::vec2 _buttonSize = glm::vec2(_w,_h);
+			glm::vec2 _buttonPos = glm::vec2(_w*(i%_columns),_h*(i/_columns));
 			imgButtons.emplace_back(selectedImg,selectedImgID, &imgs->at(i), &imgNames->at(i), &bSelectImg,_buttonPos,_buttonSize, panelPos, panelSize);
 		}
-		panelSize.y = (imgs->size() - 1) / _columns * (panelSize.x / _columns);
+		//panelSize.y = (imgs->size() - 1) / _columns * (panelSize.x / _columns);
 		for (auto& bttn : imgButtons)bttn.setup();
 	}
 
@@ -141,6 +138,9 @@ public:
 		switch (_key) {
 		case 'b':
 			bGoBack = !bGoBack;
+			break;
+		case 'i':
+			cout << IsMouseOn() << endl;
 			break;
 		}
 	}

@@ -18,6 +18,7 @@ class Scene_Three : public GKScene{
 
 		//-----------GLOBAL-----------//	
 		bool bDebug;
+		ofTrueTypeFont fontM, fontL;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
@@ -48,6 +49,7 @@ class Scene_Three : public GKScene{
 
 		//-----------FOR-LIB-----------//
 		void setDataSet(DataSet* _dataSet);
+		void loadFont();
 		void loadImgs();
 		void inheriteCsv(); //here created this time
 		void initPanels();

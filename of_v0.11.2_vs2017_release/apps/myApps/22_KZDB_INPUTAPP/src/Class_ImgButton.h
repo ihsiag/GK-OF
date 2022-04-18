@@ -48,23 +48,34 @@ public:
 	~Class_ImgButton() {}
 	
 	void setup() {
+		margin = 10;
 		imgAreaPos = buttonLocalPos + glm::vec2(margin);
 		imgAreaSize = buttonSize - glm::vec2(margin * 2);
-		float _h = imgAreaSize.y;
-		float _w = _h * imgRatio;
+		float _w, _h;
+		if (imgAreaSize.x > imgAreaSize.y) {
+			_h = imgAreaSize.y;
+			_w = _h * imgRatio;
+		}
+		else {
+			_w = imgAreaSize.x;
+			_h = _w / imgRatio;
+		}
 		imgSize = glm::vec2(_w, _h);
 		imgPos = imgAreaSize / 2 - imgSize / 2;
-		imgSize = buttonSize;
-		imgPos = buttonLocalPos;
+		//imgSize = buttonSize;
+		//imgPos = buttonLocalPos;
 	};
 
 	void update() {}
 
 	void draw() {
+		ofPushMatrix();
+		ofTranslate(buttonLocalPos);
 		drawImgInImgArea();
 		glColor4f(1, 1, 1, 0.4);
 		if(IsMouseOn())drawHoverRect(imgPos,imgSize);
 		glColor4f(1, 1, 1, 1);
+		ofPopMatrix();
 	}
 
 	void drawImgInImgArea() {

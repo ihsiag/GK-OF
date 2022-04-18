@@ -11,6 +11,7 @@ void Scene_Three::setup(){
 
     //-----------RESET-----------//
     //resetScene();
+    loadFont();
 }
 
 //-----------FOR-DEFAULT-----------//
@@ -75,6 +76,25 @@ void Scene_Three::setDataSet(DataSet* _dataSet) {
     dataSet = _dataSet;
 }
 
+void Scene_Three::loadFont() {
+    string _filePath = "./font/NotoSansJP-Regular.otf";
+    ofTrueTypeFont::setGlobalDpi(72);//72
+    ofTrueTypeFontSettings settings(_filePath, 14);
+    settings.antialiased = true;
+    settings.contours = true;
+    settings.simplifyAmt = 0.5;
+    settings.addRanges(ofAlphabet::Japanese);
+    settings.addRange(ofUnicode::Latin);
+    settings.addRange(ofUnicode::Latin1Supplement);
+    //    settings.addRange(ofUnicode::NumberForms);
+    //    settings.addRange(ofUnicode::MathOperators);
+
+    fontM.load(settings);
+
+    settings.fontSize = 20;
+    fontL.load(settings);
+}
+
 void Scene_Three::loadImgs() {
     string _dirPath = "./" + dataSet->companyID + "/INPUT/projects/"+ dataSet->projectID;
     cout << "IMG-FOLDER : " << _dirPath << endl;
@@ -94,7 +114,7 @@ void Scene_Three::inheriteCsv() {
 
 
 void Scene_Three::initPanels() {
-    loadFont();
+    
     imgButtonsPanel = Class_ImgButtonsPanel(&fontL,&selectedImg, &selectedImgID, &imgs, &imgNames, dataSet->companyID, dataSet->materialID, dataSet->projectID);
     //selectedImg.loadImage("./companyA/materialA/projects/projectA/projectA_1.jpg");
     editPanel = Class_EditPanel(&selectedImg,&selectedImgID,dataSet->companyID, dataSet->materialID, dataSet->projectID);
@@ -139,7 +159,6 @@ void Scene_Three::createInfo(stringstream& _ssInstruct, stringstream& _ssProgram
     
 
     _ssDebug << "MOUSE-POS: " << ofGetMouseX() << ", " << ofGetMouseY() << endl;
-    _ssDebug << "IMGPANELS-PANEL MOUSE-POS: " << imgButtonsPanel.mousePosOnPanel<< endl;
 
 }
 

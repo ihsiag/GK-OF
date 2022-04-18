@@ -5,6 +5,8 @@
 #include "GKScene.h"
 #include "ofxCsv.h"
 
+#include "Class_MatButtonsPanel.h"
+
 class Scene_One : public GKScene{
 
 	public:
@@ -16,8 +18,6 @@ class Scene_One : public GKScene{
 		//-----------GLOBAL-----------//	
 		bool bDebug;
 		ofTrueTypeFont fontM,fontL;
-		int fontMSize, fontLSize;
-		int fontMHeight, fontLHeight;
 
 		//-----------SLIDER-----------//
 		ofxGuiGroup gui;
@@ -34,15 +34,25 @@ class Scene_One : public GKScene{
 		void createInfo(stringstream& _ssInstruct, stringstream& _ssProgramInfo, stringstream& _ssDebug);
 
 		//-----------LIB-----------//
-	
+		DataSet* dataSet;
+
+		vector<ofImage> matImgs;
+		vector<string> matImgNames;
+		Class_MatButtonsPanel matButtonsPanel;
 
 		//-----------FOR-LIB-----------//
-		DataSet* dataSet;
 		void setDataSet(DataSet* _dataSet);
 		void updateDataSet() {
 			(* dataSet).companyID = "company-A";
 			(* dataSet).materialID = "material-001";
 		}
+		void loadFont();
+		void loadImgs();
+		void inheriteCsv();
+		void initPanels();
+		void resetPanels();
+		void managePanels();
+		void runPanel();
 
 
 

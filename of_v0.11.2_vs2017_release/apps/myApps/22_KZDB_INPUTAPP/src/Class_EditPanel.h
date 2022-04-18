@@ -19,13 +19,14 @@ public:
 	glm::vec2 panelPos;
 	glm::vec2 panelSize;
 
-	/*glm::vec2 imgPos;
-	glm::vec2 imgSize;*/
+	int margin;
 
-	glm::vec2 selectedImgPos;
-	glm::vec2 selectedImgSize;
+	glm::vec2 imgAreaPos;
+	glm::vec2 imgAreaSize;
+	glm::vec2 imgPos;
+	glm::vec2 imgSize;
 	
-
+	float imgRatio;
 
 	bool bGoNext;
 	bool bGoBack;
@@ -44,12 +45,14 @@ public:
 		
 		panelPos = glm::vec2(0);
 		panelSize = glm::vec2(ofGetWidth(), ofGetHeight());
+
+		margin = 0;
+
+		imgAreaSize = panelSize / 2;
+		imgAreaPos = panelSize / 2 - imgAreaSize / 2;
 		
 		selectedImg = _selectedImg;	
 		selectedImgID = _selectedImgID;
-
-		selectedImgSize = panelSize/2;
-		selectedImgPos = panelSize/2-selectedImgSize/2;
 
 		bGoNext = false;
 		bGoBack = false;
@@ -60,20 +63,44 @@ public:
 	~Class_EditPanel() {}
 	
 	void setup() {
+		imgRatio = (*selectedImg)->getWidth() / (*selectedImg)->getHeight();
+
+		float _w, _h;
+		if (imgAreaSize.x > imgAreaSize.y) {
+			_h = imgAreaSize.y;
+			_w = _h * imgRatio;
+		}
+		else {
+			_w = imgAreaSize.x;
+			_h = _w / imgRatio;
+		}
+		imgSize = glm::vec2(_w, _h);
+		imgPos = imgAreaSize / 2 - imgSize / 2;
+
 		selectedAreas.erase(selectedAreas.begin(), selectedAreas.end());
 		readCsv();
 	};
 
 	void reset() {
-		panelPos = glm::vec2(0);
-		panelSize = glm::vec2(ofGetWidth(), ofGetHeight());
-		selectedImgSize = panelSize / 2;
-		selectedImgPos = panelSize / 2 - selectedImgSize / 2;
 		bGoNext = false;
 		bGoBack = false;
 
 		bMouseDisabled = true;
 		customFormatAreaPos = glm::vec2(0);
+
+		imgRatio = (*selectedImg)->getWidth() / (*selectedImg)->getHeight();
+
+		float _w, _h;
+		if (imgAreaSize.x > imgAreaSize.y) {
+			_h = imgAreaSize.y;
+			_w = _h * imgRatio;
+		}
+		else {
+			_w = imgAreaSize.x;
+			_h = _w / imgRatio;
+		}
+		imgSize = glm::vec2(_w, _h);
+		imgPos = imgAreaSize / 2 - imgSize / 2;
 
 		readCsv();
 	}
@@ -83,18 +110,9 @@ public:
 	}
 
 	void draw() {
-		ofFill();
-		glColor4f(0, 0, 0, 0.6);
-		glBegin(GL_QUADS);
-		glVertex2f(0, 0);
-		glVertex2f(ofGetWidth(), 0);
-		glVertex2f(ofGetWidth(), ofGetHeight());
-		glVertex2f(0, ofGetHeight());
-		glEnd();
-
 		glColor4f(1, 1, 1, 1);
 		ofNoFill();
-		(*selectedImg)->draw(selectedImgPos, selectedImgSize.x, selectedImgSize.y);
+		drawImg();
 
 		stringstream info;
 		createInfoPanel(&info);
@@ -103,6 +121,13 @@ public:
 		drawCurrentCircle();	
 		drawStampedCircle();
 	};
+
+	void drawImg() {
+		ofPushMatrix();
+		ofTranslate(imgAreaPos+imgPos);
+		(*selectedImg)->draw(glm::vec2(0), imgSize.x, imgSize.y);
+		ofPopMatrix();
+	}
 
 	void drawCurrentCircle() {
 		ofFill();
@@ -135,12 +160,12 @@ public:
 	}
 
 	glm::vec2 getcustomFormatAreaPos(const float& _mousePosX, const float& _mousePosY) {
-		glm::vec2 _range = glm::vec2(panelSize / selectedImgSize);
+		glm::vec2 _range = glm::vec2(panelSize / imgSize);
 		return glm::vec2(ofMap(_mousePosX, 0,panelSize.x, -_range.x, _range.x), ofMap(_mousePosY,0, panelSize.y, _range.y, -_range.y));
 	}
 
 	glm::vec2 getDefaultFormatPos(const glm::vec2& _customFormatPos) {
-		glm::vec2 _range = glm::vec2(panelSize / selectedImgSize);
+		glm::vec2 _range = glm::vec2(panelSize / imgSize);
 		return glm::vec2(ofMap(_customFormatPos.x, -_range.x, _range.x, 0, panelSize.x), ofMap(_customFormatPos.y, _range.y, -_range.y, 0, panelSize.y));
 	}
 
@@ -170,9 +195,9 @@ public:
 
 	void mouseScrolled(const float& _scrollY) {
 		float _scrollScale = 30;
-		selectedImgSize.x += _scrollScale*_scrollY;
-		selectedImgSize.y += _scrollScale*_scrollY;
-		selectedImgPos = glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2) - selectedImgSize / 2;
+		imgSize.y += _scrollScale*_scrollY;
+		imgSize.x = imgSize.y * imgRatio;
+		imgPos = imgAreaSize/2 - imgSize / 2;
 	}
 
 	void onMouseClicked() {
@@ -182,10 +207,10 @@ public:
 	}
 
 	void onWindowResized(const int& _w,const int& _h) {
-		//panelPos;
+		panelPos = glm::vec2(0);
 		panelSize = glm::vec2(_w,_h);
-		selectedImgSize = panelSize / 2;
-		selectedImgPos = panelPos/2 - selectedImgSize / 2;
+		imgSize = panelSize / 2;
+		imgPos = panelPos/2 - imgSize / 2;
 	}
 
 	bool goNext() { return bGoNext; }
