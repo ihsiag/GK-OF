@@ -87,6 +87,7 @@ public:
 
 //-------------------------------------------------------HELPER_IMPORT-------------------------------------------------------//
 	string findLatestFilePath(const string& _dirPath, const string& _fileType);
+	string extractFilePathWithoutExt(const string& _filePath);
 	void loadImgsInDir(vector<ofImage>* _imgs, const string& _dirPath);
 	void loadImgsInDir(vector<ofImage>* _imgs,vector<string>* _names, const string& _dirPath);
 	void importGK3D(const string& _url, ofMesh& _meshToPass, vector<GKPlane>& _gkPlanesCreatedFromMeshToPass, vector<GKPlane>& _gkPlanesCreatedManuallyToPass);

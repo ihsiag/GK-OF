@@ -83,7 +83,7 @@ public:
 	};
 
 	void drawTitle(const glm::vec2& _pos) {
-		font->drawString("SELECTED-MATERIAL", _pos.x, _pos.y + font->getSize());
+		font->drawString("SELECT-SUBJECT-IMAGE", _pos.x, _pos.y + font->getSize());
 	}
 
 

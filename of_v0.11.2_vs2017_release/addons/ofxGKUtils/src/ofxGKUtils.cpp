@@ -800,6 +800,14 @@ string ofxGKUtils::findLatestFilePath(const string& _dirPath,const string& _file
 	}
 }
 
+string ofxGKUtils::extractFilePathWithoutExt(const string& _filePath) {
+	string::size_type pos;
+	if ((pos = _filePath.find_last_of(".")) == string::npos) {
+		return _filePath;
+	}
+	return _filePath.substr(0, pos);
+}
+
 void ofxGKUtils::loadImgsInDir(vector<ofImage>* _imgs, const string& _dirPath) {
 	ofDirectory _dir(_dirPath);
 	_dir.allowExt("png");

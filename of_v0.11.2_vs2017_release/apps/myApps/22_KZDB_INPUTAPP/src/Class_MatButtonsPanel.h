@@ -8,6 +8,8 @@
 
 class Class_MatButtonsPanel :public Class_Panel {
 public:
+	DataSet** dataSet;
+
 	ofTrueTypeFont* font;
 
 	vector<ofImage>* imgs;
@@ -31,6 +33,7 @@ public:
 	}
 
 	Class_MatButtonsPanel(ofTrueTypeFont* _font,vector<ofImage>* _imgs,vector<string>* _imgNames,DataSet** _dataSet) {
+		dataSet = _dataSet;
 		font = _font;
 		imgs = _imgs;
 		imgNames = _imgNames;
@@ -108,7 +111,7 @@ public:
 			float _h = _w * 2 / 3;
 			glm::vec2 _buttonSize = glm::vec2(_w,_h);
 			glm::vec2 _buttonPos = glm::vec2(_w*(i%_columns),_h*(i/_columns));
-			matButtons.emplace_back(&imgs->at(i), &imgNames->at(i),&bGoNext, _buttonPos, _buttonSize, panelPos, panelSize);
+			matButtons.emplace_back(&imgs->at(i), &imgNames->at(i),&bGoNext, _buttonPos, _buttonSize, panelPos, panelSize,dataSet);
 		}
 		//panelSize.y = (imgs->size() - 1) / _columns * (panelSize.x / _columns);
 		for (auto& bttn : matButtons)bttn.setup();

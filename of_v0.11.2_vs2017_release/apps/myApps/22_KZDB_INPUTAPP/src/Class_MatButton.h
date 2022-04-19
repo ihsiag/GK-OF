@@ -8,6 +8,7 @@
 
 class Class_MatButton {
 public:	
+	DataSet** dataSet;
 	ofImage* originalImg;
 	string* imgName;
 
@@ -25,10 +26,14 @@ public:
 	glm::vec2 imgSize;
 	float imgRatio;
 
+	glm::vec2 textAreaPos;
+	glm::vec2 textAreaSize;
+	glm::vec2 textPos;
+
 	bool* bGoNext;
 
-	Class_MatButton(ofImage* _img, string* _imgName, bool* _bGoNext, const glm::vec2& _buttonPos, const glm::vec2& _buttonSize, const glm::vec2& _panelPos, const glm::vec2& _panelSize) {
-		
+	Class_MatButton(ofImage* _img, string* _imgName, bool* _bGoNext, const glm::vec2& _buttonPos, const glm::vec2& _buttonSize, const glm::vec2& _panelPos, const glm::vec2& _panelSize, DataSet** _dataSet) {
+		dataSet = _dataSet;
 		originalImg = _img;
 		imgName = _imgName;
 		bGoNext = _bGoNext;
@@ -108,6 +113,7 @@ public:
 		if (IsMouseOn()) {
 			*bGoNext = true;
 			cout << "matButton Clicked : " << originalImg<< endl;
+			(*dataSet)->materialID = *imgName;
 		}
 	};
 

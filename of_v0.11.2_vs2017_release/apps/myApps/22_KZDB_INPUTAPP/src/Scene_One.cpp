@@ -75,7 +75,6 @@ void Scene_One::setDataSet(DataSet* _dataSet) {
     dataSet = _dataSet;
     //
     dataSet->companyID = "company-A";
-    dataSet->materialID = "material-001";
 }
 
 void Scene_One::loadFont() {
@@ -106,7 +105,10 @@ void Scene_One::loadImgs() {
     gk.loadImgsInDir(&matImgs, &matImgNames, _dirPath);
     cout << "IMG-NUM : " << matImgs.size() << endl;
     cout << "IMG-FILE-NAMES : " << endl;
-    for (auto& in : matImgNames)cout << in << endl;
+    for (auto& in : matImgNames) {
+        in = gk.extractFilePathWithoutExt(in);
+        cout << in << endl;
+    }
 }
 
 void Scene_One::inheriteCsv() {

@@ -88,6 +88,7 @@ class Scene_One : public GKScene{
 			if (args.button == OF_MOUSE_BUTTON_LEFT) {
 				cout << "=========================================" << endl;
 				cout << "Scene_One : clicked" << endl;
+				matButtonsPanel.onMouseClicked();
 			}
 		}
 
