@@ -5,11 +5,16 @@ void ofApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
     ImGuiIO& io = ImGui::GetIO();
     ofDirectory dataDirectory(ofToDataPath("/", true));
-    //io.Fonts->AddFontFromFileTTF("/font/NotoSansJP-Regular.ttf", 14.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+    io.Fonts->AddFontFromFileTTF("data/font/NotoSansJP-Regular.otf", 20.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //io.ImeWindowHandle = ofGetWin32Window();
+
+    ImGuiPlatformIO& pio = ImGui::GetPlatformIO();
 
     gui.setup();
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    /*ImVec2 _pos = ImVec2(0, 0);
+    ImGuiViewport* _vp = ImGui::GetWindowViewport();
+    pio.Platform_SetImeInputPos(_vp, _pos);*/
 }
 
 //--------------------------------------------------------------
@@ -21,6 +26,7 @@ void ofApp::update(){
 void ofApp::draw(){
     float floatValue = 19;
     gui.begin();
+    //pio->Platform_SetImeInputPos(ImGuiViewport * vp, ImVec2 pos);
     ImGui::Text("Hello, world!");
     
     static char str0[128] = "Hello, world!";
@@ -28,7 +34,7 @@ void ofApp::draw(){
     //ImGui::SameLine(); HelpMarker("USER:\nHold SHIFT or use mouse to select text.\n" "CTRL+Left/Right to word jump.\n" "CTRL+A or double-click to select all.\n" "CTRL+X,CTRL+C,CTRL+V clipboard.\n" "CTRL+Z,CTRL+Y undo/redo.\n" "ESCAPE to revert.\n\nPROGRAMMER:\nYou can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputText() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example (this is not demonstrated in imgui_demo.cpp).");
 
     static char str1[128] = "";
-    //ImGui::InputTextWithHint("input text (w/ hint)", "enter text here", str1, IM_ARRAYSIZE(str1));
+    ImGui::InputTextWithHint("input text (w/ hint)", "enter text here", str1, IM_ARRAYSIZE(str1));
     gui.end();
 }
 
