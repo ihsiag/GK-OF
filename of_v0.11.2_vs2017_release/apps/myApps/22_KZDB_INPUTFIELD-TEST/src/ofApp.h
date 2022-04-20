@@ -4,12 +4,20 @@
 #include "ofxGui.h"
 #include "ofxImGui.h"
 
+#if defined (_WIN32)
+#include "ofxImGui-master/IMM32IMGUI/imgui_imm32_onthespot.h"
+//#include "ofxImGui-master/IMM32IMGUI/imgui_imm32_onthespot_sdl.h" /* If you are using SDL, include imgui_imm32_onthesport_sdl.h */
+#endif
+
 class ofApp : public ofBaseApp{
 
 	public:
 		
 		ofxImGui::Gui gui;
 		ofxTextField field;
+
+		ImGUIIMMCommunication imguiIMMCommunication{};
+		//VERIFY(imguiIMMCommunication.subclassify(window));
 		
 
 
