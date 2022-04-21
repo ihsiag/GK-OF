@@ -12,9 +12,9 @@ void ofApp::setup(){
 
     gui.setup();
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    ImVec2 _pos = ImVec2(0, 0);
+    /*ImVec2 _pos = ImVec2(0, 0);
     ImGuiViewport* _vp = ImGui::GetWindowViewport();
-    pio.Platform_SetImeInputPos(_vp, _pos);
+    pio.Platform_SetImeInputPos(_vp, _pos);*/
 }
 
 //--------------------------------------------------------------
