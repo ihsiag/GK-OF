@@ -330,6 +330,16 @@ void ofxGKUtils::drawInfo(const stringstream& _ss, const glm::vec2& _xyPos) {
 	ofDrawBitmapString(_ss.str().c_str(), _pos);
 }
 
+void ofxGKUtils::drawInfo(const string& _s, const glm::vec2& _xyPos) {
+	//Bitmap
+	//Width : 8pt , Height : 11pt
+	glm::vec2 _pos = _xyPos;
+	_pos.y += 11;
+
+	//ofDrawBitmapStringHighlight(_ss.str().c_str(), _pos, ofColor(0), ofColor(255));
+	ofDrawBitmapString(_s, _pos);
+}
+
 void ofxGKUtils::drawInfo(const stringstream& _ss, const glm::vec2& _xyPos, const ofTrueTypeFont& _font, const int& _fontSize) {
 	//TrueTypeFont
 	glm::vec2 _pos = _xyPos;

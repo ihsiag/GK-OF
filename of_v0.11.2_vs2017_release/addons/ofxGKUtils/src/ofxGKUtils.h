@@ -54,6 +54,7 @@ public:
 	void drawInfo(const stringstream& _ss, const int& _indexPos);
 	void drawInfo(const stringstream& _ss, const int& _indexPos, const bool& _bSetMargin, const glm::vec2& _margin);
 	void drawInfo(const stringstream& _ss, const glm::vec2& _xyPos);
+	void drawInfo(const string& _s, const glm::vec2& _xyPos);
 	void drawInfo(const stringstream& _ss, const glm::vec2& _xyPos ,const ofTrueTypeFont& _font, const int& _fontSize);
 	void manageInfoLimit(stringstream* _ss,const float& _height); // <- still blanc
 	void manageInfoLimit(stringstream* _ss, const int& _numOfGrids); // <-still blanc
