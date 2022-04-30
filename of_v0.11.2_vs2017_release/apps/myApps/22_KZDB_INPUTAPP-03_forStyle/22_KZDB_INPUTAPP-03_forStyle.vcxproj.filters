@@ -1,0 +1,270 @@
+<?xml version="1.0"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\scenes\sceneOne\Scene_One.cpp">
+			<Filter>src\scenes\sceneOne</Filter>
+		</ClCompile>
+		<ClCompile Include="src\scenes\sceneThree\Scene_Three.cpp">
+			<Filter>src\scenes\sceneThree</Filter>
+		</ClCompile>
+		<ClCompile Include="src\scenes\sceneTwo\Scene_Two.cpp">
+			<Filter>src\scenes\sceneTwo</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxCsv-master\src\ofxCsv.cpp">
+			<Filter>addons\ofxCsv-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxCsv-master\src\ofxCsvRow.cpp">
+			<Filter>addons\ofxCsv-master\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGKUtils\src\ofxGKUtils.cpp">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxColorPicker.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxInputField.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\components">
+			<UniqueIdentifier>{A7091329-47AF-1E09-F83A-268F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\components\buttons">
+			<UniqueIdentifier>{65B2A874-4A34-62C3-894A-87C7}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\components\panels">
+			<UniqueIdentifier>{828C99BD-D02A-3D01-A8B3-337E}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\components\zones">
+			<UniqueIdentifier>{ECA22162-B564-186E-0702-C552}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\scenes">
+			<UniqueIdentifier>{8E7977D1-1DB1-AB02-A133-0EC0}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\scenes\sceneOne">
+			<UniqueIdentifier>{6B845EF2-D83C-1B2B-ECC4-5E77}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\scenes\sceneThree">
+			<UniqueIdentifier>{8B42FBED-1D19-C5E9-3A88-0983}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\scenes\sceneTwo">
+			<UniqueIdentifier>{BA9B3779-D7FE-3643-7714-024E}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons">
+			<UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxCsv-master">
+			<UniqueIdentifier>{C431DF2C-33B1-21EE-3CD2-DC9B}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxCsv-master\src">
+			<UniqueIdentifier>{35597847-B952-D830-6991-CCC0}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGKUtils">
+			<UniqueIdentifier>{C1B368EE-FBF2-7113-D368-2AD3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGKUtils\src">
+			<UniqueIdentifier>{2D05EAB6-6705-1220-C579-3E7E}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGKUtils\src\gui">
+			<UniqueIdentifier>{32359672-A33F-DABA-4AD2-FBE2}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGui">
+			<UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGui\src">
+			<UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\buttons\Class_Button.h">
+			<Filter>src\components\buttons</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\buttons\Class_Button_Image.h">
+			<Filter>src\components\buttons</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\buttons\Class_Button_Link.h">
+			<Filter>src\components\buttons</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\panels\Class_Panel.h">
+			<Filter>src\components\panels</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\panels\Class_Panel_Stamp.h">
+			<Filter>src\components\panels</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\zones\Class_Zone.h">
+			<Filter>src\components\zones</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\zones\Class_Zone_Content.h">
+			<Filter>src\components\zones</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\zones\Class_Zone_HeadTitle.h">
+			<Filter>src\components\zones</Filter>
+		</ClInclude>
+		<ClInclude Include="src\components\zones\Class_Zone_Index.h">
+			<Filter>src\components\zones</Filter>
+		</ClInclude>
+		<ClInclude Include="src\DataSet.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\GKScene.h">
+			<Filter>src\scenes</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneOne\Class_Button_Image_forSceneOne.h">
+			<Filter>src\scenes\sceneOne</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneOne\Class_Zone_Content_forSceneOne.h">
+			<Filter>src\scenes\sceneOne</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneOne\Class_Zone_HeadTitle_forSceneOne.h">
+			<Filter>src\scenes\sceneOne</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneOne\Class_Zone_Index_forSceneOne.h">
+			<Filter>src\scenes\sceneOne</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneOne\Scene_One.h">
+			<Filter>src\scenes\sceneOne</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneThree\Class_Panel_Stamp_forSceneThree.h">
+			<Filter>src\scenes\sceneThree</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneThree\Class_Zone_Content_forSceneThree.h">
+			<Filter>src\scenes\sceneThree</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneThree\Class_Zone_HeadTitle_forSceneThree.h">
+			<Filter>src\scenes\sceneThree</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneThree\Class_Zone_Index_forSceneThree.h">
+			<Filter>src\scenes\sceneThree</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneThree\Scene_Three.h">
+			<Filter>src\scenes\sceneThree</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneTwo\Class_Button_Image_forSceneTwo.h">
+			<Filter>src\scenes\sceneTwo</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneTwo\Class_Zone_Content_forSceneTwo.h">
+			<Filter>src\scenes\sceneTwo</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneTwo\Class_Zone_HeadTitle_forSceneTwo.h">
+			<Filter>src\scenes\sceneTwo</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneTwo\Class_Zone_Index_forSceneTwo.h">
+			<Filter>src\scenes\sceneTwo</Filter>
+		</ClInclude>
+		<ClInclude Include="src\scenes\sceneTwo\Scene_Two.h">
+			<Filter>src\scenes\sceneTwo</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxCsv-master\src\ofxCsv.h">
+			<Filter>addons\ofxCsv-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxCsv-master\src\ofxCsvRow.h">
+			<Filter>addons\ofxCsv-master\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\Easing.h">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKLineSimple.h">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPlane.h">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\GKPoint.h">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\gui\GKController2DTo3D.h">
+			<Filter>addons\ofxGKUtils\src\gui</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\gui\GKControllerAngle.h">
+			<Filter>addons\ofxGKUtils\src\gui</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGKUtils\src\ofxGKUtils.h">
+			<Filter>addons\ofxGKUtils\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxColorPicker.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiUtils.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxInputField.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="icon.rc" />
+	</ItemGroup>
+</Project>

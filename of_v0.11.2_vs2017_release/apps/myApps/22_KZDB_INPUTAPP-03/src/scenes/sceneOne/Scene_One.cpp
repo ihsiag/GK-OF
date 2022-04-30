@@ -41,7 +41,7 @@ void Scene_One::draw(){
 
     //-----------FRONT-LAYER-----------//
     glColor4f(1,1,1,1);
-    if (bDebug)showCurrentDataSet();
+    if (*bDebug)showCurrentDataSet();
     //gk.drawGrid();
 }
 

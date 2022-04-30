@@ -81,15 +81,8 @@ public:
 
 	//-----------EVENT-----------//
 	void keyPressed(int key) {
-		switch (key) {
-		case 's':
-			gk.saveImage();
-			break;
-		case 'f':
-			ofToggleFullscreen();
-			break;
-		case'h':
-			bDebug = !bDebug;
+		switch (key) {// s,f,h already in use
+		case' ':
 			break;
 		}
 	}

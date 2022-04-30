@@ -10,11 +10,17 @@ void ofApp::addGKScene(GKScene* _gkScene) {
 void ofApp::setup(){
 
 	currentSceneIndex = 0;
-	
+	bDebug = false;
+	//loadFonts();
+	loadUiElements();
+
 	for (GKScene* gs : gkScenes) {
 		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 		//ofPushStyle();
+		//gs->setFonts(&fonts);
+		gs->setUiElements(&uiElements);
+		gs->setBoolDebug(&bDebug);
 		gs->setDataSet(&dataSet);
 		gs->initScene();
 		//ofPopStyle();

@@ -9,6 +9,7 @@
 class ofApp : public ofBaseApp{
 	//*work as scene manager *//
 private:
+	ofxGKUtils gk;
 	ofApp() {}
 	~ofApp() {
 		for (GKScene* gs : gkScenes) {
@@ -25,6 +26,87 @@ public:
 	void addGKScene(GKScene* _gkScene);
 	
 	DataSet dataSet;
+	bool bDebug = false;
+	vector<ofTrueTypeFont> fonts;
+	ofTrueTypeFont fontS, fontM, fontS_bold, fontL_bold;
+
+	vector<ofImage> uiElements;
+	
+	void loadFonts() {
+		string _filePath = "./font/Noto-Sans_JP/NotoSansJP-Light.otf";
+		ofTrueTypeFont::setGlobalDpi(72);//72
+		
+		ofTrueTypeFontSettings settings(_filePath, 12);
+		settings.antialiased = true;
+		settings.contours = true;
+		settings.simplifyAmt = 0.5;
+		settings.addRanges(ofAlphabet::Japanese);
+		settings.addRange(ofUnicode::Latin);
+		settings.addRange(ofUnicode::Latin1Supplement);
+		//    settings.addRange(ofUnicode::NumberForms);
+		//    settings.addRange(ofUnicode::MathOperators);
+
+		fontS.load(settings); // :: 12/16/300
+
+		_filePath = "./font/Noto-Sans_JP/NotoSansJP-Light.otf";
+		settings.fontName = _filePath;
+		settings.fontSize = 18;
+		fontM.load(settings); // :: 18/24/300
+
+		_filePath = "./font/Noto-Sans_JP/NotoSansJP-Bold.otf";
+		settings.fontName = _filePath;
+		settings.fontSize = 12;
+		fontS_bold.load(settings); // :: 12/16/700
+
+		_filePath = "./font/Noto-Sans_JP/NotoSansJP-Black.otf";
+		settings.fontName = _filePath;
+		settings.fontSize = 24;
+		fontL_bold.load(settings); // :: 24/32/800
+
+		fonts.erase(fonts.begin(), fonts.end());
+		fonts.push_back(fontS);
+		fonts.push_back(fontM);
+		fonts.push_back(fontS_bold);
+		fonts.push_back(fontL_bold);
+		cout << "FONTS LOADED" << endl;
+	}
+	void loadUiElements() {
+		uiElements.erase(uiElements.begin(), uiElements.end());
+		ofImage _img;
+		string _filePath;
+		_filePath = "./ui/elements/index_selectProject.png";
+		_img.loadImage(_filePath);
+		uiElements.push_back(_img);
+
+		_filePath = "./ui/elements/index_selectImage.png";
+		_img.loadImage(_filePath);
+		uiElements.push_back(_img);
+
+		_filePath = "./ui/elements/index_selectPosition.png";
+		_img.loadImage(_filePath);
+		uiElements.push_back(_img);
+
+		_filePath = "./ui/elements/head_selectProject.png";
+		_img.loadImage(_filePath);
+		uiElements.push_back(_img);
+
+		_filePath = "./ui/elements/head_selectImage.png";
+		_img.loadImage(_filePath);
+		uiElements.push_back(_img);
+
+		_filePath = "./ui/elements/head_selectPosition.png";
+		_img.loadImage(_filePath);
+		uiElements.push_back(_img);
+
+		_filePath = "./ui/elements/element_copied_en.png";
+		_img.loadImage(_filePath);
+		uiElements.push_back(_img);
+
+		_filePath = "./ui/elements/element_copied_ja.png";
+		_img.loadImage(_filePath);
+		uiElements.push_back(_img);
+	}
+	;
 
 	int currentSceneIndex;
 	float currentSceneSec;
@@ -59,9 +141,17 @@ public:
 		case OF_KEY_RIGHT:
 			goNextScene();
 			break;
-
 		case OF_KEY_LEFT:
 			goBackScene();
+			break;
+		case 'f':
+			ofToggleFullscreen();
+			break;
+		case 's':
+			gk.saveImage();
+			break;
+		case 'h':
+			bDebug = !bDebug;
 			break;
 		}
 	};

@@ -23,8 +23,9 @@ class GKScene {
 public:
 	virtual ~GKScene() {}
 	ofxGKUtils gk;
-	ofTrueTypeFont fontM,fontL;
-	bool bDebug = true;
+	bool *bDebug;
+	ofTrueTypeFont *fontS, *fontM, *fontS_bold, *fontL_bold;
+	vector<ofImage>* uiElements;
 
 	/*Class_IndexZone indexZone;
 	Class_HeadTitleZone headTitleZone;
@@ -42,25 +43,21 @@ public:
 	virtual bool goBack()=0;
 
 	virtual void setDataSet(DataSet* _dataSet) = 0;
-	void loadFont() {
-		string _filePath = "./font/NotoSansJP-Regular.otf";
-		ofTrueTypeFont::setGlobalDpi(72);//72
-		ofTrueTypeFontSettings settings(_filePath, 14);
-		settings.antialiased = true;
-		settings.contours = true;
-		settings.simplifyAmt = 0.5;
-		settings.addRanges(ofAlphabet::Japanese);
-		settings.addRange(ofUnicode::Latin);
-		settings.addRange(ofUnicode::Latin1Supplement);
-		//    settings.addRange(ofUnicode::NumberForms);
-		//    settings.addRange(ofUnicode::MathOperators);
-
-		fontM.load(settings);
-
-		settings.fontSize = 20;
-		fontL.load(settings);
+	
+	void setFonts(vector<ofTrueTypeFont>* _fonts) {
+		fontS = &_fonts->at(0);
+		fontM = &_fonts->at(1);
+		fontS_bold = &_fonts->at(2);
+		fontL_bold = &_fonts->at(3);
 	}
 
+	void setUiElements(vector<ofImage>* _uiElements) {
+		uiElements = _uiElements;
+	}
+
+	void setBoolDebug(bool* _bDebug) {
+		bDebug = _bDebug;
+	}
 	
 	virtual void keyPressed(int key) = 0;
 	virtual void keyReleased(int key) = 0;

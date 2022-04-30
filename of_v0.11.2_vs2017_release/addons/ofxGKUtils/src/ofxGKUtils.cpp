@@ -948,7 +948,7 @@ void ofxGKUtils::importGK3D(const string& _url,ofMesh& _meshToPass, vector<GKPla
 		cout << "tmpMesh.ply exists" << endl;
 		//ofFile::removeFile("./tmpMesh.ply", true);
 	}
-	*ssLog << "IMPORTED GK3D : " + _url << endl;
+	//*ssLog << "IMPORTED GK3D : " + _url << endl;
 	std::cout << "valuesToCreateMesh : " << _gkPlanesCreatedFromMeshToPass.size() << endl;
 	std::cout << "valuesToCreateGKPlnae : " << _gkPlanesCreatedManuallyToPass.size() << endl;
 }
@@ -982,7 +982,7 @@ void ofxGKUtils::saveImage() {
 	ofImage _imgToSave;
 	_imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
 	_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
-	*ssLog << "EXPORTED SCREEN : " + _fileName << std::endl;
+	//*ssLog << "EXPORTED SCREEN : " + _fileName << std::endl;
 }
 
 void ofxGKUtils::saveImage(const string& _url) {
@@ -990,7 +990,7 @@ void ofxGKUtils::saveImage(const string& _url) {
 	ofImage _imgToSave;
 	_imgToSave.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
 	_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
-	*ssLog << "EXPORTED SCREEN : " + _fileName << std::endl;
+	//*ssLog << "EXPORTED SCREEN : " + _fileName << std::endl;
 }
 
 void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo) {
@@ -1000,7 +1000,7 @@ void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo) {
 	ofImage _imgToSave;
 	_imgToSave.setFromPixels(_pixels);
 	_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
-	*ssLog << "EXPORTED FBO : " + _fileName << std::endl;
+	//*ssLog << "EXPORTED FBO : " + _fileName << std::endl;
 }
 
 void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo, const string& _url) {
@@ -1010,19 +1010,19 @@ void ofxGKUtils::saveFBOtoImage(ofFbo* _fbo, const string& _url) {
 	ofImage _imgToSave;
 	_imgToSave.setFromPixels(_pixels);
 	_imgToSave.save(_fileName, OF_IMAGE_QUALITY_BEST);
-	*ssLog << "EXPORTED FBO : " + _fileName << std::endl;
+	//*ssLog << "EXPORTED FBO : " + _fileName << std::endl;
 }
 
 void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor) {
 	string _fileName = makeFileName("./meshExport/", "ply").str().c_str();
 	ofMesh _meshToSave = _mesh;
 	glm::vec3 _centroid = _mesh.getCentroid();
-	*ssLog << _centroid << endl;
+	//*ssLog << _centroid << endl;
 	for (int i = 0; i < _mesh.getNumVertices(); i++) {
 		_meshToSave.getVertices()[i] = (_mesh.getVertex(i) - _centroid) * _scaleFactor;;
 	}
 	_meshToSave.save(_fileName);
-	*ssLog << "EXPORTED MESH : " + _fileName << endl;
+	//*ssLog << "EXPORTED MESH : " + _fileName << endl;
 	//free(&_meshToSave);
 }
 
@@ -1030,12 +1030,12 @@ void ofxGKUtils::saveMesh(ofMesh& _mesh, const float& _scaleFactor, const string
 	string _fileName = makeFileName(_url, "ply").str().c_str();
 	ofMesh _meshToSave = _mesh;
 	glm::vec3 _centroid = _mesh.getCentroid();
-	*ssLog << _centroid << endl;
+	//*ssLog << _centroid << endl;
 	for (int i = 0; i < _mesh.getNumVertices(); i++) {
 		_meshToSave.getVertices()[i] = (_mesh.getVertex(i) - _centroid) * _scaleFactor;;
 	}
 	_meshToSave.save(_fileName);
-	*ssLog << "EXPORTED MESH : " + _fileName << endl;
+	//*ssLog << "EXPORTED MESH : " + _fileName << endl;
 	//free(&_meshToSave);
 }
 
@@ -1155,6 +1155,6 @@ void ofxGKUtils::saveGK3D(const string& _url, ofMesh& _originalMesh,vector<GKPla
 			}
 			file_out << _tmpVerticesLog << endl;
 		}
-		*ssLog << "EXPORTED GK3D : " + _fileName << endl;
+		//*ssLog << "EXPORTED GK3D : " + _fileName << endl;
 	}
 }
