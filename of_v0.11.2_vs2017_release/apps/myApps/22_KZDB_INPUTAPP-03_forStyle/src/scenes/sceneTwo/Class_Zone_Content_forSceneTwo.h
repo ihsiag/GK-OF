@@ -9,6 +9,7 @@
 class Class_ContentZone_forSceneTwo : public Class_Zone {
 
 public:
+	int globalInnerMargin;
 	glm::vec2 zoneSize;
 	glm::vec2 zonePos;
 	vector<ofImage>* uiElements;
@@ -17,7 +18,8 @@ public:
 	vector<Class_ImageButton_forSceneTwo>buttons;
 
 	Class_ContentZone_forSceneTwo() {};
-	Class_ContentZone_forSceneTwo(const glm::vec2& _zonePos, const glm::vec2& _zoneSize, vector<ofImage>* _uiElements, SceneAdminInfo* _adminInfo,vector<ofImage>* _prjImgs, vector<string>* _prjIds) {
+	Class_ContentZone_forSceneTwo(const int& _globalInnerMargin, const glm::vec2& _zonePos, const glm::vec2& _zoneSize, vector<ofImage>* _uiElements, SceneAdminInfo* _adminInfo,vector<ofImage>* _prjImgs, vector<string>* _prjIds) {
+		globalInnerMargin = _globalInnerMargin;
 		zonePos = _zonePos;
 		zoneSize = _zoneSize;
 		adminInfo = _adminInfo;
@@ -82,6 +84,7 @@ public:
 
 	void onWindowResized(const int& _w, const int& _h) {
 		zoneSize.x = _w;
+		zoneSize.y = _h - (40 + 49 / 2 + 10 + 87 / 2 + 10) - 40;
 		int _columns = 4;
 		glm::vec2 _buttonSize = glm::vec2(zoneSize.x / _columns, zoneSize.x / _columns * 2 / 3);
 		for (int i = 0; i < buttons.size(); i++) {

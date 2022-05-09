@@ -7,7 +7,7 @@
 #include "scenes/sceneOne/Class_Zone_HeadTitle_forSceneOne.h"
 #include "scenes/sceneOne/Class_Zone_Content_forSceneOne.h"
 
-
+#include "ofxCsv.h"
 
 
 class Scene_One : public GKScene{
@@ -16,6 +16,7 @@ class Scene_One : public GKScene{
 		//-----------DEFAULT-----------//	
 		unsigned long int currentFrame;
 		float time;
+		int globalMargin = 40;
 
 		void initScene();
 		void resetScene();
@@ -28,8 +29,13 @@ class Scene_One : public GKScene{
 		//-----------FOR-SCENE-GLOBAL-VALUE-----------//		
 		DataSet* dataSet;
 		SceneAdminInfo adminInfo;
+
+		ofxCsv csv;
+		ofTrueTypeFont font;
 		vector<ofImage> prjThumbImgs;
 		vector<string> prjIds;
+		vector<string> prjNames;
+
 
 		//-----------FOR-SCENE-ZONE-----------//
 		vector<Class_Zone*> zones;
@@ -41,6 +47,8 @@ class Scene_One : public GKScene{
 		//-----------FOR-SCENE-SET-----------//
 		void setDataSet(DataSet* _dataSet);
 		void loadPrjThumbImgs();
+		void loadPrjNames();
+		void loadFont();
 		
 		void setZones();
 		void setButtons();
@@ -105,7 +113,9 @@ class Scene_One : public GKScene{
 			for (auto& zone : zones)zone->mouseScrolled(scrollY);
 		}
 		void windowResized(int w, int h) {
-			for (auto& zone : zones)zone->onWindowResized(w, h);
+			indexZone.onWindowResized(w - globalMargin * 2, h);
+			headTitleZone.onWindowResized(w - globalMargin * 2, h);
+			contentZone.onWindowResized(w - globalMargin * 2, h);
 		}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}		

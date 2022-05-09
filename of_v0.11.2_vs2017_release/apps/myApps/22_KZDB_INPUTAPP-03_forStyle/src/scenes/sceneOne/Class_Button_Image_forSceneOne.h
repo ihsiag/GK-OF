@@ -15,10 +15,11 @@ public:
 	glm::vec2 buttonPos;//relative to parentGlobalPos
 
 	SceneAdminInfo* adminInfo;
-
+	ofTrueTypeFont* font;
 
 	ofImage* prjImg;
 	string* prjId;
+	string* prjName;
 
 	float imgRatio;
 
@@ -28,13 +29,24 @@ public:
 	glm::vec2 imgSize;
 
 	Class_ImageButton_forSceneOne(){}
-	Class_ImageButton_forSceneOne(const glm::vec2& _parentGlobalPos,const glm::vec2& _buttonPos,const glm::vec2 _buttonSize, SceneAdminInfo* _adminInfo,ofImage* _prjImg, string* _prjId) {
+	Class_ImageButton_forSceneOne(
+		const glm::vec2& _parentGlobalPos,
+		const glm::vec2& _buttonPos,
+		const glm::vec2 _buttonSize, 
+		SceneAdminInfo* _adminInfo,
+		ofImage* _prjImg, 
+		string* _prjId,
+		string* _prjName,
+		ofTrueTypeFont* _font
+		) {
 		parentGlobalPos = _parentGlobalPos;
 		buttonPos = _buttonPos;
 		buttonSize = _buttonSize;
 		adminInfo = _adminInfo;
 		prjImg = _prjImg;
 		prjId = _prjId;
+		prjName = _prjName;
+		font = _font;
 
 		imgAreaSize = buttonSize -glm::vec2(5);
 		imgAreaPos = buttonSize / 2 - imgAreaSize / 2;
@@ -67,6 +79,7 @@ public:
 		drawButtonArea();
 		drawImg();
 		drawHoverRect();
+		drawName();
 		ofPopMatrix();
 	};
 
@@ -103,6 +116,27 @@ public:
 		}
 	}
 
+	void drawName() {
+		ofPushMatrix();
+		ofTranslate(0,0);
+		ofRectangle _bb = font->getStringBoundingBox(*prjName, 0, 0);
+		glColor3f(0,0,0);
+		ofFill();
+		ofPushMatrix();
+		ofTranslate(0, font->getSize());
+		ofDrawRectangle(_bb);
+		ofPopMatrix();
+		glColor3f(1,1,1);
+		//
+		ofPushMatrix();
+		ofTranslate(0, font->getSize());
+		//ofScale(0.5,0.5);
+		font->drawString(*prjName,0,0);
+		ofPopMatrix();
+		//
+		ofPopMatrix();
+
+	}
 
 	bool IsMouseOn() {
 		bool _b = false;

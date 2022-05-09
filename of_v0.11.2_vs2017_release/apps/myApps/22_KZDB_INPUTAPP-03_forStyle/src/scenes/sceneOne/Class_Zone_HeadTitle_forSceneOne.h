@@ -8,6 +8,7 @@
 class Class_HeadTitleZone_forSceneOne :public Class_Zone{
 
 public:
+	int globalInnerMargin;
 	glm::vec2 zoneSize;
 	glm::vec2 zonePos;
 
@@ -18,7 +19,8 @@ public:
 
 	Class_HeadTitleZone_forSceneOne() {}
 
-	Class_HeadTitleZone_forSceneOne(const glm::vec2& _zonePos,const glm::vec2& _zoneSize, vector<ofImage>* _uiElements,SceneAdminInfo* _adminInfo) {
+	Class_HeadTitleZone_forSceneOne(const int& _globalInnerMargin,const glm::vec2& _zonePos,const glm::vec2& _zoneSize, vector<ofImage>* _uiElements,SceneAdminInfo* _adminInfo) {
+		globalInnerMargin = _globalInnerMargin;
 		zonePos = _zonePos;
 		zoneSize = _zoneSize;
 		uiElements = _uiElements;

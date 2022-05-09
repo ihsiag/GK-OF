@@ -9,6 +9,7 @@
 class Class_ContentZone_forSceneOne : public Class_Zone {
 
 public:
+	int globalInnerMargin;
 	glm::vec2 zoneSize;
 	glm::vec2 zonePos;
 	vector<ofImage>* uiElements;
@@ -17,7 +18,18 @@ public:
 	vector<Class_ImageButton_forSceneOne>buttons;
 
 	Class_ContentZone_forSceneOne() {};
-	Class_ContentZone_forSceneOne(const glm::vec2& _zonePos, const glm::vec2& _zoneSize,vector<ofImage>* _uiElements,SceneAdminInfo* _adminInfo,vector<ofImage>* _prjImgs, vector<string>* _prjIds) {
+	Class_ContentZone_forSceneOne(
+		const int& _globalInnerMargin, 
+		const glm::vec2& _zonePos, 
+		const glm::vec2& _zoneSize,
+		vector<ofImage>* _uiElements,
+		SceneAdminInfo* _adminInfo,
+		vector<ofImage>* _prjImgs, 
+		vector<string>* _prjIds,
+		vector<string>* _prjNames,
+		ofTrueTypeFont* _font
+	) {
+		globalInnerMargin = _globalInnerMargin;
 		zonePos = _zonePos;
 		zoneSize = _zoneSize;
 		uiElements = _uiElements;
@@ -26,7 +38,7 @@ public:
 		glm::vec2 _buttonSize = glm::vec2(zoneSize.x / _columns, zoneSize.x / _columns * 2 / 3);
 		for (int i = 0; i < _prjImgs->size(); i++) {
 			glm::vec2 _buttonPos = glm::vec2(_buttonSize.x*(i%_columns),_buttonSize.y*(i/_columns));
-			buttons.emplace_back(zonePos,_buttonPos,_buttonSize,adminInfo,&_prjImgs->at(i),&_prjIds->at(i));
+			buttons.emplace_back(zonePos,_buttonPos,_buttonSize,adminInfo,&_prjImgs->at(i),&_prjIds->at(i),&_prjNames->at(i),_font);
 		}
 	};
 
@@ -82,6 +94,7 @@ public:
 
 	void onWindowResized(const int& _w, const int& _h) {
 		zoneSize.x = _w;
+		zoneSize.y = _h - (40 + 49/2 + 10 + 87/2 + 10) - 40;
 		int _columns = 4;
 		glm::vec2 _buttonSize = glm::vec2(zoneSize.x / _columns, zoneSize.x / _columns * 2 / 3);
 		for (int i = 0; i < buttons.size(); i++) {

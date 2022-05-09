@@ -69,15 +69,15 @@ void Scene_Two::loadImgsInPrj() {
 
 void Scene_Two::setZones() {
     int _margin = 10;
-    glm::vec2 _indexZonePos = glm::vec2(0);
-    glm::vec2 _indexZoneSize = glm::vec2(ofGetWidth(), 49/2);
-    glm::vec2 _headTitleZonePos = glm::vec2(0, _indexZonePos.y + _indexZoneSize.y + _margin);
-    glm::vec2 _headTitleZoneSize = glm::vec2(_indexZoneSize.x, 87/2);
-    glm::vec2 _contentZonePos = glm::vec2(0, _headTitleZonePos.y + _headTitleZoneSize.y + _margin);
-    glm::vec2 _contentZoneSize = glm::vec2(_indexZoneSize.x, ofGetHeight() - (_indexZoneSize.y + _margin + _headTitleZoneSize.y + _margin));
-    indexZone = Class_IndexZone_forSceneTwo(_indexZonePos, _indexZoneSize, uiElementsForIndexZone,&adminInfo);
-    headTitleZone = Class_HeadTitleZone_forSceneTwo(_headTitleZonePos, _headTitleZoneSize,uiElementsForHeadTitleZone, &adminInfo);
-    contentZone = Class_ContentZone_forSceneTwo(_contentZonePos, _contentZoneSize, uiElementsForContentZone,&adminInfo, 
+    glm::vec2 _indexZonePos = glm::vec2(globalMargin);
+    glm::vec2 _indexZoneSize = glm::vec2(ofGetWidth() - globalMargin * 2, 49 / 2);
+    glm::vec2 _headTitleZonePos = glm::vec2(_indexZonePos.x, _indexZonePos.y + _indexZoneSize.y + _margin);
+    glm::vec2 _headTitleZoneSize = glm::vec2(_indexZoneSize.x, 87 / 2);
+    glm::vec2 _contentZonePos = glm::vec2(_indexZonePos.x, _headTitleZonePos.y + _headTitleZoneSize.y + _margin);
+    glm::vec2 _contentZoneSize = glm::vec2(_indexZoneSize.x, ofGetHeight() - (_indexZonePos.y + _indexZoneSize.y + _margin + _headTitleZoneSize.y + _margin)-globalMargin);
+    indexZone = Class_IndexZone_forSceneTwo(globalMargin,_indexZonePos, _indexZoneSize, uiElementsForIndexZone,&adminInfo);
+    headTitleZone = Class_HeadTitleZone_forSceneTwo(globalMargin,_headTitleZonePos, _headTitleZoneSize,uiElementsForHeadTitleZone, &adminInfo);
+    contentZone = Class_ContentZone_forSceneTwo(globalMargin,_contentZonePos, _contentZoneSize, uiElementsForContentZone,&adminInfo,
         &imgsInPrj,
         &imgInPrjNames
     );

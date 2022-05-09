@@ -9,6 +9,7 @@
 class Class_ContentZone_forSceneThree : public Class_Zone {
 
 public:
+	int globalInnerMargin;
 	glm::vec2 zoneSize;
 	glm::vec2 zonePos;
 	vector<ofImage>* uiElements;
@@ -17,7 +18,8 @@ public:
 	Class_StampPanel_forSceneThree stampPanel;
 
 	Class_ContentZone_forSceneThree() {};
-	Class_ContentZone_forSceneThree(const glm::vec2& _zonePos, const glm::vec2& _zoneSize, vector<ofImage>* _uiElements,SceneAdminInfo* _adminInfo,ofImage* _imgToStamp) {
+	Class_ContentZone_forSceneThree(const int& _globalInnerMargin, const glm::vec2& _zonePos, const glm::vec2& _zoneSize, vector<ofImage>* _uiElements,SceneAdminInfo* _adminInfo,ofImage* _imgToStamp) {
+		globalInnerMargin = _globalInnerMargin;
 		zonePos = _zonePos;
 		zoneSize = _zoneSize;
 		uiElements = _uiElements;
@@ -85,7 +87,7 @@ public:
 
 	void onWindowResized(const int& _w, const int& _h) {
 		zoneSize.x = _w;
-		zoneSize.y = _h - float((87 + 49) / 2) - 10 - 10;
+		zoneSize.y = _h - (40 + 49 / 2 + 10 + 87 / 2 + 10) - 40;
 		stampPanel.onWindowResized(zoneSize.x,zoneSize.y);
 		//this value depends on the max height of all images in the uiElementForindexZone and uiElementForindexZone.
 		//see "constructors in setZone() in scenes/Scene_Three.cpp.

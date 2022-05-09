@@ -14,6 +14,7 @@ public:
 	//-----------DEFAULT-----------//	
 	unsigned long int currentFrame;
 	float time;
+	int globalMargin = 40;
 
 	void initScene();
 	void resetScene();
@@ -115,7 +116,10 @@ public:
 		for (auto& zone : zones)zone->mouseScrolled(scrollY);
 	}
 	void windowResized(int w, int h) {
-		for (auto& zone : zones)zone->onWindowResized(w, h);
+		//for (auto& zone : zones)zone->onWindowResized(w-globalMargin*2, h);
+		indexZone.onWindowResized(w - globalMargin * 2, h);
+		headTitleZone.onWindowResized(w - globalMargin * 2,h);
+		contentZone.onWindowResized(w - globalMargin * 2,h);
 	}
 	void dragEvent(ofDragInfo dragInfo) {}
 	void gotMessage(ofMessage msg) {}

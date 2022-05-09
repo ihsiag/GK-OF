@@ -66,15 +66,15 @@ void Scene_Three::loadImgToStamp() {
 
 void Scene_Three::setZones() {
     int _margin = 10;
-    glm::vec2 _indexZonePos = glm::vec2(0);
-    glm::vec2 _indexZoneSize = glm::vec2(ofGetWidth(), 49/2); //this value depends on the max height of all images in the uiElementForindexZone
-    glm::vec2 _headTitleZonePos = glm::vec2(0, _indexZonePos.y + _indexZoneSize.y + _margin);
-    glm::vec2 _headTitleZoneSize = glm::vec2(_indexZoneSize.x,87/2); //this value depends on the max height of all images in the uiElementForheadTitleZone
-    glm::vec2 _contentZonePos = glm::vec2(0, _headTitleZonePos.y + _headTitleZoneSize.y + _margin);
-    glm::vec2 _contentZoneSize = glm::vec2(_indexZoneSize.x, ofGetHeight() - (_indexZoneSize.y + _margin + _headTitleZoneSize.y + _margin));
-    indexZone = Class_IndexZone_forSceneThree(_indexZonePos, _indexZoneSize,uiElementsForIndexZone, &adminInfo);
-    headTitleZone = Class_HeadTitleZone_forSceneThree(_headTitleZonePos, _headTitleZoneSize, uiElementsForHeadTitleZone,&adminInfo);
-    contentZone = Class_ContentZone_forSceneThree(_contentZonePos, _contentZoneSize, uiElementsForContentZone,&adminInfo, &imgToStamp);
+    glm::vec2 _indexZonePos = glm::vec2(globalMargin);
+    glm::vec2 _indexZoneSize = glm::vec2(ofGetWidth() - globalMargin * 2, 49 / 2);//this value depends on the max height of all images in the uiElementForindexZone
+    glm::vec2 _headTitleZonePos = glm::vec2(_indexZonePos.x, _indexZonePos.y + _indexZoneSize.y + _margin);
+    glm::vec2 _headTitleZoneSize = glm::vec2(_indexZoneSize.x, 87 / 2);//this value depends on the max height of all images in the uiElementForheadTitleZone
+    glm::vec2 _contentZonePos = glm::vec2(_indexZonePos.x, _headTitleZonePos.y + _headTitleZoneSize.y + _margin);
+    glm::vec2 _contentZoneSize = glm::vec2(_indexZoneSize.x, ofGetHeight() - (_indexZonePos.y + _indexZoneSize.y + _margin + _headTitleZoneSize.y + _margin)-globalMargin);
+    indexZone = Class_IndexZone_forSceneThree(globalMargin,_indexZonePos, _indexZoneSize,uiElementsForIndexZone, &adminInfo);
+    headTitleZone = Class_HeadTitleZone_forSceneThree(globalMargin,_headTitleZonePos, _headTitleZoneSize, uiElementsForHeadTitleZone,&adminInfo);
+    contentZone = Class_ContentZone_forSceneThree(globalMargin,_contentZonePos, _contentZoneSize, uiElementsForContentZone,&adminInfo, &imgToStamp);
     zones.erase(zones.begin(), zones.end());
     zones.push_back(&indexZone);
     zones.push_back(&headTitleZone);
