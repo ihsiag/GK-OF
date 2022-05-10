@@ -120,13 +120,13 @@ public:
 		ofPushMatrix();
 		ofTranslate(0,0);
 		ofRectangle _bb = font->getStringBoundingBox(*prjName, 0, 0);
-		glColor3f(0,0,0);
+		glColor3f(0.95,0.95,0.95);//0.65
 		ofFill();
 		ofPushMatrix();
 		ofTranslate(0, font->getSize());
 		ofDrawRectangle(_bb);
 		ofPopMatrix();
-		glColor3f(1,1,1);
+		glColor3f(0.2,0.2,0.2);//1
 		//
 		ofPushMatrix();
 		ofTranslate(0, font->getSize());

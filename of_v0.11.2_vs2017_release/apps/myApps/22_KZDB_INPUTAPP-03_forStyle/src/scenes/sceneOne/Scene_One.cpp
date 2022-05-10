@@ -101,10 +101,10 @@ void Scene_One::loadPrjNames() {
 
 void Scene_One::loadFont() {
     cout << "<BEGIN LOAD FONT>" << endl;
-    string _filePath = "./font/Noto-Sans_JP/NotoSansJP-Light.otf";
+    string _filePath = "./font/Noto-Sans_JP/NotoSansJP-Medium.otf";
     ofTrueTypeFont::setGlobalDpi(72);//72
 
-    ofTrueTypeFontSettings settings(_filePath, 22);
+    ofTrueTypeFontSettings settings(_filePath, 14);
     settings.antialiased = true;
     settings.contours = true;
     settings.simplifyAmt = 0.5;
