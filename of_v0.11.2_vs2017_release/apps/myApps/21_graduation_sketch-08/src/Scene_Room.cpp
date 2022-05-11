@@ -165,7 +165,7 @@ void Scene_Room::loadFont() {
 
 void Scene_Room::loadMesh() {
     //mesh.load("./meshToImport/test_cuboid.ply");
-    mesh.load("./3d/test-normal-reduced.ply");
+    mesh.load("./3d/test-normal-reduced_bottomAligned.ply");
     mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     meshScaleFactor = 0.05;
     for (int i = 0; i < mesh.getNumVertices(); i++) {
