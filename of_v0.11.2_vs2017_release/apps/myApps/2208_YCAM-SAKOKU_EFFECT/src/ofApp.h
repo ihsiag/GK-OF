@@ -20,7 +20,7 @@ public:
 
 	// ------------
 	void loadShader() {
-		shader.load("./shaders/sample.vert", "./shaders/sample2.frag");
+		shader.load("./shaders/sample.vert", "./shaders/sample.frag");
 		if (shader.isLoaded()) {
 			std::cout << "shaders ok" << std::endl;
 		}
@@ -49,6 +49,15 @@ public:
 		cam.enableOrtho();
 		cam.disableMouseInput();
 	}
+	void initShader() {
+		ofImage texture;
+		texture.loadImage("shaders/tex/sample2.png");
+		shader.setUniformTexture("u_texture_0",texture,0);
+		glm::vec2 imgSize = glm::vec2(texture.getWidth(), texture.getHeight());
+		ofPlanePrimitive plane;
+		plane.set(imgSize.x, imgSize.y);
+		plane.mapTexCoordsFromTexture(texture.getTextureReference());
+	}
 
 	// -----------
 	void makeArea() {
@@ -60,10 +69,6 @@ public:
 		shader.begin();
 		shader.setUniform1f("u_time", currentFrame);
 		shader.setUniform2f("u_resolution", fbo.getWidth(), fbo.getHeight());
-		//colorPallete.getTexture().bind();
-		//colorPallete.getTexture.unbind();
-		//shader.setUniformTexture
-		//ofSetColor(255, 0, 0, 255);
 		ofDrawRectangle(area);
 		shader.end();
 		cam.end();
@@ -101,6 +106,7 @@ public:
 	void setup() {
 		initBasic();
 		loadShader();
+		initShader();
 		initFbo();
 		initCam();
 	};

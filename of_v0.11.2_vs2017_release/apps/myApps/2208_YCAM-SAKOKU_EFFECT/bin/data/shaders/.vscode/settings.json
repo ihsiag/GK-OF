@@ -1,0 +1,6 @@
+{
+  "glsl-canvas.textures": {
+    "0": "./tex/sample.png",
+    "1": "./sample.png",
+  }
+}
