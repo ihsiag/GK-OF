@@ -1,16 +1,12 @@
-#version 120
-
+#version 150
 precision mediump float;
-attribute vec4 position;
-attribute vec4 normal;
-attribute vec2 uv;
 
-varying vec2 v_texCoord;
-varying vec2 vUv;
+uniform mat4 modelViewProjectionMatrix;
+in vec3 position;
+in vec2 texcoord;
+out vec2 v_texcoord;
 
-void main(void){
-  vUv = uv;
-  v_texCoord = gl_MultiTexCoord0.xy;
-  gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-  // gl_Position = modelViewProjectionMatrix * position;
+void main(){
+  v_texcoord = texcoord;
+  gl_Position = modelViewProjectionMatrix*vec4(position,1.);
 }

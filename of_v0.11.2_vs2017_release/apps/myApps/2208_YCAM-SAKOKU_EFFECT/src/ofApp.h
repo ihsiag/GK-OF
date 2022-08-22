@@ -14,6 +14,7 @@ public:
 	unsigned long int currentFrame;
 
 	ofEasyCam cam;
+	ofImage texture;
 
 	ofRectangle area;
 
@@ -50,13 +51,8 @@ public:
 		cam.disableMouseInput();
 	}
 	void initShader() {
-		ofImage texture;
-		texture.loadImage("shaders/tex/sample2.png");
-		shader.setUniformTexture("u_texture_0",texture,0);
-		glm::vec2 imgSize = glm::vec2(texture.getWidth(), texture.getHeight());
-		ofPlanePrimitive plane;
-		plane.set(imgSize.x, imgSize.y);
-		plane.mapTexCoordsFromTexture(texture.getTextureReference());
+		texture;
+		texture.loadImage("./shaders/tex/sample2.png");
 	}
 
 	// -----------
@@ -64,13 +60,33 @@ public:
 		area = ofRectangle(-2000 / 2, -2000 / 2, 2000, 2000);
 	}
 	void fboRun() {
+		/*glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearDepth(1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
 		makeArea();
 		cam.begin();
+		cam.lookAt(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+		texture.getTexture().bind();
 		shader.begin();
+
+		ofMatrix4x4 modelMatrix;
+		ofMatrix4x4 viewMatrix;
+		viewMatrix = ofGetCurrentViewMatrix();
+		ofMatrix4x4 projectionMatrix;
+		projectionMatrix = cam.getProjectionMatrix();
+		ofMatrix4x4 mvpMatrix;
+		mvpMatrix = modelMatrix * viewMatrix * projectionMatrix;
+		
+		shader.setUniformMatrix4f("modelViewProjectionMatrix", mvpMatrix);
+		shader.setUniformTexture("u_texture_0", texture.getTexture(), 0);
+		glm::vec2 imgSize = glm::vec2(texture.getWidth(), texture.getHeight());
+		shader.setUniform2f("u_texture_0_resolution", imgSize);
 		shader.setUniform1f("u_time", currentFrame);
 		shader.setUniform2f("u_resolution", fbo.getWidth(), fbo.getHeight());
+		
 		ofDrawRectangle(area);
 		shader.end();
+		texture.getTexture().unbind();
 		cam.end();
 		/*
 		cam.begin();
