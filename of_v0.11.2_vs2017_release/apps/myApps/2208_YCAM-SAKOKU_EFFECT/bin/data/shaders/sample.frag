@@ -12,7 +12,8 @@ out vec4 fragColor;
 
 void main(){
   vec2 uv = v_texcoord * u_texture_0_resolution;
-  // vec3 col = texture2DRect(u_texture_0,uv).rgb;
-  vec3 col = vec3(u_texture_0_resolution,1.);
+  vec3 col = texture2DRect(u_texture_0,uv).rgb;
+  // vec3 col = vec3(u_texture_0_resolution,1.);
+  // vec3 col = vec3(u_texture_0_resolution.xy/u_resolution,1.);
   fragColor = vec4(col,1.);
 }

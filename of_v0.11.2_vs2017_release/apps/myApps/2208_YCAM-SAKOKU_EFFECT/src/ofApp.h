@@ -10,13 +10,17 @@ class ofApp : public ofBaseApp {
 public:
 	ofxGKUtils gk;
 	ofFbo fbo;
-	ofShader shader;
 	unsigned long int currentFrame;
 
 	ofEasyCam cam;
+	ofPlanePrimitive plane;
+	ofShader shader;
 	ofImage texture;
 
-	ofRectangle area;
+	glm::vec2 textureSize;
+	glm::vec2 exportSize;
+
+	
 
 
 	// ------------
@@ -29,8 +33,14 @@ public:
 			std::cout << "no" << std::endl;
 		}
 	}
+	void initValue() {
+		texture.loadImage("./shaders/tex/sample2.png");
+		textureSize = {texture.getWidth(),texture.getHeight()};
+		//exportSize = { 1000, 1000 };
+		exportSize = textureSize;
+	}
 	void initFbo() {
-		fbo.allocate(4000, 4000, GL_RGBA);
+		fbo.allocate(exportSize.x,exportSize.y, GL_RGBA);
 	}
 	void initBasic() {
 		ofSetBackgroundAuto(true);
@@ -47,44 +57,47 @@ public:
 		cam.setNearClip(0.1);
 		cam.setFarClip(1000);
 		cam.setPosition(0, 0, 500);
+		cam.lookAt(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 		cam.enableOrtho();
 		cam.disableMouseInput();
 	}
-	void initShader() {
-		texture;
-		texture.loadImage("./shaders/tex/sample2.png");
+	void initGeo() {
+		plane = ofPlanePrimitive(textureSize.x,textureSize.y, 10, 10);
 	}
 
 	// -----------
-	void makeArea() {
-		area = ofRectangle(-2000 / 2, -2000 / 2, 2000, 2000);
-	}
-	void fboRun() {
+	void fboClear() {
+		ofClear(0);
 		/*glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClearDepth(1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
-		makeArea();
-		cam.begin();
-		cam.lookAt(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
-		texture.getTexture().bind();
-		shader.begin();
+	}
 
-		ofMatrix4x4 modelMatrix;
-		ofMatrix4x4 viewMatrix;
+	void updateShaderBasics(ofShader* _shader,ofEasyCam* _cam) {
+		glm::mat4x4 modelMatrix;
+		glm::mat4x4 viewMatrix;
 		viewMatrix = ofGetCurrentViewMatrix();
-		ofMatrix4x4 projectionMatrix;
-		projectionMatrix = cam.getProjectionMatrix();
-		ofMatrix4x4 mvpMatrix;
+		glm::mat4x4 projectionMatrix;
+		projectionMatrix = _cam->getProjectionMatrix();
+		glm::mat4x4 mvpMatrix;
 		mvpMatrix = modelMatrix * viewMatrix * projectionMatrix;
-		
-		shader.setUniformMatrix4f("modelViewProjectionMatrix", mvpMatrix);
+		_shader->setUniformMatrix4f("modelViewProjectionMatrix", mvpMatrix);
+	}
+	void updateShader() {		
+		shader.setUniform1f("u_time", currentFrame);
+		shader.setUniform2f("u_resolution", fbo.getWidth(), fbo.getHeight());
 		shader.setUniformTexture("u_texture_0", texture.getTexture(), 0);
 		glm::vec2 imgSize = glm::vec2(texture.getWidth(), texture.getHeight());
 		shader.setUniform2f("u_texture_0_resolution", imgSize);
-		shader.setUniform1f("u_time", currentFrame);
-		shader.setUniform2f("u_resolution", fbo.getWidth(), fbo.getHeight());
-		
-		ofDrawRectangle(area);
+	}
+	void fboRun() {
+		cam.begin();
+		shader.begin();
+
+		updateShaderBasics(&shader,&cam);
+		updateShader();
+				
+		plane.draw();
 		shader.end();
 		texture.getTexture().unbind();
 		cam.end();
@@ -119,16 +132,17 @@ public:
 
 
 	// -----------
-	void setup() {
-		initBasic();
+	void setup() {	
+		initValue();
 		loadShader();
-		initShader();
+		initBasic();
 		initFbo();
 		initCam();
+		initGeo();
 	};
 	void update() {
 		fbo.begin();
-		ofClear(0);
+		fboClear();
 		fboRun();
 		fbo.end();
 	};
