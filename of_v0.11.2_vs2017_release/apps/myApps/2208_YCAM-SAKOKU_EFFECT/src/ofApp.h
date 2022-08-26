@@ -14,6 +14,8 @@ public:
 
 	ofEasyCam cam;
 	ofShader shader;
+	vector<ofImage> textures;
+	vector<ofImage> textures_display;
 	ofImage texture;
 	ofImage texture_lcd;
 
@@ -43,6 +45,9 @@ public:
 			std::cout << "no" << std::endl;
 		}
 	}
+	void loadImages() {
+
+	}
 	void initGui() {
 		gk.setGUI(gui, 0);
 		gui.add(displayScale.setup("displayScale", 0.08, 0.001, 1.00));
@@ -57,7 +62,7 @@ public:
 		textureAspectRatio = texture.getWidth() / texture.getHeight();
 		texture_lcd.loadImage("./shaders/tex/lcd.png");
 
-		exportSize = { 14173,9449};
+		exportSize = { 14173,9449 }; // 14173,9449 or 2000,1333
 	}
 	void initFbo() {
 		fbo.allocate(exportSize.x,exportSize.y, GL_RGBA);
