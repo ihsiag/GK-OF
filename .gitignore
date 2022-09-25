@@ -9,6 +9,8 @@
 # but not the data folder
 ###########################
 
+apps/myApps/
+
 /bin/*
 !/bin/data/
 
