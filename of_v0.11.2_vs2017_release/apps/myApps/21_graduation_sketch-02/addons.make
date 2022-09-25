@@ -1,4 +1,0 @@
-ofxAssimpModelLoader
-ofxBox2d-master
-ofxGui
-ofxPostProcessing-master

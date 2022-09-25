@@ -1,3 +1,0 @@
-ofxBullet-master
-ofxGKUtils
-ofxGui
