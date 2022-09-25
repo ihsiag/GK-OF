@@ -9,7 +9,7 @@
 # but not the data folder
 ###########################
 
-/apps/myApps/*
+
 
 /bin/*
 !/bin/data/
@@ -90,3 +90,5 @@ Desktop.ini
 
 # Android
 .csettings
+
+*/apps/myApps/
