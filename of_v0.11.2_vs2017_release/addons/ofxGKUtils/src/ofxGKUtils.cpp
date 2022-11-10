@@ -3,8 +3,8 @@
 using namespace std;
 //-------------------------------------------------------HELPER_DEFAULT-------------------------------------------------------//
 void ofxGKUtils::setup(stringstream* _ssGlobalLog) {
-	ofSetVerticalSync(true);
-	ofSetFrameRate(40);
+	ofSetVerticalSync(false);
+	ofSetFrameRate(0);
 	ofNoFill();
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -22,7 +22,7 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog) {
 }
 
 void ofxGKUtils::setup(stringstream* _ssGlobalLog ,const int& _frameRate) {
-	ofSetVerticalSync(true);
+	ofSetVerticalSync(false);
 	ofSetFrameRate(_frameRate);
 	ofNoFill();
 	glClearColor(0, 0, 0, 1);
@@ -76,6 +76,7 @@ void ofxGKUtils::defaultUpdate(unsigned long int* _currentFrame, float* _time) {
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0, 0, 0);
+	glColor4f(0, 0, 0, 1);
 	glLineWidth(1);
 	glPointSize(1);
 	//fbo.end();
