@@ -147,6 +147,7 @@ void ofNode::setParent(ofNode& parent, bool bMaintainGlobalTransform) {
 	this->parent = &parent;
 }
 
+
 //----------------------------------------
 void ofNode::clearParent(bool bMaintainGlobalTransform) {
 	if(parent){

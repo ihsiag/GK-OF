@@ -28,6 +28,7 @@ public:
 //-------------------------------------------------------HELPER_DEFAULT-------------------------------------------------------//
 	void setup(stringstream* _ssGlobalLog);
 	void setup(stringstream* _ssGlobalLog, const int& _frameRate);
+	void setup(const int& _frameRate);
 	void setCam(ofEasyCam* _cam);
 	void scrollCamera(ofEasyCam *_cam,const int& _scrollY);
 	void defaultUpdate(unsigned long int* _currentFrame, float* _time);

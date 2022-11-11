@@ -41,6 +41,24 @@ void ofxGKUtils::setup(stringstream* _ssGlobalLog ,const int& _frameRate) {
 	margin = 8;
 }
 
+void ofxGKUtils::setup(const int& _frameRate) {
+	ofSetVerticalSync(false);
+	ofSetFrameRate(_frameRate);
+	ofNoFill();
+	glClearColor(0, 0, 0, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0, 0, 0);
+	glLineWidth(1);
+	glPointSize(1);
+	ofEnableAlphaBlending();
+	ofEnableSmoothing();
+	ofEnableAntiAliasing();
+	ofSetCircleResolution(60);
+	//glEnable(GL_BLEND);
+	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE);
+	margin = 8;
+};
+
 void ofxGKUtils::setCam(ofEasyCam* _cam) {
 	_cam->removeAllInteractions();
 	//_ezCam->setPosition(0, 0, 0);
