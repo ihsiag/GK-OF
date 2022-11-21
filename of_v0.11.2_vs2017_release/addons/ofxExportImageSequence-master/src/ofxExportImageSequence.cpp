@@ -14,7 +14,7 @@ struct TiffExportOp
 	string path;
 	ofPixels pix;
 	
-	int fd;
+	FILE* fd;
 	TIFF* image;
 	Compression compression;
 	
@@ -31,7 +31,7 @@ struct TiffExportOp
 		if (image) TIFFClose(image);
 		image = NULL;
 		
-		if (fd) close(fd);
+		if (fd) fclose(fd);
 		fd = 0;
 	}
 	
@@ -45,8 +45,8 @@ struct TiffExportOp
 		
 		string path = ofToDataPath(this->path);
 		
-		fd = open(path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
-		image = TIFFFdOpen(fd, path.c_str(), "w");
+		fd = fopen(path.c_str(), "w+");
+		image = TIFFFdOpen(fileno(fd), path.c_str(), "w");
 		assert(image);
 		
 		TIFFSetField(image, TIFFTAG_IMAGEWIDTH, width);

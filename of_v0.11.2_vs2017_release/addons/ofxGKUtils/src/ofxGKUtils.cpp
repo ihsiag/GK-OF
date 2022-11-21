@@ -792,6 +792,38 @@ void ofxGKUtils::sortPolars(vector<GKPoint>* _gkPoints) {
 	}
 }
 
+ofQuaternion ofxGKUtils::slerp(ofQuaternion qtn1, ofQuaternion qtn2, float time) {
+	ofQuaternion dest;
+	float ht = qtn1[0] * qtn2[0] + qtn1[1] * qtn2[1] + qtn1[2] * qtn2[2] + qtn1[3] * qtn2[3];
+	float hs = 1.0 - ht * ht;
+	if (hs <= 0.0) {
+		dest[0] = qtn1[0];
+		dest[1] = qtn1[1];
+		dest[2] = qtn1[2];
+		dest[3] = qtn1[3];
+	}
+	else {
+		hs = sqrt(hs);
+		if (abs(hs) < 0.0001) {
+			dest[0] = (qtn1[0] * 0.5 + qtn2[0] * 0.5);
+			dest[1] = (qtn1[1] * 0.5 + qtn2[1] * 0.5);
+			dest[2] = (qtn1[2] * 0.5 + qtn2[2] * 0.5);
+			dest[3] = (qtn1[3] * 0.5 + qtn2[3] * 0.5);
+		}
+		else {
+			float ph = acos(ht);
+			float pt = ph * time;
+			float t0 = sin(ph - pt) / hs;
+			float t1 = sin(pt) / hs;
+			dest[0] = qtn1[0] * t0 + qtn2[0] * t1;
+			dest[1] = qtn1[1] * t0 + qtn2[1] * t1;
+			dest[2] = qtn1[2] * t0 + qtn2[2] * t1;
+			dest[3] = qtn1[3] * t0 + qtn2[3] * t1;
+		}
+	}
+	return dest;
+};
+
 #pragma mark - calc
 //-------------------------------------------------------HELPER_CALC-------------------------------------------------------//
 int ofxGKUtils::factorial(int _n) {

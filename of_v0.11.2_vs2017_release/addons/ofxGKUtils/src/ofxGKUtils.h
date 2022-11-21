@@ -82,6 +82,7 @@ public:
 	glm::vec3 getRectangularFromPolar(const GKPoint& _gkPoint);//->glm::euclidean(v)
 	void sortPolars(vector<glm::vec3>* _coords);
 	void sortPolars(vector<GKPoint>* _gkPoints);
+	ofQuaternion slerp(ofQuaternion qtn1, ofQuaternion qtn2, float time); //cloned from webgl.org 
 //-------------------------------------------------------HELPER_CALC-------------------------------------------------------//
 	int factorial(int _n);
 	int totalNumCombination(int _n, int _r);
