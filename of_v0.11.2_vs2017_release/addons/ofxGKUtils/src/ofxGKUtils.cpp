@@ -92,7 +92,7 @@ void ofxGKUtils::defaultUpdate(unsigned long int* _currentFrame, float* _time) {
 	ofNoFill();
 	//fbo.begin();
 	glClearColor(0, 0, 0, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0, 0, 0);
 	glColor4f(0, 0, 0, 1);
 	glLineWidth(1);
@@ -108,7 +108,7 @@ void ofxGKUtils::defaultUpdate(unsigned long int* _currentFrame, float* _time, c
 	ofNoFill();
 	//fbo.begin();
 	glClearColor(0, 0, 0, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0, 0, 0);
 	glLineWidth(1);
 	glPointSize(1);
@@ -125,7 +125,7 @@ void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame
 	ofNoFill();
 	//fbo.begin();
 	glClearColor(0, 0, 0, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0, 0, 0);
 	glLineWidth(1);
 	glPointSize(1);
@@ -142,7 +142,7 @@ void ofxGKUtils::defaultUpdate(ofEasyCam* _cam, unsigned long int* _currentFrame
 	ofBackground(_col.r*255, _col.g*255, _col.b*255);
 	//fbo.begin();
 	glClearColor(0,0,0,0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0, 0, 0);
 	glLineWidth(1);
 	glPointSize(1);
