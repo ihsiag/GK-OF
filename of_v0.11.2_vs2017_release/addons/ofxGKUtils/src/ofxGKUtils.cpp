@@ -752,6 +752,9 @@ glm::vec3 ofxGKUtils::getPolarFromRectangular(const GKPoint& _gkPoint) {
 	return glm::vec3(_r, _theta, _phi);
 }
 
+// Cartesian
+// 0<=theta(y)<=PI
+// 0<=phi(z)<=2*PI
 glm::vec3 ofxGKUtils::getRectangularFromPolar(const glm::vec3& _coord) {
 	//x=r*sin(theta)*cos(phi)
 	//y=r*sin(theta)*sin(phi)
@@ -761,7 +764,9 @@ glm::vec3 ofxGKUtils::getRectangularFromPolar(const glm::vec3& _coord) {
 	float _z = _coord.x * cos(_coord.y);
 	return glm::vec3(_x, _y, _z);
 }
-
+// Cartesian
+// 0<=theta(y)<=PI
+// 0<=phi(z)<=2*PI
 glm::vec3 ofxGKUtils::getRectangularFromPolar(const GKPoint& _gkPoint) {
 	//x=r*sin(theta)*cos(phi)
 	//y=r*sin(theta)*sin(phi)
